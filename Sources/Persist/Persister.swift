@@ -1,8 +1,10 @@
-public struct Persister<Value> {
+public final class Persister<Value> {
 
     public let key: String
 
     public private(set) var storage: Storage
+
+    private let lock = Lock()
 
     private let transform: AnyOutputTransform<Value>?
 
@@ -22,25 +24,31 @@ public struct Persister<Value> {
         untransform = nil
     }
 
-    mutating func persist(_ value: Value, ofType: Value.Type = Value.self) throws {
-        if let transform = transform {
-            let transformedValue = try transform(value)
-            try storage.storeValue(transformedValue, key: key)
-        } else {
-            try? storage.storeValue(value, key: key)
+    public func persist(_ value: Value, ofType: Value.Type = Value.self) throws {
+        try lock.perform {
+            if let transform = transform {
+                let transformedValue = try transform(value)
+                try storage.storeValue(transformedValue, key: key)
+            } else {
+                try storage.storeValue(value, key: key)
+            }
         }
     }
 
-    mutating func removeValue() throws {
-        try storage.removeValue(for: key)
+    public func removeValue() throws {
+        try lock.perform {
+            try storage.removeValue(for: key)
+        }
     }
 
-    mutating func retrieveValue(ofType: Value.Type = Value.self) throws -> Value? {
-        if let untransform = untransform {
-            guard let storedValue: Any = try storage.retrieveValue(for: key) else { return nil }
-            return try untransform(storedValue)
-        } else {
-            return try storage.retrieveValue(for: key)
+    public func retrieveValue(ofType: Value.Type = Value.self) throws -> Value? {
+        try lock.perform {
+            if let untransform = untransform {
+                guard let storedValue: Any = try storage.retrieveValue(for: key) else { return nil }
+                return try untransform(storedValue)
+            } else {
+                return try storage.retrieveValue(for: key)
+            }
         }
     }
 }

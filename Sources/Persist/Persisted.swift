@@ -1,5 +1,4 @@
 import Foundation
-import Combine
 
 @propertyWrapper
 public struct Persisted<Value> {
