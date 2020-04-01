@@ -1,6 +1,6 @@
 import Foundation
 
-extension UserDefaults: Storage {
+extension UserDefaults: UpdatePropagatingStorage {
 
     public func storeValue<Value>(_ value: Value, key: String) {
         set(value, forKey: key)
@@ -18,4 +18,25 @@ extension UserDefaults: Storage {
         return value
     }
 
+    public func addUpdateListener(forKey key: String, updateListener: @escaping (Any?) -> Void) -> Cancellable {
+        let observer = KeyPathObserver(updateListener: updateListener)
+        addObserver(observer, forKeyPath: key, options: .new, context: nil)
+        let cancellable = Cancellable { [weak self] in
+            self?.removeObserver(observer, forKeyPath: key)
+        }
+        return cancellable
+    }
+
+}
+
+private final class KeyPathObserver: NSObject {
+    private let updateListener: (Any?) -> Void
+
+    fileprivate init(updateListener: @escaping (Any?) -> Void) {
+        self.updateListener = updateListener
+    }
+
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        updateListener(change?[.newKey])
+    }
 }

@@ -1,8 +1,20 @@
+import Foundation
+import Combine
+
 public final class Persister<Value> {
+
+    public typealias UpdatePayload = Result<Value?, Error>
+
+    public typealias UpdateListener = (UpdatePayload) -> Void
 
     public let key: String
 
     public private(set) var storage: Storage
+
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    public var updatesPublisher: AnyPublisher<UpdatePayload, Never> {
+        return updatesSubject.eraseToAnyPublisher()
+    }
 
     private let lock = Lock()
 
@@ -10,11 +22,30 @@ public final class Persister<Value> {
 
     private let untransform: AnyOutputUntransform<Value>?
 
+    private var storageUpdateListenerCancellable: Cancellable?
+
+    private var updateListeners: [UUID: UpdateListener] = [:]
+
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    private var updatesSubject: PassthroughSubject<UpdatePayload, Never> {
+        return _updatesSubject as! PassthroughSubject<UpdatePayload, Never>
+    }
+
+    private lazy var _updatesSubject: Any = {
+        if #available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *) {
+            return PassthroughSubject<UpdatePayload, Never>()
+        } else {
+            preconditionFailure()
+        }
+    }()
+
     public init<Transformer: Persist.Transformer>(key: String, storedBy storage: Storage, transformer: Transformer) where Transformer.Input == Value {
         self.key = key
         self.storage = storage
         transform = transformer.anyOutputTransform()
         untransform = transformer.anyOutputUntransform()
+
+        subscribeToStorageUpdatesIfPossible()
     }
 
     public init(key: String, storedBy storage: Storage) {
@@ -22,6 +53,8 @@ public final class Persister<Value> {
         self.storage = storage
         transform = nil
         untransform = nil
+
+        subscribeToStorageUpdatesIfPossible()
     }
 
     public func persist(_ value: Value, ofType: Value.Type = Value.self) throws {
@@ -32,12 +65,20 @@ public final class Persister<Value> {
             } else {
                 try storage.storeValue(value, key: key)
             }
+
+            if !(storage is UpdatePropagatingStorage) {
+                notifyUpdateListenersOfResult(.success(value))
+            }
         }
     }
 
     public func removeValue() throws {
         try lock.perform {
             try storage.removeValue(for: key)
+
+            if !(storage is UpdatePropagatingStorage) {
+                notifyUpdateListenersOfResult(.success(nil))
+            }
         }
     }
 
@@ -51,6 +92,48 @@ public final class Persister<Value> {
             }
         }
     }
+
+    public func addUpdateListener(_ updateListener: @escaping UpdateListener) -> Cancellable {
+        let uuid = UUID()
+        updateListeners[uuid] = updateListener
+
+        return Cancellable { [weak self] in
+            self?.updateListeners.removeValue(forKey: uuid)
+        }
+    }
+
+    private func notifyUpdateListenersOfResult(_ result: Result<Value?, Error>) {
+        updateListeners.values.forEach { $0(result) }
+
+        if #available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *) {
+            updatesSubject.send(result)
+        }
+    }
+
+    private func subscribeToStorageUpdatesIfPossible() {
+        guard let updatePropagatingStorage = storage as? UpdatePropagatingStorage else { return }
+
+        storageUpdateListenerCancellable = updatePropagatingStorage.addUpdateListener(forKey: key) { [weak self] value in
+            guard let self = self else { return }
+
+            let result: Result<Value?, Error>
+
+            defer {
+                self.notifyUpdateListenersOfResult(result)
+            }
+
+            if let value = value {
+                if let value = value as? Value {
+                    result = .success(value)
+                } else {
+                    result = .failure(PersistanceError.unexpectedValueType(value: value, expected: Value.self))
+                }
+            } else {
+                result = .success(nil)
+            }
+        }
+    }
+
 }
 
 private typealias AnyOutputTransform<Input> = (_ value: Input) throws -> Any
