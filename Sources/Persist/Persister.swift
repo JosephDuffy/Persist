@@ -16,7 +16,7 @@ public final class Persister<Value> {
         return updatesSubject.eraseToAnyPublisher()
     }
 
-    private let lock = Lock()
+    private let lock: Lock
 
     private let transform: AnyOutputTransform<Value>?
 
@@ -39,25 +39,27 @@ public final class Persister<Value> {
         }
     }()
 
-    public init<Transformer: Persist.Transformer>(key: String, storedBy storage: Storage, transformer: Transformer) where Transformer.Input == Value {
+    public init<Transformer: Persist.Transformer>(key: String, storedBy storage: Storage, transformer: Transformer, lock: Lock) where Transformer.Input == Value {
         self.key = key
         self.storage = storage
         transform = transformer.anyOutputTransform()
         untransform = transformer.anyOutputUntransform()
+        self.lock = lock
 
         subscribeToStorageUpdatesIfPossible()
     }
 
-    public init(key: String, storedBy storage: Storage) {
+    public init(key: String, storedBy storage: Storage, lock: Lock) {
         self.key = key
         self.storage = storage
         transform = nil
         untransform = nil
+        self.lock = lock
 
         subscribeToStorageUpdatesIfPossible()
     }
 
-    public func persist(_ value: Value, ofType: Value.Type = Value.self) throws {
+    public func persist(_ value: Value) throws {
         try lock.perform {
             if let transform = transform {
                 let transformedValue = try transform(value)
@@ -82,13 +84,14 @@ public final class Persister<Value> {
         }
     }
 
-    public func retrieveValue(ofType: Value.Type = Value.self) throws -> Value? {
-        try lock.perform {
+    public func retrieveValue() throws -> Value? {
+        return try lock.perform {
             if let untransform = untransform {
                 guard let storedValue: Any = try storage.retrieveValue(for: key) else { return nil }
                 return try untransform(storedValue)
             } else {
-                return try storage.retrieveValue(for: key)
+                let result: Value? = try storage.retrieveValue(for: key)
+                return result
             }
         }
     }

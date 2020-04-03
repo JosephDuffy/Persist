@@ -21,14 +21,14 @@ public struct Persisted<Value> {
         self.projectedValue = persister
     }
 
-    public init(key: String, defaultValue: Value, storedBy storage: Storage) {
+    public init(key: String, defaultValue: Value, storedBy storage: Storage, lock: Lock) {
         self.defaultValue = defaultValue
-        self.projectedValue = Persister(key: key, storedBy: storage)
+        self.projectedValue = Persister(key: key, storedBy: storage, lock: lock)
     }
 
-    public init<Transformer: Persist.Transformer>(key: String, defaultValue: Value, storedBy storage: Storage, transformer: Transformer) where Transformer.Input == Value {
+    public init<Transformer: Persist.Transformer>(key: String, defaultValue: Value, storedBy storage: Storage, transformer: Transformer, lock: Lock) where Transformer.Input == Value {
         self.defaultValue = defaultValue
-        self.projectedValue = Persister(key: key, storedBy: storage, transformer: transformer)
+        self.projectedValue = Persister(key: key, storedBy: storage, transformer: transformer, lock: lock)
     }
 
 }
@@ -40,14 +40,14 @@ extension Persisted where Value: ExpressibleByNilLiteral {
         self.projectedValue = persister
     }
 
-    public init(key: String, defaultValue: Value = nil, storedBy storage: Storage) {
+    public init(key: String, defaultValue: Value = nil, storedBy storage: Storage, lock: Lock) {
         self.defaultValue = defaultValue
-        self.projectedValue = Persister(key: key, storedBy: storage)
+        self.projectedValue = Persister(key: key, storedBy: storage, lock: lock)
     }
 
-    public init<Transformer: Persist.Transformer>(key: String, defaultValue: Value = nil, storedBy storage: Storage, transformer: Transformer) where Transformer.Input == Value {
+    public init<Transformer: Persist.Transformer>(key: String, defaultValue: Value = nil, storedBy storage: Storage, transformer: Transformer, lock: Lock) where Transformer.Input == Value {
         self.defaultValue = defaultValue
-        self.projectedValue = Persister(key: key, storedBy: storage, transformer: transformer)
+        self.projectedValue = Persister(key: key, storedBy: storage, transformer: transformer, lock: lock)
     }
 
 }
