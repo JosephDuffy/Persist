@@ -1,6 +1,6 @@
 # Persist
 
-Property wrapper for automatic thread-safe storage and retrieval of values.
+Property wrapper for automatic storage and retrieval of values.
 
 ## Usage
 

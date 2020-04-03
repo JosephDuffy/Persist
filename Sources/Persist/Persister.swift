@@ -16,8 +16,6 @@ public final class Persister<Value> {
         return updatesSubject.eraseToAnyPublisher()
     }
 
-    private let lock: Lock
-
     private let transform: AnyOutputTransform<Value>?
 
     private let untransform: AnyOutputUntransform<Value>?
@@ -39,60 +37,52 @@ public final class Persister<Value> {
         }
     }()
 
-    public init<Transformer: Persist.Transformer>(key: String, storedBy storage: Storage, transformer: Transformer, lock: Lock) where Transformer.Input == Value {
+    public init<Transformer: Persist.Transformer>(key: String, storedBy storage: Storage, transformer: Transformer) where Transformer.Input == Value {
         self.key = key
         self.storage = storage
         transform = transformer.anyOutputTransform()
         untransform = transformer.anyOutputUntransform()
-        self.lock = lock
 
         subscribeToStorageUpdatesIfPossible()
     }
 
-    public init(key: String, storedBy storage: Storage, lock: Lock) {
+    public init(key: String, storedBy storage: Storage) {
         self.key = key
         self.storage = storage
         transform = nil
         untransform = nil
-        self.lock = lock
 
         subscribeToStorageUpdatesIfPossible()
     }
 
     public func persist(_ value: Value) throws {
-        try lock.perform {
-            if let transform = transform {
-                let transformedValue = try transform(value)
-                try storage.storeValue(transformedValue, key: key)
-            } else {
-                try storage.storeValue(value, key: key)
-            }
+        if let transform = transform {
+            let transformedValue = try transform(value)
+            try storage.storeValue(transformedValue, key: key)
+        } else {
+            try storage.storeValue(value, key: key)
+        }
 
-            if !(storage is UpdatePropagatingStorage) {
-                notifyUpdateListenersOfResult(.success(value))
-            }
+        if !(storage is UpdatePropagatingStorage) {
+            notifyUpdateListenersOfResult(.success(value))
         }
     }
 
     public func removeValue() throws {
-        try lock.perform {
-            try storage.removeValue(for: key)
+        try storage.removeValue(for: key)
 
-            if !(storage is UpdatePropagatingStorage) {
-                notifyUpdateListenersOfResult(.success(nil))
-            }
+        if !(storage is UpdatePropagatingStorage) {
+            notifyUpdateListenersOfResult(.success(nil))
         }
     }
 
     public func retrieveValue() throws -> Value? {
-        return try lock.perform {
-            if let untransform = untransform {
-                guard let storedValue: Any = try storage.retrieveValue(for: key) else { return nil }
-                return try untransform(storedValue)
-            } else {
-                let result: Value? = try storage.retrieveValue(for: key)
-                return result
-            }
+        if let untransform = untransform {
+            guard let storedValue: Any = try storage.retrieveValue(for: key) else { return nil }
+            return try untransform(storedValue)
+        } else {
+            let result: Value? = try storage.retrieveValue(for: key)
+            return result
         }
     }
 

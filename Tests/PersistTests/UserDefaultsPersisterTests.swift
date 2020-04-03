@@ -47,7 +47,7 @@ final class UserDefaultsStorageTests: XCTestCase {
     func testPersisterUpdateListenerUpdateViaUserDefaults() {
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
 
-        let persister = Persister<String>(key: "test", storedBy: userDefaults, lock: UnfairLock())
+        let persister = Persister<String>(key: "test", storedBy: userDefaults)
         let cancellable = persister.addUpdateListener() { _ in
             callsUpdateListenerExpectation.fulfill()
         }
@@ -60,7 +60,7 @@ final class UserDefaultsStorageTests: XCTestCase {
     func testPersisterUpdateListenerUpdateViaPersister() throws {
         let key = "test"
         let setValue = "value"
-        let persister = Persister<String>(key: key, storedBy: userDefaults, lock: UnfairLock())
+        let persister = Persister<String>(key: key, storedBy: userDefaults)
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
         let updateListenerCancellable = persister.addUpdateListener() { result in
