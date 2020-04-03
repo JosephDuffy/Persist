@@ -1,10 +1,10 @@
 # Persist
 
-Property wrapper for automatic storage and retrieval of values.
+Property wrapper for storage and retrieval of values with support for transformations such as storing as JSON.
 
 ## Usage
 
-Persist provides the `Persisted` property wrapper, which handles the automatic persistence and retrieval of values by utilising the `Persister`. When creating a `Persisted` property wrapper any form of storage may be used. Included with `Persist` is an extension to `UserDefaults` to support persistence.
+Persist provides the `Persisted` property wrapper, which handles the persistence and retrieval of values by utilising the `Persister`. When creating a `Persisted` property wrapper any form of storage may be used. Included with `Persist` is an extension to `UserDefaults` to support persistence.
 
 ```swift
 class Foo {
