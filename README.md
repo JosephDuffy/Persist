@@ -48,9 +48,36 @@ let cancellable = foo.$bar.addUpdateListener() { _ in
 }
 ```
 
-## Dependency Injection
+### Transformers
 
-To support testing you may initialise the property wrapper in your own init functions, e.g.:
+Some storage methods will only support a subset of types, or you might want to modify how some values are encoded/decoded (e.g. to ensure on-disk date representation are the same as what an API sends/expects). This is where transformers come in:
+
+```swift
+struct Bar: Codable {
+    var baz: String
+}
+
+class Foo {
+    @Persisted(key: "bar", storedBy: UserDefaults.standard, transformer: JSONTransformer())
+    var bar: Bar?
+}
+```
+
+When using a transformer subscribers will always be notified of the pre-encoded and post-decoded value:
+
+```swift
+let foo = Foo()
+let cancellable = foo.$bar.addUpdateListener() { bar in
+    // `bar` is always `Bar?` despite being stored as JSON `Data`
+    print("Value updated:", bar ?? "removed")
+}
+```
+
+Transformers are typesafe, e.g. `JSONTransformer` is only usable when the value to be stored is `Codable`.
+
+### Property Wrapper Initialisation
+
+To support dependency injection or to initialise more complex `Persisted` instances you may initialise the property wrapper in your own init functions:
 
 ```swift
 class Foo {
@@ -58,7 +85,29 @@ class Foo {
     var bar: String?
 
     init() {
-        _persisted = Persisted(key: "foo-bar", storage: UserDefaults.standard)
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = .secondsSince1970
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .secondsSince1970
+        let transformer = JSONTransformer(encoder: encoder, decoder: decoder)
+        _bar_ = Persisted(key: "foo-bar", storage: UserDefaults.standard, transformer: transformer)
     }
 }
+```
+
+## Installation
+
+Persist can be installed via [SwiftPM](https://github.com/apple/swift-package-manager) by adding the package to the dependencies section and as the dependency of a target:
+
+```swift
+let package = Package(
+    ...
+    dependencies: [
+        .package(url: "https://github.com/JosephDuffy/Persist.git", from: "0.1.0"),
+    ],
+    targets: [
+        .target(name: "MyApp", dependencies: ["Persist"]),
+    ],
+    ...
+)
 ```
