@@ -90,7 +90,7 @@ class Foo {
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .secondsSince1970
         let transformer = JSONTransformer(encoder: encoder, decoder: decoder)
-        _bar_ = Persisted(key: "foo-bar", storage: UserDefaults.standard, transformer: transformer)
+        _bar = Persisted(key: "foo-bar", storage: UserDefaults.standard, transformer: transformer)
     }
 }
 ```
