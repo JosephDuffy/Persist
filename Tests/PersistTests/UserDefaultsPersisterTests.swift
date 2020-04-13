@@ -16,6 +16,15 @@ final class UserDefaultsStorageTests: XCTestCase {
         XCTAssertEqual(try userDefaults.retrieveValue(for: "key"), "test")
     }
 
+    func testStoringURLs() {
+        let url = URL(string: "http://example.com")
+        userDefaults.storeValue(url, key: "key")
+
+        XCTAssertEqual(userDefaults.url(forKey: "key"), url, "URLs should be stored as URLs")
+        XCTAssertEqual(try userDefaults.retrieveValue(for: "key"), url)
+        XCTAssertNil(try userDefaults.retrieveValue(for: "other") as URL?)
+    }
+
     func testUpdateListenerWithStorageFunction() {
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
         callsUpdateListenerExpectation.expectedFulfillmentCount = 1

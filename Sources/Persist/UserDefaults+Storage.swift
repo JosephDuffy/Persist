@@ -3,7 +3,11 @@ import Foundation
 extension UserDefaults: UpdatePropagatingStorage {
 
     public func storeValue<Value>(_ value: Value, key: String) {
-        set(value, forKey: key)
+        if let url = value as? URL {
+            set(url, forKey: key)
+        } else {
+            set(value, forKey: key)
+        }
     }
 
     public func removeValue(for key: String) {
@@ -11,6 +15,10 @@ extension UserDefaults: UpdatePropagatingStorage {
     }
 
     public func retrieveValue<Value>(for key: String) throws -> Value? {
+        if Value.self == URL.self {
+            return url(forKey: key) as! Value?
+        }
+
         guard let object = self.object(forKey: key) else { return nil }
         guard let value = object as? Value else {
             throw PersistanceError.unexpectedValueType(value: object, expected: Value.self)
