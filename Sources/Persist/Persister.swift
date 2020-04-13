@@ -1,5 +1,7 @@
 import Foundation
+#if canImport(Combine)
 import Combine
+#endif
 
 public final class Persister<Value> {
 
@@ -11,10 +13,12 @@ public final class Persister<Value> {
 
     public private(set) var storage: Storage
 
+    #if canImport(Combine)
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
     public var updatesPublisher: AnyPublisher<UpdatePayload, Never> {
         return updatesSubject.eraseToAnyPublisher()
     }
+    #endif
 
     private let transform: AnyOutputTransform<Value>?
 
@@ -24,6 +28,7 @@ public final class Persister<Value> {
 
     private var updateListeners: [UUID: UpdateListener] = [:]
 
+    #if canImport(Combine)
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
     private var updatesSubject: PassthroughSubject<UpdatePayload, Never> {
         return _updatesSubject as! PassthroughSubject<UpdatePayload, Never>
@@ -36,6 +41,7 @@ public final class Persister<Value> {
             preconditionFailure()
         }
     }()
+    #endif
 
     public init<Transformer: Persist.Transformer>(key: String, storedBy storage: Storage, transformer: Transformer) where Transformer.Input == Value {
         self.key = key
@@ -98,9 +104,11 @@ public final class Persister<Value> {
     private func notifyUpdateListenersOfResult(_ result: Result<Value?, Error>) {
         updateListeners.values.forEach { $0(result) }
 
+        #if canImport(Combine)
         if #available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *) {
             updatesSubject.send(result)
         }
+        #endif
     }
 
     private func subscribeToStorageUpdatesIfPossible() {
