@@ -10,19 +10,49 @@ final class UserDefaultsStorageTests: XCTestCase {
     }
 
     func testStoringStrings() {
-        userDefaults.storeValue("test", key: "key")
+        let key = "key"
+        let value = "test"
 
-        XCTAssertEqual(userDefaults.string(forKey: "key"), "test", "String should be stored as strings")
-        XCTAssertEqual(try userDefaults.retrieveValue(for: "key"), "test")
+        let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
+        let cancellable = userDefaults.addUpdateListener(forKey: key) { newValue in
+            defer {
+                callsUpdateListenerExpectation.fulfill()
+            }
+
+            XCTAssertTrue(newValue is String, "Value passed to update listener should be a String")
+            XCTAssertEqual(newValue as? String, value, "Value passed to update listener should be new value")
+        }
+        _ = cancellable
+
+        userDefaults.storeValue(value, key: key)
+
+        XCTAssertEqual(userDefaults.string(forKey: key),value, "String should be stored as strings")
+        XCTAssertEqual(try userDefaults.retrieveValue(for: key), value)
+
+        waitForExpectations(timeout: 0.1)
     }
 
     func testStoringURLs() {
         let url = URL(string: "http://example.com")
+
+        let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
+        let cancellable = userDefaults.addUpdateListener(forKey: "key") { newValue in
+            defer {
+                callsUpdateListenerExpectation.fulfill()
+            }
+
+            XCTAssertTrue(newValue is URL, "Value passed to update listener should be a URL")
+            XCTAssertEqual(newValue as? URL, url, "Value passed to update listener should be new value")
+        }
+        _ = cancellable
+
         userDefaults.storeValue(url, key: "key")
 
         XCTAssertEqual(userDefaults.url(forKey: "key"), url, "URLs should be stored as URLs")
         XCTAssertEqual(try userDefaults.retrieveValue(for: "key"), url)
         XCTAssertNil(try userDefaults.retrieveValue(for: "other") as URL?)
+
+        waitForExpectations(timeout: 0.1)
     }
 
     func testUpdateListenerWithStorageFunction() {
@@ -80,8 +110,8 @@ final class UserDefaultsStorageTests: XCTestCase {
             switch result {
             case .success(let value):
                 XCTAssertEqual(value, setValue)
-            case .failure:
-                XCTFail("Should return a success for updated values")
+            case .failure(let error):
+                XCTFail("Should return a success for updated values, not \(error)")
             }
         }
         _ = updateListenerCancellable
