@@ -3,6 +3,8 @@
  */
 public protocol Storage {
 
+    associatedtype Key
+
     typealias UpdateListener = (Any?) -> Void
 
     /**
@@ -11,14 +13,14 @@ public protocol Storage {
      - parameter value: The value to store.
      - parameter key: The key to store the value against.
      */
-    mutating func storeValue<Value>(_ value: Value, key: String) throws
+    mutating func storeValue<Value>(_ value: Value, key: Key) throws
 
     /**
      Remove the value for the provided key.
 
      - parameter key: The key of the value to remove.
      */
-    mutating func removeValue(for key: String) throws
+    mutating func removeValue(for key: Key) throws
 
     /**
      Retrieve the value for the provided key.
@@ -27,7 +29,7 @@ public protocol Storage {
      - parameter key: The key of the value to retrieve.
      - returns: The stored value, or `nil` if no value is associated with the key.
      */
-    func retrieveValue<Value>(for key: String) throws -> Value?
+    func retrieveValue<Value>(for key: Key) throws -> Value?
 
     /**
      Add an update listener that should be notified when a value is updated from an external source, i.e. not via any of the functions on `Storage`.
@@ -36,7 +38,7 @@ public protocol Storage {
      - parameter updateListener: A closure to call when an update occurs.
      - returns: An object that can be used to remove the update listener and cancel future updates.
      */
-    mutating func addUpdateListener(forKey key: String, updateListener: @escaping UpdateListener) -> Cancellable
+    mutating func addUpdateListener(forKey key: Key, updateListener: @escaping UpdateListener) -> Cancellable
 }
 
 extension Storage {
@@ -51,7 +53,7 @@ extension Storage {
      - parameter type: The type of the value to retrieve.
      - returns: The stored value, or `nil` if no value is associated with the key.
      */
-    public func retrieveValue<Value>(for key: String, ofType type: Value.Type) throws -> Value? {
+    public func retrieveValue<Value>(for key: Key, ofType type: Value.Type) throws -> Value? {
         try retrieveValue(for: key)
     }
 

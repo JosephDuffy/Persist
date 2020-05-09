@@ -3,13 +3,15 @@ import Foundation
 import Combine
 #endif
 
-public final class Persister<Value> {
+public final class Persister<Value, Storage: Persist.Storage> {
 
     public typealias UpdatePayload = Result<Value?, Error>
 
     public typealias UpdateListener = (UpdatePayload) -> Void
 
-    public let key: String
+    public typealias Key = Storage.Key
+
+    public let key: Key
 
     public private(set) var storage: Storage
 
@@ -43,7 +45,7 @@ public final class Persister<Value> {
     }()
     #endif
 
-    public init<Transformer: Persist.Transformer>(key: String, storedBy storage: Storage, transformer: Transformer) where Transformer.Input == Value {
+    public init<Transformer: Persist.Transformer>(key: Key, storedBy storage: Storage, transformer: Transformer) where Transformer.Input == Value {
         self.key = key
         self.storage = storage
         transform = transformer.anyOutputTransform()
@@ -52,7 +54,7 @@ public final class Persister<Value> {
         subscribeToStorageUpdates()
     }
 
-    public init(key: String, storedBy storage: Storage) {
+    public init(key: Key, storedBy storage: Storage) {
         self.key = key
         self.storage = storage
         transform = nil
