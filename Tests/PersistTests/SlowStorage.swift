@@ -4,7 +4,7 @@ import Foundation
 /**
  Storage that only persists value in memory and allows for artificial slowdowns.
  */
-public final class SlowStorage: Storage {
+public final class SlowStorage: InMemoryStorage {
 
     public var storeDelay: useconds_t?
 
@@ -12,30 +12,22 @@ public final class SlowStorage: Storage {
 
     public var retrieveDelay: useconds_t?
 
-    private var dictionary: [String: Any] = [:]
-
-    public init() {}
-
-    public func storeValue<Value>(_ value: Value, key: String) throws {
+    public override func storeValue<Value>(_ value: Value, key: String) {
         _ = storeDelay.map(usleep)
 
-        dictionary[key] = value
+        super.storeValue(value, key: key)
     }
 
-    public func removeValue(for key: String) throws {
+    public override func removeValue(for key: String) {
         _ = removeDelay.map(usleep)
 
-        dictionary.removeValue(forKey: key)
+        super.removeValue(for: key)
     }
 
-    public func retrieveValue<Value>(for key: String) throws -> Value? {
+    public override func retrieveValue<Value>(for key: String) throws -> Value? {
         _ = retrieveDelay.map(usleep)
 
-        guard let anyValue = dictionary[key] else { return nil }
-        guard let value = anyValue as? Value else {
-            throw PersistanceError.unexpectedValueType(value: anyValue, expected: Value.self)
-        }
-        return value
+        return try super.retrieveValue(for: key)
     }
 
 }

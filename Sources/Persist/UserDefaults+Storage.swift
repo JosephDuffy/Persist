@@ -1,6 +1,6 @@
 import Foundation
 
-extension UserDefaults: UpdatePropagatingStorage {
+extension UserDefaults: Storage {
 
     public func storeValue<Value>(_ value: Value, key: String) {
         if let url = value as? URL {

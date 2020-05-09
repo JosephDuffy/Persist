@@ -3,6 +3,8 @@
  */
 public protocol Storage {
 
+    typealias UpdateListener = (Any?) -> Void
+
     /**
      Store the provided value against the provided key.
 
@@ -26,6 +28,15 @@ public protocol Storage {
      - returns: The stored value, or `nil` if no value is associated with the key.
      */
     func retrieveValue<Value>(for key: String) throws -> Value?
+
+    /**
+     Add an update listener that should be notified when a value is updated from an external source, i.e. not via any of the functions on `Storage`.
+
+     - parameter key: The key to subscribe to changes to.
+     - parameter updateListener: A closure to call when an update occurs.
+     - returns: An object that can be used to remove the update listener and cancel future updates.
+     */
+    mutating func addUpdateListener(forKey key: String, updateListener: @escaping UpdateListener) -> Cancellable
 }
 
 extension Storage {

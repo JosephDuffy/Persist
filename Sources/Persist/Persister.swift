@@ -49,7 +49,7 @@ public final class Persister<Value> {
         transform = transformer.anyOutputTransform()
         untransform = transformer.anyOutputUntransform()
 
-        subscribeToStorageUpdatesIfPossible()
+        subscribeToStorageUpdates()
     }
 
     public init(key: String, storedBy storage: Storage) {
@@ -58,7 +58,7 @@ public final class Persister<Value> {
         transform = nil
         untransform = nil
 
-        subscribeToStorageUpdatesIfPossible()
+        subscribeToStorageUpdates()
     }
 
     public func persist(_ value: Value) throws {
@@ -68,18 +68,10 @@ public final class Persister<Value> {
         } else {
             try storage.storeValue(value, key: key)
         }
-
-        if !(storage is UpdatePropagatingStorage) {
-            notifyUpdateListenersOfResult(.success(value))
-        }
     }
 
     public func removeValue() throws {
         try storage.removeValue(for: key)
-
-        if !(storage is UpdatePropagatingStorage) {
-            notifyUpdateListenersOfResult(.success(nil))
-        }
     }
 
     public func retrieveValue() throws -> Value? {
@@ -111,10 +103,8 @@ public final class Persister<Value> {
         #endif
     }
 
-    private func subscribeToStorageUpdatesIfPossible() {
-        guard let updatePropagatingStorage = storage as? UpdatePropagatingStorage else { return }
-
-        storageUpdateListenerCancellable = updatePropagatingStorage.addUpdateListener(forKey: key) { [weak self] value in
+    private func subscribeToStorageUpdates() {
+        storageUpdateListenerCancellable = storage.addUpdateListener(forKey: key) { [weak self] value in
             guard let self = self else { return }
 
             let result: Result<Value?, Error>

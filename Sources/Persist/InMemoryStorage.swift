@@ -1,21 +1,25 @@
+import Foundation
+
 /**
  Storage that only persists value in memory; values will not be persisted between app launches or instances of `InMemoryStorage`.
  */
-public struct InMemoryStorage: Storage {
+open class InMemoryStorage: Storage {
 
     private var dictionary: [String: Any] = [:]
 
+    private var updateListeners: [UUID: UpdateListener] = [:]
+
     public init() {}
 
-    public mutating func storeValue<Value>(_ value: Value, key: String) throws {
+    open func storeValue<Value>(_ value: Value, key: String) {
         dictionary[key] = value
     }
 
-    public mutating func removeValue(for key: String) throws {
+    open func removeValue(for key: String) {
         dictionary.removeValue(forKey: key)
     }
 
-    public func retrieveValue<Value>(for key: String) throws -> Value? {
+    open func retrieveValue<Value>(for key: String) throws -> Value? {
         guard let anyValue = dictionary[key] else { return nil }
         guard let value = anyValue as? Value else {
             throw PersistanceError.unexpectedValueType(value: anyValue, expected: Value.self)
@@ -23,8 +27,18 @@ public struct InMemoryStorage: Storage {
         return value
     }
 
-    public mutating func storeValue<Value>(_ value: Value, key: String, ofType type: Value.Type) throws {
-        try storeValue(value, key: key)
+    open func storeValue<Value>(_ value: Value, key: String, ofType type: Value.Type) {
+        storeValue(value, key: key)
+    }
+
+    open func addUpdateListener(forKey key: String, updateListener: @escaping UpdateListener) -> Cancellable {
+        let uuid = UUID()
+
+        updateListeners[uuid] = updateListener
+
+        return Cancellable { [weak self] in
+            self?.updateListeners.removeValue(forKey: uuid)
+        }
     }
 
 }
