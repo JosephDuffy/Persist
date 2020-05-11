@@ -67,9 +67,14 @@ When using a transformer subscribers will always be notified of the pre-encoded 
 
 ```swift
 let foo = Foo()
-let cancellable = foo.$bar.addUpdateListener() { bar in
-    // `bar` is always `Bar?` despite being stored as JSON `Data`
-    print("Value updated:", bar ?? "removed")
+let cancellable = foo.$bar.addUpdateListener() { updateResult in
+    switch updateResult {
+    case .success(let bar):
+        // `bar` is always `Bar?` despite being stored as JSON `Data`
+        print("Bar updated:", bar ?? "removed")
+    case .failure(let error):
+        print("Error updating bar:", error)
+    }
 }
 ```
 
