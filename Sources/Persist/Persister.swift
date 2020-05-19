@@ -116,7 +116,14 @@ public final class Persister<Value, Storage: Persist.Storage> {
             }
 
             if let value = value {
-                if let value = value as? Value {
+                if let untransform = self.untransform {
+                    do {
+                        let untransformedValue = try untransform(value)
+                        result = .success(untransformedValue)
+                    } catch {
+                        result = .failure(error)
+                    }
+                } else if let value = value as? Value {
                     result = .success(value)
                 } else {
                     result = .failure(PersistanceError.unexpectedValueType(value: value, expected: Value.self))
