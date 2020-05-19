@@ -7,16 +7,20 @@ open class InMemoryStorage: Storage {
 
     private var dictionary: [String: Any] = [:]
 
-    private var updateListeners: [UUID: UpdateListener] = [:]
+    private var updateListeners: [String: [UUID: UpdateListener]] = [:]
 
     public init() {}
 
     open func storeValue<Value>(_ value: Value, key: String) {
         dictionary[key] = value
+
+        updateListeners[key]?.values.forEach { $0(value) }
     }
 
     open func removeValue(for key: String) {
         dictionary.removeValue(forKey: key)
+
+        updateListeners[key]?.values.forEach { $0(nil) }
     }
 
     open func retrieveValue<Value>(for key: String) throws -> Value? {
@@ -27,17 +31,13 @@ open class InMemoryStorage: Storage {
         return value
     }
 
-    open func storeValue<Value>(_ value: Value, key: String, ofType type: Value.Type) {
-        storeValue(value, key: key)
-    }
-
     open func addUpdateListener(forKey key: String, updateListener: @escaping UpdateListener) -> Cancellable {
         let uuid = UUID()
 
-        updateListeners[uuid] = updateListener
+        updateListeners[key, default: [:]][uuid] = updateListener
 
         return Cancellable { [weak self] in
-            self?.updateListeners.removeValue(forKey: uuid)
+            self?.updateListeners[key]?.removeValue(forKey: uuid)
         }
     }
 
