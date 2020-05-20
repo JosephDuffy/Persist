@@ -7,7 +7,7 @@ final class PersisterTests: XCTestCase {
         struct StoredValue: Codable, Equatable {
             let property: String
         }
-        let persister = Persister<StoredValue?, InMemoryStorage>(key: "test", storedBy: InMemoryStorage(), transformer: JSONTransformer())
+        let persister = Persister<StoredValue, InMemoryStorage>(key: "test", storedBy: InMemoryStorage(), transformer: JSONTransformer())
         let storedValue = StoredValue(property: "value")
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
