@@ -1,7 +1,7 @@
 import Foundation
 
 /**
- Storage that only persists value in memory; values will not be persisted between app launches or instances of `InMemoryStorage`.
+ Storage that stores values in memory; values will not be persisted between app launches or instances of `InMemoryStorage`.
  */
 open class InMemoryStorage: Storage {
 
