@@ -13,6 +13,15 @@ public struct JSONTransformer<Input: Codable>: Transformer {
         self.decoder = decoder
     }
 
+    public init(coderUserInfo userInfo: [CodingUserInfoKey: Any]) {
+        let encoder = JSONEncoder()
+        let decoder = JSONDecoder()
+        encoder.userInfo = userInfo
+        decoder.userInfo = userInfo
+
+        self.init(encoder: encoder, decoder: decoder)
+    }
+
     public func transformValue(_ value: Input) throws -> Data {
         return try encoder.encode(value)
     }
