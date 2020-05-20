@@ -1,5 +1,7 @@
 import Foundation
 
+public typealias PersistedInMemory<Value> = Persisted<Value, InMemoryStorage>
+
 /**
  Storage that stores values in memory; values will not be persisted between app launches or instances of `InMemoryStorage`.
  */
