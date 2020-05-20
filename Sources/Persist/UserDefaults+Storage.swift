@@ -1,5 +1,7 @@
 import Foundation
 
+public typealias PersistedInUserDefaults<Value> = Persisted<Value, UserDefaults>
+
 extension UserDefaults: Storage {
 
     public func storeValue<Value>(_ value: Value, key: String) {
