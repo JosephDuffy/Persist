@@ -1,6 +1,6 @@
 import Foundation
 
-public struct PropertyListTransformer<Input: Codable>: Transformer {
+public struct PropertyListEncoderTransformer<Input: Codable>: Transformer {
 
     public typealias Output = Data
 

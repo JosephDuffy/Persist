@@ -3,17 +3,17 @@ import Foundation
 import Combine
 #endif
 
-public final class Persister<Value, Storage: Persist.Storage> {
+public final class Persister<Value> {
 
     public typealias UpdatePayload = Result<Value?, Error>
 
     public typealias UpdateListener = (UpdatePayload) -> Void
 
-    public typealias Key = Storage.Key
+    public typealias ValueGetter = () throws -> Value?
 
-    public let key: Key
+    public typealias ValueSetter = (Value?) throws -> Void
 
-    public private(set) var storage: Storage
+    public typealias AddUpdateListener = (@escaping (UpdatePayload) -> Void) -> Cancellable
 
     #if canImport(Combine)
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
@@ -22,9 +22,9 @@ public final class Persister<Value, Storage: Persist.Storage> {
     }
     #endif
 
-    private let transform: AnyOutputTransform<Value>?
+    private let valueGetter: ValueGetter
 
-    private let untransform: AnyOutputUntransform<Value>?
+    private let valueSetter: ValueSetter
 
     private var storageUpdateListenerCancellable: Cancellable?
 
@@ -45,45 +45,156 @@ public final class Persister<Value, Storage: Persist.Storage> {
     }()
     #endif
 
-    public init<Transformer: Persist.Transformer>(key: Key, storedBy storage: Storage, transformer: Transformer) where Transformer.Input == Value {
-        self.key = key
-        self.storage = storage
-        transform = transformer.anyOutputTransform()
-        untransform = transformer.anyOutputUntransform()
+    public init(
+        valueGetter: @escaping ValueGetter,
+        valueSetter: @escaping ValueSetter,
+        addUpdateListener: AddUpdateListener
+    ) {
+        self.valueGetter = valueGetter
+        self.valueSetter = valueSetter
 
-        subscribeToStorageUpdates()
+        subscribeToStorageUpdates(addUpdateListener: addUpdateListener)
     }
 
-    public init(key: Key, storedBy storage: Storage) {
-        self.key = key
-        self.storage = storage
-        transform = nil
-        untransform = nil
-
-        subscribeToStorageUpdates()
-    }
-
-    public func persist(_ value: Value) throws {
-        if let transform = transform {
-            let transformedValue = try transform(value)
-            try storage.storeValue(transformedValue, key: key)
-        } else {
-            try storage.storeValue(value, key: key)
+    public convenience init<Storage: Persist.Storage>(
+        key: Storage.Key,
+        storedBy storage: Storage
+    ) where Storage.Value == Any {
+        let valueGetter: ValueGetter = {
+            guard let anyValue = try storage.retrieveValue(for: key) else { return nil }
+            guard let value = anyValue as? Value else {
+                throw PersistanceError.unexpectedValueType(value: anyValue, expected: Value.self)
+            }
+            return value
         }
+
+        let valueSetter: ValueSetter = { newValue in
+            guard let newValue = newValue else {
+                try storage.removeValue(for: key)
+                return
+            }
+
+            try storage.storeValue(newValue, key: key)
+        }
+
+        self.init(
+            valueGetter: valueGetter,
+            valueSetter: valueSetter,
+            addUpdateListener: { updateListener in
+                return storage.addUpdateListener(forKey: key) { newValue in
+                    guard let anyValue = newValue else {
+                        updateListener(.success(nil))
+                        return
+                    }
+
+                    guard let value = anyValue as? Value else {
+                        updateListener(.failure(PersistanceError.unexpectedValueType(value: anyValue, expected: Value.self)))
+                        return
+                    }
+
+                    updateListener(.success(value))
+                }
+            }
+        )
     }
 
-    public func removeValue() throws {
-        try storage.removeValue(for: key)
+    public convenience init<Storage: Persist.Storage, Transformer: Persist.Transformer>(
+        key: Storage.Key,
+        storedBy storage: Storage,
+        transformer: Transformer
+    ) where Storage.Value == Any, Transformer.Input == Value {
+        let valueGetter: ValueGetter = {
+            guard let anyValue = try storage.retrieveValue(for: key) else { return nil }
+            guard let transformerOutput = anyValue as? Transformer.Output else {
+                throw PersistanceError.unexpectedValueType(value: anyValue, expected: Transformer.Output.self)
+            }
+            return try transformer.untransformValue(from: transformerOutput)
+        }
+
+        let valueSetter: ValueSetter = { newValue in
+            guard let newValue = newValue else {
+                try storage.removeValue(for: key)
+                return
+            }
+
+            let transformedValue = try transformer.transformValue(newValue)
+            try storage.storeValue(transformedValue, key: key)
+        }
+
+        self.init(
+            valueGetter: valueGetter,
+            valueSetter: valueSetter,
+            addUpdateListener: { updateListener in
+                return storage.addUpdateListener(forKey: key) { newValue in
+                    guard let anyValue = newValue else {
+                        updateListener(.success(nil))
+                        return
+                    }
+
+                    guard let value = anyValue as? Transformer.Output else {
+                        updateListener(.failure(PersistanceError.unexpectedValueType(value: anyValue, expected: Transformer.Output.self)))
+                        return
+                    }
+
+                    do {
+                        let untransformedValue = try transformer.untransformValue(from: value)
+                        updateListener(.success(untransformedValue))
+                    } catch {
+                        updateListener(.failure(error))
+                    }
+                }
+            }
+        )
+    }
+
+    public convenience init<Storage: Persist.Storage, Transformer: Persist.Transformer>(
+        key: Storage.Key,
+        storedBy storage: Storage,
+        transformer: Transformer
+    ) where Transformer.Input == Value, Transformer.Output == Storage.Value {
+        let valueGetter: ValueGetter = {
+            guard let value = try storage.retrieveValue(for: key) else { return nil }
+
+            return try transformer.untransformValue(from: value)
+        }
+
+        let valueSetter: ValueSetter = { newValue in
+            guard let newValue = newValue else {
+                try storage.removeValue(for: key)
+                return
+            }
+
+            let transformedValue = try transformer.transformValue(newValue)
+            try storage.storeValue(transformedValue, key: key)
+        }
+
+        self.init(
+            valueGetter: valueGetter,
+            valueSetter: valueSetter,
+            addUpdateListener: { updateListener in
+                return storage.addUpdateListener(forKey: key) { newValue in
+                    guard let newValue = newValue else {
+                        updateListener(.success(nil))
+                        return
+                    }
+
+                    do {
+                        let untransformedValue = try transformer.untransformValue(from: newValue)
+                        updateListener(.success(untransformedValue))
+                    } catch {
+                        updateListener(.failure(error))
+                    }
+                }
+            }
+        )
+    }
+
+    public func persist(_ newValue: Value?) throws {
+        try valueSetter(newValue)
     }
 
     public func retrieveValue() throws -> Value? {
-        if let untransform = untransform {
-            guard let storedValue: Any = try storage.retrieveValue(for: key) else { return nil }
-            return try untransform(storedValue)
-        } else {
-            let result: Value? = try storage.retrieveValue(for: key)
-            return result
-        }
+        return try valueGetter()
     }
 
     public func addUpdateListener(_ updateListener: @escaping UpdateListener) -> Cancellable {
@@ -105,54 +216,11 @@ public final class Persister<Value, Storage: Persist.Storage> {
         #endif
     }
 
-    private func subscribeToStorageUpdates() {
-        storageUpdateListenerCancellable = storage.addUpdateListener(forKey: key) { [weak self] value in
+    private func subscribeToStorageUpdates(addUpdateListener: AddUpdateListener) {
+        storageUpdateListenerCancellable = addUpdateListener { [weak self] result in
             guard let self = self else { return }
 
-            let result: Result<Value?, Error>
-
-            defer {
-                self.notifyUpdateListenersOfResult(result)
-            }
-
-            if let value = value {
-                if let untransform = self.untransform {
-                    do {
-                        let untransformedValue = try untransform(value)
-                        result = .success(untransformedValue)
-                    } catch {
-                        result = .failure(error)
-                    }
-                } else if let value = value as? Value {
-                    result = .success(value)
-                } else {
-                    result = .failure(PersistanceError.unexpectedValueType(value: value, expected: Value.self))
-                }
-            } else {
-                result = .success(nil)
-            }
-        }
-    }
-
-}
-
-private typealias AnyOutputTransform<Input> = (_ value: Input) throws -> Any
-private typealias AnyOutputUntransform<Input> = (_ output: Any) throws -> Input
-
-extension Transformer {
-
-    fileprivate func anyOutputTransform() -> AnyOutputTransform<Input> {
-        return { value in
-            return try self.transformValue(value)
-        }
-    }
-
-    fileprivate func anyOutputUntransform() -> AnyOutputUntransform<Input> {
-        return { anyOutput in
-            guard let output = anyOutput as? Output else {
-                throw PersistanceError.unexpectedValueType(value: anyOutput, expected: Output.self)
-            }
-            return try self.untransformValue(from: output)
+            self.notifyUpdateListenersOfResult(result)
         }
     }
 

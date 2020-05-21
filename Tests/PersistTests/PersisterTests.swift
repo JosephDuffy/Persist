@@ -7,7 +7,8 @@ final class PersisterTests: XCTestCase {
         struct StoredValue: Codable, Equatable {
             let property: String
         }
-        let persister = Persister<StoredValue, InMemoryStorage>(key: "test", storedBy: InMemoryStorage(), transformer: JSONTransformer())
+        let storage = InMemoryStorage()
+        let persister = Persister<StoredValue>(key: "test", storedBy: storage, transformer: JSONTransformer())
         let storedValue = StoredValue(property: "value")
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
@@ -26,7 +27,7 @@ final class PersisterTests: XCTestCase {
         _ = cancellable
 
         try persister.persist(storedValue)
-        XCTAssertNotNil(try persister.storage.retrieveValue(for: "test") as Data?, "Should store encoded data in storage")
+        XCTAssert(storage.retrieveValue(for: "test") is Data, "Should store encoded data in storage")
         XCTAssertEqual(try persister.retrieveValue(), storedValue, "Should return untransformed value")
 
         waitForExpectations(timeout: 1, handler: nil)

@@ -12,7 +12,7 @@ public final class SlowStorage: InMemoryStorage {
 
     public var retrieveDelay: useconds_t?
 
-    public override func storeValue<Value>(_ value: Value, key: String) {
+    public override func storeValue(_ value: Any, key: String) {
         _ = storeDelay.map(usleep)
 
         super.storeValue(value, key: key)
@@ -24,10 +24,10 @@ public final class SlowStorage: InMemoryStorage {
         super.removeValue(for: key)
     }
 
-    public override func retrieveValue<Value>(for key: String) throws -> Value? {
+    public override func retrieveValue(for key: String) -> Any? {
         _ = retrieveDelay.map(usleep)
 
-        return try super.retrieveValue(for: key)
+        return super.retrieveValue(for: key)
     }
 
 }

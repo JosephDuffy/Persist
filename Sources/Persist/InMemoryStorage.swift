@@ -1,11 +1,11 @@
 import Foundation
 
-public typealias PersistedInMemory<Value> = Persisted<Value, InMemoryStorage>
-
 /**
  Storage that stores values in memory; values will not be persisted between app launches or instances of `InMemoryStorage`.
  */
 open class InMemoryStorage: Storage {
+
+    public typealias Value = Any
 
     private var dictionary: [String: Any] = [:]
 
@@ -13,7 +13,7 @@ open class InMemoryStorage: Storage {
 
     public init() {}
 
-    open func storeValue<Value>(_ value: Value, key: String) {
+    open func storeValue(_ value: Any, key: String) {
         dictionary[key] = value
 
         updateListeners[key]?.values.forEach { $0(value) }
@@ -25,12 +25,8 @@ open class InMemoryStorage: Storage {
         updateListeners[key]?.values.forEach { $0(nil) }
     }
 
-    open func retrieveValue<Value>(for key: String) throws -> Value? {
-        guard let anyValue = dictionary[key] else { return nil }
-        guard let value = anyValue as? Value else {
-            throw PersistanceError.unexpectedValueType(value: anyValue, expected: Value.self)
-        }
-        return value
+    open func retrieveValue(for key: String) -> Any? {
+        return dictionary[key]
     }
 
     open func addUpdateListener(forKey key: String, updateListener: @escaping UpdateListener) -> Cancellable {

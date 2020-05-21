@@ -7,7 +7,7 @@ final class PersistedTests: XCTestCase {
         struct StoredValue: Codable, Equatable {
             let property: String
         }
-        var persisted = Persisted<StoredValue, InMemoryStorage>(key: "test-key", storedBy: InMemoryStorage())
+        var persisted = Persisted<StoredValue>(key: "test-key", storedBy: InMemoryStorage())
         let storedValue = StoredValue(property: "value")
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
@@ -35,7 +35,7 @@ final class PersistedTests: XCTestCase {
         struct StoredValue: Codable, Equatable {
             let property: String
         }
-        var persisted = Persisted<StoredValue, InMemoryStorage>(key: "test-key", storedBy: InMemoryStorage())
+        var persisted = Persisted<StoredValue>(key: "test-key", storedBy: InMemoryStorage())
         let storedValue = StoredValue(property: "value")
         persisted.wrappedValue = storedValue
 

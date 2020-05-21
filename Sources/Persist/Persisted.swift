@@ -1,38 +1,45 @@
 import Foundation
 
 @propertyWrapper
-public struct Persisted<Value, Storage: Persist.Storage> {
+public struct Persisted<Value> {
 
     public var wrappedValue: Value? {
         mutating get {
-            return (try? projectedValue.retrieveValue()) ?? defaultValue
+            return try? projectedValue.retrieveValue() ?? defaultValue
         }
         set {
-            if let newValue = newValue {
-                try? projectedValue.persist(newValue)
-            } else {
-                try? projectedValue.removeValue()
-            }
+            try? projectedValue.persist(newValue)
         }
     }
 
-    public private(set) var projectedValue: Persister<Value, Storage>
+    public private(set) var projectedValue: Persister<Value>
 
     public let defaultValue: Value?
 
-    public init(defaultValue: Value? = nil, storedBy persister: Persister<Value, Storage>) {
+    public init(persister: Persister<Value>, defaultValue: Value? = nil) {
         self.defaultValue = defaultValue
-        self.projectedValue = persister
+        projectedValue = persister
     }
 
-    public init(key: Storage.Key, defaultValue: Value? = nil, storedBy storage: Storage) {
+    public init<Storage: Persist.Storage>(
+        key: Storage.Key,
+        defaultValue: Value? = nil,
+        storedBy storage: Storage
+    ) where Storage.Value == Any {
         self.defaultValue = defaultValue
-        self.projectedValue = Persister(key: key, storedBy: storage)
+
+        projectedValue = Persister(key: key, storedBy: storage)
     }
 
-    public init<Transformer: Persist.Transformer>(key: Storage.Key, defaultValue: Value? = nil, storedBy storage: Storage, transformer: Transformer) where Transformer.Input == Value {
+    public init<Storage: Persist.Storage, Transformer: Persist.Transformer>(
+        key: Storage.Key,
+        defaultValue: Value? = nil,
+        storedBy storage: Storage,
+        transformer: Transformer
+    ) where Transformer.Input == Value, Transformer.Output == Storage.Value {
         self.defaultValue = defaultValue
-        self.projectedValue = Persister(key: key, storedBy: storage, transformer: transformer)
+
+        projectedValue = Persister(key: key, storedBy: storage, transformer: transformer)
     }
 
 }
