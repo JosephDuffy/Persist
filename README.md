@@ -1,14 +1,14 @@
 # Persist
 
-Property wrapper for storage and retrieval of values with support for transformations such as storing as JSON.
+Property wrapper for storing and retrieving values with support for transformations such as storing as JSON data.
 
 ## Usage
 
-Persist provides the `Persisted` property wrapper, which handles the persistence and retrieval of values by utilising the `Persister`. When creating a `Persisted` property wrapper any form of storage may be used. Included with `Persist` is an extension to `UserDefaults` to support persistence.
+Persist provides the `Persisted` property wrapper, which handles the persisting of values by utilising some form of storage. When creating a `Persisted` property wrapper any form of storage may be used, as long as it supports the type you wish to store.
 
 ```swift
 class Foo {
-    @Persisted(key: "foo-bar", storage: UserDefaults.standard)
+    @Persisted(key: "foo-bar", userDefaults: .standard)
     var bar: String?
 }
 
@@ -18,13 +18,21 @@ foo.bar = "new-value"
 UserDefaults.standard.object(forKey: "foo-bar") // "new-value"
 ```
 
+`Persist` includes out-of-the-box supports for:
+
+- [x] `UserDefaults`
+- [ ] `NSUbiquitousKeyValueStore`
+- [ ] Local file system
+- [ ] Keychain
+- [x] `InMemoryStorage` (a simple wrapper around a dictionary)
+
 ### Subscribing to Updates
 
 When targeting macOS 10.15, iOS 13, tvOS 13, or watchOS 6 or greater Combine can be used to subscribe to updates:
 
 ```swift
 class Foo {
-    @Persisted
+    @Persisted(key: "foo-bar", userDefaults: .standard)
     var bar: String?
 }
 
@@ -38,7 +46,7 @@ For versions prior to macOS 10.15, iOS 13, tvOS 13, or watchOS 6 a closure API i
 
 ```swift
 class Foo {
-    @Persisted
+    @Persisted(key: "foo-bar", userDefaults: .standard)
     var bar: String?
 }
 
@@ -58,7 +66,7 @@ struct Bar: Codable {
 }
 
 class Foo {
-    @Persisted(key: "bar", storedBy: UserDefaults.standard, transformer: JSONTransformer())
+    @Persisted(key: "bar", userDefaults: .standard, transformer: JSONTransformer())
     var bar: Bar?
 }
 ```
@@ -78,7 +86,41 @@ let cancellable = foo.$bar.addUpdateListener() { updateResult in
 }
 ```
 
-Transformers are typesafe, e.g. `JSONTransformer` is only usable when the value to be stored is `Codable`.
+Transformers are typesafe, e.g. `JSONTransformer` is only usable when the value to be stored is `Codable` and the `Storage` supports `Data`.
+
+#### Chaining Transformers
+
+If a value should go through mutliple transformers you can chain them.
+
+```swift
+struct Bar: Codable {
+    var baz: String
+}
+
+public struct BarTransformer: Transformer {
+
+    public func transformValue(_ bar: Bar) -> Bar {
+        var bar = bar
+        bar.baz = "transformed"
+        return bar
+    }
+
+    public func untransformValue(from bar: Bar) -> Bar {
+        return bar
+    }
+
+}
+
+class Foo {
+    @Persisted(key: "bar", userDefaults: .standard, transformer: BarTransformer().append(JSONTransformer()))
+    var bar: Bar?
+}
+
+let foo = Foo()
+let bar = Bar(baz: "example value")
+foo.bar = bar
+foo.bar.baz // "transformed"
+```
 
 ### Property Wrapper Initialisation
 
@@ -89,13 +131,8 @@ class Foo {
     @Persisted
     var bar: String?
 
-    init() {
-        let encoder = JSONEncoder()
-        encoder.dateEncodingStrategy = .secondsSince1970
-        let decoder = JSONDecoder()
-        decoder.dateDecodingStrategy = .secondsSince1970
-        let transformer = JSONTransformer(encoder: encoder, decoder: decoder)
-        _bar = Persisted(key: "foo-bar", storage: UserDefaults.standard, transformer: transformer)
+    init(userDefaults: UserDefaults) {
+        _bar = Persisted(key: "foo-bar", userDefaults: userDefaults)
     }
 }
 ```
