@@ -17,14 +17,6 @@ jobs:
     - name: Select Xcode ${{ matrix.xcode }}
       run: sudo xcode-select --switch /Applications/Xcode_${{ matrix.xcode }}.app
 
-    - name: Cache SwiftPM
-      uses: actions/cache@v1
-      with:
-        path: .build
-        key: ${{ runner.os }}-xcode_${{ matrix.xcode }}-swiftpm-${{ github.workspace }}-${{ hashFiles('**/Package.resolved') }}
-        restore-keys: |
-          ${{ runner.os }}-xcode_${{ matrix.xcode }}-swiftpm-${{ github.workspace }}-
-
     - name: SwiftPM tests
       run: swift test --enable-code-coverage
 
@@ -54,10 +46,11 @@ jobs:
     - name: Cache SwiftPM
       uses: actions/cache@v1
       with:
-        path: DevelopmentDependencies/.build
-        key: ${{ runner.os }}-xcode_${{ matrix.xcode }}-swiftpm-${{ github.workspace }}-${{ hashFiles('**/Package.resolved') }}
+        path: CIDependencies/.build
+        key: ${{ runner.os }}-xcode_${{ matrix.xcode }}-swiftpm-ci-deps-${{ github.workspace }}-${{ hashFiles('CIDependencies/Package.resolved') }}
         restore-keys: |
-          ${{ runner.os }}-xcode_${{ matrix.xcode }}-swiftpm-${{ github.workspace }}
+          ${{ runner.os }}-xcode_${{ matrix.xcode }}-swiftpm-ci-deps-${{ github.workspace }}
+
     - name: Run Tests
       run: swift run --configuration release --package-path ./CIDependencies/ xcutils test ${{ matrix.platform }} --scheme Persist --enable-code-coverage
 
