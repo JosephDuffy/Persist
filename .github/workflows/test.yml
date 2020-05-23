@@ -12,7 +12,7 @@ jobs:
         xcode: ["11.4"]
 
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
 
     - name: Select Xcode ${{ matrix.xcode }}
       run: sudo xcode-select --switch /Applications/Xcode_${{ matrix.xcode }}.app
@@ -38,7 +38,7 @@ jobs:
         platform: ["iOS", "tvOS"]
 
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
 
     - name: Select Xcode ${{ matrix.xcode }}
       run: sudo xcode-select --switch /Applications/Xcode_${{ matrix.xcode }}.app
@@ -69,7 +69,7 @@ jobs:
         swift: ["5.2.3"]
 
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
 
     - name: Install swiftenv
       run: |
