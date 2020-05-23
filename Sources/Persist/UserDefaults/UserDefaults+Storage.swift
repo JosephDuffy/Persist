@@ -1,3 +1,4 @@
+#if os(macOS) || os(iOS) || os(tvOS) || os(watchOS)
 import Foundation
 
 extension UserDefaults: Storage {
@@ -62,3 +63,4 @@ private final class KeyPathObserver: NSObject {
         }
     }
 }
+#endif

@@ -1,3 +1,4 @@
+#if os(macOS) || os(iOS) || os(tvOS) || os(watchOS)
 import XCTest
 @testable import Persist
 
@@ -230,3 +231,4 @@ final class UserDefaultsStorageTests: XCTestCase {
     }
 
 }
+#endif

@@ -1,3 +1,4 @@
+#if os(macOS) || os(iOS) || os(tvOS) || os(watchOS)
 import Foundation
 
 public enum UserDefaultsValue: Hashable {
@@ -72,3 +73,4 @@ public enum UserDefaultsValue: Hashable {
         }
     }
 }
+#endif
