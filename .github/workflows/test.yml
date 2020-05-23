@@ -59,7 +59,7 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-xcode_${{ matrix.xcode }}-swiftpm-${{ github.workspace }}
     - name: Run Tests
-      run: swift run --configuration release xcutils test ${{ matrix.platform }} --scheme Persist --enable-code-coverage
+      run: swift run --configuration release --package-path ./CIDependencies/ xcutils test ${{ matrix.platform }} --scheme Persist --enable-code-coverage
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1
