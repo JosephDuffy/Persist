@@ -9,6 +9,9 @@ let package = Package(
     products: [
         .library(name: "Persist", targets: ["Persist"]),
     ],
+    dependencies: [
+        .package(url: "https://github.com/JosephDuffy/xcutils.git", .branch("master")),
+    ],
     targets: [
         .target(name: "Persist"),
         .testTarget(name: "PersistTests", dependencies: ["Persist"]),

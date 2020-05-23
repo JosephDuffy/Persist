@@ -1,0 +1,34 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "swift-argument-parser",
+        "repositoryURL": "https://github.com/apple/swift-argument-parser",
+        "state": {
+          "branch": null,
+          "revision": "223d62adc52d51669ae2ee19bdb8b7d9fd6fcd9c",
+          "version": "0.0.6"
+        }
+      },
+      {
+        "package": "Version",
+        "repositoryURL": "https://github.com/mxcl/Version.git",
+        "state": {
+          "branch": null,
+          "revision": "200046c93f6d5d78a6d72bfd9c0b27a95e9c0a2b",
+          "version": "1.2.0"
+        }
+      },
+      {
+        "package": "xcutils",
+        "repositoryURL": "https://github.com/JosephDuffy/xcutils.git",
+        "state": {
+          "branch": "master",
+          "revision": "353f90ead1820762624ae99430af64edcdb1ad34",
+          "version": null
+        }
+      }
+    ]
+  },
+  "version": 1
+}
