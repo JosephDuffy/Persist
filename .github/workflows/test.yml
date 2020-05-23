@@ -1,6 +1,9 @@
 name: Tests
 
-on: [push]
+on:
+  push:
+    paths:
+    - '**/*.swift'
 
 jobs:
   macos_tests:
