@@ -1,3 +1,4 @@
+#if !os(watchOS)
 import XCTest
 @testable import Persist
 
@@ -62,3 +63,4 @@ final class PersistedTests: XCTestCase {
     }
 
 }
+#endif

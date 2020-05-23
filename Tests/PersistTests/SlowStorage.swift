@@ -1,3 +1,4 @@
+#if !os(watchOS)
 import Persist
 import Foundation
 
@@ -31,3 +32,4 @@ public final class SlowStorage: InMemoryStorage {
     }
 
 }
+#endif
