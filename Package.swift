@@ -10,7 +10,7 @@ let package = Package(
         .library(name: "Persist", targets: ["Persist"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/JosephDuffy/xcutils.git", .branch("master")),
+        .package(url: "https://github.com/JosephDuffy/xcutils.git", from: "0.1.0"),
     ],
     targets: [
         .target(name: "Persist"),

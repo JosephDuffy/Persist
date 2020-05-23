@@ -23,9 +23,9 @@
         "package": "xcutils",
         "repositoryURL": "https://github.com/JosephDuffy/xcutils.git",
         "state": {
-          "branch": "master",
-          "revision": "353f90ead1820762624ae99430af64edcdb1ad34",
-          "version": null
+          "branch": null,
+          "revision": "0454a5dd89b680a841ada3138cd90f6c606b2d28",
+          "version": "0.1.0"
         }
       }
     ]
