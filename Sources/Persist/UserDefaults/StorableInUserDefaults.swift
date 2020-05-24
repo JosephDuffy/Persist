@@ -1,3 +1,4 @@
+#if os(macOS) || os(iOS) || os(tvOS) || os(watchOS)
 import Foundation
 
 public protocol StorableInUserDefaults {
@@ -117,3 +118,4 @@ extension Dictionary: StorableInUserDefaults where Key == String, Value: Storabl
         return .dictionary(mapValues(\.asPropertyListValue))
     }
 }
+#endif

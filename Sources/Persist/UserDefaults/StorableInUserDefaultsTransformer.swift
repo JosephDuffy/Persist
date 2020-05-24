@@ -1,3 +1,4 @@
+#if os(macOS) || os(iOS) || os(tvOS) || os(watchOS)
 public struct StorableInUserDefaultsTransformer<Input: StorableInUserDefaults>: Transformer {
 
     public func transformValue(_ value: Input) -> UserDefaultsValue {
@@ -13,3 +14,4 @@ public struct StorableInUserDefaultsTransformer<Input: StorableInUserDefaults>: 
     }
 
 }
+#endif

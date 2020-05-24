@@ -1,0 +1,39 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+
+  build_docs:
+    name: Build Docs
+    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        xcode: ["11.4"]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Select Xcode ${{ matrix.xcode }}
+      run: sudo xcode-select --switch /Applications/Xcode_${{ matrix.xcode }}.app
+
+    - name: Cache SwiftPM
+      uses: actions/cache@v1
+      with:
+        path: CIDependencies/.build
+        key: ${{ runner.os }}-xcode_${{ matrix.xcode }}-swiftpm-ci-deps-${{ github.workspace }}-${{ hashFiles('CIDependencies/Package.resolved') }}
+        restore-keys: |
+          ${{ runner.os }}-xcode_${{ matrix.xcode }}-swiftpm-ci-deps-${{ github.workspace }}
+
+    - name: Build docs
+      run: swift run --configuration release --package-path ./CIDependencies/ sourcedocs generate --spm-module Persist
+
+    - name: Upload Docs
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./Documentation/Reference/
