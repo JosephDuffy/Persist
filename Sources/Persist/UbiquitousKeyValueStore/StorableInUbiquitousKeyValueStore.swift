@@ -21,7 +21,7 @@ extension Persisted where Value: StorableInUbiquitousKeyValueStore {
     public init(
         key: String,
         defaultValue: Value? = nil,
-        ubiquitousKeyValueStore: UbiquitousKeyValueStore = .default
+        ubiquitousKeyValueStore: UbiquitousKeyValueStore
     ) {
         let persister = Persister<Value>(key: key, storedBy: ubiquitousKeyValueStore)
         self.init(persister: persister, defaultValue: defaultValue)
@@ -44,7 +44,7 @@ extension Persisted {
     public init<Transformer: Persist.Transformer>(
         key: String,
         defaultValue: Value? = nil,
-        ubiquitousKeyValueStore: UbiquitousKeyValueStore = .default,
+        ubiquitousKeyValueStore: UbiquitousKeyValueStore,
         transformer: Transformer
     ) where Transformer.Input == Value, Transformer.Output: StorableInUbiquitousKeyValueStore {
         let persister = Persister(key: key, storedBy: ubiquitousKeyValueStore, transformer: transformer)
@@ -68,7 +68,7 @@ extension Persister where Value: StorableInUbiquitousKeyValueStore {
 
     public convenience init(
         key: String,
-        ubiquitousKeyValueStore: UbiquitousKeyValueStore = .default
+        ubiquitousKeyValueStore: UbiquitousKeyValueStore
     ) {
         self.init(
             key: key,
@@ -92,7 +92,7 @@ extension Persister {
 
     public convenience init<Transformer: Persist.Transformer>(
         key: String,
-        ubiquitousKeyValueStore: UbiquitousKeyValueStore = .default,
+        ubiquitousKeyValueStore: UbiquitousKeyValueStore,
         transformer: Transformer
     ) where Transformer.Input == Value, Transformer.Output: StorableInUbiquitousKeyValueStore {
         let aggregateTransformer = transformer.append(transformer: StorableInUbiquitousKeyValueStoreTransformer<Transformer.Output>())
