@@ -59,6 +59,40 @@ public final class Persister<Value> {
     public convenience init<Storage: Persist.Storage>(
         key: Storage.Key,
         storedBy storage: Storage
+    ) where Storage.Value == Value {
+        let valueGetter: ValueGetter = {
+            guard let value = try storage.retrieveValue(for: key) else { return nil }
+            return value
+        }
+
+        let valueSetter: ValueSetter = { newValue in
+            guard let newValue = newValue else {
+                try storage.removeValue(for: key)
+                return
+            }
+
+            try storage.storeValue(newValue, key: key)
+        }
+
+        self.init(
+            valueGetter: valueGetter,
+            valueSetter: valueSetter,
+            addUpdateListener: { updateListener in
+                return storage.addUpdateListener(forKey: key) { newValue in
+                    guard let value = newValue else {
+                        updateListener(.success(nil))
+                        return
+                    }
+
+                    updateListener(.success(value))
+                }
+            }
+        )
+    }
+
+    public convenience init<Storage: Persist.Storage>(
+        key: Storage.Key,
+        storedBy storage: Storage
     ) where Storage.Value == Any {
         let valueGetter: ValueGetter = {
             guard let anyValue = try storage.retrieveValue(for: key) else { return nil }

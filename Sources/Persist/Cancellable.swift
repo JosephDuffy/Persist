@@ -13,8 +13,9 @@ public final class Cancellable {
     }
 
     public func cancel() {
-        cancelClosure?()
-        cancelClosure = nil
+        guard let cancelClosure = cancelClosure else { return }
+        cancelClosure()
+        self.cancelClosure = nil
     }
 
 }
