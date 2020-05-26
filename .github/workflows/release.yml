@@ -16,10 +16,6 @@ jobs:
     - name: Fetch tag
       run: git fetch --depth=1 origin +${{ github.ref }}:${{ github.ref }}
 
-    - run: git tag -ln
-
-    - run: git tag -ln --format=$'%(contents:subject)\n\n%(contents:body)'
-
     - name: Get the release version
       id: release_version
       run: echo "::set-output name=version::${GITHUB_REF/refs\/tags\//}"
@@ -34,9 +30,6 @@ jobs:
         echo "$description"
         echo "::set-output name=description::$description"
       id: release_description
-
-    - name: Debug steps.release_description.outputs.description
-      run: echo "${{ steps.release_description.outputs.description }}"
 
     - name: Create Release
       id: create_release
