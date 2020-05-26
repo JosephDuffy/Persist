@@ -1,28 +1,28 @@
 #if os(macOS) || os(iOS) || os(tvOS)
 import XCTest
+import Foundation
 @testable import Persist
 
-final class UserDefaultsStorageTests: XCTestCase {
+final class UbiquitousKeyValueStoreValueStorageTests: XCTestCase {
 
-    private let userDefaults = UserDefaults(suiteName: "test-suite")!
+    private let ubiquitousKeyValueStore = UbiquitousKeyValueStore.default
 
-    override func tearDown() {
-        userDefaults.dictionaryRepresentation().keys.forEach(userDefaults.removeObject(forKey:))
-    }
-
-    func testStoredInUserDefaults() {
+    func testStoredInUbiquitousKeyValueStore() {
         class Foo {
-            @StoredInUserDefaults
+            @StoredInUbiquitousKeyValueStore
             var bar: String?
 
-            init(userDefaults: UserDefaults) {
-                _bar = StoredInUserDefaults(key: "foo-bar", userDefaults: userDefaults)
+            init(ubiquitousKeyValueStore: UbiquitousKeyValueStore) {
+                _bar = StoredInUbiquitousKeyValueStore(
+                    key: "foo-bar",
+                    storedBy: ubiquitousKeyValueStore
+                )
             }
         }
 
-        let foo = Foo(userDefaults: userDefaults)
+        let foo = Foo(ubiquitousKeyValueStore: ubiquitousKeyValueStore)
         foo.bar = "new-value"
-        XCTAssertEqual(userDefaults.string(forKey: "foo-bar"), "new-value")
+        XCTAssertEqual(ubiquitousKeyValueStore.nsUbiquitousKeyValueStore.string(forKey: "foo-bar"), "new-value")
     }
 
     func testStoringStrings() {
@@ -30,7 +30,7 @@ final class UserDefaultsStorageTests: XCTestCase {
         let value = "test"
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
-        let cancellable = userDefaults.addUpdateListener(forKey: key) { newValue in
+        let cancellable = ubiquitousKeyValueStore.addUpdateListener(forKey: key) { newValue in
             defer {
                 callsUpdateListenerExpectation.fulfill()
             }
@@ -39,18 +39,18 @@ final class UserDefaultsStorageTests: XCTestCase {
         }
         _ = cancellable
 
-        userDefaults.storeValue(.string(value), key: key)
+        ubiquitousKeyValueStore.storeValue(.string(value), key: key)
 
-        XCTAssertEqual(userDefaults.string(forKey: key), value, "String should be stored as strings")
-        XCTAssertEqual(userDefaults.retrieveValue(for: key), .string(value))
+        XCTAssertEqual(ubiquitousKeyValueStore.nsUbiquitousKeyValueStore.string(forKey: key), value, "String should be stored as strings")
+        XCTAssertEqual(ubiquitousKeyValueStore.retrieveValue(for: key), .string(value))
 
         waitForExpectations(timeout: 0.1)
     }
 
     func testStoringArray() {
         let key = "key"
-        let userDefaultsValue = UserDefaultsValue.array([
-            .array([.int(1), .int(2), .int(3)]),
+        let ubiquitousKeyValueStoreValue = UbiquitousKeyValueStoreValue.array([
+            .array([.int64(1), .int64(2), .int64(3)]),
             .dictionary([
                 "embedded-baz": .double(123.45),
             ]),
@@ -58,27 +58,27 @@ final class UserDefaultsStorageTests: XCTestCase {
         ])
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
-        let cancellable = userDefaults.addUpdateListener(forKey: key) { newValue in
+        let cancellable = ubiquitousKeyValueStore.addUpdateListener(forKey: key) { newValue in
             defer {
                 callsUpdateListenerExpectation.fulfill()
             }
 
-            XCTAssertEqual(newValue, userDefaultsValue, "Value passed to update listener should be new value")
+            XCTAssertEqual(newValue, ubiquitousKeyValueStoreValue, "Value passed to update listener should be new value")
         }
         _ = cancellable
 
-        userDefaults.storeValue(userDefaultsValue, key: key)
+        ubiquitousKeyValueStore.storeValue(ubiquitousKeyValueStoreValue, key: key)
 
-        XCTAssertNotNil(userDefaults.array(forKey: key), "Arrays should be stored as arrays")
-        XCTAssertEqual(userDefaults.retrieveValue(for: key), userDefaultsValue)
+        XCTAssertNotNil(ubiquitousKeyValueStore.nsUbiquitousKeyValueStore.array(forKey: key), "Arrays should be stored as arrays")
+        XCTAssertEqual(ubiquitousKeyValueStore.retrieveValue(for: key), ubiquitousKeyValueStoreValue)
 
         waitForExpectations(timeout: 0.1)
     }
 
     func testStoringDictionary() {
         let key = "key"
-        let userDefaultsValue = UserDefaultsValue.dictionary([
-            "foo": .array([.int(1), .int(2), .int(3)]),
+        let ubiquitousKeyValueStoreValue = UbiquitousKeyValueStoreValue.dictionary([
+            "foo": .array([.int64(1), .int64(2), .int64(3)]),
             "bar": .dictionary([
                 "embedded-baz": .double(123.45),
             ]),
@@ -86,41 +86,19 @@ final class UserDefaultsStorageTests: XCTestCase {
         ])
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
-        let cancellable = userDefaults.addUpdateListener(forKey: key) { newValue in
+        let cancellable = ubiquitousKeyValueStore.addUpdateListener(forKey: key) { newValue in
             defer {
                 callsUpdateListenerExpectation.fulfill()
             }
 
-            XCTAssertEqual(newValue, userDefaultsValue, "Value passed to update listener should be new value")
+            XCTAssertEqual(newValue, ubiquitousKeyValueStoreValue, "Value passed to update listener should be new value")
         }
         _ = cancellable
 
-        userDefaults.storeValue(userDefaultsValue, key: key)
+        ubiquitousKeyValueStore.storeValue(ubiquitousKeyValueStoreValue, key: key)
 
-        XCTAssertNotNil(userDefaults.dictionary(forKey: key), "Dictionaries should be stored as dictionaries")
-        XCTAssertEqual(userDefaults.retrieveValue(for: key), userDefaultsValue)
-
-        waitForExpectations(timeout: 0.1)
-    }
-
-    func testStoringURLs() {
-        let url = URL(string: "http://example.com")!
-
-        let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
-        let cancellable = userDefaults.addUpdateListener(forKey: "key") { newValue in
-            defer {
-                callsUpdateListenerExpectation.fulfill()
-            }
-
-            XCTAssertEqual(newValue, .url(url), "Value passed to update listener should be new value")
-        }
-        _ = cancellable
-
-        userDefaults.storeValue(.url(url), key: "key")
-
-        XCTAssertEqual(userDefaults.url(forKey: "key"), url, "URLs should be stored as URLs")
-        XCTAssertEqual(userDefaults.retrieveValue(for: "key"), .url(url))
-        XCTAssertNil(userDefaults.retrieveValue(for: "other"))
+        XCTAssertNotNil(ubiquitousKeyValueStore.nsUbiquitousKeyValueStore.dictionary(forKey: key), "Dictionaries should be stored as dictionaries")
+        XCTAssertEqual(ubiquitousKeyValueStore.retrieveValue(for: key), ubiquitousKeyValueStoreValue)
 
         waitForExpectations(timeout: 0.1)
     }
@@ -134,15 +112,19 @@ final class UserDefaultsStorageTests: XCTestCase {
             @Persisted
             var bar: Bar?
 
-            init(userDefaults: UserDefaults) {
-                _bar = Persisted(key: "bar", userDefaults: userDefaults, transformer: JSONTransformer())
+            init(ubiquitousKeyValueStore: UbiquitousKeyValueStore) {
+                _bar = Persisted(
+                    key: "bar",
+                    storedBy: ubiquitousKeyValueStore,
+                    transformer: JSONTransformer()
+                )
             }
         }
 
         let bar = Bar(baz: "new-value")
-        let foo = Foo(userDefaults: userDefaults)
+        let foo = Foo(ubiquitousKeyValueStore: ubiquitousKeyValueStore)
         foo.bar = bar
-        XCTAssertNotNil(userDefaults.data(forKey: "bar"), "Should store transformed value")
+        XCTAssertNotNil(ubiquitousKeyValueStore.nsUbiquitousKeyValueStore.data(forKey: "bar"), "Should store transformed value")
         XCTAssertEqual(foo.bar, bar, "Should return untransformed value")
     }
 
@@ -151,38 +133,40 @@ final class UserDefaultsStorageTests: XCTestCase {
         callsUpdateListenerExpectation.expectedFulfillmentCount = 1
         callsUpdateListenerExpectation.assertForOverFulfill = true
 
-        let cancellable = userDefaults.addUpdateListener(forKey: "test") { _ in
+        let cancellable = ubiquitousKeyValueStore.addUpdateListener(forKey: "test") { _ in
             callsUpdateListenerExpectation.fulfill()
         }
         _ = cancellable
-        userDefaults.storeValue(.string("test"), key: "test")
+        ubiquitousKeyValueStore.storeValue(.string("test"), key: "test")
 
         waitForExpectations(timeout: 1)
     }
 
-    func testUpdateListenerWithSetFunction() {
+    func testUpdateListenerFromNotification() {
+        ubiquitousKeyValueStore.storeValue(.string("initial-value"), key: "test")
+
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
         callsUpdateListenerExpectation.expectedFulfillmentCount = 1
         callsUpdateListenerExpectation.assertForOverFulfill = true
 
-        let cancellable = userDefaults.addUpdateListener(forKey: "test") { _ in
-            callsUpdateListenerExpectation.fulfill()
+        let updatedValue = "updated-value"
+        let cancellable = ubiquitousKeyValueStore.addUpdateListener(forKey: "test") { update in
+            defer {
+                callsUpdateListenerExpectation.fulfill()
+            }
+
+            XCTAssertEqual(update, .string(updatedValue), "New value should be retrieved and passed to update listeners")
         }
         _ = cancellable
-        userDefaults.set("test", forKey: "test")
 
-        waitForExpectations(timeout: 1)
-    }
-
-    func testPersisterUpdateListenerUpdateViaUserDefaults() {
-        let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
-
-        let persister = Persister<String>(key: "test", userDefaults: userDefaults)
-        let cancellable = persister.addUpdateListener() { _ in
-            callsUpdateListenerExpectation.fulfill()
-        }
-        _ = cancellable
-        userDefaults.set("test", forKey: "test")
+        ubiquitousKeyValueStore.nsUbiquitousKeyValueStore.set(updatedValue, forKey: "test")
+        NotificationCenter.default.post(
+            name: NSUbiquitousKeyValueStore.didChangeExternallyNotification,
+            object: ubiquitousKeyValueStore.nsUbiquitousKeyValueStore,
+            userInfo: [
+                NSUbiquitousKeyValueStoreChangedKeysKey: ["test"],
+            ]
+        )
 
         waitForExpectations(timeout: 1)
     }
@@ -190,7 +174,7 @@ final class UserDefaultsStorageTests: XCTestCase {
     func testPersisterUpdateListenerUpdateViaPersister() throws {
         let key = "test"
         let setValue = "value"
-        let persister = Persister<String>(key: key, userDefaults: userDefaults)
+        let persister = Persister<String>(key: key, storedBy: ubiquitousKeyValueStore)
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
         let updateListenerCancellable = persister.addUpdateListener() { result in
