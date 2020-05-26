@@ -24,8 +24,12 @@ jobs:
         description="${description//'%'/'%25'}"
         description="${description//$'\n'/'%0A'}"
         description="${description//$'\r'/'%0D'}"
+        echo "$description"
         echo "::set-output name=description::$description"
       id: release_description
+
+    - name: Debug steps.release_description.outputs.description
+      run: echo "${{ steps.release_description.outputs.description }}"
 
     - name: Create Release
       id: create_release
