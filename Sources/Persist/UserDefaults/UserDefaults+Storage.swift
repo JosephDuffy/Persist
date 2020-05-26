@@ -19,13 +19,13 @@ extension UserDefaults: Storage {
     }
 
     public func retrieveValue(for key: String) -> UserDefaultsValue? {
-        if let url = self.url(forKey: key), value(forKey: key) is Data {
+        if let url = self.url(forKey: key), object(forKey: key) is Data {
             // `url(forKey:)` will return a URL for values that were not set as
             // URLs. URLs are stored in UserDefaults as Data so checking
             // `value(forKey:) is Data` ensures the value retrieved was set to
             // a URL.
             return .url(url)
-        } else if let anyValue = value(forKey: key) {
+        } else if let anyValue = object(forKey: key) {
             return UserDefaultsValue(value: anyValue)
         } else {
             return nil
