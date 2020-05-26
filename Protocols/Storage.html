@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Storage Protocol Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a name="//apple_ref/swift/Protocol/Storage" class="dashAnchor"></a>
+    <a title="Storage Protocol Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html"> Docs</a> (19% documented)</p>
+        <p class="header-right"><a href="https://github.com/JosephDuffy/Persist"><img src="../img/gh.png"/>View on GitHub</a></p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html"> Reference</a>
+        <img id="carat" src="../img/carat.png" />
+        Storage Protocol Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/Cancellable.html">Cancellable</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/InMemoryStorage.html">InMemoryStorage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Persister.html">Persister</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/UbiquitousKeyValueStore.html">UbiquitousKeyValueStore</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Enums.html">Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Enums/PersistanceError.html">PersistanceError</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/UbiquitousKeyValueStoreValue.html">UbiquitousKeyValueStoreValue</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/UserDefaultsValue.html">UserDefaultsValue</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Extensions.html">Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Extensions/Array.html">Array</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Extensions/Bool.html">Bool</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Extensions/Data.html">Data</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Extensions/Dictionary.html">Dictionary</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Extensions/Double.html">Double</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Extensions/Float.html">Float</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Extensions/Int.html">Int</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Extensions/Int64.html">Int64</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Extensions/StoredInUserDefaults.html">StoredInUserDefaults</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Extensions/String.html">String</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Extensions/URL.html">URL</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Extensions/UserDefaults.html">UserDefaults</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Protocols/StorableInUbiquitousKeyValueStore.html">StorableInUbiquitousKeyValueStore</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/StorableInUserDefaults.html">StorableInUserDefaults</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/Storage.html">Storage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/Transformer.html">Transformer</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Structs.html">Structures</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Structs/AggregateTransformer.html">AggregateTransformer</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/JSONTransformer.html">JSONTransformer</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Persisted.html">Persisted</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/PropertyListEncoderTransformer.html">PropertyListEncoderTransformer</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/StorableInUbiquitousKeyValueStoreTransformer.html">StorableInUbiquitousKeyValueStoreTransformer</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/StorableInUserDefaultsTransformer.html">StorableInUserDefaultsTransformer</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Typealiases.html">Type Aliases</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:7Persist31StoredInUbiquitousKeyValueStorea">StoredInUbiquitousKeyValueStore</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:7Persist20StoredInUserDefaultsa">StoredInUserDefaults</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>Storage</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">Storage</span> <span class="p">:</span> <span class="kt">AnyObject</span></code></pre>
+
+                </div>
+              </div>
+            <p>A protocol that defines the interface to store, remove, and retrieve values by a string key.</p>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:7Persist7StorageP3KeyQa"></a>
+                    <a name="//apple_ref/swift/Alias/Key" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7Persist7StorageP3KeyQa">Key</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">associatedtype</span> <span class="kt">Key</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:7Persist7StorageP5ValueQa"></a>
+                    <a name="//apple_ref/swift/Alias/Value" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7Persist7StorageP5ValueQa">Value</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">associatedtype</span> <span class="kt">Value</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:7Persist7StorageP14UpdateListenera"></a>
+                    <a name="//apple_ref/swift/Alias/UpdateListener" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7Persist7StorageP14UpdateListenera">UpdateListener</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">typealias</span> <span class="kt">UpdateListener</span> <span class="o">=</span> <span class="p">(</span><span class="kt"><a href="../Protocols/Storage.html#/s:7Persist7StorageP5ValueQa">Value</a></span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:7Persist7StorageP10storeValue_3keyy0D0Qz_3KeyQztKF"></a>
+                    <a name="//apple_ref/swift/Method/storeValue(_:key:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7Persist7StorageP10storeValue_3keyy0D0Qz_3KeyQztKF">storeValue(_:<wbr>key:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Store the provided value against the provided key.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">storeValue</span><span class="p">(</span><span class="n">_</span> <span class="nv">value</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Storage.html#/s:7Persist7StorageP5ValueQa">Value</a></span><span class="p">,</span> <span class="nv">key</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Storage.html#/s:7Persist7StorageP3KeyQa">Key</a></span><span class="p">)</span> <span class="k">throws</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>value</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The value to store.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>key</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The key to store the value against.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:7Persist7StorageP11removeValue3fory3KeyQz_tKF"></a>
+                    <a name="//apple_ref/swift/Method/removeValue(for:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7Persist7StorageP11removeValue3fory3KeyQz_tKF">removeValue(for:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Remove the value for the provided key.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">removeValue</span><span class="p">(</span><span class="k">for</span> <span class="nv">key</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Storage.html#/s:7Persist7StorageP3KeyQa">Key</a></span><span class="p">)</span> <span class="k">throws</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>key</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The key of the value to remove.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:7Persist7StorageP13retrieveValue3for0D0QzSg3KeyQz_tKF"></a>
+                    <a name="//apple_ref/swift/Method/retrieveValue(for:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7Persist7StorageP13retrieveValue3for0D0QzSg3KeyQz_tKF">retrieveValue(for:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Retrieve the value for the provided key.</p>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    <code>PersistanceError.unexpectedValueType</code> if stored value that is not of type <code><a href="../Protocols/Storage.html#/s:7Persist7StorageP5ValueQa">Value</a></code>.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">retrieveValue</span><span class="p">(</span><span class="k">for</span> <span class="nv">key</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Storage.html#/s:7Persist7StorageP3KeyQa">Key</a></span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Protocols/Storage.html#/s:7Persist7StorageP5ValueQa">Value</a></span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>key</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The key of the value to retrieve.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The stored value, or <code>nil</code> if no value is associated with the key.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:7Persist7StorageP17addUpdateListener6forKey06updateE0AA11CancellableC0G0Qz_y5ValueQzSgctF"></a>
+                    <a name="//apple_ref/swift/Method/addUpdateListener(forKey:updateListener:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7Persist7StorageP17addUpdateListener6forKey06updateE0AA11CancellableC0G0Qz_y5ValueQzSgctF">addUpdateListener(forKey:<wbr>updateListener:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Add an update listener that should be notified when a value is updated from an external source, i.e. not via any of the functions on <code>Storage</code>.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">addUpdateListener</span><span class="p">(</span><span class="n">forKey</span> <span class="nv">key</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Storage.html#/s:7Persist7StorageP3KeyQa">Key</a></span><span class="p">,</span> <span class="nv">updateListener</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Protocols/Storage.html#/s:7Persist7StorageP14UpdateListenera">UpdateListener</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Cancellable.html">Cancellable</a></span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>key</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The key to subscribe to changes to.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>updateListener</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A closure to call when an update occurs.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>An object that can be used to remove the update listener and cancel future updates.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2020 <a class="link" href="" target="_blank" rel="external">Joseph Duffy</a>. All rights reserved. (Last updated: 2020-05-26)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>
