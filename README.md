@@ -1,6 +1,7 @@
 # Persist
 
 [![codecov](https://codecov.io/gh/JosephDuffy/Persist/branch/master/graph/badge.svg)](https://codecov.io/gh/JosephDuffy/Persist)
+[![Documentation](https://josephduffy.github.io/Persist/badge.svg)](https://josephduffy.github.io/Persist/)
 
 Property wrapper for storing and retrieving values with support for transformations such as storing as JSON data.
 

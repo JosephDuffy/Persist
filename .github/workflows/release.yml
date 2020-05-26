@@ -56,19 +56,26 @@ jobs:
     - name: Select Xcode ${{ matrix.xcode }}
       run: sudo xcode-select --switch /Applications/Xcode_${{ matrix.xcode }}.app
 
-    - name: Cache SwiftPM
-      uses: actions/cache@v1
+    - name: Setup Ruby
+      uses: ruby/setup-ruby@v1
+
+    - uses: actions/cache@v1
       with:
-        path: CIDependencies/.build
-        key: ${{ runner.os }}-xcode_${{ matrix.xcode }}-swiftpm-ci-deps-${{ github.workspace }}-${{ hashFiles('CIDependencies/Package.resolved') }}
+        path: vendor/bundle
+        key: ${{ runner.os }}-gems-${{ hashFiles('.ruby-version') }}-${{ hashFiles('**/Gemfile.lock') }}
         restore-keys: |
-          ${{ runner.os }}-xcode_${{ matrix.xcode }}-swiftpm-ci-deps-${{ github.workspace }}
+          ${{ runner.os }}-gems-${{ hashFiles('.ruby-version') }}-
+
+    - name: Bundle install
+      run: |
+        bundle config path vendor/bundle
+        bundle install --jobs 4 --retry 3
 
     - name: Build docs
-      run: swift run --configuration release --package-path ./CIDependencies/ sourcedocs generate --spm-module Persist
+      run: bundle exec jazzy
 
     - name: Upload Docs
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./Documentation/Reference/
+        publish_dir: docs

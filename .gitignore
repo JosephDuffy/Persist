@@ -2,4 +2,4 @@
 .build
 /*.xcodeproj
 xcuserdata/
-Documentation/
+docs/
