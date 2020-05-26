@@ -35,9 +35,9 @@ final class PersisterTests: XCTestCase {
     }
 
     func testStoringValueWithSpecficStorageType() throws {
-        let storage = UserDefaults(suiteName: "test-suite")!
-        let persister = Persister<UserDefaultsValue>(key: "test", storedBy: storage)
-        let storedValue = UserDefaultsValue.string("stored-value")
+        let storage = InMemoryStorage<String>()
+        let persister = Persister(key: "test", storedBy: storage)
+        let storedValue = "stored-value"
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
         let cancellable = persister.addUpdateListener { result in
