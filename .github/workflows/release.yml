@@ -6,6 +6,28 @@ on:
       - 'v*'
 
 jobs:
+  create_release:
+    name: Create Release
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Get release description
+      run: |
+        echo "##[set-output name=description;]$(git tag -ln --format=$'%(contents:subject)\n\n%(contents:body)' ${{ github.ref }})"
+      id: release-description
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        body: "${{ steps.release-description.outputs.description }}"
+        prerelease: true
 
   build_docs:
     name: Build Docs
