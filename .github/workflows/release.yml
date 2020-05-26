@@ -40,7 +40,7 @@ jobs:
         tag_name: ${{ steps.release_version.outputs.version }}
         release_name: ${{ steps.release_version.outputs.version }}
         body: ${{ steps.release_description.outputs.description }}
-        prerelease: true
+        prerelease: ${{ startsWith(steps.release_version.outputs.version, 'v0.') || contains(steps.release_version.outputs.version, '-') }}
 
   build_docs:
     name: Build Docs
