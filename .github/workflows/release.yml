@@ -15,7 +15,7 @@ jobs:
 
     - name: Get release description
       run: |
-        echo "##[set-output name=description;]$(git tag -ln --format=$'%(contents:subject)\n\n%(contents:body)' ${{ github.ref }})"
+        echo "##[set-output name=description;]$(git for-each-ref --format=$'%(contents:subject)\n\n%(contents:body)' ${{ github.ref }})"
       id: release-description
 
     - name: Create Release
