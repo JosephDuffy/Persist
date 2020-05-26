@@ -15,11 +15,16 @@ jobs:
 
     - name: Get the release version
       id: release_version
-      run: echo ::set-output name=version::${GITHUB_REF/refs\/tags\//}
+      run: echo "::set-output name=version::${GITHUB_REF/refs\/tags\//}"
 
     - name: Get release description
       run: |
-        echo "##[set-output name=description;]$(git tag -ln --format=$'%(contents:subject)\n\n%(contents:body)' ${{ steps.release_version.outputs.version }})"
+        description="$(git tag -ln --format=$'%(contents:subject)\n\n%(contents:body)' ${{ steps.release_version.outputs.version }})""
+        # Fix set-output for multiline strings: https://github.community/t/set-output-truncates-multiline-strings/16852
+        description="${description//'%'/'%25'}"
+        description="${description//$'\n'/'%0A'}"
+        description="${description//$'\r'/'%0D'}"
+        echo "::set-output name=description::$description"
       id: release_description
 
     - name: Create Release
