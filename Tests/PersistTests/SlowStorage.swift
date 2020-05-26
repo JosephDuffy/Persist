@@ -5,7 +5,7 @@ import Foundation
 /**
  Storage that only persists value in memory and allows for artificial slowdowns.
  */
-public final class SlowStorage: InMemoryStorage {
+public final class SlowStorage<StoredValue>: InMemoryStorage<StoredValue> {
 
     public var storeDelay: useconds_t?
 
@@ -13,7 +13,7 @@ public final class SlowStorage: InMemoryStorage {
 
     public var retrieveDelay: useconds_t?
 
-    public override func storeValue(_ value: Any, key: String) {
+    public override func storeValue(_ value: StoredValue, key: String) {
         _ = storeDelay.map(usleep)
 
         super.storeValue(value, key: key)
@@ -25,7 +25,7 @@ public final class SlowStorage: InMemoryStorage {
         super.removeValue(for: key)
     }
 
-    public override func retrieveValue(for key: String) -> Any? {
+    public override func retrieveValue(for key: String) -> StoredValue? {
         _ = retrieveDelay.map(usleep)
 
         return super.retrieveValue(for: key)

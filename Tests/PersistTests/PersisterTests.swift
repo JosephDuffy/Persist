@@ -8,7 +8,7 @@ final class PersisterTests: XCTestCase {
         struct StoredValue: Codable, Equatable {
             let property: String
         }
-        let storage = InMemoryStorage()
+        let storage = InMemoryStorage<Any>()
         let persister = Persister<StoredValue>(key: "test", storedBy: storage)
         let storedValue = StoredValue(property: "value")
 
@@ -28,7 +28,8 @@ final class PersisterTests: XCTestCase {
         _ = cancellable
 
         try persister.persist(storedValue)
-        XCTAssertEqual(try persister.retrieveValue(), storedValue, "Should store value")
+        XCTAssertEqual(try persister.retrieveValue(), storedValue, "Should retrieve stored value")
+        XCTAssertEqual(storage.retrieveValue(for: "test") as? StoredValue, storedValue, "Should store value in storage")
 
         waitForExpectations(timeout: 1, handler: nil)
     }
@@ -54,7 +55,8 @@ final class PersisterTests: XCTestCase {
         _ = cancellable
 
         try persister.persist(storedValue)
-        XCTAssertEqual(try persister.retrieveValue(), storedValue, "Should store value")
+        XCTAssertEqual(try persister.retrieveValue(), storedValue, "Should retrieve stored value")
+        XCTAssertEqual(storage.retrieveValue(for: "test"), storedValue, "Should store value in storage")
 
         waitForExpectations(timeout: 1, handler: nil)
     }
@@ -63,7 +65,7 @@ final class PersisterTests: XCTestCase {
         struct StoredValue: Codable, Equatable {
             let property: String
         }
-        let storage = InMemoryStorage()
+        let storage = InMemoryStorage<Data>()
         let persister = Persister<StoredValue>(key: "test", storedBy: storage, transformer: JSONTransformer())
         let storedValue = StoredValue(property: "value")
 
@@ -83,7 +85,7 @@ final class PersisterTests: XCTestCase {
         _ = cancellable
 
         try persister.persist(storedValue)
-        XCTAssert(storage.retrieveValue(for: "test") is Data, "Should store encoded data in storage")
+        XCTAssertNotNil(storage.retrieveValue(for: "test"), "Should store encoded data in storage")
         XCTAssertEqual(try persister.retrieveValue(), storedValue, "Should return untransformed value")
 
         waitForExpectations(timeout: 1, handler: nil)
