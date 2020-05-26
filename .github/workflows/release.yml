@@ -13,6 +13,9 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: Fetch tag
+      run: git fetch --depth=1 origin +${{ github.ref }}:${{ github.ref }}
+
     - run: git tag -ln
 
     - run: git tag -ln --format=$'%(contents:subject)\n\n%(contents:body)'
