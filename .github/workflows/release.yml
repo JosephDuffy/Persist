@@ -13,10 +13,14 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: Get the release version
+      id: release_version
+      run: echo ::set-output name=version::${GITHUB_REF/refs\/tags\//}
+
     - name: Get release description
       run: |
-        echo "##[set-output name=description;]$(git for-each-ref --format=$'%(contents:subject)\n\n%(contents:body)' ${{ github.ref }})"
-      id: release-description
+        echo "##[set-output name=description;]$(git tag -ln --format=$'%(contents:subject)\n\n%(contents:body)' ${{ steps.release_version.outputs.version }})"
+      id: release_description
 
     - name: Create Release
       id: create_release
@@ -24,9 +28,9 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
-        body: "${{ steps.release-description.outputs.description }}"
+        tag_name: ${ steps.release_version.outputs.version }}
+        release_name: ${{ Release steps.release_version.outputs.version }}
+        body: ${{ steps.release_description.outputs.description }}
         prerelease: true
 
   build_docs:
