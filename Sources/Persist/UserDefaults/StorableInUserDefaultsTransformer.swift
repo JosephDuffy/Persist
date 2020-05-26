@@ -2,7 +2,7 @@
 public struct StorableInUserDefaultsTransformer<Input: StorableInUserDefaults>: Transformer {
 
     public func transformValue(_ value: Input) -> UserDefaultsValue {
-        return value.asPropertyListValue
+        return value.asUserDefaultsValue
     }
 
     public func untransformValue(from output: UserDefaultsValue) throws -> Input {
