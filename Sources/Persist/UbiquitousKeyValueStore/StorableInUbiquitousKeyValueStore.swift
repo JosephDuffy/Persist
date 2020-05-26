@@ -14,8 +14,7 @@ extension Persisted where Value: StorableInUbiquitousKeyValueStore {
         defaultValue: Value? = nil,
         storedBy storage: UbiquitousKeyValueStore
     ) {
-        let persister = Persister<Value>(key: key, storedBy: storage)
-        self.init(persister: persister, defaultValue: defaultValue)
+        self.init(key: key, defaultValue: defaultValue, ubiquitousKeyValueStore: storage)
     }
 
     public init(
@@ -37,8 +36,7 @@ extension Persisted {
         storedBy storage: UbiquitousKeyValueStore,
         transformer: Transformer
     ) where Transformer.Input == Value, Transformer.Output: StorableInUbiquitousKeyValueStore {
-        let persister = Persister(key: key, storedBy: storage, transformer: transformer)
-        self.init(persister: persister, defaultValue: defaultValue)
+        self.init(key: key, defaultValue: defaultValue, ubiquitousKeyValueStore: storage, transformer: transformer)
     }
 
     public init<Transformer: Persist.Transformer>(
