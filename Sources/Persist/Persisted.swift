@@ -25,6 +25,16 @@ public struct Persisted<Value> {
         key: Storage.Key,
         defaultValue: Value? = nil,
         storedBy storage: Storage
+    ) where Storage.Value == Value {
+        self.defaultValue = defaultValue
+
+        projectedValue = Persister(key: key, storedBy: storage)
+    }
+
+    public init<Storage: Persist.Storage>(
+        key: Storage.Key,
+        defaultValue: Value? = nil,
+        storedBy storage: Storage
     ) where Storage.Value == Any {
         self.defaultValue = defaultValue
 

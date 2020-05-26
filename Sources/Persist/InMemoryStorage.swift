@@ -3,17 +3,16 @@ import Foundation
 /**
  Storage that stores values in memory; values will not be persisted between app launches or instances of `InMemoryStorage`.
  */
-open class InMemoryStorage: Storage {
+open class InMemoryStorage<StoredValue>: Storage {
+    public typealias Value = StoredValue
 
-    public typealias Value = Any
-
-    private var dictionary: [String: Any] = [:]
+    private var dictionary: [String: StoredValue] = [:]
 
     private var updateListeners: [String: [UUID: UpdateListener]] = [:]
 
     public init() {}
 
-    open func storeValue(_ value: Any, key: String) {
+    open func storeValue(_ value: StoredValue, key: String) {
         dictionary[key] = value
 
         updateListeners[key]?.values.forEach { $0(value) }
@@ -25,7 +24,7 @@ open class InMemoryStorage: Storage {
         updateListeners[key]?.values.forEach { $0(nil) }
     }
 
-    open func retrieveValue(for key: String) -> Any? {
+    open func retrieveValue(for key: String) -> StoredValue? {
         return dictionary[key]
     }
 
