@@ -57,7 +57,7 @@ final class FileManagerStorageTests: XCTestCase {
         XCTAssertNil(readData)
     }
 
-    func testValueBeingPersisted() throws {
+    func testValueBeingCreatedOnDisk() throws {
         let dataURL = testFilesDirectory.appendingPathComponent("\(UUID().uuidString).data", isDirectory: false)
 
         addTeardownBlock {
@@ -84,12 +84,12 @@ final class FileManagerStorageTests: XCTestCase {
         }
         _ = cancellable
 
-        try storage.storeValue(writtenData, key: dataURL)
+        try writtenData.write(to: dataURL)
 
-        waitForExpectations(timeout: 1, handler: nil)
+        waitForExpectations(timeout: 10, handler: nil)
     }
 
-    func testValueBeingDeleted() throws {
+    func testValueBeingDeletedFromDisk() throws {
         let dataURL = testFilesDirectory.appendingPathComponent("\(UUID().uuidString).data", isDirectory: false)
 
         addTeardownBlock {
@@ -116,9 +116,91 @@ final class FileManagerStorageTests: XCTestCase {
         }
         _ = cancellable
 
-        try storage.removeValue(for: dataURL)
+        try FileManager.default.removeItem(at: dataURL)
 
-        waitForExpectations(timeout: 1, handler: nil)
+        waitForExpectations(timeout: 10, handler: nil)
+    }
+
+    func testValueBeingDeletedThenCreatedFromDisk() throws {
+        let dataURL = testFilesDirectory.appendingPathComponent("\(UUID().uuidString).data", isDirectory: false)
+
+        addTeardownBlock {
+            try? FileManager.default.removeItem(at: dataURL)
+        }
+
+        let storedData = UUID().uuidString.data(using: .utf8)!
+        let storage = FileManagerStorage()
+        let persister = Persister(key: dataURL, storedBy: storage)
+        try storedData.write(to: dataURL)
+
+        let updatedData = UUID().uuidString.data(using: .utf8)!
+
+        let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
+        callsUpdateListenerExpectation.expectedFulfillmentCount = 2
+
+        var callCount = 0
+        let cancellable = persister.addUpdateListener { result in
+            defer {
+                callsUpdateListenerExpectation.fulfill()
+                callCount += 1
+            }
+
+            if callCount == 0 {
+                switch result {
+                case .success(let newValue):
+                    XCTAssertNil(newValue, "Value passed to update listener should be `nil` when file has been deleted on disk")
+                case .failure(let error):
+                    XCTFail("Update listener should be notified of a success. Got error: \(error)")
+                }
+                try? updatedData.write(to: dataURL)
+            } else if callCount == 1 {
+                switch result {
+                case .success(let newValue):
+                    XCTAssertEqual(newValue, updatedData, "Value passed to update listener should be new data when file has been updated on disk")
+                case .failure(let error):
+                    XCTFail("Update listener should be notified of a success. Got error: \(error)")
+                }
+            }
+        }
+        _ = cancellable
+
+        try FileManager.default.removeItem(at: dataURL)
+
+        waitForExpectations(timeout: 10, handler: nil)
+    }
+
+    func testValueBeingUpdatedOnDisk() throws {
+        let dataURL = testFilesDirectory.appendingPathComponent("\(UUID().uuidString).data", isDirectory: false)
+
+        addTeardownBlock {
+            try? FileManager.default.removeItem(at: dataURL)
+        }
+
+        let storedData = UUID().uuidString.data(using: .utf8)!
+        let storage = FileManagerStorage()
+        let persister = Persister(key: dataURL, storedBy: storage)
+        try storedData.write(to: dataURL)
+
+        let updatedData = UUID().uuidString.data(using: .utf8)!
+
+        let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
+        let cancellable = persister.addUpdateListener { result in
+            defer {
+                callsUpdateListenerExpectation.fulfill()
+            }
+
+            switch result {
+            case .success(let newValue):
+                XCTAssertEqual(newValue, updatedData, "Value passed to update listener should be new data when file has been updated on disk")
+            case .failure(let error):
+                XCTFail("Update listener should be notified of a success. Got error: \(error)")
+            }
+        }
+        _ = cancellable
+
+        try updatedData.write(to: dataURL)
+
+        waitForExpectations(timeout: 10, handler: nil)
     }
 
 }
