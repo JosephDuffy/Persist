@@ -1,4 +1,4 @@
-#if os(macOS) || os(iOS) || os(tvOS) || os(watchOS)
+#if os(macOS) || os(iOS) || os(tvOS)
 public struct StorableInUbiquitousKeyValueStoreTransformer<Input: StorableInUbiquitousKeyValueStore>: Transformer {
 
     public func transformValue(_ value: Input) -> UbiquitousKeyValueStoreValue {
