@@ -5,21 +5,26 @@ import XCTest
 final class FileManagerStorageTests: XCTestCase {
 
     var testFilesDirectory: URL {
-        return testsDirectory.appendingPathComponent("Resources/FileManagerTests", isDirectory: true)
-    }
+        let basePath: URL
+        if #available(macOS 10.12, iOS 10.0, tvOS 10.0, *) {
+            basePath = FileManager.default.temporaryDirectory
+        } else {
+            basePath = Bundle.allBundles.first(where: { $0.bundlePath.hasSuffix(".xctest") })!.bundleURL
+        }
 
-    var testsDirectory: URL {
-        return testsBundle.bundleURL
-    }
-
-    var testsBundle: Bundle {
-        return Bundle.allBundles.first(where: { $0.bundlePath.hasSuffix(".xctest") })!
+        return basePath.appendingPathComponent("PersistFileManagerTestFiles", isDirectory: true)
     }
 
     override func setUpWithError() throws {
         try FileManager.default.createDirectory(at: testFilesDirectory, withIntermediateDirectories: true, attributes: nil)
 
         try super.setUpWithError()
+    }
+
+    override func tearDownWithError() throws {
+        try FileManager.default.removeItem(at: testFilesDirectory)
+
+        try super.tearDownWithError()
     }
 
     func testSettingValue() {
