@@ -34,6 +34,13 @@ final class FileManagerStorageTests: XCTestCase {
         _ = Persisted(key: testFilesDirectory, fileManager: .default, transformer: MockTransformer())
     }
 
+    func testPersisterFileManagerAPI() {
+        _ = Persister(key: testFilesDirectory, storedBy: FileManager.default)
+        _ = Persister(key: testFilesDirectory, fileManager: .default)
+        _ = Persister(key: testFilesDirectory, storedBy: FileManager.default, transformer: MockTransformer())
+        _ = Persister(key: testFilesDirectory, fileManager: .default, transformer: MockTransformer())
+    }
+
     func testSettingValue() {
         let dataURL = testFilesDirectory.appendingPathComponent("\(UUID().uuidString).data", isDirectory: false)
 
