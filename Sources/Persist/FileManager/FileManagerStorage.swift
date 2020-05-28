@@ -24,16 +24,8 @@ public final class FileManagerStorage: Storage {
         updateListeners[url]?.values.forEach { $0(nil) }
     }
 
-    public func retrieveValue(for url: URL) throws -> Data? {
-        do {
-            return try Data(contentsOf: url)
-        } catch {
-            if (error as NSError).code == 260 {
-                return nil
-            } else {
-                throw error
-            }
-        }
+    public func retrieveValue(for url: URL) -> Data? {
+        return fileManager.contents(atPath: url.path)
     }
 
     public func addUpdateListener(forKey url: URL, updateListener: @escaping UpdateListener) -> Cancellable {

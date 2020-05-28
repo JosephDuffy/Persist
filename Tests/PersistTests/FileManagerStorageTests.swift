@@ -51,14 +51,14 @@ final class FileManagerStorageTests: XCTestCase {
         let storage = FileManagerStorage()
         let writtenData = UUID().uuidString.data(using: .utf8)!
         try writtenData.write(to: dataURL)
-        let readData = try? storage.retrieveValue(for: dataURL)
+        let readData = storage.retrieveValue(for: dataURL)
         XCTAssertEqual(readData, writtenData)
     }
 
     func testReadingNonExistantFile() throws {
         let dataURL = testFilesDirectory.appendingPathComponent("\(UUID().uuidString).data", isDirectory: false)
         let storage = FileManagerStorage()
-        let readData = try storage.retrieveValue(for: dataURL)
+        let readData = storage.retrieveValue(for: dataURL)
         XCTAssertNil(readData)
     }
 
