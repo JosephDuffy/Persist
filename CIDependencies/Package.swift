@@ -8,7 +8,6 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/JosephDuffy/xcutils.git", from: "0.1.0"),
-        .package(url: "https://github.com/eneko/SourceDocs.git", from: "1.0.0"),
     ],
     targets: [
         .target(name: "CIDependencies")
