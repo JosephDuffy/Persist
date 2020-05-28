@@ -59,6 +59,31 @@ jobs:
       with:
         fail_ci_if_error: true
 
+  watchos_build:
+    name: watchOS Build (Xcode)
+    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        xcode: ["11.4"]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Select Xcode ${{ matrix.xcode }}
+      run: sudo xcode-select --switch /Applications/Xcode_${{ matrix.xcode }}.app
+
+    - name: Cache SwiftPM
+      uses: actions/cache@v1
+      with:
+        path: CIDependencies/.build
+        key: ${{ runner.os }}-xcode_${{ matrix.xcode }}-swiftpm-ci-deps-${{ github.workspace }}-${{ hashFiles('CIDependencies/Package.resolved') }}
+        restore-keys: |
+          ${{ runner.os }}-xcode_${{ matrix.xcode }}-swiftpm-ci-deps-${{ github.workspace }}
+
+    - name: Run Tests
+      run: swift run --configuration release --package-path ./CIDependencies/ xcutils build watchOS --scheme Persist
+
   linux_tests:
     name: SwiftPM on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
