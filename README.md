@@ -27,7 +27,7 @@ UserDefaults.standard.object(forKey: "foo-bar") // "new-value"
 
 - [x] `UserDefaults`
 - [x] `NSUbiquitousKeyValueStore`
-- [ ] Local file system
+- [x] `FileManager`
 - [ ] Keychain
 - [x] `InMemoryStorage` (a simple wrapper around a dictionary)
 

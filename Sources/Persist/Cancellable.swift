@@ -1,4 +1,4 @@
-public final class Cancellable {
+public class Cancellable {
 
     public typealias CancelClosure = () -> Void
 
