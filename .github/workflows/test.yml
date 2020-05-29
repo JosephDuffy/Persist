@@ -17,6 +17,14 @@ jobs:
     - name: Select Xcode ${{ matrix.xcode }}
       run: sudo xcode-select --switch /Applications/Xcode_${{ matrix.xcode }}.app
 
+    - name: Cache SwiftPM
+      uses: actions/cache@v1
+      with:
+        path: .build
+        key: ${{ runner.os }}-xcode_${{ matrix.xcode }}-swiftpm-deps-${{ github.workspace }}-${{ hashFiles('Package.resolved') }}
+        restore-keys: |
+          ${{ runner.os }}-xcode_${{ matrix.xcode }}-swiftpm-deps-${{ github.workspace }}
+
     - name: SwiftPM tests
       run: swift test --enable-code-coverage
 
@@ -51,8 +59,16 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-xcode_${{ matrix.xcode }}-swiftpm-ci-deps-${{ github.workspace }}
 
+    - name: Cache DerivedData
+      uses: actions/cache@v1
+      with:
+        path: ~/Library/Developer/Xcode/DerivedData
+        key: ${{ runner.os }}-${{ matrix.platform }}_derived_data-xcode_${{ matrix.xcode }}
+        restore-keys: |
+          ${{ runner.os }}-${{ matrix.platform }}_derived_data
+
     - name: Run Tests
-      run: swift run --configuration release --package-path ./CIDependencies/ xcutils test ${{ matrix.platform }} --scheme Persist --enable-code-coverage
+      run: swift run --configuration release --skip-update --package-path ./CIDependencies/ xcutils test ${{ matrix.platform }} --scheme Persist --enable-code-coverage
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1
@@ -81,8 +97,16 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-xcode_${{ matrix.xcode }}-swiftpm-ci-deps-${{ github.workspace }}
 
-    - name: Run Tests
-      run: swift run --configuration release --package-path ./CIDependencies/ xcutils build watchOS --scheme Persist
+    - name: Cache DerivedData
+      uses: actions/cache@v1
+      with:
+        path: ~/Library/Developer/Xcode/DerivedData
+        key: ${{ runner.os }}-watchOS_derived_data-xcode_${{ matrix.xcode }}
+        restore-keys: |
+          ${{ runner.os }}-watchOS_derived_data
+
+    - name: Build for watchOS
+      run: swift run --configuration release --skip-update --package-path ./CIDependencies/ xcutils build watchOS --scheme Persist
 
   linux_tests:
     name: SwiftPM on ${{ matrix.os }}
