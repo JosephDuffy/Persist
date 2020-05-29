@@ -59,8 +59,11 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-${{ matrix.platform }}_derived_data
 
+    - name: Resolve Swift Packages
+      run: swift package resolve
+
     - name: Run Tests
-      run: swift run --configuration release --package-path ./CIDependencies/ xcutils test ${{ matrix.platform }} --scheme Persist --enable-code-coverage
+      run: swift run --configuration release --skip-update --package-path ./CIDependencies/ xcutils test ${{ matrix.platform }} --scheme Persist --enable-code-coverage
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1
@@ -97,8 +100,11 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-watchOS_derived_data
 
+    - name: Resolve Swift Packages
+      run: swift package resolve
+
     - name: Run Tests
-      run: swift run --configuration release --package-path ./CIDependencies/ xcutils build watchOS --scheme Persist
+      run: swift run --configuration release --skip-update --package-path ./CIDependencies/ xcutils build watchOS --scheme Persist
 
   linux_tests:
     name: SwiftPM on ${{ matrix.os }}
