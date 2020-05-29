@@ -111,7 +111,7 @@ jobs:
     - name: Resolve Swift Packages
       run: swift package resolve
 
-    - name: Run Tests
+    - name: Build for watchOS
       run: swift run --configuration release --skip-update --package-path ./CIDependencies/ xcutils build watchOS --scheme Persist
 
   linux_tests:
