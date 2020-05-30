@@ -43,7 +43,7 @@ public struct PropertyListEncoderTransformer<Input: Codable>: Transformer {
         return try encoder.encode(value)
     }
 
-    public func untransformValue(from data: Data) throws -> Input {
+    public func untransformValue(_ data: Data) throws -> Input {
         return try decoder.decode(Input.self, from: data)
     }
 

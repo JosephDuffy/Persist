@@ -10,7 +10,7 @@ internal final class MockTransformer<Value>: Transformer {
         return value
     }
 
-    func untransformValue(from output: Value) -> Value {
+    func untransformValue(_ output: Value) -> Value {
         return output
     }
 

@@ -5,7 +5,7 @@ public struct StorableInUbiquitousKeyValueStoreTransformer<Input: StorableInUbiq
         return value.asUbiquitousKeyValueStoreValue
     }
 
-    public func untransformValue(from output: UbiquitousKeyValueStoreValue) throws -> Input {
+    public func untransformValue(_ output: UbiquitousKeyValueStoreValue) throws -> Input {
         guard let value = output.value as? Input else {
             throw PersistanceError.unexpectedValueType(value: output.value, expected: Input.self)
         }
