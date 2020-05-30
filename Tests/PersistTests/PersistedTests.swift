@@ -208,11 +208,12 @@ final class PersistedTests: XCTestCase {
         waitForExpectations(timeout: 0.1)
     }
 
-    func testAnyStorageSettingWithDifferentStoredValueTypeAndUntransformedValue() {
+    func testAnyStorageSettingToValueDifferentFromTransformerOutput() {
         let key = "key"
         let actualValue = "test"
         let storage = InMemoryStorage<Any>()
-        let persister = Persister<Int>(key: key, storedBy: storage, transformer: StorableInUserDefaultsTransformer())
+        let transformer = MockTransformer<Int>()
+        let persister = Persister<Int>(key: key, storedBy: storage, transformer: transformer)
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
         let cancellable = persister.addUpdateListener() { newValue in
@@ -230,7 +231,7 @@ final class PersistedTests: XCTestCase {
         }
         _ = cancellable
 
-        storage.storeValue(UserDefaultsValue.string(actualValue), key: key)
+        storage.storeValue(actualValue, key: key)
 
         XCTAssertThrowsError(try persister.retrieveValue(), "Retrieving a value with a different type should throw") { error in
             switch error {
@@ -243,6 +244,66 @@ final class PersistedTests: XCTestCase {
         }
 
         waitForExpectations(timeout: 0.1)
+    }
+
+    func testAnyStorageSettingWithTransformerError() {
+        let key = "key"
+        let actualValue = "test"
+        let storage = InMemoryStorage<Any>()
+        let transformer = MockTransformer<String>()
+        let transformerError = NSError(domain: "persist-tests-domain", code: 1, userInfo: nil)
+        let persister = Persister<String>(key: key, storedBy: storage, transformer: transformer)
+
+        transformer.errorToThrow = transformerError
+
+        XCTAssertThrowsError(try persister.persist(actualValue), "Setting a value when the transformer throws should throw") { error in
+            XCTAssertEqual(error as NSError, transformerError, "Should throw error thrown by transformer")
+        }
+    }
+
+    func testAnyStorageRetievingWithTransformerError() throws {
+        let key = "key"
+        let storedValue = "test"
+        let storage = InMemoryStorage<Any>()
+        let transformer = MockTransformer<String>()
+        let transformerError = NSError(domain: "persist-tests-domain", code: 1, userInfo: nil)
+        let persister = Persister<String>(key: key, storedBy: storage, transformer: transformer)
+
+        try persister.persist(storedValue)
+        transformer.errorToThrow = transformerError
+
+        XCTAssertThrowsError(try persister.retrieveValue(), "Retrieving a value when the transformer throws should throw") { error in
+            XCTAssertEqual(error as NSError, transformerError, "Should throw error thrown by transformer")
+        }
+    }
+
+    func testAnyStorageUpdateListenerTransformerError() {
+        let key = "key"
+        let storedValue = "test"
+        let storage = InMemoryStorage<Any>()
+        let transformer = MockTransformer<String>()
+        let transformerError = NSError(domain: "persist-tests-domain", code: 1, userInfo: nil)
+        let persister = Persister<String>(key: key, storedBy: storage, transformer: transformer)
+        transformer.errorToThrow = transformerError
+
+        let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
+        let cancellable = persister.addUpdateListener() { newValue in
+            defer {
+                callsUpdateListenerExpectation.fulfill()
+            }
+
+            switch newValue {
+            case .failure(let error):
+                XCTAssertEqual(error as NSError, transformerError, "Should pass error thrown by transformer")
+            default:
+                XCTFail()
+            }
+        }
+        _ = cancellable
+
+        storage.storeValue(storedValue, key: key)
+
+        waitForExpectations(timeout: 1, handler: nil)
     }
 
     func testAnyStorageSettingWithoutTransformer() throws {
