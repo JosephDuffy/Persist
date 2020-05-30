@@ -4,6 +4,14 @@ import XCTest
 
 final class PersistedTests: XCTestCase {
 
+    func testAnyAPIWithTransformer() {
+        struct StoredValue: Codable, Equatable {
+            let property: String
+        }
+
+        _ = Persisted<StoredValue>(key: "test-key", storedBy: InMemoryStorage<Any>(), transformer: JSONTransformer())
+    }
+
     func testSettingWrappedValue() throws {
         struct StoredValue: Codable, Equatable {
             let property: String
