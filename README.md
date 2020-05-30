@@ -25,11 +25,10 @@ UserDefaults.standard.object(forKey: "foo-bar") // "new-value"
 
 `Persist` includes out-of-the-box supports for:
 
-- [x] `UserDefaults`
-- [x] `NSUbiquitousKeyValueStore`
-- [x] `FileManager`
-- [ ] Keychain
-- [x] `InMemoryStorage` (a simple wrapper around a dictionary)
+- `UserDefaults`
+- `NSUbiquitousKeyValueStore`
+- `FileManager`
+- `InMemoryStorage` (a simple wrapper around a dictionary)
 
 ### Subscribing to Updates
 
@@ -121,6 +120,52 @@ let foo = Foo()
 let bar = Bar(baz: "example value")
 foo.bar = bar
 foo.bar.baz // "transformed"
+```
+
+### Default Values
+
+A default value may be provided that will be used when the persister returns `nil` or throws and error.
+
+```swift
+struct Foo {
+    @Persisted(key: "bar", userDefaults: .standard, defaultValue: "default")
+    var bar: Bar!
+}
+
+var foo = Foo()
+foo.bar // "default"
+```
+
+The default value can be optionally stored when used, either due to an error or because the storage returned `nil`. This can be useful when the first value is random and should be persisted between app launches once initially created.
+
+```swift
+struct Foo {
+    @Persisted(key: "persistedWhenNilInt", userDefaults: .standard, defaultValue: Int.random(in: 1...10), defaultValuePersistBehaviour: .persistWhenNil)
+    var persistedWhenNilInt: Int!
+
+    @Persisted(key: "notPersistedWhenNilRandomInt", userDefaults: .standard, defaultValue: Int.random(in: 1...10))
+    var notPersistedWhenNilRandomInt: Int!
+}
+
+var foo = Foo()
+
+UserDefaults.standard.object(forKey: "persistedWhenNilInt") // nil
+foo.persistedWhenNilInt // 3
+UserDefaults.standard.object(forKey: "persistedWhenNilInt") // 3
+foo.persistedWhenNilInt // 3
+
+UserDefaults.standard.object(forKey: "notPersistedWhenNilRandomInt") // nil
+foo.notPersistedWhenNilRandomInt // 7
+UserDefaults.standard.object(forKey: "notPersistedWhenNilRandomInt") // nil
+foo.notPersistedWhenNilRandomInt // 7
+
+// ...restart app
+
+UserDefaults.standard.object(forKey: "persistedWhenNilInt") // 3
+foo.persistedWhenNilInt // 3
+
+UserDefaults.standard.object(forKey: "notPersistedWhenNilRandomInt") // nil
+foo.notPersistedWhenNilRandomInt // 4
 ```
 
 ### Property Wrapper Initialisation
