@@ -199,3 +199,7 @@ let package = Package(
     ...
 )
 ```
+
+# License
+
+The project is released under the MIT license. View the [LICENSE](./LICENSE) file for the full license.
