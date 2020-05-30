@@ -28,9 +28,10 @@ final class UserDefaultsStorageTests: XCTestCase {
     func testStoringStrings() {
         let key = "key"
         let value = "test"
+        let storage = UserDefaultsStorage(userDefaults: userDefaults)
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
-        let cancellable = userDefaults.addUpdateListener(forKey: key) { newValue in
+        let cancellable = storage.addUpdateListener(forKey: key) { newValue in
             defer {
                 callsUpdateListenerExpectation.fulfill()
             }
@@ -39,10 +40,10 @@ final class UserDefaultsStorageTests: XCTestCase {
         }
         _ = cancellable
 
-        userDefaults.storeValue(.string(value), key: key)
+        storage.storeValue(.string(value), key: key)
 
         XCTAssertEqual(userDefaults.string(forKey: key), value, "String should be stored as strings")
-        XCTAssertEqual(userDefaults.retrieveValue(for: key), .string(value))
+        XCTAssertEqual(storage.retrieveValue(for: key), .string(value))
 
         waitForExpectations(timeout: 0.1)
     }
@@ -56,9 +57,10 @@ final class UserDefaultsStorageTests: XCTestCase {
             ]),
             .string("hello world"),
         ])
+        let storage = UserDefaultsStorage(userDefaults: userDefaults)
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
-        let cancellable = userDefaults.addUpdateListener(forKey: key) { newValue in
+        let cancellable = storage.addUpdateListener(forKey: key) { newValue in
             defer {
                 callsUpdateListenerExpectation.fulfill()
             }
@@ -67,10 +69,10 @@ final class UserDefaultsStorageTests: XCTestCase {
         }
         _ = cancellable
 
-        userDefaults.storeValue(userDefaultsValue, key: key)
+        storage.storeValue(userDefaultsValue, key: key)
 
         XCTAssertNotNil(userDefaults.array(forKey: key), "Arrays should be stored as arrays")
-        XCTAssertEqual(userDefaults.retrieveValue(for: key), userDefaultsValue)
+        XCTAssertEqual(storage.retrieveValue(for: key), userDefaultsValue)
 
         waitForExpectations(timeout: 0.1)
     }
@@ -84,9 +86,10 @@ final class UserDefaultsStorageTests: XCTestCase {
             ]),
             "baz": .string("hello world"),
         ])
+        let storage = UserDefaultsStorage(userDefaults: userDefaults)
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
-        let cancellable = userDefaults.addUpdateListener(forKey: key) { newValue in
+        let cancellable = storage.addUpdateListener(forKey: key) { newValue in
             defer {
                 callsUpdateListenerExpectation.fulfill()
             }
@@ -95,19 +98,20 @@ final class UserDefaultsStorageTests: XCTestCase {
         }
         _ = cancellable
 
-        userDefaults.storeValue(userDefaultsValue, key: key)
+        storage.storeValue(userDefaultsValue, key: key)
 
         XCTAssertNotNil(userDefaults.dictionary(forKey: key), "Dictionaries should be stored as dictionaries")
-        XCTAssertEqual(userDefaults.retrieveValue(for: key), userDefaultsValue)
+        XCTAssertEqual(storage.retrieveValue(for: key), userDefaultsValue)
 
         waitForExpectations(timeout: 0.1)
     }
 
     func testStoringURLs() {
         let url = URL(string: "http://example.com")!
+        let storage = UserDefaultsStorage(userDefaults: userDefaults)
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
-        let cancellable = userDefaults.addUpdateListener(forKey: "key") { newValue in
+        let cancellable = storage.addUpdateListener(forKey: "key") { newValue in
             defer {
                 callsUpdateListenerExpectation.fulfill()
             }
@@ -116,11 +120,11 @@ final class UserDefaultsStorageTests: XCTestCase {
         }
         _ = cancellable
 
-        userDefaults.storeValue(.url(url), key: "key")
+        storage.storeValue(.url(url), key: "key")
 
         XCTAssertEqual(userDefaults.url(forKey: "key"), url, "URLs should be stored as URLs")
-        XCTAssertEqual(userDefaults.retrieveValue(for: "key"), .url(url))
-        XCTAssertNil(userDefaults.retrieveValue(for: "other"))
+        XCTAssertEqual(storage.retrieveValue(for: "key"), .url(url))
+        XCTAssertNil(storage.retrieveValue(for: "other"))
 
         waitForExpectations(timeout: 0.1)
     }
@@ -147,25 +151,29 @@ final class UserDefaultsStorageTests: XCTestCase {
     }
 
     func testUpdateListenerWithStorageFunction() {
+        let storage = UserDefaultsStorage(userDefaults: userDefaults)
+
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
         callsUpdateListenerExpectation.expectedFulfillmentCount = 1
         callsUpdateListenerExpectation.assertForOverFulfill = true
 
-        let cancellable = userDefaults.addUpdateListener(forKey: "test") { _ in
+        let cancellable = storage.addUpdateListener(forKey: "test") { _ in
             callsUpdateListenerExpectation.fulfill()
         }
         _ = cancellable
-        userDefaults.storeValue(.string("test"), key: "test")
+        storage.storeValue(.string("test"), key: "test")
 
         waitForExpectations(timeout: 1)
     }
 
     func testUpdateListenerWithSetFunction() {
+        let storage = UserDefaultsStorage(userDefaults: userDefaults)
+
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
         callsUpdateListenerExpectation.expectedFulfillmentCount = 1
         callsUpdateListenerExpectation.assertForOverFulfill = true
 
-        let cancellable = userDefaults.addUpdateListener(forKey: "test") { _ in
+        let cancellable = storage.addUpdateListener(forKey: "test") { _ in
             callsUpdateListenerExpectation.fulfill()
         }
         _ = cancellable
