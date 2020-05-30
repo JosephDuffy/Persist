@@ -53,6 +53,14 @@ final class UserDefaultsStorageTests: XCTestCase {
         XCTAssertEqual(userDefaults.string(forKey: "foo-bar"), "new-value")
     }
 
+    func testPersisterWithURL() throws {
+        let persister = Persister<URL>.init(key: "test", userDefaults: userDefaults)
+        let url = URL(string: "http://example.com")!
+
+        try persister.persist(url)
+        XCTAssertEqual(try persister.retrieveValue(), url)
+    }
+
     func testPersisterWithBoolFalse() throws {
         let persister = Persister<Bool>.init(key: "test", userDefaults: userDefaults)
         let bool = false
@@ -67,6 +75,49 @@ final class UserDefaultsStorageTests: XCTestCase {
 
         try persister.persist(bool)
         XCTAssertEqual(try persister.retrieveValue(), bool)
+    }
+
+    func testPersisterWithInt() throws {
+        let persister = Persister<Int>.init(key: "test", userDefaults: userDefaults)
+        let int = 0
+
+        try persister.persist(int)
+        XCTAssertEqual(try persister.retrieveValue(), int)
+    }
+
+    func testPersisterWithDouble() throws {
+        let persister = Persister<Double>.init(key: "test", userDefaults: userDefaults)
+        let double = 1.23
+
+        try persister.persist(double)
+        XCTAssertEqual(try persister.retrieveValue(), double)
+    }
+
+    func testPersisterWithFloat() throws {
+        let persister = Persister<Float>.init(key: "test", userDefaults: userDefaults)
+        let float: Float = 1.23
+
+        try persister.persist(float)
+        XCTAssertEqual(try persister.retrieveValue()!, float, accuracy: 0.1)
+    }
+
+    func testPersisterWithArray() throws {
+        let persister = Persister<[Int]>.init(key: "test", userDefaults: userDefaults)
+        let array = [1, 2, 0, 6]
+
+        try persister.persist(array)
+        XCTAssertEqual(try persister.retrieveValue(), array)
+    }
+
+    func testPersisterWithDictionary() throws {
+        let persister = Persister<[String: [Int]]>.init(key: "test", userDefaults: userDefaults)
+        let dictionary = [
+            "foo": [1, 2, 0, 6],
+            "bar": [0, 4, 7],
+        ]
+
+        try persister.persist(dictionary)
+        XCTAssertEqual(try persister.retrieveValue(), dictionary)
     }
 
     func testStoringStrings() {

@@ -69,6 +69,41 @@ final class NSUbiquitousKeyValueStoreStorageTests: XCTestCase {
         XCTAssertEqual(try persister.retrieveValue(), bool)
     }
 
+    func testPersisterWithInt64() throws {
+        let persister = Persister<Int64>.init(key: "test", nsUbiquitousKeyValueStoreStorage: nsUbiquitousKeyValueStoreStorage)
+        let int64: Int64 = 0
+
+        try persister.persist(int64)
+        XCTAssertEqual(try persister.retrieveValue(), int64)
+    }
+
+    func testPersisterWithDouble() throws {
+        let persister = Persister<Double>.init(key: "test", nsUbiquitousKeyValueStoreStorage: nsUbiquitousKeyValueStoreStorage)
+        let double = 1.23
+
+        try persister.persist(double)
+        XCTAssertEqual(try persister.retrieveValue(), double)
+    }
+
+    func testPersisterWithArray() throws {
+        let persister = Persister<[Int64]>.init(key: "test", nsUbiquitousKeyValueStoreStorage: nsUbiquitousKeyValueStoreStorage)
+        let array: [Int64] = [1, 2, 0, 6]
+
+        try persister.persist(array)
+        XCTAssertEqual(try persister.retrieveValue(), array)
+    }
+
+    func testPersisterWithDictionary() throws {
+        let persister = Persister<[String: [Int64]]>.init(key: "test", nsUbiquitousKeyValueStoreStorage: nsUbiquitousKeyValueStoreStorage)
+        let dictionary: [String: [Int64]] = [
+            "foo": [1, 2, 0, 6],
+            "bar": [0, 4, 7],
+        ]
+
+        try persister.persist(dictionary)
+        XCTAssertEqual(try persister.retrieveValue(), dictionary)
+    }
+
     func testStoringStrings() {
         let key = "key"
         let value = "test"
@@ -186,7 +221,7 @@ final class NSUbiquitousKeyValueStoreStorageTests: XCTestCase {
         waitForExpectations(timeout: 1)
     }
 
-    func testUpdateListenerFromNotification() {
+    func testUpdateListenerNewValueFromNotification() {
         nsUbiquitousKeyValueStoreStorage.storeValue(.string("initial-value"), key: "test")
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
@@ -211,6 +246,71 @@ final class NSUbiquitousKeyValueStoreStorageTests: XCTestCase {
                 NSUbiquitousKeyValueStoreChangedKeysKey: ["test"],
             ]
         )
+
+        waitForExpectations(timeout: 1)
+    }
+
+    func testUpdateListenerDeletedFromNotification() {
+        nsUbiquitousKeyValueStoreStorage.storeValue(.string("initial-value"), key: "test")
+
+        let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
+        callsUpdateListenerExpectation.expectedFulfillmentCount = 1
+        callsUpdateListenerExpectation.assertForOverFulfill = true
+
+        let cancellable = nsUbiquitousKeyValueStoreStorage.addUpdateListener(forKey: "test") { update in
+            defer {
+                callsUpdateListenerExpectation.fulfill()
+            }
+
+            XCTAssertEqual(update, nil, "New value should be retrieved and passed to update listeners")
+        }
+        _ = cancellable
+
+        nsUbiquitousKeyValueStoreStorage.nsUbiquitousKeyValueStore.removeObject(forKey: "test")
+        NotificationCenter.default.post(
+            name: NSUbiquitousKeyValueStore.didChangeExternallyNotification,
+            object: nsUbiquitousKeyValueStoreStorage.nsUbiquitousKeyValueStore,
+            userInfo: [
+                NSUbiquitousKeyValueStoreChangedKeysKey: ["test"],
+            ]
+        )
+
+        waitForExpectations(timeout: 1)
+    }
+
+    func testUpdateListenerDeletedViaStorage() {
+        nsUbiquitousKeyValueStoreStorage.storeValue(.string("initial-value"), key: "test")
+
+        let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
+        callsUpdateListenerExpectation.expectedFulfillmentCount = 1
+        callsUpdateListenerExpectation.assertForOverFulfill = true
+
+        let cancellable = nsUbiquitousKeyValueStoreStorage.addUpdateListener(forKey: "test") { update in
+            defer {
+                callsUpdateListenerExpectation.fulfill()
+            }
+
+            XCTAssertEqual(update, nil, "New value should be retrieved and passed to update listeners")
+        }
+        _ = cancellable
+
+        nsUbiquitousKeyValueStoreStorage.removeValue(for: "test")
+
+        waitForExpectations(timeout: 1)
+    }
+
+    func testUpdateListenerForDifferentKeyChange() {
+        nsUbiquitousKeyValueStoreStorage.storeValue(.string("initial-value"), key: "test")
+        nsUbiquitousKeyValueStoreStorage.storeValue(.string("initial-value"), key: "test2")
+
+        let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
+        callsUpdateListenerExpectation.isInverted = true
+        let cancellable = nsUbiquitousKeyValueStoreStorage.addUpdateListener(forKey: "test") { update in
+            callsUpdateListenerExpectation.fulfill()
+        }
+        _ = cancellable
+
+        nsUbiquitousKeyValueStoreStorage.removeValue(for: "test2")
 
         waitForExpectations(timeout: 1)
     }
