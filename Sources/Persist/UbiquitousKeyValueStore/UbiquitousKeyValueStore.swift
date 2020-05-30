@@ -1,7 +1,7 @@
 #if os(macOS) || os(iOS) || os(tvOS)
 import Foundation
 
-open class UbiquitousKeyValueStore: Storage {
+public final class UbiquitousKeyValueStore: Storage {
 
     public static var `default`: Self {
         return Self(nsUbiquitousKeyValueStore: .default)
