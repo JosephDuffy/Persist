@@ -6,7 +6,7 @@ public struct StorableInNSUbiquitousKeyValueStoreTransformer<Input: StorableInNS
     }
 
     public func untransformValue(_ output: NSUbiquitousKeyValueStoreValue) throws -> Input {
-        guard let value = output.value as? Input else {
+        guard let value = output.cast(to: Input.self) else {
             throw PersistenceError.unexpectedValueType(value: output.value, expected: Input.self)
         }
 

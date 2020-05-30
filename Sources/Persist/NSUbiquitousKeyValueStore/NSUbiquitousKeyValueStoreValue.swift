@@ -10,6 +10,23 @@ public enum NSUbiquitousKeyValueStoreValue: Hashable {
     indirect case array([NSUbiquitousKeyValueStoreValue])
     indirect case dictionary([String: NSUbiquitousKeyValueStoreValue])
 
+    func cast<Type>(to type: Type.Type) -> Type? {
+        switch self {
+        case .int64(let int64):
+            if type == Bool.self {
+                if int64 == 0 {
+                    return false as? Type
+                } else if int64 == 1 {
+                    return true as? Type
+                }
+            }
+
+            return int64 as? Type
+        default:
+            return value as? Type
+        }
+    }
+
     var value: Any {
         switch self {
         case .string(let string):
