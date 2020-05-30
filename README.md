@@ -74,16 +74,12 @@ class Foo {
     @Persisted(key: "bar", userDefaults: .standard, transformer: JSONTransformer())
     var bar: Bar?
 }
-```
 
-When using a transformer subscribers will always be notified of the pre-encoded and post-decoded value:
-
-```swift
 let foo = Foo()
 let cancellable = foo.$bar.addUpdateListener() { updateResult in
     switch updateResult {
     case .success(let bar):
-        // `bar` is always `Bar?` despite being stored as JSON `Data`
+        // `bar` is always `Bar?` despite being transformed to JSON `Data` by `JSONTransformer`
         print("Bar updated:", bar ?? "removed")
     case .failure(let error):
         print("Error updating bar:", error)
@@ -110,7 +106,7 @@ public struct BarTransformer: Transformer {
         return bar
     }
 
-    public func untransformValue(from bar: Bar) -> Bar {
+    public func untransformValue(_ bar: Bar) -> Bar {
         return bar
     }
 
