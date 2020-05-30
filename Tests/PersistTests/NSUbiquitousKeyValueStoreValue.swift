@@ -5,7 +5,7 @@ import XCTest
 final class UbiquitousKeyValueStoreValueTests: XCTestCase {
 
     func testDictionary() {
-        let dictionary: [String: StorableInUbiquitousKeyValueStore] = [
+        let dictionary: [String: StorableInNSUbiquitousKeyValueStore] = [
             "foo": [1, 2, 3] as [Int64],
             "bar": true,
             "baz": "hello world",

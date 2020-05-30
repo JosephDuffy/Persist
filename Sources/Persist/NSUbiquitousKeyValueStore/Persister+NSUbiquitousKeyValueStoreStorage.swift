@@ -1,6 +1,7 @@
+#if os(macOS) || os(iOS) || os(tvOS)
 import Foundation
 
-extension Persister where Value: StorableInUbiquitousKeyValueStore {
+extension Persister where Value: StorableInNSUbiquitousKeyValueStore {
 
     public convenience init(
         key: String,
@@ -31,7 +32,7 @@ extension Persister {
         key: String,
         storedBy nsUbiquitousKeyValueStoreStorage: NSUbiquitousKeyValueStoreStorage,
         transformer: Transformer
-    ) where Transformer.Input == Value, Transformer.Output: StorableInUbiquitousKeyValueStore {
+    ) where Transformer.Input == Value, Transformer.Output: StorableInNSUbiquitousKeyValueStore {
         self.init(key: key, nsUbiquitousKeyValueStoreStorage: nsUbiquitousKeyValueStoreStorage, transformer: transformer)
     }
 
@@ -39,7 +40,7 @@ extension Persister {
         key: String,
         nsUbiquitousKeyValueStoreStorage: NSUbiquitousKeyValueStoreStorage,
         transformer: Transformer
-    ) where Transformer.Input == Value, Transformer.Output: StorableInUbiquitousKeyValueStore {
+    ) where Transformer.Input == Value, Transformer.Output: StorableInNSUbiquitousKeyValueStore {
         let aggregateTransformer = transformer.append(transformer: StorableInNSUbiquitousKeyValueStoreTransformer<Transformer.Output>())
         self.init(
             key: key,
@@ -49,3 +50,4 @@ extension Persister {
     }
 
 }
+#endif

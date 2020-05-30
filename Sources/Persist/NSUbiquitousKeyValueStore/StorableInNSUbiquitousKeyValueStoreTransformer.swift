@@ -1,8 +1,8 @@
 #if os(macOS) || os(iOS) || os(tvOS)
-public struct StorableInNSUbiquitousKeyValueStoreTransformer<Input: StorableInUbiquitousKeyValueStore>: Transformer {
+public struct StorableInNSUbiquitousKeyValueStoreTransformer<Input: StorableInNSUbiquitousKeyValueStore>: Transformer {
 
     public func transformValue(_ value: Input) -> NSUbiquitousKeyValueStoreValue {
-        return value.asUbiquitousKeyValueStoreValue
+        return value.asNSUbiquitousKeyValueStoreValue
     }
 
     public func untransformValue(_ output: NSUbiquitousKeyValueStoreValue) throws -> Input {

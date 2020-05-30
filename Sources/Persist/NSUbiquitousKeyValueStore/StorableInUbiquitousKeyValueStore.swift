@@ -1,49 +1,49 @@
 #if os(macOS) || os(iOS) || os(tvOS)
 import Foundation
 
-public protocol StorableInUbiquitousKeyValueStore {
-    var asUbiquitousKeyValueStoreValue: NSUbiquitousKeyValueStoreValue { get }
+public protocol StorableInNSUbiquitousKeyValueStore {
+    var asNSUbiquitousKeyValueStoreValue: NSUbiquitousKeyValueStoreValue { get }
 }
 
-extension String: StorableInUbiquitousKeyValueStore {
-    public var asUbiquitousKeyValueStoreValue: NSUbiquitousKeyValueStoreValue {
+extension String: StorableInNSUbiquitousKeyValueStore {
+    public var asNSUbiquitousKeyValueStoreValue: NSUbiquitousKeyValueStoreValue {
         return .string(self)
     }
 }
 
-extension Data: StorableInUbiquitousKeyValueStore {
-    public var asUbiquitousKeyValueStoreValue: NSUbiquitousKeyValueStoreValue {
+extension Data: StorableInNSUbiquitousKeyValueStore {
+    public var asNSUbiquitousKeyValueStoreValue: NSUbiquitousKeyValueStoreValue {
         return .data(self)
     }
 }
 
-extension Bool: StorableInUbiquitousKeyValueStore {
-    public var asUbiquitousKeyValueStoreValue: NSUbiquitousKeyValueStoreValue {
+extension Bool: StorableInNSUbiquitousKeyValueStore {
+    public var asNSUbiquitousKeyValueStoreValue: NSUbiquitousKeyValueStoreValue {
         return .bool(self)
     }
 }
 
-extension Int64: StorableInUbiquitousKeyValueStore {
-    public var asUbiquitousKeyValueStoreValue: NSUbiquitousKeyValueStoreValue {
+extension Int64: StorableInNSUbiquitousKeyValueStore {
+    public var asNSUbiquitousKeyValueStoreValue: NSUbiquitousKeyValueStoreValue {
         return .int64(self)
     }
 }
 
-extension Double: StorableInUbiquitousKeyValueStore {
-    public var asUbiquitousKeyValueStoreValue: NSUbiquitousKeyValueStoreValue {
+extension Double: StorableInNSUbiquitousKeyValueStore {
+    public var asNSUbiquitousKeyValueStoreValue: NSUbiquitousKeyValueStoreValue {
         return .double(self)
     }
 }
 
-extension Array: StorableInUbiquitousKeyValueStore where Element: StorableInUbiquitousKeyValueStore {
-    public var asUbiquitousKeyValueStoreValue: NSUbiquitousKeyValueStoreValue {
-        return .array(map(\.asUbiquitousKeyValueStoreValue))
+extension Array: StorableInNSUbiquitousKeyValueStore where Element: StorableInNSUbiquitousKeyValueStore {
+    public var asNSUbiquitousKeyValueStoreValue: NSUbiquitousKeyValueStoreValue {
+        return .array(map(\.asNSUbiquitousKeyValueStoreValue))
     }
 }
 
-extension Dictionary: StorableInUbiquitousKeyValueStore where Key == String, Value: StorableInUbiquitousKeyValueStore {
-    public var asUbiquitousKeyValueStoreValue: NSUbiquitousKeyValueStoreValue {
-        return .dictionary(mapValues(\.asUbiquitousKeyValueStoreValue))
+extension Dictionary: StorableInNSUbiquitousKeyValueStore where Key == String, Value: StorableInNSUbiquitousKeyValueStore {
+    public var asNSUbiquitousKeyValueStoreValue: NSUbiquitousKeyValueStoreValue {
+        return .dictionary(mapValues(\.asNSUbiquitousKeyValueStoreValue))
     }
 }
 #endif

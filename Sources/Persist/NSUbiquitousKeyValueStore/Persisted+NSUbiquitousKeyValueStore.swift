@@ -1,3 +1,4 @@
+#if os(macOS) || os(iOS) || os(tvOS)
 import Foundation
 
 extension StoredInNSUbiquitousKeyValueStore {
@@ -32,7 +33,7 @@ extension Persisted {
         defaultValue: Value? = nil,
         storedBy nsUbiquitousKeyValueStore: NSUbiquitousKeyValueStore,
         transformer: Transformer
-    ) where Transformer.Input == Value, Transformer.Output: StorableInUbiquitousKeyValueStore {
+    ) where Transformer.Input == Value, Transformer.Output: StorableInNSUbiquitousKeyValueStore {
         self.init(
             key: key,
             defaultValue: defaultValue,
@@ -46,7 +47,7 @@ extension Persisted {
         defaultValue: Value? = nil,
         nsUbiquitousKeyValueStore: NSUbiquitousKeyValueStore,
         transformer: Transformer
-    ) where Transformer.Input == Value, Transformer.Output: StorableInUbiquitousKeyValueStore {
+    ) where Transformer.Input == Value, Transformer.Output: StorableInNSUbiquitousKeyValueStore {
         let persister = Persister(
             key: key,
             nsUbiquitousKeyValueStore: nsUbiquitousKeyValueStore,
@@ -56,3 +57,4 @@ extension Persisted {
     }
 
 }
+#endif
