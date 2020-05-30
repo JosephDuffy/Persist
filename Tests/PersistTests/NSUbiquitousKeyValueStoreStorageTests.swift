@@ -54,7 +54,7 @@ final class NSUbiquitousKeyValueStoreStorageTests: XCTestCase {
     }
 
     func testPersisterWithBoolFalse() throws {
-        let persister = Persister<Bool>.init(key: "test", nsUbiquitousKeyValueStoreStorage: nsUbiquitousKeyValueStoreStorage)
+        let persister = Persister<Bool>(key: "test", nsUbiquitousKeyValueStoreStorage: nsUbiquitousKeyValueStoreStorage)
         let bool = false
 
         try persister.persist(bool)
@@ -62,7 +62,7 @@ final class NSUbiquitousKeyValueStoreStorageTests: XCTestCase {
     }
 
     func testPersisterWithBoolTrue() throws {
-        let persister = Persister<Bool>.init(key: "test", nsUbiquitousKeyValueStoreStorage: nsUbiquitousKeyValueStoreStorage)
+        let persister = Persister<Bool>(key: "test", nsUbiquitousKeyValueStoreStorage: nsUbiquitousKeyValueStoreStorage)
         let bool = true
 
         try persister.persist(bool)
@@ -70,7 +70,7 @@ final class NSUbiquitousKeyValueStoreStorageTests: XCTestCase {
     }
 
     func testPersisterWithInt64() throws {
-        let persister = Persister<Int64>.init(key: "test", nsUbiquitousKeyValueStoreStorage: nsUbiquitousKeyValueStoreStorage)
+        let persister = Persister<Int64>(key: "test", nsUbiquitousKeyValueStoreStorage: nsUbiquitousKeyValueStoreStorage)
         let int64: Int64 = 0
 
         try persister.persist(int64)
@@ -78,7 +78,7 @@ final class NSUbiquitousKeyValueStoreStorageTests: XCTestCase {
     }
 
     func testPersisterWithDouble() throws {
-        let persister = Persister<Double>.init(key: "test", nsUbiquitousKeyValueStoreStorage: nsUbiquitousKeyValueStoreStorage)
+        let persister = Persister<Double>(key: "test", nsUbiquitousKeyValueStoreStorage: nsUbiquitousKeyValueStoreStorage)
         let double = 1.23
 
         try persister.persist(double)
@@ -86,7 +86,7 @@ final class NSUbiquitousKeyValueStoreStorageTests: XCTestCase {
     }
 
     func testPersisterWithArray() throws {
-        let persister = Persister<[Int64]>.init(key: "test", nsUbiquitousKeyValueStoreStorage: nsUbiquitousKeyValueStoreStorage)
+        let persister = Persister<[Int64]>(key: "test", nsUbiquitousKeyValueStoreStorage: nsUbiquitousKeyValueStoreStorage)
         let array: [Int64] = [1, 2, 0, 6]
 
         try persister.persist(array)
@@ -94,7 +94,7 @@ final class NSUbiquitousKeyValueStoreStorageTests: XCTestCase {
     }
 
     func testPersisterWithDictionary() throws {
-        let persister = Persister<[String: [Int64]]>.init(key: "test", nsUbiquitousKeyValueStoreStorage: nsUbiquitousKeyValueStoreStorage)
+        let persister = Persister<[String: [Int64]]>(key: "test", nsUbiquitousKeyValueStoreStorage: nsUbiquitousKeyValueStoreStorage)
         let dictionary: [String: [Int64]] = [
             "foo": [1, 2, 0, 6],
             "bar": [0, 4, 7],
@@ -102,6 +102,42 @@ final class NSUbiquitousKeyValueStoreStorageTests: XCTestCase {
 
         try persister.persist(dictionary)
         XCTAssertEqual(try persister.retrieveValue(), dictionary)
+    }
+
+    func testRetrieveValueOfDifferentType() {
+        let key = "key"
+        let actualValue = "test"
+        let persister = Persister<Int64>(key: key, nsUbiquitousKeyValueStoreStorage: nsUbiquitousKeyValueStoreStorage)
+
+        let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
+        let cancellable = persister.addUpdateListener() { newValue in
+            defer {
+                callsUpdateListenerExpectation.fulfill()
+            }
+
+            switch newValue {
+            case .failure(PersistenceError.unexpectedValueType(let value, let expected)):
+                XCTAssertEqual(value as? String, actualValue)
+                XCTAssert(expected == Int64.self)
+            default:
+                XCTFail()
+            }
+        }
+        _ = cancellable
+
+        nsUbiquitousKeyValueStoreStorage.storeValue(.string(actualValue), key: key)
+
+        XCTAssertThrowsError(try persister.retrieveValue(), "Retrieving a value with a different type should throw") { error in
+            switch error {
+            case PersistenceError.unexpectedValueType(let value, let expected):
+                XCTAssertEqual(value as? String, actualValue)
+                XCTAssert(expected == Int64.self)
+            default:
+                XCTFail()
+            }
+        }
+
+        waitForExpectations(timeout: 0.1)
     }
 
     func testStoringStrings() {

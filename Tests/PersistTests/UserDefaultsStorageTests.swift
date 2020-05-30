@@ -38,6 +38,18 @@ final class UserDefaultsStorageTests: XCTestCase {
         _ = Persister<Int>(key: "test", userDefaultsStorage: .standard, transformer: MockTransformer())
     }
 
+    func testUserDefaultsStorageSuiteNameInitialiser() {
+        let storage = UserDefaultsStorage(suiteName: "persist-test-suite")
+
+        XCTAssertNotNil(storage, "UserDefaultsStorage(suiteName:) should not return `nil`")
+    }
+
+    func testUserDefaultsStorageGlobalSuiteNameInitialiser() {
+        let storage = UserDefaultsStorage(suiteName: UserDefaults.globalDomain)
+
+        XCTAssertNil(storage, "UserDefaultsStorage(suiteName:) should return `nil` for the global domain")
+    }
+
     func testStoredInUserDefaults() {
         class Foo {
             @StoredInUserDefaults
@@ -54,7 +66,7 @@ final class UserDefaultsStorageTests: XCTestCase {
     }
 
     func testPersisterWithURL() throws {
-        let persister = Persister<URL>.init(key: "test", userDefaults: userDefaults)
+        let persister = Persister<URL>(key: "test", userDefaults: userDefaults)
         let url = URL(string: "http://example.com")!
 
         try persister.persist(url)
@@ -62,7 +74,7 @@ final class UserDefaultsStorageTests: XCTestCase {
     }
 
     func testPersisterWithBoolFalse() throws {
-        let persister = Persister<Bool>.init(key: "test", userDefaults: userDefaults)
+        let persister = Persister<Bool>(key: "test", userDefaults: userDefaults)
         let bool = false
 
         try persister.persist(bool)
@@ -70,7 +82,7 @@ final class UserDefaultsStorageTests: XCTestCase {
     }
 
     func testPersisterWithBoolTrue() throws {
-        let persister = Persister<Bool>.init(key: "test", userDefaults: userDefaults)
+        let persister = Persister<Bool>(key: "test", userDefaults: userDefaults)
         let bool = true
 
         try persister.persist(bool)
@@ -78,7 +90,7 @@ final class UserDefaultsStorageTests: XCTestCase {
     }
 
     func testPersisterWithInt() throws {
-        let persister = Persister<Int>.init(key: "test", userDefaults: userDefaults)
+        let persister = Persister<Int>(key: "test", userDefaults: userDefaults)
         let int = 0
 
         try persister.persist(int)
@@ -86,7 +98,7 @@ final class UserDefaultsStorageTests: XCTestCase {
     }
 
     func testPersisterWithDouble() throws {
-        let persister = Persister<Double>.init(key: "test", userDefaults: userDefaults)
+        let persister = Persister<Double>(key: "test", userDefaults: userDefaults)
         let double = 1.23
 
         try persister.persist(double)
@@ -94,7 +106,7 @@ final class UserDefaultsStorageTests: XCTestCase {
     }
 
     func testPersisterWithFloat() throws {
-        let persister = Persister<Float>.init(key: "test", userDefaults: userDefaults)
+        let persister = Persister<Float>(key: "test", userDefaults: userDefaults)
         let float: Float = 1.23
 
         try persister.persist(float)
@@ -102,7 +114,7 @@ final class UserDefaultsStorageTests: XCTestCase {
     }
 
     func testPersisterWithArray() throws {
-        let persister = Persister<[Int]>.init(key: "test", userDefaults: userDefaults)
+        let persister = Persister<[Int]>(key: "test", userDefaults: userDefaults)
         let array = [1, 2, 0, 6]
 
         try persister.persist(array)
@@ -110,7 +122,7 @@ final class UserDefaultsStorageTests: XCTestCase {
     }
 
     func testPersisterWithDictionary() throws {
-        let persister = Persister<[String: [Int]]>.init(key: "test", userDefaults: userDefaults)
+        let persister = Persister<[String: [Int]]>(key: "test", userDefaults: userDefaults)
         let dictionary = [
             "foo": [1, 2, 0, 6],
             "bar": [0, 4, 7],
@@ -118,6 +130,42 @@ final class UserDefaultsStorageTests: XCTestCase {
 
         try persister.persist(dictionary)
         XCTAssertEqual(try persister.retrieveValue(), dictionary)
+    }
+
+    func testRetrieveValueOfDifferentType() {
+        let key = "key"
+        let actualValue = "test"
+        let persister = Persister<Int>(key: key, userDefaults: userDefaults)
+
+        let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
+        let cancellable = persister.addUpdateListener() { newValue in
+            defer {
+                callsUpdateListenerExpectation.fulfill()
+            }
+
+            switch newValue {
+            case .failure(PersistenceError.unexpectedValueType(let value, let expected)):
+                XCTAssertEqual(value as? String, actualValue)
+                XCTAssert(expected == Int.self)
+            default:
+                XCTFail()
+            }
+        }
+        _ = cancellable
+
+        userDefaults.set(actualValue, forKey: "key")
+
+        XCTAssertThrowsError(try persister.retrieveValue(), "Retrieving a value with a different type should throw") { error in
+            switch error {
+            case PersistenceError.unexpectedValueType(let value, let expected):
+                XCTAssertEqual(value as? String, actualValue)
+                XCTAssert(expected == Int.self)
+            default:
+                XCTFail()
+            }
+        }
+
+        waitForExpectations(timeout: 0.1)
     }
 
     func testStoringStrings() {
