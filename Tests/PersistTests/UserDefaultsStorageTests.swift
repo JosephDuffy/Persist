@@ -53,6 +53,22 @@ final class UserDefaultsStorageTests: XCTestCase {
         XCTAssertEqual(userDefaults.string(forKey: "foo-bar"), "new-value")
     }
 
+    func testPersisterWithBoolFalse() throws {
+        let persister = Persister<Bool>.init(key: "test", userDefaults: userDefaults)
+        let bool = false
+
+        try persister.persist(bool)
+        XCTAssertEqual(try persister.retrieveValue(), bool)
+    }
+
+    func testPersisterWithBoolTrue() throws {
+        let persister = Persister<Bool>.init(key: "test", userDefaults: userDefaults)
+        let bool = true
+
+        try persister.persist(bool)
+        XCTAssertEqual(try persister.retrieveValue(), bool)
+    }
+
     func testStoringStrings() {
         let key = "key"
         let value = "test"
