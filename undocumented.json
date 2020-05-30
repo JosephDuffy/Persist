@@ -1,985 +1,1265 @@
 {
   "warnings": [
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/Cancellable.swift",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Cancellable.swift",
       "line": 1,
       "symbol": "Cancellable",
       "symbol_kind": "source.lang.swift.decl.class",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/Cancellable.swift",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Cancellable.swift",
       "line": 3,
       "symbol": "Cancellable.CancelClosure",
       "symbol_kind": "source.lang.swift.decl.typealias",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/Cancellable.swift",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Cancellable.swift",
       "line": 7,
       "symbol": "Cancellable.init(cancel:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/Cancellable.swift",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Cancellable.swift",
       "line": 15,
       "symbol": "Cancellable.cancel()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/InMemoryStorage.swift",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/FileManager/FileManagerStorage.swift",
+      "line": 3,
+      "symbol": "FileManagerStorage",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/FileManager/FileManagerStorage.swift",
+      "line": 5,
+      "symbol": "FileManagerStorage.Value",
+      "symbol_kind": "source.lang.swift.decl.typealias",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/FileManager/FileManagerStorage.swift",
+      "line": 11,
+      "symbol": "FileManagerStorage.init(fileManager:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/FileManager/Persisted+FileManager.swift",
+      "line": 5,
+      "symbol": "Persisted.init(key:defaultValue:storedBy:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/FileManager/Persisted+FileManager.swift",
+      "line": 13,
+      "symbol": "Persisted.init(key:defaultValue:fileManager:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/FileManager/Persisted+FileManager.swift",
+      "line": 26,
+      "symbol": "Persisted.init(key:defaultValue:storedBy:transformer:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/FileManager/Persisted+FileManager.swift",
+      "line": 35,
+      "symbol": "Persisted.init(key:defaultValue:fileManager:transformer:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/FileManager/Persister+FileManager.swift",
+      "line": 5,
+      "symbol": "Persister.init(key:storedBy:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/FileManager/Persister+FileManager.swift",
+      "line": 15,
+      "symbol": "Persister.init(key:fileManager:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/FileManager/Persister+FileManager.swift",
+      "line": 28,
+      "symbol": "Persister.init(key:storedBy:transformer:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/FileManager/Persister+FileManager.swift",
+      "line": 40,
+      "symbol": "Persister.init(key:fileManager:transformer:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/InMemoryStorage.swift",
       "line": 7,
       "symbol": "InMemoryStorage.Value",
       "symbol_kind": "source.lang.swift.decl.typealias",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/InMemoryStorage.swift",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/InMemoryStorage.swift",
       "line": 13,
       "symbol": "InMemoryStorage.init()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/PersistanceError.swift",
-      "line": 1,
-      "symbol": "PersistanceError",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/NSUbiquitousKeyValueStore/NSUbiquitousKeyValueStoreStorage.swift",
+      "line": 4,
+      "symbol": "NSUbiquitousKeyValueStoreStorage",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/NSUbiquitousKeyValueStore/NSUbiquitousKeyValueStoreStorage.swift",
+      "line": 6,
+      "symbol": "NSUbiquitousKeyValueStoreStorage.default",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/NSUbiquitousKeyValueStore/NSUbiquitousKeyValueStoreStorage.swift",
+      "line": 10,
+      "symbol": "NSUbiquitousKeyValueStoreStorage.Value",
+      "symbol_kind": "source.lang.swift.decl.typealias",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/NSUbiquitousKeyValueStore/NSUbiquitousKeyValueStoreStorage.swift",
+      "line": 12,
+      "symbol": "NSUbiquitousKeyValueStoreStorage.nsUbiquitousKeyValueStore",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/NSUbiquitousKeyValueStore/NSUbiquitousKeyValueStoreStorage.swift",
+      "line": 16,
+      "symbol": "NSUbiquitousKeyValueStoreStorage.init(nsUbiquitousKeyValueStore:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/NSUbiquitousKeyValueStore/NSUbiquitousKeyValueStoreStorage.swift",
+      "line": 44,
+      "symbol": "NSUbiquitousKeyValueStoreStorage.addUpdateListener(forKey:notificationCenter:updateListener:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/NSUbiquitousKeyValueStore/NSUbiquitousKeyValueStoreValue.swift",
+      "line": 4,
+      "symbol": "NSUbiquitousKeyValueStoreValue",
       "symbol_kind": "source.lang.swift.decl.enum",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/PersistanceError.swift",
-      "line": 2,
-      "symbol": "PersistanceError.unexpectedValueType(value:expected:)",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/NSUbiquitousKeyValueStore/NSUbiquitousKeyValueStoreValue.swift",
+      "line": 5,
+      "symbol": "NSUbiquitousKeyValueStoreValue.string(_:)",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/Persisted.swift",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/NSUbiquitousKeyValueStore/NSUbiquitousKeyValueStoreValue.swift",
+      "line": 6,
+      "symbol": "NSUbiquitousKeyValueStoreValue.data(_:)",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/NSUbiquitousKeyValueStore/NSUbiquitousKeyValueStoreValue.swift",
+      "line": 7,
+      "symbol": "NSUbiquitousKeyValueStoreValue.bool(_:)",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/NSUbiquitousKeyValueStore/NSUbiquitousKeyValueStoreValue.swift",
+      "line": 8,
+      "symbol": "NSUbiquitousKeyValueStoreValue.int64(_:)",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/NSUbiquitousKeyValueStore/NSUbiquitousKeyValueStoreValue.swift",
+      "line": 9,
+      "symbol": "NSUbiquitousKeyValueStoreValue.double(_:)",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/NSUbiquitousKeyValueStore/NSUbiquitousKeyValueStoreValue.swift",
+      "line": 10,
+      "symbol": "NSUbiquitousKeyValueStoreValue.array(_:)",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/NSUbiquitousKeyValueStore/NSUbiquitousKeyValueStoreValue.swift",
+      "line": 11,
+      "symbol": "NSUbiquitousKeyValueStoreValue.dictionary(_:)",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/NSUbiquitousKeyValueStore/Persisted+NSUbiquitousKeyValueStore.swift",
+      "line": 6,
+      "symbol": "StoredInNSUbiquitousKeyValueStore.init(key:defaultValue:storedBy:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/NSUbiquitousKeyValueStore/Persisted+NSUbiquitousKeyValueStore.swift",
+      "line": 18,
+      "symbol": "StoredInNSUbiquitousKeyValueStore.init(key:defaultValue:nsUbiquitousKeyValueStore:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/NSUbiquitousKeyValueStore/Persisted+NSUbiquitousKeyValueStore.swift",
+      "line": 31,
+      "symbol": "Persisted.init(key:defaultValue:storedBy:transformer:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/NSUbiquitousKeyValueStore/Persisted+NSUbiquitousKeyValueStore.swift",
+      "line": 45,
+      "symbol": "Persisted.init(key:defaultValue:nsUbiquitousKeyValueStore:transformer:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/NSUbiquitousKeyValueStore/Persisted+NSUbiquitousKeyValueStoreStorage.swift",
+      "line": 6,
+      "symbol": "StoredInNSUbiquitousKeyValueStore.init(key:defaultValue:storedBy:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/NSUbiquitousKeyValueStore/Persisted+NSUbiquitousKeyValueStoreStorage.swift",
+      "line": 18,
+      "symbol": "StoredInNSUbiquitousKeyValueStore.init(key:defaultValue:nsUbiquitousKeyValueStoreStorage:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/NSUbiquitousKeyValueStore/Persisted+NSUbiquitousKeyValueStoreStorage.swift",
+      "line": 31,
+      "symbol": "Persisted.init(key:defaultValue:storedBy:transformer:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/NSUbiquitousKeyValueStore/Persisted+NSUbiquitousKeyValueStoreStorage.swift",
+      "line": 45,
+      "symbol": "Persisted.init(key:defaultValue:nsUbiquitousKeyValueStoreStorage:transformer:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/NSUbiquitousKeyValueStore/Persister+NSUbiquitousKeyValueStore.swift",
+      "line": 6,
+      "symbol": "Persister.init(key:storedBy:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/NSUbiquitousKeyValueStore/Persister+NSUbiquitousKeyValueStore.swift",
+      "line": 16,
+      "symbol": "Persister.init(key:nsUbiquitousKeyValueStore:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/NSUbiquitousKeyValueStore/Persister+NSUbiquitousKeyValueStore.swift",
+      "line": 31,
+      "symbol": "Persister.init(key:storedBy:transformer:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/NSUbiquitousKeyValueStore/Persister+NSUbiquitousKeyValueStore.swift",
+      "line": 39,
+      "symbol": "Persister.init(key:nsUbiquitousKeyValueStore:transformer:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/NSUbiquitousKeyValueStore/Persister+NSUbiquitousKeyValueStoreStorage.swift",
+      "line": 6,
+      "symbol": "Persister.init(key:storedBy:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/NSUbiquitousKeyValueStore/Persister+NSUbiquitousKeyValueStoreStorage.swift",
+      "line": 16,
+      "symbol": "Persister.init(key:nsUbiquitousKeyValueStoreStorage:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/NSUbiquitousKeyValueStore/Persister+NSUbiquitousKeyValueStoreStorage.swift",
+      "line": 31,
+      "symbol": "Persister.init(key:storedBy:transformer:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/NSUbiquitousKeyValueStore/Persister+NSUbiquitousKeyValueStoreStorage.swift",
+      "line": 39,
+      "symbol": "Persister.init(key:nsUbiquitousKeyValueStoreStorage:transformer:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/NSUbiquitousKeyValueStore/StorableInNSUbiquitousKeyValueStoreTransformer.swift",
+      "line": 2,
+      "symbol": "StorableInNSUbiquitousKeyValueStoreTransformer",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/NSUbiquitousKeyValueStore/StorableInNSUbiquitousKeyValueStoreTransformer.swift",
+      "line": 4,
+      "symbol": "StorableInNSUbiquitousKeyValueStoreTransformer.transformValue(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/NSUbiquitousKeyValueStore/StorableInNSUbiquitousKeyValueStoreTransformer.swift",
+      "line": 8,
+      "symbol": "StorableInNSUbiquitousKeyValueStoreTransformer.untransformValue(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/NSUbiquitousKeyValueStore/StorableInUbiquitousKeyValueStore.swift",
+      "line": 4,
+      "symbol": "StorableInNSUbiquitousKeyValueStore",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/NSUbiquitousKeyValueStore/StorableInUbiquitousKeyValueStore.swift",
+      "line": 5,
+      "symbol": "StorableInNSUbiquitousKeyValueStore.asNSUbiquitousKeyValueStoreValue",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/NSUbiquitousKeyValueStore/StorableInUbiquitousKeyValueStore.swift",
+      "line": 9,
+      "symbol": "String.asNSUbiquitousKeyValueStoreValue",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/NSUbiquitousKeyValueStore/StorableInUbiquitousKeyValueStore.swift",
+      "line": 15,
+      "symbol": "Data.asNSUbiquitousKeyValueStoreValue",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/NSUbiquitousKeyValueStore/StorableInUbiquitousKeyValueStore.swift",
+      "line": 21,
+      "symbol": "Bool.asNSUbiquitousKeyValueStoreValue",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/NSUbiquitousKeyValueStore/StorableInUbiquitousKeyValueStore.swift",
+      "line": 27,
+      "symbol": "Int64.asNSUbiquitousKeyValueStoreValue",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/NSUbiquitousKeyValueStore/StorableInUbiquitousKeyValueStore.swift",
+      "line": 33,
+      "symbol": "Double.asNSUbiquitousKeyValueStoreValue",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/NSUbiquitousKeyValueStore/StorableInUbiquitousKeyValueStore.swift",
+      "line": 39,
+      "symbol": "Array.asNSUbiquitousKeyValueStoreValue",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/NSUbiquitousKeyValueStore/StorableInUbiquitousKeyValueStore.swift",
+      "line": 45,
+      "symbol": "Dictionary.asNSUbiquitousKeyValueStoreValue",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Persisted.swift",
+      "line": 3,
+      "symbol": "Persisted",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Persisted.swift",
       "line": 4,
       "symbol": "Persisted",
       "symbol_kind": "source.lang.swift.decl.struct",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/Persisted.swift",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Persisted.swift",
       "line": 6,
       "symbol": "Persisted.wrappedValue",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/Persisted.swift",
-      "line": 10,
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Persisted.swift",
+      "line": 24,
       "symbol": "Persisted",
       "symbol_kind": "source.lang.swift.decl.extension",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/Persisted.swift",
-      "line": 15,
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Persisted.swift",
+      "line": 25,
+      "symbol": "Persisted",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Persisted.swift",
+      "line": 25,
+      "symbol": "Persisted",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Persisted.swift",
+      "line": 29,
+      "symbol": "Persisted",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Persisted.swift",
+      "line": 29,
+      "symbol": "Persisted",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Persisted.swift",
+      "line": 33,
       "symbol": "Persisted.projectedValue",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/Persisted.swift",
-      "line": 17,
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Persisted.swift",
+      "line": 35,
       "symbol": "Persisted.defaultValue",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/Persisted.swift",
-      "line": 19,
-      "symbol": "Persisted.init(persister:defaultValue:)",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Persisted.swift",
+      "line": 37,
+      "symbol": "Persisted.defaultValuePersistBehaviour",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Persisted.swift",
+      "line": 39,
+      "symbol": "Persisted.init(persister:defaultValue:defaultValuePersistBehaviour:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/Persisted.swift",
-      "line": 24,
-      "symbol": "Persisted.init(key:defaultValue:storedBy:)",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Persisted.swift",
+      "line": 50,
+      "symbol": "Persisted.init(key:defaultValue:storedBy:defaultValuePersistBehaviour:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/Persisted.swift",
-      "line": 31,
-      "symbol": "Persisted",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Persisted.swift",
+      "line": 62,
+      "symbol": "Persisted.init(key:defaultValue:storedBy:defaultValuePersistBehaviour:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Persisted.swift",
+      "line": 74,
+      "symbol": "Persisted.init(key:defaultValue:storedBy:transformer:defaultValuePersistBehaviour:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Persisted.swift",
+      "line": 87,
+      "symbol": "Persisted.init(key:defaultValue:storedBy:transformer:defaultValuePersistBehaviour:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/PersistenceError.swift",
+      "line": 1,
+      "symbol": "PersistenceError",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/PersistenceError.swift",
+      "line": 2,
+      "symbol": "PersistenceError.unexpectedValueType(value:expected:)",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Persister.swift",
+      "line": 3,
+      "symbol": "Persister",
       "symbol_kind": "source.lang.swift.decl.extension",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/Persisted.swift",
-      "line": 31,
-      "symbol": "Persisted",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Persister.swift",
+      "line": 4,
+      "symbol": "Persister",
       "symbol_kind": "source.lang.swift.decl.extension",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/Persisted.swift",
-      "line": 34,
-      "symbol": "Persisted.init(key:defaultValue:storedBy:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Persister.swift",
+      "line": 4,
+      "symbol": "Persister",
+      "symbol_kind": "source.lang.swift.decl.extension",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/Persisted.swift",
-      "line": 44,
-      "symbol": "Persisted.init(key:defaultValue:storedBy:transformer:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Persister.swift",
+      "line": 4,
+      "symbol": "Persister",
+      "symbol_kind": "source.lang.swift.decl.extension",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/Persister.swift",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Persister.swift",
+      "line": 4,
+      "symbol": "Persister",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Persister.swift",
       "line": 6,
       "symbol": "Persister",
       "symbol_kind": "source.lang.swift.decl.class",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/Persister.swift",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Persister.swift",
       "line": 8,
       "symbol": "Persister.UpdatePayload",
       "symbol_kind": "source.lang.swift.decl.typealias",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/Persister.swift",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Persister.swift",
       "line": 10,
       "symbol": "Persister.UpdateListener",
       "symbol_kind": "source.lang.swift.decl.typealias",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/Persister.swift",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Persister.swift",
       "line": 12,
       "symbol": "Persister.ValueGetter",
       "symbol_kind": "source.lang.swift.decl.typealias",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/Persister.swift",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Persister.swift",
       "line": 14,
       "symbol": "Persister.ValueSetter",
       "symbol_kind": "source.lang.swift.decl.typealias",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/Persister.swift",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Persister.swift",
       "line": 16,
       "symbol": "Persister.AddUpdateListener",
       "symbol_kind": "source.lang.swift.decl.typealias",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/Persister.swift",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Persister.swift",
       "line": 20,
       "symbol": "Persister.updatesPublisher",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/Persister.swift",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Persister.swift",
+      "line": 26,
+      "symbol": "Persister",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Persister.swift",
+      "line": 29,
+      "symbol": "Persister",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Persister.swift",
+      "line": 29,
+      "symbol": "Persister",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Persister.swift",
+      "line": 29,
+      "symbol": "Persister",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Persister.swift",
+      "line": 29,
+      "symbol": "Persister",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Persister.swift",
       "line": 48,
       "symbol": "Persister.init(valueGetter:valueSetter:addUpdateListener:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/Persister.swift",
-      "line": 54,
-      "symbol": "Persister",
-      "symbol_kind": "source.lang.swift.decl.extension",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/Persister.swift",
-      "line": 55,
-      "symbol": "Persister",
-      "symbol_kind": "source.lang.swift.decl.extension",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/Persister.swift",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Persister.swift",
       "line": 59,
       "symbol": "Persister.init(key:storedBy:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/Persister.swift",
-      "line": 80,
-      "symbol": "Persister",
-      "symbol_kind": "source.lang.swift.decl.extension",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/Persister.swift",
-      "line": 81,
-      "symbol": "Persister",
-      "symbol_kind": "source.lang.swift.decl.extension",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/Persister.swift",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Persister.swift",
       "line": 93,
       "symbol": "Persister.init(key:storedBy:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/Persister.swift",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Persister.swift",
       "line": 135,
       "symbol": "Persister.init(key:storedBy:transformer:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/Persister.swift",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Persister.swift",
       "line": 184,
       "symbol": "Persister.init(key:storedBy:transformer:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/Persister.swift",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Persister.swift",
       "line": 226,
       "symbol": "Persister.persist(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/Persister.swift",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Persister.swift",
       "line": 230,
       "symbol": "Persister.retrieveValue()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/Persister.swift",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Persister.swift",
       "line": 234,
       "symbol": "Persister.addUpdateListener(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/Storage.swift",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Storage.swift",
       "line": 6,
       "symbol": "Storage.Key",
       "symbol_kind": "source.lang.swift.decl.associatedtype",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/Storage.swift",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Storage.swift",
       "line": 8,
       "symbol": "Storage.Value",
       "symbol_kind": "source.lang.swift.decl.associatedtype",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/Storage.swift",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Storage.swift",
       "line": 10,
       "symbol": "Storage.UpdateListener",
       "symbol_kind": "source.lang.swift.decl.typealias",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/Transformer/AggregateTransformer.swift",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Transformer/AggregateTransformer.swift",
       "line": 1,
       "symbol": "AggregateTransformer",
       "symbol_kind": "source.lang.swift.decl.struct",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/Transformer/AggregateTransformer.swift",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Transformer/AggregateTransformer.swift",
       "line": 7,
       "symbol": "AggregateTransformer.init(firstTransformer:secondTransformer:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/Transformer/AggregateTransformer.swift",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Transformer/AggregateTransformer.swift",
       "line": 22,
       "symbol": "AggregateTransformer.transformValue(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/Transformer/AggregateTransformer.swift",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Transformer/AggregateTransformer.swift",
       "line": 26,
-      "symbol": "AggregateTransformer.untransformValue(from:)",
+      "symbol": "AggregateTransformer.untransformValue(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/Transformer/AggregateTransformer.swift",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Transformer/AggregateTransformer.swift",
       "line": 34,
       "symbol": "Transformer.append(transformer:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/Transformer/JSONTransformer.swift",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Transformer/JSONTransformer.swift",
       "line": 3,
       "symbol": "JSONTransformer",
       "symbol_kind": "source.lang.swift.decl.struct",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/Transformer/JSONTransformer.swift",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Transformer/JSONTransformer.swift",
       "line": 5,
       "symbol": "JSONTransformer.Output",
       "symbol_kind": "source.lang.swift.decl.typealias",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/Transformer/JSONTransformer.swift",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Transformer/JSONTransformer.swift",
       "line": 7,
       "symbol": "JSONTransformer.encoder",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/Transformer/JSONTransformer.swift",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Transformer/JSONTransformer.swift",
       "line": 9,
       "symbol": "JSONTransformer.decoder",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/Transformer/JSONTransformer.swift",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Transformer/JSONTransformer.swift",
       "line": 11,
       "symbol": "JSONTransformer.init(encoder:decoder:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/Transformer/JSONTransformer.swift",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Transformer/JSONTransformer.swift",
       "line": 16,
       "symbol": "JSONTransformer.init(coderUserInfo:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/Transformer/JSONTransformer.swift",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Transformer/JSONTransformer.swift",
       "line": 25,
       "symbol": "JSONTransformer.transformValue(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/Transformer/JSONTransformer.swift",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Transformer/JSONTransformer.swift",
       "line": 29,
-      "symbol": "JSONTransformer.untransformValue(from:)",
+      "symbol": "JSONTransformer.untransformValue(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/Transformer/PropertyListEncoderTransformer.swift",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Transformer/PropertyListTransformer.swift",
       "line": 3,
-      "symbol": "PropertyListEncoderTransformer",
+      "symbol": "PropertyListTransformer",
       "symbol_kind": "source.lang.swift.decl.struct",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/Transformer/PropertyListEncoderTransformer.swift",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Transformer/PropertyListTransformer.swift",
       "line": 5,
-      "symbol": "PropertyListEncoderTransformer.Output",
+      "symbol": "PropertyListTransformer.Output",
       "symbol_kind": "source.lang.swift.decl.typealias",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/Transformer/PropertyListEncoderTransformer.swift",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Transformer/PropertyListTransformer.swift",
       "line": 7,
-      "symbol": "PropertyListEncoderTransformer.encoder",
+      "symbol": "PropertyListTransformer.encoder",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/Transformer/PropertyListEncoderTransformer.swift",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Transformer/PropertyListTransformer.swift",
       "line": 9,
-      "symbol": "PropertyListEncoderTransformer.decoder",
+      "symbol": "PropertyListTransformer.decoder",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/Transformer/PropertyListEncoderTransformer.swift",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Transformer/PropertyListTransformer.swift",
       "line": 11,
-      "symbol": "PropertyListEncoderTransformer.init(encoder:decoder:)",
+      "symbol": "PropertyListTransformer.init(encoder:decoder:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/Transformer/PropertyListEncoderTransformer.swift",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Transformer/PropertyListTransformer.swift",
       "line": 16,
-      "symbol": "PropertyListEncoderTransformer.init(outputFormat:)",
+      "symbol": "PropertyListTransformer.init(outputFormat:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/Transformer/PropertyListEncoderTransformer.swift",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Transformer/PropertyListTransformer.swift",
       "line": 23,
-      "symbol": "PropertyListEncoderTransformer.init(coderUserInfo:)",
+      "symbol": "PropertyListTransformer.init(coderUserInfo:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/Transformer/PropertyListEncoderTransformer.swift",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Transformer/PropertyListTransformer.swift",
       "line": 32,
-      "symbol": "PropertyListEncoderTransformer.init(outputFormat:userInfo:)",
+      "symbol": "PropertyListTransformer.init(outputFormat:coderUserInfo:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/Transformer/PropertyListEncoderTransformer.swift",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Transformer/PropertyListTransformer.swift",
       "line": 42,
-      "symbol": "PropertyListEncoderTransformer.transformValue(_:)",
+      "symbol": "PropertyListTransformer.transformValue(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/Transformer/PropertyListEncoderTransformer.swift",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Transformer/PropertyListTransformer.swift",
       "line": 46,
-      "symbol": "PropertyListEncoderTransformer.untransformValue(from:)",
+      "symbol": "PropertyListTransformer.untransformValue(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/Transformer/Transformer.swift",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Transformer/Transformer.swift",
       "line": 1,
       "symbol": "Transformer",
       "symbol_kind": "source.lang.swift.decl.protocol",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/Transformer/Transformer.swift",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Transformer/Transformer.swift",
       "line": 3,
       "symbol": "Transformer.Input",
       "symbol_kind": "source.lang.swift.decl.associatedtype",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/Transformer/Transformer.swift",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Transformer/Transformer.swift",
       "line": 5,
       "symbol": "Transformer.Output",
       "symbol_kind": "source.lang.swift.decl.associatedtype",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/Transformer/Transformer.swift",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Transformer/Transformer.swift",
       "line": 7,
       "symbol": "Transformer.transformValue(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/Transformer/Transformer.swift",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Transformer/Transformer.swift",
       "line": 9,
-      "symbol": "Transformer.untransformValue(from:)",
+      "symbol": "Transformer.untransformValue(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/Transformer/Transformer.swift",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/Transformer/Transformer.swift",
       "line": 32,
       "symbol": "Transformer",
       "symbol_kind": "source.lang.swift.decl.extension",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/UbiquitousKeyValueStore/StorableInUbiquitousKeyValueStore.swift",
-      "line": 4,
-      "symbol": "StorableInUbiquitousKeyValueStore",
-      "symbol_kind": "source.lang.swift.decl.protocol",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/UbiquitousKeyValueStore/StorableInUbiquitousKeyValueStore.swift",
-      "line": 5,
-      "symbol": "StorableInUbiquitousKeyValueStore.asUbiquitousKeyValueStoreValue",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/UbiquitousKeyValueStore/StorableInUbiquitousKeyValueStore.swift",
-      "line": 8,
-      "symbol": "StoredInUbiquitousKeyValueStore",
-      "symbol_kind": "source.lang.swift.decl.typealias",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/UbiquitousKeyValueStore/StorableInUbiquitousKeyValueStore.swift",
-      "line": 12,
-      "symbol": "Persisted.init(key:defaultValue:storedBy:)",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/UserDefaults/Persisted+UserDefaults.swift",
+      "line": 6,
+      "symbol": "StoredInUserDefaults.init(key:defaultValue:storedBy:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/UbiquitousKeyValueStore/StorableInUbiquitousKeyValueStore.swift",
-      "line": 20,
-      "symbol": "Persisted.init(key:defaultValue:ubiquitousKeyValueStore:)",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/UserDefaults/Persisted+UserDefaults.swift",
+      "line": 14,
+      "symbol": "StoredInUserDefaults.init(key:defaultValue:userDefaults:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/UbiquitousKeyValueStore/StorableInUbiquitousKeyValueStore.swift",
-      "line": 33,
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/UserDefaults/Persisted+UserDefaults.swift",
+      "line": 27,
       "symbol": "Persisted.init(key:defaultValue:storedBy:transformer:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/UbiquitousKeyValueStore/StorableInUbiquitousKeyValueStore.swift",
-      "line": 42,
-      "symbol": "Persisted.init(key:defaultValue:ubiquitousKeyValueStore:transformer:)",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/UserDefaults/Persisted+UserDefaults.swift",
+      "line": 36,
+      "symbol": "Persisted.init(key:defaultValue:userDefaults:transformer:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/UbiquitousKeyValueStore/StorableInUbiquitousKeyValueStore.swift",
-      "line": 56,
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/UserDefaults/Persisted+UserDefaultsStorage.swift",
+      "line": 6,
+      "symbol": "StoredInUserDefaults.init(key:defaultValue:storedBy:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/UserDefaults/Persisted+UserDefaultsStorage.swift",
+      "line": 14,
+      "symbol": "StoredInUserDefaults.init(key:defaultValue:userDefaultsStorage:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/UserDefaults/Persisted+UserDefaultsStorage.swift",
+      "line": 27,
+      "symbol": "Persisted.init(key:defaultValue:storedBy:transformer:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/UserDefaults/Persisted+UserDefaultsStorage.swift",
+      "line": 36,
+      "symbol": "Persisted.init(key:defaultValue:userDefaultsStorage:transformer:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/UserDefaults/Persister+UserDefaults.swift",
+      "line": 6,
       "symbol": "Persister.init(key:storedBy:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/UbiquitousKeyValueStore/StorableInUbiquitousKeyValueStore.swift",
-      "line": 67,
-      "symbol": "Persister.init(key:ubiquitousKeyValueStore:)",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/UserDefaults/Persister+UserDefaults.swift",
+      "line": 16,
+      "symbol": "Persister.init(key:userDefaults:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/UbiquitousKeyValueStore/StorableInUbiquitousKeyValueStore.swift",
-      "line": 82,
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/UserDefaults/Persister+UserDefaults.swift",
+      "line": 31,
       "symbol": "Persister.init(key:storedBy:transformer:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/UbiquitousKeyValueStore/StorableInUbiquitousKeyValueStore.swift",
-      "line": 91,
-      "symbol": "Persister.init(key:ubiquitousKeyValueStore:transformer:)",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/UserDefaults/Persister+UserDefaults.swift",
+      "line": 43,
+      "symbol": "Persister.init(key:userDefaults:transformer:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/UbiquitousKeyValueStore/StorableInUbiquitousKeyValueStore.swift",
-      "line": 103,
-      "symbol": "String.asUbiquitousKeyValueStoreValue",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/UbiquitousKeyValueStore/StorableInUbiquitousKeyValueStore.swift",
-      "line": 109,
-      "symbol": "Data.asUbiquitousKeyValueStoreValue",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/UbiquitousKeyValueStore/StorableInUbiquitousKeyValueStore.swift",
-      "line": 115,
-      "symbol": "Bool.asUbiquitousKeyValueStoreValue",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/UbiquitousKeyValueStore/StorableInUbiquitousKeyValueStore.swift",
-      "line": 121,
-      "symbol": "Int64.asUbiquitousKeyValueStoreValue",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/UbiquitousKeyValueStore/StorableInUbiquitousKeyValueStore.swift",
-      "line": 127,
-      "symbol": "Double.asUbiquitousKeyValueStoreValue",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/UbiquitousKeyValueStore/StorableInUbiquitousKeyValueStore.swift",
-      "line": 133,
-      "symbol": "Array.asUbiquitousKeyValueStoreValue",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/UbiquitousKeyValueStore/StorableInUbiquitousKeyValueStore.swift",
-      "line": 139,
-      "symbol": "Dictionary.asUbiquitousKeyValueStoreValue",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/UbiquitousKeyValueStore/StorableInUbiquitousKeyValueStoreTransformer.swift",
-      "line": 2,
-      "symbol": "StorableInUbiquitousKeyValueStoreTransformer",
-      "symbol_kind": "source.lang.swift.decl.struct",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/UbiquitousKeyValueStore/StorableInUbiquitousKeyValueStoreTransformer.swift",
-      "line": 4,
-      "symbol": "StorableInUbiquitousKeyValueStoreTransformer.transformValue(_:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/UbiquitousKeyValueStore/StorableInUbiquitousKeyValueStoreTransformer.swift",
-      "line": 8,
-      "symbol": "StorableInUbiquitousKeyValueStoreTransformer.untransformValue(from:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/UbiquitousKeyValueStore/UbiquitousKeyValueStore.swift",
-      "line": 4,
-      "symbol": "UbiquitousKeyValueStore",
-      "symbol_kind": "source.lang.swift.decl.class",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/UbiquitousKeyValueStore/UbiquitousKeyValueStore.swift",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/UserDefaults/Persister+UserDefaultsStorage.swift",
       "line": 6,
-      "symbol": "UbiquitousKeyValueStore.default",
-      "symbol_kind": "source.lang.swift.decl.var.static",
+      "symbol": "Persister.init(key:storedBy:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/UbiquitousKeyValueStore/UbiquitousKeyValueStore.swift",
-      "line": 10,
-      "symbol": "UbiquitousKeyValueStore.Value",
-      "symbol_kind": "source.lang.swift.decl.typealias",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/UbiquitousKeyValueStore/UbiquitousKeyValueStore.swift",
-      "line": 12,
-      "symbol": "UbiquitousKeyValueStore.nsUbiquitousKeyValueStore",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/UbiquitousKeyValueStore/UbiquitousKeyValueStore.swift",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/UserDefaults/Persister+UserDefaultsStorage.swift",
       "line": 16,
-      "symbol": "UbiquitousKeyValueStore.init(nsUbiquitousKeyValueStore:)",
+      "symbol": "Persister.init(key:userDefaultsStorage:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/UbiquitousKeyValueStore/UbiquitousKeyValueStore.swift",
-      "line": 44,
-      "symbol": "UbiquitousKeyValueStore.addUpdateListener(forKey:notificationCenter:updateListener:)",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/UserDefaults/Persister+UserDefaultsStorage.swift",
+      "line": 31,
+      "symbol": "Persister.init(key:storedBy:transformer:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/UbiquitousKeyValueStore/UbiquitousKeyValueStoreValue.swift",
-      "line": 4,
-      "symbol": "UbiquitousKeyValueStoreValue",
-      "symbol_kind": "source.lang.swift.decl.enum",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/UserDefaults/Persister+UserDefaultsStorage.swift",
+      "line": 43,
+      "symbol": "Persister.init(key:userDefaultsStorage:transformer:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/UbiquitousKeyValueStore/UbiquitousKeyValueStoreValue.swift",
-      "line": 5,
-      "symbol": "UbiquitousKeyValueStoreValue.string(_:)",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/UbiquitousKeyValueStore/UbiquitousKeyValueStoreValue.swift",
-      "line": 6,
-      "symbol": "UbiquitousKeyValueStoreValue.data(_:)",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/UbiquitousKeyValueStore/UbiquitousKeyValueStoreValue.swift",
-      "line": 7,
-      "symbol": "UbiquitousKeyValueStoreValue.bool(_:)",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/UbiquitousKeyValueStore/UbiquitousKeyValueStoreValue.swift",
-      "line": 8,
-      "symbol": "UbiquitousKeyValueStoreValue.int64(_:)",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/UbiquitousKeyValueStore/UbiquitousKeyValueStoreValue.swift",
-      "line": 9,
-      "symbol": "UbiquitousKeyValueStoreValue.double(_:)",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/UbiquitousKeyValueStore/UbiquitousKeyValueStoreValue.swift",
-      "line": 10,
-      "symbol": "UbiquitousKeyValueStoreValue.array(_:)",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/UbiquitousKeyValueStore/UbiquitousKeyValueStoreValue.swift",
-      "line": 11,
-      "symbol": "UbiquitousKeyValueStoreValue.dictionary(_:)",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/UserDefaults/StorableInUserDefaults.swift",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/UserDefaults/StorableInUserDefaults.swift",
       "line": 4,
       "symbol": "StorableInUserDefaults",
       "symbol_kind": "source.lang.swift.decl.protocol",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/UserDefaults/StorableInUserDefaults.swift",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/UserDefaults/StorableInUserDefaults.swift",
       "line": 5,
       "symbol": "StorableInUserDefaults.asUserDefaultsValue",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/UserDefaults/StorableInUserDefaults.swift",
-      "line": 8,
-      "symbol": "StoredInUserDefaults",
-      "symbol_kind": "source.lang.swift.decl.typealias",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/UserDefaults/StorableInUserDefaults.swift",
-      "line": 10,
-      "symbol": "StoredInUserDefaults",
-      "symbol_kind": "source.lang.swift.decl.extension",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/UserDefaults/StorableInUserDefaults.swift",
-      "line": 12,
-      "symbol": "StoredInUserDefaults.init(key:defaultValue:storedBy:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/UserDefaults/StorableInUserDefaults.swift",
-      "line": 21,
-      "symbol": "StoredInUserDefaults.init(key:defaultValue:userDefaults:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/UserDefaults/StorableInUserDefaults.swift",
-      "line": 33,
-      "symbol": "Persisted.init(key:defaultValue:storedBy:transformer:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/UserDefaults/StorableInUserDefaults.swift",
-      "line": 43,
-      "symbol": "Persisted.init(key:defaultValue:userDefaults:transformer:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/UserDefaults/StorableInUserDefaults.swift",
-      "line": 57,
-      "symbol": "Persister.init(key:storedBy:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/UserDefaults/StorableInUserDefaults.swift",
-      "line": 68,
-      "symbol": "Persister.init(key:userDefaults:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/UserDefaults/StorableInUserDefaults.swift",
-      "line": 83,
-      "symbol": "Persister.init(key:storedBy:transformer:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/UserDefaults/StorableInUserDefaults.swift",
-      "line": 96,
-      "symbol": "Persister.init(key:userDefaults:transformer:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/UserDefaults/StorableInUserDefaults.swift",
-      "line": 112,
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/UserDefaults/StorableInUserDefaults.swift",
+      "line": 9,
       "symbol": "String.asUserDefaultsValue",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/UserDefaults/StorableInUserDefaults.swift",
-      "line": 118,
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/UserDefaults/StorableInUserDefaults.swift",
+      "line": 15,
       "symbol": "Data.asUserDefaultsValue",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/UserDefaults/StorableInUserDefaults.swift",
-      "line": 124,
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/UserDefaults/StorableInUserDefaults.swift",
+      "line": 21,
       "symbol": "URL.asUserDefaultsValue",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/UserDefaults/StorableInUserDefaults.swift",
-      "line": 130,
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/UserDefaults/StorableInUserDefaults.swift",
+      "line": 27,
       "symbol": "Bool.asUserDefaultsValue",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/UserDefaults/StorableInUserDefaults.swift",
-      "line": 136,
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/UserDefaults/StorableInUserDefaults.swift",
+      "line": 33,
       "symbol": "Int.asUserDefaultsValue",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/UserDefaults/StorableInUserDefaults.swift",
-      "line": 142,
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/UserDefaults/StorableInUserDefaults.swift",
+      "line": 39,
       "symbol": "Double.asUserDefaultsValue",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/UserDefaults/StorableInUserDefaults.swift",
-      "line": 148,
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/UserDefaults/StorableInUserDefaults.swift",
+      "line": 45,
       "symbol": "Float.asUserDefaultsValue",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/UserDefaults/StorableInUserDefaults.swift",
-      "line": 154,
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/UserDefaults/StorableInUserDefaults.swift",
+      "line": 51,
       "symbol": "Array.asUserDefaultsValue",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/UserDefaults/StorableInUserDefaults.swift",
-      "line": 160,
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/UserDefaults/StorableInUserDefaults.swift",
+      "line": 57,
       "symbol": "Dictionary.asUserDefaultsValue",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/UserDefaults/StorableInUserDefaultsTransformer.swift",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/UserDefaults/StorableInUserDefaultsTransformer.swift",
       "line": 2,
       "symbol": "StorableInUserDefaultsTransformer",
       "symbol_kind": "source.lang.swift.decl.struct",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/UserDefaults/StorableInUserDefaultsTransformer.swift",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/UserDefaults/StorableInUserDefaultsTransformer.swift",
       "line": 4,
       "symbol": "StorableInUserDefaultsTransformer.transformValue(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/UserDefaults/StorableInUserDefaultsTransformer.swift",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/UserDefaults/StorableInUserDefaultsTransformer.swift",
       "line": 8,
-      "symbol": "StorableInUserDefaultsTransformer.untransformValue(from:)",
+      "symbol": "StorableInUserDefaultsTransformer.untransformValue(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/UserDefaults/UserDefaults+Storage.swift",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/UserDefaults/UserDefaultsStorage.swift",
+      "line": 4,
+      "symbol": "UserDefaultsStorage",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/UserDefaults/UserDefaultsStorage.swift",
       "line": 6,
-      "symbol": "UserDefaults.Value",
+      "symbol": "UserDefaultsStorage.Value",
       "symbol_kind": "source.lang.swift.decl.typealias",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/UserDefaults/UserDefaultsValue.swift",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/UserDefaults/UserDefaultsStorage.swift",
+      "line": 8,
+      "symbol": "UserDefaultsStorage.standard",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/UserDefaults/UserDefaultsStorage.swift",
+      "line": 12,
+      "symbol": "UserDefaultsStorage.userDefaults",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/UserDefaults/UserDefaultsStorage.swift",
+      "line": 16,
+      "symbol": "UserDefaultsStorage.init(userDefaults:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/UserDefaults/UserDefaultsStorage.swift",
+      "line": 20,
+      "symbol": "UserDefaultsStorage.init(suiteName:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/UserDefaults/UserDefaultsValue.swift",
       "line": 4,
       "symbol": "UserDefaultsValue",
       "symbol_kind": "source.lang.swift.decl.enum",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/UserDefaults/UserDefaultsValue.swift",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/UserDefaults/UserDefaultsValue.swift",
       "line": 5,
       "symbol": "UserDefaultsValue.string(_:)",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/UserDefaults/UserDefaultsValue.swift",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/UserDefaults/UserDefaultsValue.swift",
       "line": 6,
       "symbol": "UserDefaultsValue.data(_:)",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/UserDefaults/UserDefaultsValue.swift",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/UserDefaults/UserDefaultsValue.swift",
       "line": 7,
       "symbol": "UserDefaultsValue.url(_:)",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/UserDefaults/UserDefaultsValue.swift",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/UserDefaults/UserDefaultsValue.swift",
       "line": 8,
       "symbol": "UserDefaultsValue.bool(_:)",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/UserDefaults/UserDefaultsValue.swift",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/UserDefaults/UserDefaultsValue.swift",
       "line": 9,
       "symbol": "UserDefaultsValue.int(_:)",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/UserDefaults/UserDefaultsValue.swift",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/UserDefaults/UserDefaultsValue.swift",
       "line": 10,
       "symbol": "UserDefaultsValue.double(_:)",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/UserDefaults/UserDefaultsValue.swift",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/UserDefaults/UserDefaultsValue.swift",
       "line": 11,
       "symbol": "UserDefaultsValue.float(_:)",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/UserDefaults/UserDefaultsValue.swift",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/UserDefaults/UserDefaultsValue.swift",
       "line": 12,
       "symbol": "UserDefaultsValue.array(_:)",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/runners/2.262.1/work/Persist/Persist/Sources/Persist/UserDefaults/UserDefaultsValue.swift",
+      "file": "/Users/runner/runners/2.263.0/work/Persist/Persist/Sources/Persist/UserDefaults/UserDefaultsValue.swift",
       "line": 13,
       "symbol": "UserDefaultsValue.dictionary(_:)",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     }
   ],
-  "source_directory": "/Users/runner/runners/2.262.1/work/Persist/Persist"
+  "source_directory": "/Users/runner/runners/2.263.0/work/Persist/Persist"
 }

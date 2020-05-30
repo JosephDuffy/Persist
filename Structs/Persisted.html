@@ -14,7 +14,7 @@
     <a title="Persisted Structure Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html"> Docs</a> (19% documented)</p>
+        <p><a href="../index.html"> Docs</a> (21% documented)</p>
         <p class="header-right"><a href="https://github.com/JosephDuffy/Persist"><img src="../img/gh.png"/>View on GitHub</a></p>
       </div>
     </header>
@@ -35,13 +35,19 @@
                 <a href="../Classes/Cancellable.html">Cancellable</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Classes/FileManagerStorage.html">FileManagerStorage</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Classes/InMemoryStorage.html">InMemoryStorage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/NSUbiquitousKeyValueStoreStorage.html">NSUbiquitousKeyValueStoreStorage</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/Persister.html">Persister</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Classes/UbiquitousKeyValueStore.html">UbiquitousKeyValueStore</a>
+                <a href="../Classes/UserDefaultsStorage.html">UserDefaultsStorage</a>
               </li>
             </ul>
           </li>
@@ -49,10 +55,10 @@
             <a href="../Enums.html">Enumerations</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="../Enums/PersistanceError.html">PersistanceError</a>
+                <a href="../Enums/NSUbiquitousKeyValueStoreValue.html">NSUbiquitousKeyValueStoreValue</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Enums/UbiquitousKeyValueStoreValue.html">UbiquitousKeyValueStoreValue</a>
+                <a href="../Enums/PersistenceError.html">PersistenceError</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Enums/UserDefaultsValue.html">UserDefaultsValue</a>
@@ -87,6 +93,9 @@
                 <a href="../Extensions/Int64.html">Int64</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Extensions/StoredInNSUbiquitousKeyValueStore.html">StoredInNSUbiquitousKeyValueStore</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Extensions/StoredInUserDefaults.html">StoredInUserDefaults</a>
               </li>
               <li class="nav-group-task">
@@ -95,16 +104,13 @@
               <li class="nav-group-task">
                 <a href="../Extensions/URL.html">URL</a>
               </li>
-              <li class="nav-group-task">
-                <a href="../Extensions/UserDefaults.html">UserDefaults</a>
-              </li>
             </ul>
           </li>
           <li class="nav-group-name">
             <a href="../Protocols.html">Protocols</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="../Protocols/StorableInUbiquitousKeyValueStore.html">StorableInUbiquitousKeyValueStore</a>
+                <a href="../Protocols/StorableInNSUbiquitousKeyValueStore.html">StorableInNSUbiquitousKeyValueStore</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Protocols/StorableInUserDefaults.html">StorableInUserDefaults</a>
@@ -124,16 +130,19 @@
                 <a href="../Structs/AggregateTransformer.html">AggregateTransformer</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Structs/DefaultValuePersistOption.html">DefaultValuePersistOption</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Structs/JSONTransformer.html">JSONTransformer</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/Persisted.html">Persisted</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Structs/PropertyListEncoderTransformer.html">PropertyListEncoderTransformer</a>
+                <a href="../Structs/PropertyListTransformer.html">PropertyListTransformer</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Structs/StorableInUbiquitousKeyValueStoreTransformer.html">StorableInUbiquitousKeyValueStoreTransformer</a>
+                <a href="../Structs/StorableInNSUbiquitousKeyValueStoreTransformer.html">StorableInNSUbiquitousKeyValueStoreTransformer</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/StorableInUserDefaultsTransformer.html">StorableInUserDefaultsTransformer</a>
@@ -144,7 +153,7 @@
             <a href="../Typealiases.html">Type Aliases</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="../Typealiases.html#/s:7Persist31StoredInUbiquitousKeyValueStorea">StoredInUbiquitousKeyValueStore</a>
+                <a href="../Typealiases.html#/s:7Persist33StoredInNSUbiquitousKeyValueStorea">StoredInNSUbiquitousKeyValueStore</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Typealiases.html#/s:7Persist20StoredInUserDefaultsa">StoredInUserDefaults</a>
@@ -240,7 +249,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">defaultValue</span><span class="p">:</span> <span class="kt">Value</span><span class="p">?</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">defaultValue</span><span class="p">:</span> <span class="kt">Value</span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -250,9 +259,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:7Persist9PersistedV9persister12defaultValueACyxGAA9PersisterCyxG_xSgtcfc"></a>
-                    <a name="//apple_ref/swift/Method/init(persister:defaultValue:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:7Persist9PersistedV9persister12defaultValueACyxGAA9PersisterCyxG_xSgtcfc">init(persister:<wbr>defaultValue:<wbr>)</a>
+                    <a name="/s:7Persist9PersistedV012defaultValueA9BehaviourAA07DefaultdA6OptionVvp"></a>
+                    <a name="//apple_ref/swift/Property/defaultValuePersistBehaviour" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7Persist9PersistedV012defaultValueA9BehaviourAA07DefaultdA6OptionVvp">defaultValuePersistBehaviour</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -266,7 +275,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">persister</span><span class="p">:</span> <span class="kt"><a href="../Classes/Persister.html">Persister</a></span><span class="o">&lt;</span><span class="kt">Value</span><span class="o">&gt;</span><span class="p">,</span> <span class="n"><a href="../Structs/Persisted.html#/s:7Persist9PersistedV12defaultValuexSgvp">defaultValue</a></span><span class="p">:</span> <span class="kt">Value</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">defaultValuePersistBehaviour</span><span class="p">:</span> <span class="kt"><a href="../Structs/DefaultValuePersistOption.html">DefaultValuePersistOption</a></span></code></pre>
 
                         </div>
                       </div>
@@ -276,9 +285,39 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:7Persist9PersistedV3key12defaultValue8storedByACyxG3KeyQyd___xSgqd__tc0E0Qyd__RszAA7StorageRd__lufc"></a>
-                    <a name="//apple_ref/swift/Method/init(key:defaultValue:storedBy:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:7Persist9PersistedV3key12defaultValue8storedByACyxG3KeyQyd___xSgqd__tc0E0Qyd__RszAA7StorageRd__lufc">init(key:<wbr>defaultValue:<wbr>storedBy:<wbr>)</a>
+                    <a name="/s:7Persist9PersistedV9persister12defaultValue0deA9BehaviourACyxGAA9PersisterCyxG_xSgAA07DefaulteA6OptionVtcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(persister:defaultValue:defaultValuePersistBehaviour:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7Persist9PersistedV9persister12defaultValue0deA9BehaviourACyxGAA9PersisterCyxG_xSgAA07DefaulteA6OptionVtcfc">init(persister:<wbr>defaultValue:<wbr>defaultValuePersistBehaviour:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span>
+    <span class="nv">persister</span><span class="p">:</span> <span class="kt"><a href="../Classes/Persister.html">Persister</a></span><span class="o">&lt;</span><span class="kt">Value</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="n"><a href="../Structs/Persisted.html#/s:7Persist9PersistedV12defaultValuexSgvp">defaultValue</a></span><span class="p">:</span> <span class="kt">Value</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+    <span class="n"><a href="../Structs/Persisted.html#/s:7Persist9PersistedV012defaultValueA9BehaviourAA07DefaultdA6OptionVvp">defaultValuePersistBehaviour</a></span><span class="p">:</span> <span class="kt"><a href="../Structs/DefaultValuePersistOption.html">DefaultValuePersistOption</a></span> <span class="o">=</span> <span class="p">[]</span>
+<span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:7Persist9PersistedV3key12defaultValue8storedBy0deA9BehaviourACyxG3KeyQyd___xSgqd__AA07DefaulteA6OptionVtc0E0Qyd__RszAA7StorageRd__lufc"></a>
+                    <a name="//apple_ref/swift/Method/init(key:defaultValue:storedBy:defaultValuePersistBehaviour:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7Persist9PersistedV3key12defaultValue8storedBy0deA9BehaviourACyxG3KeyQyd___xSgqd__AA07DefaulteA6OptionVtc0E0Qyd__RszAA7StorageRd__lufc">init(key:<wbr>defaultValue:<wbr>storedBy:<wbr>defaultValuePersistBehaviour:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -295,7 +334,8 @@
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">init</span><span class="o">&lt;</span><span class="kt"><a href="../Protocols/Storage.html">Storage</a></span><span class="p">:</span> <span class="kt">Persist</span><span class="o">.</span><span class="kt"><a href="../Protocols/Storage.html">Storage</a></span><span class="o">&gt;</span><span class="p">(</span>
     <span class="nv">key</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Storage.html">Storage</a></span><span class="o">.</span><span class="kt">Key</span><span class="p">,</span>
     <span class="n"><a href="../Structs/Persisted.html#/s:7Persist9PersistedV12defaultValuexSgvp">defaultValue</a></span><span class="p">:</span> <span class="kt">Value</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
-    <span class="n">storedBy</span> <span class="nv">storage</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Storage.html">Storage</a></span>
+    <span class="n">storedBy</span> <span class="nv">storage</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Storage.html">Storage</a></span><span class="p">,</span>
+    <span class="n"><a href="../Structs/Persisted.html#/s:7Persist9PersistedV012defaultValueA9BehaviourAA07DefaultdA6OptionVvp">defaultValuePersistBehaviour</a></span><span class="p">:</span> <span class="kt"><a href="../Structs/DefaultValuePersistOption.html">DefaultValuePersistOption</a></span> <span class="o">=</span> <span class="p">[]</span>
 <span class="p">)</span> <span class="k">where</span> <span class="kt"><a href="../Protocols/Storage.html">Storage</a></span><span class="o">.</span><span class="kt">Value</span> <span class="o">==</span> <span class="kt">Value</span></code></pre>
 
                         </div>
@@ -306,9 +346,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:7Persist9PersistedV3key12defaultValue8storedByACyxG3KeyQyd___xSgqd__tcAA7StorageRd__yp0E0Rtd__lufc"></a>
-                    <a name="//apple_ref/swift/Method/init(key:defaultValue:storedBy:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:7Persist9PersistedV3key12defaultValue8storedByACyxG3KeyQyd___xSgqd__tcAA7StorageRd__yp0E0Rtd__lufc">init(key:<wbr>defaultValue:<wbr>storedBy:<wbr>)</a>
+                    <a name="/s:7Persist9PersistedV3key12defaultValue8storedBy0deA9BehaviourACyxG3KeyQyd___xSgqd__AA07DefaulteA6OptionVtcAA7StorageRd__yp0E0Rtd__lufc"></a>
+                    <a name="//apple_ref/swift/Method/init(key:defaultValue:storedBy:defaultValuePersistBehaviour:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7Persist9PersistedV3key12defaultValue8storedBy0deA9BehaviourACyxG3KeyQyd___xSgqd__AA07DefaulteA6OptionVtcAA7StorageRd__yp0E0Rtd__lufc">init(key:<wbr>defaultValue:<wbr>storedBy:<wbr>defaultValuePersistBehaviour:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -325,7 +365,8 @@
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">init</span><span class="o">&lt;</span><span class="kt"><a href="../Protocols/Storage.html">Storage</a></span><span class="p">:</span> <span class="kt">Persist</span><span class="o">.</span><span class="kt"><a href="../Protocols/Storage.html">Storage</a></span><span class="o">&gt;</span><span class="p">(</span>
     <span class="nv">key</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Storage.html">Storage</a></span><span class="o">.</span><span class="kt">Key</span><span class="p">,</span>
     <span class="n"><a href="../Structs/Persisted.html#/s:7Persist9PersistedV12defaultValuexSgvp">defaultValue</a></span><span class="p">:</span> <span class="kt">Value</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
-    <span class="n">storedBy</span> <span class="nv">storage</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Storage.html">Storage</a></span>
+    <span class="n">storedBy</span> <span class="nv">storage</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Storage.html">Storage</a></span><span class="p">,</span>
+    <span class="n"><a href="../Structs/Persisted.html#/s:7Persist9PersistedV012defaultValueA9BehaviourAA07DefaultdA6OptionVvp">defaultValuePersistBehaviour</a></span><span class="p">:</span> <span class="kt"><a href="../Structs/DefaultValuePersistOption.html">DefaultValuePersistOption</a></span> <span class="o">=</span> <span class="p">[]</span>
 <span class="p">)</span> <span class="k">where</span> <span class="kt"><a href="../Protocols/Storage.html">Storage</a></span><span class="o">.</span><span class="kt">Value</span> <span class="o">==</span> <span class="kt">Any</span></code></pre>
 
                         </div>
@@ -336,9 +377,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:7Persist9PersistedV3key12defaultValue8storedBy11transformerACyxG3KeyQyd___xSgqd__qd_0_tc5InputQyd_0_RszAA7StorageRd__AA11TransformerRd_0_6OutputQyd_0_0E0Rtd__r0_lufc"></a>
-                    <a name="//apple_ref/swift/Method/init(key:defaultValue:storedBy:transformer:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:7Persist9PersistedV3key12defaultValue8storedBy11transformerACyxG3KeyQyd___xSgqd__qd_0_tc5InputQyd_0_RszAA7StorageRd__AA11TransformerRd_0_6OutputQyd_0_0E0Rtd__r0_lufc">init(key:<wbr>defaultValue:<wbr>storedBy:<wbr>transformer:<wbr>)</a>
+                    <a name="/s:7Persist9PersistedV3key12defaultValue8storedBy11transformer0deA9BehaviourACyxG3KeyQyd___xSgqd__qd_0_AA07DefaulteA6OptionVtc5InputQyd_0_RszAA7StorageRd__AA11TransformerRd_0_yp0E0Rtd__r0_lufc"></a>
+                    <a name="//apple_ref/swift/Method/init(key:defaultValue:storedBy:transformer:defaultValuePersistBehaviour:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7Persist9PersistedV3key12defaultValue8storedBy11transformer0deA9BehaviourACyxG3KeyQyd___xSgqd__qd_0_AA07DefaulteA6OptionVtc5InputQyd_0_RszAA7StorageRd__AA11TransformerRd_0_yp0E0Rtd__r0_lufc">init(key:<wbr>defaultValue:<wbr>storedBy:<wbr>transformer:<wbr>defaultValuePersistBehaviour:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -356,7 +397,40 @@
     <span class="nv">key</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Storage.html">Storage</a></span><span class="o">.</span><span class="kt">Key</span><span class="p">,</span>
     <span class="n"><a href="../Structs/Persisted.html#/s:7Persist9PersistedV12defaultValuexSgvp">defaultValue</a></span><span class="p">:</span> <span class="kt">Value</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
     <span class="n">storedBy</span> <span class="nv">storage</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Storage.html">Storage</a></span><span class="p">,</span>
-    <span class="nv">transformer</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span>
+    <span class="nv">transformer</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="p">,</span>
+    <span class="n"><a href="../Structs/Persisted.html#/s:7Persist9PersistedV012defaultValueA9BehaviourAA07DefaultdA6OptionVvp">defaultValuePersistBehaviour</a></span><span class="p">:</span> <span class="kt"><a href="../Structs/DefaultValuePersistOption.html">DefaultValuePersistOption</a></span> <span class="o">=</span> <span class="p">[]</span>
+<span class="p">)</span> <span class="k">where</span> <span class="kt"><a href="../Protocols/Storage.html">Storage</a></span><span class="o">.</span><span class="kt">Value</span> <span class="o">==</span> <span class="kt">Any</span><span class="p">,</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Input</span> <span class="o">==</span> <span class="kt">Value</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:7Persist9PersistedV3key12defaultValue8storedBy11transformer0deA9BehaviourACyxG3KeyQyd___xSgqd__qd_0_AA07DefaulteA6OptionVtc5InputQyd_0_RszAA7StorageRd__AA11TransformerRd_0_6OutputQyd_0_0E0Rtd__r0_lufc"></a>
+                    <a name="//apple_ref/swift/Method/init(key:defaultValue:storedBy:transformer:defaultValuePersistBehaviour:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7Persist9PersistedV3key12defaultValue8storedBy11transformer0deA9BehaviourACyxG3KeyQyd___xSgqd__qd_0_AA07DefaulteA6OptionVtc5InputQyd_0_RszAA7StorageRd__AA11TransformerRd_0_6OutputQyd_0_0E0Rtd__r0_lufc">init(key:<wbr>defaultValue:<wbr>storedBy:<wbr>transformer:<wbr>defaultValuePersistBehaviour:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">init</span><span class="o">&lt;</span><span class="kt"><a href="../Protocols/Storage.html">Storage</a></span><span class="p">:</span> <span class="kt">Persist</span><span class="o">.</span><span class="kt"><a href="../Protocols/Storage.html">Storage</a></span><span class="p">,</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="p">:</span> <span class="kt">Persist</span><span class="o">.</span><span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">&gt;</span><span class="p">(</span>
+    <span class="nv">key</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Storage.html">Storage</a></span><span class="o">.</span><span class="kt">Key</span><span class="p">,</span>
+    <span class="n"><a href="../Structs/Persisted.html#/s:7Persist9PersistedV12defaultValuexSgvp">defaultValue</a></span><span class="p">:</span> <span class="kt">Value</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+    <span class="n">storedBy</span> <span class="nv">storage</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Storage.html">Storage</a></span><span class="p">,</span>
+    <span class="nv">transformer</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="p">,</span>
+    <span class="n"><a href="../Structs/Persisted.html#/s:7Persist9PersistedV012defaultValueA9BehaviourAA07DefaultdA6OptionVvp">defaultValuePersistBehaviour</a></span><span class="p">:</span> <span class="kt"><a href="../Structs/DefaultValuePersistOption.html">DefaultValuePersistOption</a></span> <span class="o">=</span> <span class="p">[]</span>
 <span class="p">)</span> <span class="k">where</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Input</span> <span class="o">==</span> <span class="kt">Value</span><span class="p">,</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Output</span> <span class="o">==</span> <span class="kt"><a href="../Protocols/Storage.html">Storage</a></span><span class="o">.</span><span class="kt">Value</span></code></pre>
 
                         </div>
@@ -367,9 +441,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:7Persist9PersistedV3key12defaultValue8storedBy11transformerACyxGSS_xSgAA013UbiquitousKeyE5StoreCqd__tc5InputQyd__RszAA11TransformerRd__AA010StorableInijeK06OutputRpd__lufc"></a>
+                    <a name="/s:7Persist9PersistedV3key12defaultValue8storedBy11transformerACyxG10Foundation3URLV_xSgSo13NSFileManagerCqd__tc5InputQyd__RszAA11TransformerRd__AI4DataV6OutputRtd__lufc"></a>
                     <a name="//apple_ref/swift/Method/init(key:defaultValue:storedBy:transformer:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:7Persist9PersistedV3key12defaultValue8storedBy11transformerACyxGSS_xSgAA013UbiquitousKeyE5StoreCqd__tc5InputQyd__RszAA11TransformerRd__AA010StorableInijeK06OutputRpd__lufc">init(key:<wbr>defaultValue:<wbr>storedBy:<wbr>transformer:<wbr>)</a>
+                    <a class="token" href="#/s:7Persist9PersistedV3key12defaultValue8storedBy11transformerACyxG10Foundation3URLV_xSgSo13NSFileManagerCqd__tc5InputQyd__RszAA11TransformerRd__AI4DataV6OutputRtd__lufc">init(key:<wbr>defaultValue:<wbr>storedBy:<wbr>transformer:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -384,11 +458,11 @@
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">init</span><span class="o">&lt;</span><span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="p">:</span> <span class="kt">Persist</span><span class="o">.</span><span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">&gt;</span><span class="p">(</span>
-    <span class="nv">key</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>
+    <span class="nv">key</span><span class="p">:</span> <span class="kt">URL</span><span class="p">,</span>
     <span class="n"><a href="../Structs/Persisted.html#/s:7Persist9PersistedV12defaultValuexSgvp">defaultValue</a></span><span class="p">:</span> <span class="kt">Value</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
-    <span class="n">storedBy</span> <span class="nv">storage</span><span class="p">:</span> <span class="kt"><a href="../Classes/UbiquitousKeyValueStore.html">UbiquitousKeyValueStore</a></span><span class="p">,</span>
+    <span class="n">storedBy</span> <span class="nv">fileManager</span><span class="p">:</span> <span class="kt">FileManager</span><span class="p">,</span>
     <span class="nv">transformer</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span>
-<span class="p">)</span> <span class="k">where</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Input</span> <span class="o">==</span> <span class="kt">Value</span><span class="p">,</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Output</span><span class="p">:</span> <span class="kt"><a href="../Protocols/StorableInUbiquitousKeyValueStore.html">StorableInUbiquitousKeyValueStore</a></span></code></pre>
+<span class="p">)</span> <span class="k">where</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Input</span> <span class="o">==</span> <span class="kt">Value</span><span class="p">,</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Output</span> <span class="o">==</span> <span class="kt">Data</span></code></pre>
 
                         </div>
                       </div>
@@ -398,9 +472,40 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:7Persist9PersistedV3key12defaultValue013ubiquitousKeyE5Store11transformerACyxGSS_xSgAA010UbiquitousgeH0Cqd__tc5InputQyd__RszAA11TransformerRd__AA010StorableInjgeH06OutputRpd__lufc"></a>
-                    <a name="//apple_ref/swift/Method/init(key:defaultValue:ubiquitousKeyValueStore:transformer:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:7Persist9PersistedV3key12defaultValue013ubiquitousKeyE5Store11transformerACyxGSS_xSgAA010UbiquitousgeH0Cqd__tc5InputQyd__RszAA11TransformerRd__AA010StorableInjgeH06OutputRpd__lufc">init(key:<wbr>defaultValue:<wbr>ubiquitousKeyValueStore:<wbr>transformer:<wbr>)</a>
+                    <a name="/s:7Persist9PersistedV3key12defaultValue11fileManager11transformerACyxG10Foundation3URLV_xSgSo06NSFileG0Cqd__tc5InputQyd__RszAA11TransformerRd__AI4DataV6OutputRtd__lufc"></a>
+                    <a name="//apple_ref/swift/Method/init(key:defaultValue:fileManager:transformer:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7Persist9PersistedV3key12defaultValue11fileManager11transformerACyxG10Foundation3URLV_xSgSo06NSFileG0Cqd__tc5InputQyd__RszAA11TransformerRd__AI4DataV6OutputRtd__lufc">init(key:<wbr>defaultValue:<wbr>fileManager:<wbr>transformer:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">init</span><span class="o">&lt;</span><span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="p">:</span> <span class="kt">Persist</span><span class="o">.</span><span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">&gt;</span><span class="p">(</span>
+    <span class="nv">key</span><span class="p">:</span> <span class="kt">URL</span><span class="p">,</span>
+    <span class="n"><a href="../Structs/Persisted.html#/s:7Persist9PersistedV12defaultValuexSgvp">defaultValue</a></span><span class="p">:</span> <span class="kt">Value</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+    <span class="nv">fileManager</span><span class="p">:</span> <span class="kt">FileManager</span><span class="p">,</span>
+    <span class="nv">transformer</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span>
+<span class="p">)</span> <span class="k">where</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Input</span> <span class="o">==</span> <span class="kt">Value</span><span class="p">,</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Output</span> <span class="o">==</span> <span class="kt">Data</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:7Persist9PersistedV3key12defaultValue8storedBy11transformerACyxGSS_xSgSo015NSUbiquitousKeyE5StoreCqd__tc5InputQyd__RszAA11TransformerRd__AA010StorableInijeK06OutputRpd__lufc"></a>
+                    <a name="//apple_ref/swift/Method/init(key:defaultValue:storedBy:transformer:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7Persist9PersistedV3key12defaultValue8storedBy11transformerACyxGSS_xSgSo015NSUbiquitousKeyE5StoreCqd__tc5InputQyd__RszAA11TransformerRd__AA010StorableInijeK06OutputRpd__lufc">init(key:<wbr>defaultValue:<wbr>storedBy:<wbr>transformer:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -417,9 +522,102 @@
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">init</span><span class="o">&lt;</span><span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="p">:</span> <span class="kt">Persist</span><span class="o">.</span><span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">&gt;</span><span class="p">(</span>
     <span class="nv">key</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>
     <span class="n"><a href="../Structs/Persisted.html#/s:7Persist9PersistedV12defaultValuexSgvp">defaultValue</a></span><span class="p">:</span> <span class="kt">Value</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
-    <span class="nv">ubiquitousKeyValueStore</span><span class="p">:</span> <span class="kt"><a href="../Classes/UbiquitousKeyValueStore.html">UbiquitousKeyValueStore</a></span><span class="p">,</span>
+    <span class="n">storedBy</span> <span class="nv">nsUbiquitousKeyValueStore</span><span class="p">:</span> <span class="kt">NSUbiquitousKeyValueStore</span><span class="p">,</span>
     <span class="nv">transformer</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span>
-<span class="p">)</span> <span class="k">where</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Input</span> <span class="o">==</span> <span class="kt">Value</span><span class="p">,</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Output</span><span class="p">:</span> <span class="kt"><a href="../Protocols/StorableInUbiquitousKeyValueStore.html">StorableInUbiquitousKeyValueStore</a></span></code></pre>
+<span class="p">)</span> <span class="k">where</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Input</span> <span class="o">==</span> <span class="kt">Value</span><span class="p">,</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Output</span><span class="p">:</span> <span class="kt"><a href="../Protocols/StorableInNSUbiquitousKeyValueStore.html">StorableInNSUbiquitousKeyValueStore</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:7Persist9PersistedV3key12defaultValue015nsUbiquitousKeyE5Store11transformerACyxGSS_xSgSo012NSUbiquitousheI0Cqd__tc5InputQyd__RszAA11TransformerRd__AA010StorableInkheI06OutputRpd__lufc"></a>
+                    <a name="//apple_ref/swift/Method/init(key:defaultValue:nsUbiquitousKeyValueStore:transformer:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7Persist9PersistedV3key12defaultValue015nsUbiquitousKeyE5Store11transformerACyxGSS_xSgSo012NSUbiquitousheI0Cqd__tc5InputQyd__RszAA11TransformerRd__AA010StorableInkheI06OutputRpd__lufc">init(key:<wbr>defaultValue:<wbr>nsUbiquitousKeyValueStore:<wbr>transformer:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">init</span><span class="o">&lt;</span><span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="p">:</span> <span class="kt">Persist</span><span class="o">.</span><span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">&gt;</span><span class="p">(</span>
+    <span class="nv">key</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>
+    <span class="n"><a href="../Structs/Persisted.html#/s:7Persist9PersistedV12defaultValuexSgvp">defaultValue</a></span><span class="p">:</span> <span class="kt">Value</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+    <span class="nv">nsUbiquitousKeyValueStore</span><span class="p">:</span> <span class="kt">NSUbiquitousKeyValueStore</span><span class="p">,</span>
+    <span class="nv">transformer</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span>
+<span class="p">)</span> <span class="k">where</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Input</span> <span class="o">==</span> <span class="kt">Value</span><span class="p">,</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Output</span><span class="p">:</span> <span class="kt"><a href="../Protocols/StorableInNSUbiquitousKeyValueStore.html">StorableInNSUbiquitousKeyValueStore</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:7Persist9PersistedV3key12defaultValue8storedBy11transformerACyxGSS_xSgAA015NSUbiquitousKeyE12StoreStorageCqd__tc5InputQyd__RszAA11TransformerRd__AA010StorableInijeK06OutputRpd__lufc"></a>
+                    <a name="//apple_ref/swift/Method/init(key:defaultValue:storedBy:transformer:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7Persist9PersistedV3key12defaultValue8storedBy11transformerACyxGSS_xSgAA015NSUbiquitousKeyE12StoreStorageCqd__tc5InputQyd__RszAA11TransformerRd__AA010StorableInijeK06OutputRpd__lufc">init(key:<wbr>defaultValue:<wbr>storedBy:<wbr>transformer:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">init</span><span class="o">&lt;</span><span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="p">:</span> <span class="kt">Persist</span><span class="o">.</span><span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">&gt;</span><span class="p">(</span>
+    <span class="nv">key</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>
+    <span class="n"><a href="../Structs/Persisted.html#/s:7Persist9PersistedV12defaultValuexSgvp">defaultValue</a></span><span class="p">:</span> <span class="kt">Value</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+    <span class="n">storedBy</span> <span class="nv">nsUbiquitousKeyValueStoreStorage</span><span class="p">:</span> <span class="kt"><a href="../Classes/NSUbiquitousKeyValueStoreStorage.html">NSUbiquitousKeyValueStoreStorage</a></span><span class="p">,</span>
+    <span class="nv">transformer</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span>
+<span class="p">)</span> <span class="k">where</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Input</span> <span class="o">==</span> <span class="kt">Value</span><span class="p">,</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Output</span><span class="p">:</span> <span class="kt"><a href="../Protocols/StorableInNSUbiquitousKeyValueStore.html">StorableInNSUbiquitousKeyValueStore</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:7Persist9PersistedV3key12defaultValue015nsUbiquitousKeyE12StoreStorage11transformerACyxGSS_xSgAA012NSUbiquitousheiJ0Cqd__tc5InputQyd__RszAA11TransformerRd__AA010StorableInlheI06OutputRpd__lufc"></a>
+                    <a name="//apple_ref/swift/Method/init(key:defaultValue:nsUbiquitousKeyValueStoreStorage:transformer:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7Persist9PersistedV3key12defaultValue015nsUbiquitousKeyE12StoreStorage11transformerACyxGSS_xSgAA012NSUbiquitousheiJ0Cqd__tc5InputQyd__RszAA11TransformerRd__AA010StorableInlheI06OutputRpd__lufc">init(key:<wbr>defaultValue:<wbr>nsUbiquitousKeyValueStoreStorage:<wbr>transformer:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">init</span><span class="o">&lt;</span><span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="p">:</span> <span class="kt">Persist</span><span class="o">.</span><span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">&gt;</span><span class="p">(</span>
+    <span class="nv">key</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>
+    <span class="n"><a href="../Structs/Persisted.html#/s:7Persist9PersistedV12defaultValuexSgvp">defaultValue</a></span><span class="p">:</span> <span class="kt">Value</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+    <span class="nv">nsUbiquitousKeyValueStoreStorage</span><span class="p">:</span> <span class="kt"><a href="../Classes/NSUbiquitousKeyValueStoreStorage.html">NSUbiquitousKeyValueStoreStorage</a></span><span class="p">,</span>
+    <span class="nv">transformer</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span>
+<span class="p">)</span> <span class="k">where</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Input</span> <span class="o">==</span> <span class="kt">Value</span><span class="p">,</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Output</span><span class="p">:</span> <span class="kt"><a href="../Protocols/StorableInNSUbiquitousKeyValueStore.html">StorableInNSUbiquitousKeyValueStore</a></span></code></pre>
 
                         </div>
                       </div>
@@ -448,7 +646,7 @@
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">init</span><span class="o">&lt;</span><span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="p">:</span> <span class="kt">Persist</span><span class="o">.</span><span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">&gt;</span><span class="p">(</span>
     <span class="nv">key</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>
     <span class="n"><a href="../Structs/Persisted.html#/s:7Persist9PersistedV12defaultValuexSgvp">defaultValue</a></span><span class="p">:</span> <span class="kt">Value</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
-    <span class="n">storedBy</span> <span class="nv">storage</span><span class="p">:</span> <span class="kt">UserDefaults</span><span class="p">,</span>
+    <span class="n">storedBy</span> <span class="nv">userDefaults</span><span class="p">:</span> <span class="kt">UserDefaults</span><span class="p">,</span>
     <span class="nv">transformer</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span>
 <span class="p">)</span> <span class="k">where</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Input</span> <span class="o">==</span> <span class="kt">Value</span><span class="p">,</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Output</span><span class="p">:</span> <span class="kt"><a href="../Protocols/StorableInUserDefaults.html">StorableInUserDefaults</a></span></code></pre>
 
@@ -488,15 +686,77 @@
                     </section>
                   </div>
                 </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:7Persist9PersistedV3key12defaultValue8storedBy11transformerACyxGSS_xSgAA19UserDefaultsStorageCqd__tc5InputQyd__RszAA11TransformerRd__AA010StorableIniJ06OutputRpd__lufc"></a>
+                    <a name="//apple_ref/swift/Method/init(key:defaultValue:storedBy:transformer:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7Persist9PersistedV3key12defaultValue8storedBy11transformerACyxGSS_xSgAA19UserDefaultsStorageCqd__tc5InputQyd__RszAA11TransformerRd__AA010StorableIniJ06OutputRpd__lufc">init(key:<wbr>defaultValue:<wbr>storedBy:<wbr>transformer:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">init</span><span class="o">&lt;</span><span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="p">:</span> <span class="kt">Persist</span><span class="o">.</span><span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">&gt;</span><span class="p">(</span>
+    <span class="nv">key</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>
+    <span class="n"><a href="../Structs/Persisted.html#/s:7Persist9PersistedV12defaultValuexSgvp">defaultValue</a></span><span class="p">:</span> <span class="kt">Value</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+    <span class="n">storedBy</span> <span class="nv">userDefaultsStorage</span><span class="p">:</span> <span class="kt"><a href="../Classes/UserDefaultsStorage.html">UserDefaultsStorage</a></span><span class="p">,</span>
+    <span class="nv">transformer</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span>
+<span class="p">)</span> <span class="k">where</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Input</span> <span class="o">==</span> <span class="kt">Value</span><span class="p">,</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Output</span><span class="p">:</span> <span class="kt"><a href="../Protocols/StorableInUserDefaults.html">StorableInUserDefaults</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:7Persist9PersistedV3key12defaultValue19userDefaultsStorage11transformerACyxGSS_xSgAA04UsergH0Cqd__tc5InputQyd__RszAA11TransformerRd__AA010StorableInjG06OutputRpd__lufc"></a>
+                    <a name="//apple_ref/swift/Method/init(key:defaultValue:userDefaultsStorage:transformer:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7Persist9PersistedV3key12defaultValue19userDefaultsStorage11transformerACyxGSS_xSgAA04UsergH0Cqd__tc5InputQyd__RszAA11TransformerRd__AA010StorableInjG06OutputRpd__lufc">init(key:<wbr>defaultValue:<wbr>userDefaultsStorage:<wbr>transformer:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">init</span><span class="o">&lt;</span><span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="p">:</span> <span class="kt">Persist</span><span class="o">.</span><span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">&gt;</span><span class="p">(</span>
+    <span class="nv">key</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>
+    <span class="n"><a href="../Structs/Persisted.html#/s:7Persist9PersistedV12defaultValuexSgvp">defaultValue</a></span><span class="p">:</span> <span class="kt">Value</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+    <span class="nv">userDefaultsStorage</span><span class="p">:</span> <span class="kt"><a href="../Classes/UserDefaultsStorage.html">UserDefaultsStorage</a></span><span class="p">,</span>
+    <span class="nv">transformer</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span>
+<span class="p">)</span> <span class="k">where</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Input</span> <span class="o">==</span> <span class="kt">Value</span><span class="p">,</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Output</span><span class="p">:</span> <span class="kt"><a href="../Protocols/StorableInUserDefaults.html">StorableInUserDefaults</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
               </ul>
             </div>
             <div class="task-group">
               <div class="task-name-container">
-                <a name="/Available%20where%20%60Value%60:%20%60StorableInUbiquitousKeyValueStore%60"></a>
-                <a name="//apple_ref/swift/Section/Available where `Value`: `StorableInUbiquitousKeyValueStore`" class="dashAnchor"></a>
+                <a name="/Available%20where%20%60Value%60%20==%20%60Data%60"></a>
+                <a name="//apple_ref/swift/Section/Available where `Value` == `Data`" class="dashAnchor"></a>
                 <div class="section-name-container">
-                  <a class="section-name-link" href="#/Available%20where%20%60Value%60:%20%60StorableInUbiquitousKeyValueStore%60"></a>
-                  <h3 class="section-name"><p>Available where <code>Value</code>: <code><a href="../Protocols/StorableInUbiquitousKeyValueStore.html">StorableInUbiquitousKeyValueStore</a></code></p>
+                  <a class="section-name-link" href="#/Available%20where%20%60Value%60%20==%20%60Data%60"></a>
+                  <h3 class="section-name"><p>Available where <code>Value</code> == <code>Data</code></p>
 </h3>
                 </div>
               </div>
@@ -504,9 +764,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:7Persist9PersistedVA2A33StorableInUbiquitousKeyValueStoreRzlE3key07defaultG08storedByACyxGSS_xSgAA0efgH0Ctcfc"></a>
+                    <a name="/s:7Persist9PersistedVAA10Foundation4DataVRszlE3key12defaultValue8storedByACyAFGAD3URLV_AFSgSo13NSFileManagerCtcfc"></a>
                     <a name="//apple_ref/swift/Method/init(key:defaultValue:storedBy:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:7Persist9PersistedVA2A33StorableInUbiquitousKeyValueStoreRzlE3key07defaultG08storedByACyxGSS_xSgAA0efgH0Ctcfc">init(key:<wbr>defaultValue:<wbr>storedBy:<wbr>)</a>
+                    <a class="token" href="#/s:7Persist9PersistedVAA10Foundation4DataVRszlE3key12defaultValue8storedByACyAFGAD3URLV_AFSgSo13NSFileManagerCtcfc">init(key:<wbr>defaultValue:<wbr>storedBy:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -521,9 +781,9 @@
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span>
-    <span class="nv">key</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>
+    <span class="nv">key</span><span class="p">:</span> <span class="kt">URL</span><span class="p">,</span>
     <span class="n"><a href="../Structs/Persisted.html#/s:7Persist9PersistedV12defaultValuexSgvp">defaultValue</a></span><span class="p">:</span> <span class="kt">Value</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
-    <span class="n">storedBy</span> <span class="nv">storage</span><span class="p">:</span> <span class="kt"><a href="../Classes/UbiquitousKeyValueStore.html">UbiquitousKeyValueStore</a></span>
+    <span class="n">storedBy</span> <span class="nv">fileManager</span><span class="p">:</span> <span class="kt">FileManager</span>
 <span class="p">)</span></code></pre>
 
                         </div>
@@ -534,9 +794,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:7Persist9PersistedVA2A33StorableInUbiquitousKeyValueStoreRzlE3key07defaultG0010ubiquitousfgH0ACyxGSS_xSgAA0efgH0Ctcfc"></a>
-                    <a name="//apple_ref/swift/Method/init(key:defaultValue:ubiquitousKeyValueStore:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:7Persist9PersistedVA2A33StorableInUbiquitousKeyValueStoreRzlE3key07defaultG0010ubiquitousfgH0ACyxGSS_xSgAA0efgH0Ctcfc">init(key:<wbr>defaultValue:<wbr>ubiquitousKeyValueStore:<wbr>)</a>
+                    <a name="/s:7Persist9PersistedVAA10Foundation4DataVRszlE3key12defaultValue11fileManagerACyAFGAD3URLV_AFSgSo06NSFileI0Ctcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(key:defaultValue:fileManager:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7Persist9PersistedVAA10Foundation4DataVRszlE3key12defaultValue11fileManagerACyAFGAD3URLV_AFSgSo06NSFileI0Ctcfc">init(key:<wbr>defaultValue:<wbr>fileManager:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -551,9 +811,9 @@
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span>
-    <span class="nv">key</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>
+    <span class="nv">key</span><span class="p">:</span> <span class="kt">URL</span><span class="p">,</span>
     <span class="n"><a href="../Structs/Persisted.html#/s:7Persist9PersistedV12defaultValuexSgvp">defaultValue</a></span><span class="p">:</span> <span class="kt">Value</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
-    <span class="nv">ubiquitousKeyValueStore</span><span class="p">:</span> <span class="kt"><a href="../Classes/UbiquitousKeyValueStore.html">UbiquitousKeyValueStore</a></span>
+    <span class="nv">fileManager</span><span class="p">:</span> <span class="kt">FileManager</span>
 <span class="p">)</span></code></pre>
 
                         </div>
@@ -566,7 +826,7 @@
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2020 <a class="link" href="" target="_blank" rel="external">Joseph Duffy</a>. All rights reserved. (Last updated: 2020-05-26)</p>
+          <p>&copy; 2020 <a class="link" href="" target="_blank" rel="external">Joseph Duffy</a>. All rights reserved. (Last updated: 2020-05-30)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

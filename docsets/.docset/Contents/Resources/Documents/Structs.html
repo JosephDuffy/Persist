@@ -14,7 +14,7 @@
     <a title="Structures  Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="index.html"> Docs</a> (19% documented)</p>
+        <p><a href="index.html"> Docs</a> (21% documented)</p>
         <p class="header-right"><a href="https://github.com/JosephDuffy/Persist"><img src="img/gh.png"/>View on GitHub</a></p>
       </div>
     </header>
@@ -35,13 +35,19 @@
                 <a href="Classes/Cancellable.html">Cancellable</a>
               </li>
               <li class="nav-group-task">
+                <a href="Classes/FileManagerStorage.html">FileManagerStorage</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Classes/InMemoryStorage.html">InMemoryStorage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/NSUbiquitousKeyValueStoreStorage.html">NSUbiquitousKeyValueStoreStorage</a>
               </li>
               <li class="nav-group-task">
                 <a href="Classes/Persister.html">Persister</a>
               </li>
               <li class="nav-group-task">
-                <a href="Classes/UbiquitousKeyValueStore.html">UbiquitousKeyValueStore</a>
+                <a href="Classes/UserDefaultsStorage.html">UserDefaultsStorage</a>
               </li>
             </ul>
           </li>
@@ -49,10 +55,10 @@
             <a href="Enums.html">Enumerations</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="Enums/PersistanceError.html">PersistanceError</a>
+                <a href="Enums/NSUbiquitousKeyValueStoreValue.html">NSUbiquitousKeyValueStoreValue</a>
               </li>
               <li class="nav-group-task">
-                <a href="Enums/UbiquitousKeyValueStoreValue.html">UbiquitousKeyValueStoreValue</a>
+                <a href="Enums/PersistenceError.html">PersistenceError</a>
               </li>
               <li class="nav-group-task">
                 <a href="Enums/UserDefaultsValue.html">UserDefaultsValue</a>
@@ -87,6 +93,9 @@
                 <a href="Extensions/Int64.html">Int64</a>
               </li>
               <li class="nav-group-task">
+                <a href="Extensions/StoredInNSUbiquitousKeyValueStore.html">StoredInNSUbiquitousKeyValueStore</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Extensions/StoredInUserDefaults.html">StoredInUserDefaults</a>
               </li>
               <li class="nav-group-task">
@@ -95,16 +104,13 @@
               <li class="nav-group-task">
                 <a href="Extensions/URL.html">URL</a>
               </li>
-              <li class="nav-group-task">
-                <a href="Extensions/UserDefaults.html">UserDefaults</a>
-              </li>
             </ul>
           </li>
           <li class="nav-group-name">
             <a href="Protocols.html">Protocols</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="Protocols/StorableInUbiquitousKeyValueStore.html">StorableInUbiquitousKeyValueStore</a>
+                <a href="Protocols/StorableInNSUbiquitousKeyValueStore.html">StorableInNSUbiquitousKeyValueStore</a>
               </li>
               <li class="nav-group-task">
                 <a href="Protocols/StorableInUserDefaults.html">StorableInUserDefaults</a>
@@ -124,16 +130,19 @@
                 <a href="Structs/AggregateTransformer.html">AggregateTransformer</a>
               </li>
               <li class="nav-group-task">
+                <a href="Structs/DefaultValuePersistOption.html">DefaultValuePersistOption</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Structs/JSONTransformer.html">JSONTransformer</a>
               </li>
               <li class="nav-group-task">
                 <a href="Structs/Persisted.html">Persisted</a>
               </li>
               <li class="nav-group-task">
-                <a href="Structs/PropertyListEncoderTransformer.html">PropertyListEncoderTransformer</a>
+                <a href="Structs/PropertyListTransformer.html">PropertyListTransformer</a>
               </li>
               <li class="nav-group-task">
-                <a href="Structs/StorableInUbiquitousKeyValueStoreTransformer.html">StorableInUbiquitousKeyValueStoreTransformer</a>
+                <a href="Structs/StorableInNSUbiquitousKeyValueStoreTransformer.html">StorableInNSUbiquitousKeyValueStoreTransformer</a>
               </li>
               <li class="nav-group-task">
                 <a href="Structs/StorableInUserDefaultsTransformer.html">StorableInUserDefaultsTransformer</a>
@@ -144,7 +153,7 @@
             <a href="Typealiases.html">Type Aliases</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="Typealiases.html#/s:7Persist31StoredInUbiquitousKeyValueStorea">StoredInUbiquitousKeyValueStore</a>
+                <a href="Typealiases.html#/s:7Persist33StoredInNSUbiquitousKeyValueStorea">StoredInNSUbiquitousKeyValueStore</a>
               </li>
               <li class="nav-group-task">
                 <a href="Typealiases.html#/s:7Persist20StoredInUserDefaultsa">StoredInUserDefaults</a>
@@ -163,6 +172,34 @@
           <section class="section task-group-section">
             <div class="task-group">
               <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:7Persist012DefaultValueA6OptionV"></a>
+                    <a name="//apple_ref/swift/Struct/DefaultValuePersistOption" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7Persist012DefaultValueA6OptionV">DefaultValuePersistOption</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>An option to persist the default value when returned by <code><a href="Structs/Persisted.html">Persisted</a></code>&lsquo;s <code>wrappedValue</code>.</p>
+
+                        <a href="Structs/DefaultValuePersistOption.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">DefaultValuePersistOption</span> <span class="p">:</span> <span class="kt">OptionSet</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
                 <li class="item">
                   <div>
                     <code>
@@ -185,6 +222,33 @@
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">@propertyWrapper</span>
 <span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Persisted</span><span class="o">&lt;</span><span class="kt">Value</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:7Persist46StorableInNSUbiquitousKeyValueStoreTransformerV"></a>
+                    <a name="//apple_ref/swift/Struct/StorableInNSUbiquitousKeyValueStoreTransformer" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7Persist46StorableInNSUbiquitousKeyValueStoreTransformerV">StorableInNSUbiquitousKeyValueStoreTransformer</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                        <a href="Structs/StorableInNSUbiquitousKeyValueStoreTransformer.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">StorableInNSUbiquitousKeyValueStoreTransformer</span><span class="o">&lt;</span><span class="kt">Input</span><span class="o">&gt;</span> <span class="p">:</span> <span class="kt"><a href="Protocols/Transformer.html">Transformer</a></span> <span class="k">where</span> <span class="kt">Input</span> <span class="p">:</span> <span class="kt"><a href="Protocols/StorableInNSUbiquitousKeyValueStore.html">StorableInNSUbiquitousKeyValueStore</a></span></code></pre>
 
                         </div>
                       </div>
@@ -248,9 +312,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:7Persist30PropertyListEncoderTransformerV"></a>
-                    <a name="//apple_ref/swift/Struct/PropertyListEncoderTransformer" class="dashAnchor"></a>
-                    <a class="token" href="#/s:7Persist30PropertyListEncoderTransformerV">PropertyListEncoderTransformer</a>
+                    <a name="/s:7Persist23PropertyListTransformerV"></a>
+                    <a name="//apple_ref/swift/Struct/PropertyListTransformer" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7Persist23PropertyListTransformerV">PropertyListTransformer</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -259,40 +323,13 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         
-                        <a href="Structs/PropertyListEncoderTransformer.html" class="slightly-smaller">See more</a>
+                        <a href="Structs/PropertyListTransformer.html" class="slightly-smaller">See more</a>
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">PropertyListEncoderTransformer</span><span class="o">&lt;</span><span class="kt">Input</span><span class="o">&gt;</span> <span class="p">:</span> <span class="kt"><a href="Protocols/Transformer.html">Transformer</a></span> <span class="k">where</span> <span class="kt">Input</span> <span class="p">:</span> <span class="kt">Decodable</span><span class="p">,</span> <span class="kt">Input</span> <span class="p">:</span> <span class="kt">Encodable</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:7Persist44StorableInUbiquitousKeyValueStoreTransformerV"></a>
-                    <a name="//apple_ref/swift/Struct/StorableInUbiquitousKeyValueStoreTransformer" class="dashAnchor"></a>
-                    <a class="token" href="#/s:7Persist44StorableInUbiquitousKeyValueStoreTransformerV">StorableInUbiquitousKeyValueStoreTransformer</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        
-                        <a href="Structs/StorableInUbiquitousKeyValueStoreTransformer.html" class="slightly-smaller">See more</a>
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">StorableInUbiquitousKeyValueStoreTransformer</span><span class="o">&lt;</span><span class="kt">Input</span><span class="o">&gt;</span> <span class="p">:</span> <span class="kt"><a href="Protocols/Transformer.html">Transformer</a></span> <span class="k">where</span> <span class="kt">Input</span> <span class="p">:</span> <span class="kt"><a href="Protocols/StorableInUbiquitousKeyValueStore.html">StorableInUbiquitousKeyValueStore</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">PropertyListTransformer</span><span class="o">&lt;</span><span class="kt">Input</span><span class="o">&gt;</span> <span class="p">:</span> <span class="kt"><a href="Protocols/Transformer.html">Transformer</a></span> <span class="k">where</span> <span class="kt">Input</span> <span class="p">:</span> <span class="kt">Decodable</span><span class="p">,</span> <span class="kt">Input</span> <span class="p">:</span> <span class="kt">Encodable</span></code></pre>
 
                         </div>
                       </div>
@@ -331,7 +368,7 @@
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2020 <a class="link" href="" target="_blank" rel="external">Joseph Duffy</a>. All rights reserved. (Last updated: 2020-05-26)</p>
+          <p>&copy; 2020 <a class="link" href="" target="_blank" rel="external">Joseph Duffy</a>. All rights reserved. (Last updated: 2020-05-30)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

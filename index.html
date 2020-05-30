@@ -13,7 +13,7 @@
     <a title="  Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="index.html"> Docs</a> (19% documented)</p>
+        <p><a href="index.html"> Docs</a> (21% documented)</p>
         <p class="header-right"><a href="https://github.com/JosephDuffy/Persist"><img src="img/gh.png"/>View on GitHub</a></p>
       </div>
     </header>
@@ -34,13 +34,19 @@
                 <a href="Classes/Cancellable.html">Cancellable</a>
               </li>
               <li class="nav-group-task">
+                <a href="Classes/FileManagerStorage.html">FileManagerStorage</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Classes/InMemoryStorage.html">InMemoryStorage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/NSUbiquitousKeyValueStoreStorage.html">NSUbiquitousKeyValueStoreStorage</a>
               </li>
               <li class="nav-group-task">
                 <a href="Classes/Persister.html">Persister</a>
               </li>
               <li class="nav-group-task">
-                <a href="Classes/UbiquitousKeyValueStore.html">UbiquitousKeyValueStore</a>
+                <a href="Classes/UserDefaultsStorage.html">UserDefaultsStorage</a>
               </li>
             </ul>
           </li>
@@ -48,10 +54,10 @@
             <a href="Enums.html">Enumerations</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="Enums/PersistanceError.html">PersistanceError</a>
+                <a href="Enums/NSUbiquitousKeyValueStoreValue.html">NSUbiquitousKeyValueStoreValue</a>
               </li>
               <li class="nav-group-task">
-                <a href="Enums/UbiquitousKeyValueStoreValue.html">UbiquitousKeyValueStoreValue</a>
+                <a href="Enums/PersistenceError.html">PersistenceError</a>
               </li>
               <li class="nav-group-task">
                 <a href="Enums/UserDefaultsValue.html">UserDefaultsValue</a>
@@ -86,6 +92,9 @@
                 <a href="Extensions/Int64.html">Int64</a>
               </li>
               <li class="nav-group-task">
+                <a href="Extensions/StoredInNSUbiquitousKeyValueStore.html">StoredInNSUbiquitousKeyValueStore</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Extensions/StoredInUserDefaults.html">StoredInUserDefaults</a>
               </li>
               <li class="nav-group-task">
@@ -94,16 +103,13 @@
               <li class="nav-group-task">
                 <a href="Extensions/URL.html">URL</a>
               </li>
-              <li class="nav-group-task">
-                <a href="Extensions/UserDefaults.html">UserDefaults</a>
-              </li>
             </ul>
           </li>
           <li class="nav-group-name">
             <a href="Protocols.html">Protocols</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="Protocols/StorableInUbiquitousKeyValueStore.html">StorableInUbiquitousKeyValueStore</a>
+                <a href="Protocols/StorableInNSUbiquitousKeyValueStore.html">StorableInNSUbiquitousKeyValueStore</a>
               </li>
               <li class="nav-group-task">
                 <a href="Protocols/StorableInUserDefaults.html">StorableInUserDefaults</a>
@@ -123,16 +129,19 @@
                 <a href="Structs/AggregateTransformer.html">AggregateTransformer</a>
               </li>
               <li class="nav-group-task">
+                <a href="Structs/DefaultValuePersistOption.html">DefaultValuePersistOption</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Structs/JSONTransformer.html">JSONTransformer</a>
               </li>
               <li class="nav-group-task">
                 <a href="Structs/Persisted.html">Persisted</a>
               </li>
               <li class="nav-group-task">
-                <a href="Structs/PropertyListEncoderTransformer.html">PropertyListEncoderTransformer</a>
+                <a href="Structs/PropertyListTransformer.html">PropertyListTransformer</a>
               </li>
               <li class="nav-group-task">
-                <a href="Structs/StorableInUbiquitousKeyValueStoreTransformer.html">StorableInUbiquitousKeyValueStoreTransformer</a>
+                <a href="Structs/StorableInNSUbiquitousKeyValueStoreTransformer.html">StorableInNSUbiquitousKeyValueStoreTransformer</a>
               </li>
               <li class="nav-group-task">
                 <a href="Structs/StorableInUserDefaultsTransformer.html">StorableInUserDefaultsTransformer</a>
@@ -143,7 +152,7 @@
             <a href="Typealiases.html">Type Aliases</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="Typealiases.html#/s:7Persist31StoredInUbiquitousKeyValueStorea">StoredInUbiquitousKeyValueStore</a>
+                <a href="Typealiases.html#/s:7Persist33StoredInNSUbiquitousKeyValueStorea">StoredInNSUbiquitousKeyValueStore</a>
               </li>
               <li class="nav-group-task">
                 <a href="Typealiases.html#/s:7Persist20StoredInUserDefaultsa">StoredInUserDefaults</a>
@@ -181,11 +190,10 @@
 <p><code>Persist</code> includes out-of-the-box supports for:</p>
 
 <ul>
-<li>[x] <code>UserDefaults</code></li>
-<li>[x] <code>NSUbiquitousKeyValueStore</code></li>
-<li>[ ] Local file system</li>
-<li>[ ] Keychain</li>
-<li>[x] <code><a href="Classes/InMemoryStorage.html">InMemoryStorage</a></code> (a simple wrapper around a dictionary)</li>
+<li><code>UserDefaults</code></li>
+<li><code>NSUbiquitousKeyValueStore</code></li>
+<li><code>FileManager</code></li>
+<li><code><a href="Classes/InMemoryStorage.html">InMemoryStorage</a></code> (a simple wrapper around a dictionary)</li>
 </ul>
 <h3 id='subscribing-to-updates' class='heading'>Subscribing to Updates</h3>
 
@@ -223,14 +231,12 @@
     <span class="kd">@Persisted</span><span class="p">(</span><span class="nv">key</span><span class="p">:</span> <span class="s">"bar"</span><span class="p">,</span> <span class="nv">userDefaults</span><span class="p">:</span> <span class="o">.</span><span class="n">standard</span><span class="p">,</span> <span class="nv">transformer</span><span class="p">:</span> <span class="kt">JSONTransformer</span><span class="p">())</span>
     <span class="k">var</span> <span class="nv">bar</span><span class="p">:</span> <span class="kt">Bar</span><span class="p">?</span>
 <span class="p">}</span>
-</code></pre>
 
-<p>When using a transformer subscribers will always be notified of the pre-encoded and post-decoded value:</p>
-<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">foo</span> <span class="o">=</span> <span class="kt">Foo</span><span class="p">()</span>
+<span class="k">let</span> <span class="nv">foo</span> <span class="o">=</span> <span class="kt">Foo</span><span class="p">()</span>
 <span class="k">let</span> <span class="nv">cancellable</span> <span class="o">=</span> <span class="n">foo</span><span class="o">.</span><span class="err">$</span><span class="n">bar</span><span class="o">.</span><span class="nf">addUpdateListener</span><span class="p">()</span> <span class="p">{</span> <span class="n">updateResult</span> <span class="k">in</span>
     <span class="k">switch</span> <span class="n">updateResult</span> <span class="p">{</span>
     <span class="k">case</span> <span class="o">.</span><span class="nf">success</span><span class="p">(</span><span class="k">let</span> <span class="nv">bar</span><span class="p">):</span>
-        <span class="c1">// `bar` is always `Bar?` despite being stored as JSON `Data`</span>
+        <span class="c1">// `bar` is always `Bar?` despite being transformed to JSON `Data` by `JSONTransformer`</span>
         <span class="nf">print</span><span class="p">(</span><span class="s">"Bar updated:"</span><span class="p">,</span> <span class="n">bar</span> <span class="p">??</span> <span class="s">"removed"</span><span class="p">)</span>
     <span class="k">case</span> <span class="o">.</span><span class="nf">failure</span><span class="p">(</span><span class="k">let</span> <span class="nv">error</span><span class="p">):</span>
         <span class="nf">print</span><span class="p">(</span><span class="s">"Error updating bar:"</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span>
@@ -254,7 +260,7 @@
         <span class="k">return</span> <span class="n">bar</span>
     <span class="p">}</span>
 
-    <span class="kd">public</span> <span class="kd">func</span> <span class="nf">untransformValue</span><span class="p">(</span><span class="n">from</span> <span class="nv">bar</span><span class="p">:</span> <span class="kt">Bar</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bar</span> <span class="p">{</span>
+    <span class="kd">public</span> <span class="kd">func</span> <span class="nf">untransformValue</span><span class="p">(</span><span class="n">_</span> <span class="nv">bar</span><span class="p">:</span> <span class="kt">Bar</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bar</span> <span class="p">{</span>
         <span class="k">return</span> <span class="n">bar</span>
     <span class="p">}</span>
 
@@ -269,6 +275,47 @@
 <span class="k">let</span> <span class="nv">bar</span> <span class="o">=</span> <span class="kt">Bar</span><span class="p">(</span><span class="nv">baz</span><span class="p">:</span> <span class="s">"example value"</span><span class="p">)</span>
 <span class="n">foo</span><span class="o">.</span><span class="n">bar</span> <span class="o">=</span> <span class="n">bar</span>
 <span class="n">foo</span><span class="o">.</span><span class="n">bar</span><span class="o">.</span><span class="n">baz</span> <span class="c1">// "transformed"</span>
+</code></pre>
+<h3 id='default-values' class='heading'>Default Values</h3>
+
+<p>A default value may be provided that will be used when the persister returns <code>nil</code> or throws and error.</p>
+<pre class="highlight swift"><code><span class="kd">struct</span> <span class="kt">Foo</span> <span class="p">{</span>
+    <span class="kd">@Persisted</span><span class="p">(</span><span class="nv">key</span><span class="p">:</span> <span class="s">"bar"</span><span class="p">,</span> <span class="nv">userDefaults</span><span class="p">:</span> <span class="o">.</span><span class="n">standard</span><span class="p">,</span> <span class="n">defaultValue</span><span class="p">:</span> <span class="s">"default"</span><span class="p">)</span>
+    <span class="k">var</span> <span class="nv">bar</span><span class="p">:</span> <span class="kt">Bar</span><span class="o">!</span>
+<span class="p">}</span>
+
+<span class="k">var</span> <span class="nv">foo</span> <span class="o">=</span> <span class="kt">Foo</span><span class="p">()</span>
+<span class="n">foo</span><span class="o">.</span><span class="n">bar</span> <span class="c1">// "default"</span>
+</code></pre>
+
+<p>The default value can be optionally stored when used, either due to an error or because the storage returned <code>nil</code>. This can be useful when the first value is random and should be persisted between app launches once initially created.</p>
+<pre class="highlight swift"><code><span class="kd">struct</span> <span class="kt">Foo</span> <span class="p">{</span>
+    <span class="kd">@Persisted</span><span class="p">(</span><span class="nv">key</span><span class="p">:</span> <span class="s">"persistedWhenNilInt"</span><span class="p">,</span> <span class="nv">userDefaults</span><span class="p">:</span> <span class="o">.</span><span class="n">standard</span><span class="p">,</span> <span class="n">defaultValue</span><span class="p">:</span> <span class="kt">Int</span><span class="o">.</span><span class="nf">random</span><span class="p">(</span><span class="nv">in</span><span class="p">:</span> <span class="mi">1</span><span class="o">...</span><span class="mi">10</span><span class="p">),</span> <span class="n">defaultValuePersistBehaviour</span><span class="p">:</span> <span class="o">.</span><span class="n">persistWhenNil</span><span class="p">)</span>
+    <span class="k">var</span> <span class="nv">persistedWhenNilInt</span><span class="p">:</span> <span class="kt">Int</span><span class="o">!</span>
+
+    <span class="kd">@Persisted</span><span class="p">(</span><span class="nv">key</span><span class="p">:</span> <span class="s">"notPersistedWhenNilRandomInt"</span><span class="p">,</span> <span class="nv">userDefaults</span><span class="p">:</span> <span class="o">.</span><span class="n">standard</span><span class="p">,</span> <span class="n">defaultValue</span><span class="p">:</span> <span class="kt">Int</span><span class="o">.</span><span class="nf">random</span><span class="p">(</span><span class="nv">in</span><span class="p">:</span> <span class="mi">1</span><span class="o">...</span><span class="mi">10</span><span class="p">))</span>
+    <span class="k">var</span> <span class="nv">notPersistedWhenNilRandomInt</span><span class="p">:</span> <span class="kt">Int</span><span class="o">!</span>
+<span class="p">}</span>
+
+<span class="k">var</span> <span class="nv">foo</span> <span class="o">=</span> <span class="kt">Foo</span><span class="p">()</span>
+
+<span class="kt">UserDefaults</span><span class="o">.</span><span class="n">standard</span><span class="o">.</span><span class="nf">object</span><span class="p">(</span><span class="nv">forKey</span><span class="p">:</span> <span class="s">"persistedWhenNilInt"</span><span class="p">)</span> <span class="c1">// nil</span>
+<span class="n">foo</span><span class="o">.</span><span class="n">persistedWhenNilInt</span> <span class="c1">// 3</span>
+<span class="kt">UserDefaults</span><span class="o">.</span><span class="n">standard</span><span class="o">.</span><span class="nf">object</span><span class="p">(</span><span class="nv">forKey</span><span class="p">:</span> <span class="s">"persistedWhenNilInt"</span><span class="p">)</span> <span class="c1">// 3</span>
+<span class="n">foo</span><span class="o">.</span><span class="n">persistedWhenNilInt</span> <span class="c1">// 3</span>
+
+<span class="kt">UserDefaults</span><span class="o">.</span><span class="n">standard</span><span class="o">.</span><span class="nf">object</span><span class="p">(</span><span class="nv">forKey</span><span class="p">:</span> <span class="s">"notPersistedWhenNilRandomInt"</span><span class="p">)</span> <span class="c1">// nil</span>
+<span class="n">foo</span><span class="o">.</span><span class="n">notPersistedWhenNilRandomInt</span> <span class="c1">// 7</span>
+<span class="kt">UserDefaults</span><span class="o">.</span><span class="n">standard</span><span class="o">.</span><span class="nf">object</span><span class="p">(</span><span class="nv">forKey</span><span class="p">:</span> <span class="s">"notPersistedWhenNilRandomInt"</span><span class="p">)</span> <span class="c1">// nil</span>
+<span class="n">foo</span><span class="o">.</span><span class="n">notPersistedWhenNilRandomInt</span> <span class="c1">// 7</span>
+
+<span class="c1">// ...restart app</span>
+
+<span class="kt">UserDefaults</span><span class="o">.</span><span class="n">standard</span><span class="o">.</span><span class="nf">object</span><span class="p">(</span><span class="nv">forKey</span><span class="p">:</span> <span class="s">"persistedWhenNilInt"</span><span class="p">)</span> <span class="c1">// 3</span>
+<span class="n">foo</span><span class="o">.</span><span class="n">persistedWhenNilInt</span> <span class="c1">// 3</span>
+
+<span class="kt">UserDefaults</span><span class="o">.</span><span class="n">standard</span><span class="o">.</span><span class="nf">object</span><span class="p">(</span><span class="nv">forKey</span><span class="p">:</span> <span class="s">"notPersistedWhenNilRandomInt"</span><span class="p">)</span> <span class="c1">// nil</span>
+<span class="n">foo</span><span class="o">.</span><span class="n">notPersistedWhenNilRandomInt</span> <span class="c1">// 4</span>
 </code></pre>
 <h3 id='property-wrapper-initialisation' class='heading'>Property Wrapper Initialisation</h3>
 
@@ -296,11 +343,14 @@
     <span class="o">...</span>
 <span class="p">)</span>
 </code></pre>
+<h1 id='license' class='heading'>License</h1>
+
+<p>The project is released under the MIT license. View the <a href="./LICENSE">LICENSE</a> file for the full license.</p>
 
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2020 <a class="link" href="" target="_blank" rel="external">Joseph Duffy</a>. All rights reserved. (Last updated: 2020-05-26)</p>
+          <p>&copy; 2020 <a class="link" href="" target="_blank" rel="external">Joseph Duffy</a>. All rights reserved. (Last updated: 2020-05-30)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
