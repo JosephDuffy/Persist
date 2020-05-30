@@ -7,7 +7,7 @@ public struct StorableInUserDefaultsTransformer<Input: StorableInUserDefaults>: 
 
     public func untransformValue(_ output: UserDefaultsValue) throws -> Input {
         guard let value = output.value as? Input else {
-            throw PersistanceError.unexpectedValueType(value: output.value, expected: Input.self)
+            throw PersistenceError.unexpectedValueType(value: output.value, expected: Input.self)
         }
 
         return value
