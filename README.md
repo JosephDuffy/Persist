@@ -25,11 +25,10 @@ UserDefaults.standard.object(forKey: "foo-bar") // "new-value"
 
 `Persist` includes out-of-the-box supports for:
 
-- [x] `UserDefaults`
-- [x] `NSUbiquitousKeyValueStore`
-- [x] `FileManager`
-- [ ] Keychain
-- [x] `InMemoryStorage` (a simple wrapper around a dictionary)
+- `UserDefaults`
+- `NSUbiquitousKeyValueStore`
+- `FileManager`
+- `InMemoryStorage` (a simple wrapper around a dictionary)
 
 ### Subscribing to Updates
 
