@@ -355,5 +355,37 @@ final class PersistedTests: XCTestCase {
         waitForExpectations(timeout: 1, handler: nil)
     }
 
+    func testDefaultValue() {
+        let key = "test-key"
+        let defaultValue = "default"
+        let storage = InMemoryStorage<String>()
+        var persisted = Persisted<String>(key: key, defaultValue: defaultValue, storedBy: storage)
+
+        XCTAssertEqual(persisted.wrappedValue, defaultValue)
+        XCTAssertEqual(storage.retrieveValue(for: key), defaultValue, "Default value should be persisted when retrieved")
+
+        let updatedValue = "update-value"
+        persisted.wrappedValue = updatedValue
+
+        XCTAssertEqual(persisted.wrappedValue, updatedValue)
+        XCTAssertEqual(storage.retrieveValue(for: key), updatedValue, "Updated value should be persisted when set")
+    }
+
+    func testDefaultValueDoNotPersistDefaultValue() {
+        let key = "test-key"
+        let defaultValue = "default"
+        let storage = InMemoryStorage<String>()
+        var persisted = Persisted<String>(key: key, defaultValue: defaultValue, storedBy: storage, persistDefaultValue: false)
+
+        XCTAssertEqual(persisted.wrappedValue, defaultValue)
+        XCTAssertNil(storage.retrieveValue(for: key), "Default value should not be persisted when retrieved")
+
+        let updatedValue = "update-value"
+        persisted.wrappedValue = updatedValue
+
+        XCTAssertEqual(persisted.wrappedValue, updatedValue)
+        XCTAssertEqual(storage.retrieveValue(for: key), updatedValue, "Updated value should be persisted when set")
+    }
+
 }
 #endif
