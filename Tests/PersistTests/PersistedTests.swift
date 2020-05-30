@@ -416,11 +416,18 @@ final class PersistedTests: XCTestCase {
         waitForExpectations(timeout: 1, handler: nil)
     }
 
-    func testDefaultValue() {
+    func testDefaultValueStoreWhenNil() {
         let key = "test-key"
         let defaultValue = "default"
         let storage = InMemoryStorage<String>()
-        var persisted = Persisted<String>(key: key, defaultValue: defaultValue, storedBy: storage)
+        let transformer = MockTransformer<String>()
+        var persisted = Persisted<String>(key: key, defaultValue: defaultValue, storedBy: storage, transformer: transformer, defaultValuePersistBehaviour: .persistWhenNil)
+
+        transformer.errorToThrow = NSError(domain: "perist-tests", code: 1, userInfo: nil)
+        XCTAssertEqual(persisted.wrappedValue, defaultValue)
+        XCTAssertNil(storage.retrieveValue(for: key), "Default value should not be persisted when error is thrown")
+
+        transformer.errorToThrow = nil
 
         XCTAssertEqual(persisted.wrappedValue, defaultValue)
         XCTAssertEqual(storage.retrieveValue(for: key), defaultValue, "Default value should be persisted when retrieved")
@@ -432,11 +439,35 @@ final class PersistedTests: XCTestCase {
         XCTAssertEqual(storage.retrieveValue(for: key), updatedValue, "Updated value should be persisted when set")
     }
 
-    func testDefaultValueDoNotPersistDefaultValue() {
+    func testDefaultValueStoreOnError() {
         let key = "test-key"
         let defaultValue = "default"
         let storage = InMemoryStorage<String>()
-        var persisted = Persisted<String>(key: key, defaultValue: defaultValue, storedBy: storage, persistDefaultValue: false)
+        let transformer = MockTransformer<String>()
+        var persisted = Persisted<String>(key: key, defaultValue: defaultValue, storedBy: storage, transformer: transformer, defaultValuePersistBehaviour: .persistOnError)
+
+        XCTAssertEqual(persisted.wrappedValue, defaultValue)
+        XCTAssertNil(storage.retrieveValue(for: key), "Default value should not be persisted when nil is returned")
+
+        transformer.errorToThrow = NSError(domain: "perist-tests", code: 1, userInfo: nil)
+        storage.storeValue("another-value", key: key)
+
+        XCTAssertEqual(persisted.wrappedValue, defaultValue)
+        XCTAssertEqual(persisted.wrappedValue, defaultValue, "Default value should be persisted when error is thrown")
+
+        transformer.errorToThrow = nil
+        let updatedValue = "update-value"
+        persisted.wrappedValue = updatedValue
+
+        XCTAssertEqual(persisted.wrappedValue, updatedValue)
+        XCTAssertEqual(storage.retrieveValue(for: key), updatedValue, "Updated value should be persisted when set")
+    }
+
+    func testDefaultValue() {
+        let key = "test-key"
+        let defaultValue = "default"
+        let storage = InMemoryStorage<String>()
+        var persisted = Persisted<String>(key: key, defaultValue: defaultValue, storedBy: storage)
 
         XCTAssertEqual(persisted.wrappedValue, defaultValue)
         XCTAssertNil(storage.retrieveValue(for: key), "Default value should not be persisted when retrieved")

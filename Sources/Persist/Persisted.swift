@@ -5,17 +5,25 @@ public struct Persisted<Value> {
 
     public var wrappedValue: Value? {
         mutating get {
-            if let retrieveValue = try? projectedValue.retrieveValue(){
-                return retrieveValue
-            } else if let defaultValue = defaultValue {
-                if persistDefaultValue {
+            do {
+                if let retrieveValue = try projectedValue.retrieveValue() {
+                    return retrieveValue
+                } else if let defaultValue = defaultValue {
+                    if defaultValuePersistBehaviour.contains(.persistWhenNil) {
+                        try? projectedValue.persist(defaultValue)
+                    }
+
+                    return defaultValue
+                }
+
+                return nil
+            } catch {
+                if defaultValuePersistBehaviour.contains(.persistOnError) {
                     try? projectedValue.persist(defaultValue)
                 }
 
                 return defaultValue
             }
-
-            return nil
         }
         set {
             try? projectedValue.persist(newValue)
@@ -26,17 +34,15 @@ public struct Persisted<Value> {
 
     public var defaultValue: Value?
 
-    /// If `true` the default value will be persisted using the `Persister` whenever it is used as the
-    /// value returned by `wrappedValue`.
-    public var persistDefaultValue: Bool
+    public var defaultValuePersistBehaviour: DefaultValuePersistOption
 
     public init(
         persister: Persister<Value>,
         defaultValue: Value? = nil,
-        persistDefaultValue: Bool = true
+        defaultValuePersistBehaviour: DefaultValuePersistOption = []
     ) {
         self.defaultValue = defaultValue
-        self.persistDefaultValue = persistDefaultValue
+        self.defaultValuePersistBehaviour = defaultValuePersistBehaviour
 
         projectedValue = persister
     }
@@ -45,10 +51,10 @@ public struct Persisted<Value> {
         key: Storage.Key,
         defaultValue: Value? = nil,
         storedBy storage: Storage,
-        persistDefaultValue: Bool = true
+        defaultValuePersistBehaviour: DefaultValuePersistOption = []
     ) where Storage.Value == Value {
         self.defaultValue = defaultValue
-        self.persistDefaultValue = persistDefaultValue
+        self.defaultValuePersistBehaviour = defaultValuePersistBehaviour
 
         projectedValue = Persister(key: key, storedBy: storage)
     }
@@ -57,10 +63,10 @@ public struct Persisted<Value> {
         key: Storage.Key,
         defaultValue: Value? = nil,
         storedBy storage: Storage,
-        persistDefaultValue: Bool = true
+        defaultValuePersistBehaviour: DefaultValuePersistOption = []
     ) where Storage.Value == Any {
         self.defaultValue = defaultValue
-        self.persistDefaultValue = persistDefaultValue
+        self.defaultValuePersistBehaviour = defaultValuePersistBehaviour
 
         projectedValue = Persister(key: key, storedBy: storage)
     }
@@ -70,10 +76,10 @@ public struct Persisted<Value> {
         defaultValue: Value? = nil,
         storedBy storage: Storage,
         transformer: Transformer,
-        persistDefaultValue: Bool = true
+        defaultValuePersistBehaviour: DefaultValuePersistOption = []
     ) where Storage.Value == Any, Transformer.Input == Value {
         self.defaultValue = defaultValue
-        self.persistDefaultValue = persistDefaultValue
+        self.defaultValuePersistBehaviour = defaultValuePersistBehaviour
 
         projectedValue = Persister(key: key, storedBy: storage, transformer: transformer)
     }
@@ -83,10 +89,10 @@ public struct Persisted<Value> {
         defaultValue: Value? = nil,
         storedBy storage: Storage,
         transformer: Transformer,
-        persistDefaultValue: Bool = true
+        defaultValuePersistBehaviour: DefaultValuePersistOption = []
     ) where Transformer.Input == Value, Transformer.Output == Storage.Value {
         self.defaultValue = defaultValue
-        self.persistDefaultValue = persistDefaultValue
+        self.defaultValuePersistBehaviour = defaultValuePersistBehaviour
 
         projectedValue = Persister(key: key, storedBy: storage, transformer: transformer)
     }
