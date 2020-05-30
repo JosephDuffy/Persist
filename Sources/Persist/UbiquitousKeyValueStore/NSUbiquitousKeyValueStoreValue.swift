@@ -1,14 +1,14 @@
 #if os(macOS) || os(iOS) || os(tvOS)
 import Foundation
 
-public enum UbiquitousKeyValueStoreValue: Hashable {
+public enum NSUbiquitousKeyValueStoreValue: Hashable {
     case string(String)
     case data(Data)
     case bool(Bool)
     case int64(Int64)
     case double(Double)
-    indirect case array([UbiquitousKeyValueStoreValue])
-    indirect case dictionary([String: UbiquitousKeyValueStoreValue])
+    indirect case array([NSUbiquitousKeyValueStoreValue])
+    indirect case dictionary([String: NSUbiquitousKeyValueStoreValue])
 
     var value: Any {
         switch self {
@@ -41,19 +41,19 @@ public enum UbiquitousKeyValueStoreValue: Hashable {
         } else if let bool = value as? Bool {
             self = .bool(bool)
         } else if let anyArray = value as? [Any] {
-            var array: [UbiquitousKeyValueStoreValue] = []
+            var array: [NSUbiquitousKeyValueStoreValue] = []
 
             for anyValue in anyArray {
-                guard let UbiquitousKeyValueStoreValue = UbiquitousKeyValueStoreValue(value: anyValue) else { return nil }
+                guard let UbiquitousKeyValueStoreValue = NSUbiquitousKeyValueStoreValue(value: anyValue) else { return nil }
                 array.append(UbiquitousKeyValueStoreValue)
             }
 
             self = .array(array)
         } else if let anyDictionary = value as? [String: Any] {
-            var dictionary: [String: UbiquitousKeyValueStoreValue] = [:]
+            var dictionary: [String: NSUbiquitousKeyValueStoreValue] = [:]
 
             for (key, anyValue) in anyDictionary {
-                guard let UbiquitousKeyValueStoreValue = UbiquitousKeyValueStoreValue(value: anyValue) else { return nil }
+                guard let UbiquitousKeyValueStoreValue = NSUbiquitousKeyValueStoreValue(value: anyValue) else { return nil }
                 dictionary[key] = UbiquitousKeyValueStoreValue
             }
 

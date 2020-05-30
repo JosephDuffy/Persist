@@ -13,7 +13,7 @@ final class UbiquitousKeyValueStoreValueTests: XCTestCase {
             "data": "the-data".data(using: .utf8)!,
         ]
 
-        let userDefaultsValue = UbiquitousKeyValueStoreValue(value: dictionary)
+        let userDefaultsValue = NSUbiquitousKeyValueStoreValue(value: dictionary)
         XCTAssertEqual(
             userDefaultsValue,
             .dictionary([

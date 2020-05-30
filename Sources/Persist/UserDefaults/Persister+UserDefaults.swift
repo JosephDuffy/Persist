@@ -5,21 +5,21 @@ extension Persister where Value: StorableInUserDefaults {
 
     public convenience init(
         key: String,
-        storedBy userDefaultsStorage: UserDefaultsStorage
+        storedBy userDefaults: UserDefaults
     ) {
         self.init(
             key: key,
-            userDefaultsStorage: userDefaultsStorage
+            userDefaults: userDefaults
         )
     }
 
     public convenience init(
         key: String,
-        userDefaultsStorage: UserDefaultsStorage
+        userDefaults: UserDefaults
     ) {
         self.init(
             key: key,
-            storedBy: userDefaultsStorage,
+            storedBy: UserDefaultsStorage(userDefaults: userDefaults),
             transformer: StorableInUserDefaultsTransformer<Value>()
         )
     }
@@ -30,25 +30,26 @@ extension Persister {
 
     public convenience init<Transformer: Persist.Transformer>(
         key: String,
-        storedBy userDefaultsStorage: UserDefaultsStorage,
+        storedBy userDefaults: UserDefaults,
         transformer: Transformer
     ) where Transformer.Input == Value, Transformer.Output: StorableInUserDefaults {
         self.init(
             key: key,
-            userDefaultsStorage: userDefaultsStorage,
+            userDefaults: userDefaults,
             transformer: transformer
         )
     }
 
     public convenience init<Transformer: Persist.Transformer>(
         key: String,
-        userDefaultsStorage: UserDefaultsStorage,
+        userDefaults: UserDefaults,
         transformer: Transformer
     ) where Transformer.Input == Value, Transformer.Output: StorableInUserDefaults {
+        let storage = UserDefaultsStorage(userDefaults: userDefaults)
         let aggregateTransformer = transformer.append(transformer: StorableInUserDefaultsTransformer<Transformer.Output>())
         self.init(
             key: key,
-            storedBy: userDefaultsStorage,
+            storedBy: storage,
             transformer: aggregateTransformer
         )
     }

@@ -10,6 +10,34 @@ final class UserDefaultsStorageTests: XCTestCase {
         userDefaults.dictionaryRepresentation().keys.forEach(userDefaults.removeObject(forKey:))
     }
 
+    func testPersistedUserDefaultsAPI() {
+        _ = Persisted<Int>(key: "test", storedBy: UserDefaults.standard)
+        _ = Persisted<Int>(key: "test", storedBy: UserDefaultsStorage.standard)
+
+        _ = Persisted<Int>(key: "test", userDefaults: .standard)
+        _ = Persisted<Int>(key: "test", userDefaultsStorage: .standard)
+
+        _ = Persisted<Int>(key: "test", storedBy: UserDefaults.standard, transformer: MockTransformer())
+        _ = Persisted<Int>(key: "test", storedBy: UserDefaultsStorage.standard, transformer: MockTransformer())
+
+        _ = Persisted<Int>(key: "test", userDefaults: .standard, transformer: MockTransformer())
+        _ = Persisted<Int>(key: "test", userDefaultsStorage: .standard, transformer: MockTransformer())
+    }
+
+    func testPersisterUserDefaultsAPI() {
+        _ = Persister<Int>(key: "test", storedBy: UserDefaults.standard)
+        _ = Persister<Int>(key: "test", storedBy: UserDefaultsStorage.standard)
+
+        _ = Persister<Int>(key: "test", userDefaults: .standard)
+        _ = Persister<Int>(key: "test", userDefaultsStorage: .standard)
+
+        _ = Persister<Int>(key: "test", storedBy: UserDefaults.standard, transformer: MockTransformer())
+        _ = Persister<Int>(key: "test", storedBy: UserDefaultsStorage.standard, transformer: MockTransformer())
+
+        _ = Persister<Int>(key: "test", userDefaults: .standard, transformer: MockTransformer())
+        _ = Persister<Int>(key: "test", userDefaultsStorage: .standard, transformer: MockTransformer())
+    }
+
     func testStoredInUserDefaults() {
         class Foo {
             @StoredInUserDefaults
