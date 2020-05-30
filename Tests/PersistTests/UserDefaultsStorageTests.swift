@@ -224,6 +224,29 @@ final class UserDefaultsStorageTests: XCTestCase {
         waitForExpectations(timeout: 0.1)
     }
 
+    func testRemoveValue() {
+        let url = URL(string: "http://example.com")!
+        let storage = UserDefaultsStorage(userDefaults: userDefaults)
+        storage.storeValue(.url(url), key: "key")
+
+        let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
+        let cancellable = storage.addUpdateListener(forKey: "key") { newValue in
+            defer {
+                callsUpdateListenerExpectation.fulfill()
+            }
+
+            XCTAssertNil(newValue, "Value passed to update listener should be nil for removed values")
+        }
+        _ = cancellable
+
+        storage.removeValue(for: "key")
+
+        XCTAssertNil(storage.retrieveValue(for: "key"))
+        XCTAssertNil(userDefaults.object(forKey: "key"))
+
+        waitForExpectations(timeout: 0.1)
+    }
+
     func testStoringTransformedValues() {
         struct Bar: Codable, Equatable {
             var baz: String

@@ -70,12 +70,11 @@ private final class KeyPathObserver: NSObject {
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if let keyPath = keyPath, (object as? UserDefaults)?.object(forKey: keyPath) is Data, let url = (object as? UserDefaults)?.url(forKey: keyPath) {
             updateListener(.url(url))
-        } else {
-            if let newValue = change?[.newKey] {
-                guard let propertyListValue = UserDefaultsValue(value: newValue) else { return }
-                updateListener(propertyListValue)
-            } else {
+        } else if let change = change, let newValue = change[.newKey] {
+            if newValue is NSNull {
                 updateListener(nil)
+            } else if let propertyListValue = UserDefaultsValue(value: newValue) {
+                updateListener(propertyListValue)
             }
         }
     }
