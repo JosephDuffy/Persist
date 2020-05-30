@@ -44,9 +44,9 @@ public final class UserDefaultsStorage: Storage {
             return .url(url)
         } else if let anyValue = userDefaults.object(forKey: key) {
             return UserDefaultsValue(value: anyValue)
-        } else {
-            return nil
         }
+
+        return nil
     }
 
     public func addUpdateListener(forKey key: String, updateListener: @escaping UpdateListener) -> Cancellable {

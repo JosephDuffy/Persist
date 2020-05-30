@@ -15,15 +15,13 @@ public enum UserDefaultsValue: Hashable {
     func cast<Type>(to type: Type.Type) -> Type? {
         switch self {
         case .int(let int):
-            if type == Bool.self {
-                if int == 0 {
-                    return false as? Type
-                } else if int == 1 {
-                    return true as? Type
-                }
+            if type == Bool.self, int == 0 {
+                return false as? Type
+            } else if type == Bool.self, int == 1 {
+                return true as? Type
+            } else {
+                return int as? Type
             }
-
-            return int as? Type
         default:
             return value as? Type
         }

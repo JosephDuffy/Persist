@@ -250,7 +250,7 @@ final class NSUbiquitousKeyValueStoreStorageTests: XCTestCase {
         waitForExpectations(timeout: 1)
     }
 
-    func testUpdateListenerDeletedFromNotification() {
+    func testUpdateViaUnderlyingNSUbiquitousKeyValueStoreStorage() {
         nsUbiquitousKeyValueStoreStorage.storeValue(.string("initial-value"), key: "test")
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
@@ -267,6 +267,7 @@ final class NSUbiquitousKeyValueStoreStorageTests: XCTestCase {
         _ = cancellable
 
         nsUbiquitousKeyValueStoreStorage.nsUbiquitousKeyValueStore.removeObject(forKey: "test")
+        XCTAssertNil(nsUbiquitousKeyValueStoreStorage.retrieveValue(for: "test"))
         NotificationCenter.default.post(
             name: NSUbiquitousKeyValueStore.didChangeExternallyNotification,
             object: nsUbiquitousKeyValueStoreStorage.nsUbiquitousKeyValueStore,

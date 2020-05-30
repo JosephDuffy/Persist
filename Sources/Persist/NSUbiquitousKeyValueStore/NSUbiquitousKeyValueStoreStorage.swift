@@ -30,11 +30,11 @@ public final class NSUbiquitousKeyValueStoreStorage: Storage {
     }
 
     public func retrieveValue(for key: String) -> NSUbiquitousKeyValueStoreValue? {
-        if let anyValue = nsUbiquitousKeyValueStore.object(forKey: key) {
-            return NSUbiquitousKeyValueStoreValue(value: anyValue)
-        } else {
+        guard let anyValue = nsUbiquitousKeyValueStore.object(forKey: key) else {
             return nil
         }
+
+        return NSUbiquitousKeyValueStoreValue(value: anyValue)
     }
 
     public func addUpdateListener(forKey key: String, updateListener: @escaping UpdateListener) -> Cancellable {
