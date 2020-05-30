@@ -46,6 +46,17 @@ public struct Persisted<Value> {
         defaultValue: Value? = nil,
         storedBy storage: Storage,
         transformer: Transformer
+    ) where Storage.Value == Any, Transformer.Input == Value {
+        self.defaultValue = defaultValue
+
+        projectedValue = Persister(key: key, storedBy: storage, transformer: transformer)
+    }
+
+    public init<Storage: Persist.Storage, Transformer: Persist.Transformer>(
+        key: Storage.Key,
+        defaultValue: Value? = nil,
+        storedBy storage: Storage,
+        transformer: Transformer
     ) where Transformer.Input == Value, Transformer.Output == Storage.Value {
         self.defaultValue = defaultValue
 

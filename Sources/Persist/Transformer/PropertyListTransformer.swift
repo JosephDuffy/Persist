@@ -1,6 +1,6 @@
 import Foundation
 
-public struct PropertyListEncoderTransformer<Input: Codable>: Transformer {
+public struct PropertyListTransformer<Input: Codable>: Transformer {
 
     public typealias Output = Data
 
@@ -29,7 +29,7 @@ public struct PropertyListEncoderTransformer<Input: Codable>: Transformer {
         self.init(encoder: encoder, decoder: decoder)
     }
 
-    public init(outputFormat: PropertyListSerialization.PropertyListFormat, userInfo: [CodingUserInfoKey: Any]) {
+    public init(outputFormat: PropertyListSerialization.PropertyListFormat, coderUserInfo userInfo: [CodingUserInfoKey: Any]) {
         let encoder = PropertyListEncoder()
         let decoder = PropertyListDecoder()
         encoder.outputFormat = outputFormat
@@ -43,7 +43,7 @@ public struct PropertyListEncoderTransformer<Input: Codable>: Transformer {
         return try encoder.encode(value)
     }
 
-    public func untransformValue(from data: Data) throws -> Input {
+    public func untransformValue(_ data: Data) throws -> Input {
         return try decoder.decode(Input.self, from: data)
     }
 

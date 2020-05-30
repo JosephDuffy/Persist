@@ -7,8 +7,7 @@ extension Persisted where Value == Data {
         defaultValue: Value? = nil,
         storedBy fileManager: FileManager
     ) {
-        let persister = Persister(key: key, storedBy: fileManager)
-        self.init(persister: persister, defaultValue: defaultValue)
+        self.init(key: key, defaultValue: defaultValue, fileManager: fileManager)
     }
 
     public init(
@@ -16,7 +15,8 @@ extension Persisted where Value == Data {
         defaultValue: Value? = nil,
         fileManager: FileManager
     ) {
-        self.init(persister: Persister(key: key, fileManager: fileManager), defaultValue: defaultValue)
+        let persister = Persister(key: key, storedBy: fileManager)
+        self.init(persister: persister, defaultValue: defaultValue)
     }
 
 }
@@ -29,8 +29,7 @@ extension Persisted {
         storedBy fileManager: FileManager,
         transformer: Transformer
     ) where Transformer.Input == Value, Transformer.Output == Data {
-        let persister = Persister(key: key, storedBy: fileManager, transformer: transformer)
-        self.init(persister: persister, defaultValue: defaultValue)
+        self.init(key: key, defaultValue: defaultValue, fileManager: fileManager, transformer: transformer)
     }
 
     public init<Transformer: Persist.Transformer>(

@@ -5,7 +5,7 @@ import XCTest
 final class UbiquitousKeyValueStoreValueTests: XCTestCase {
 
     func testDictionary() {
-        let dictionary: [String: StorableInUbiquitousKeyValueStore] = [
+        let dictionary: [String: StorableInNSUbiquitousKeyValueStore] = [
             "foo": [1, 2, 3] as [Int64],
             "bar": true,
             "baz": "hello world",
@@ -13,7 +13,7 @@ final class UbiquitousKeyValueStoreValueTests: XCTestCase {
             "data": "the-data".data(using: .utf8)!,
         ]
 
-        let userDefaultsValue = UbiquitousKeyValueStoreValue(value: dictionary)
+        let userDefaultsValue = NSUbiquitousKeyValueStoreValue(value: dictionary)
         XCTAssertEqual(
             userDefaultsValue,
             .dictionary([

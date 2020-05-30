@@ -97,7 +97,7 @@ public final class Persister<Value> {
         let valueGetter: ValueGetter = {
             guard let anyValue = try storage.retrieveValue(for: key) else { return nil }
             guard let value = anyValue as? Value else {
-                throw PersistanceError.unexpectedValueType(value: anyValue, expected: Value.self)
+                throw PersistenceError.unexpectedValueType(value: anyValue, expected: Value.self)
             }
             return value
         }
@@ -122,7 +122,7 @@ public final class Persister<Value> {
                     }
 
                     guard let value = anyValue as? Value else {
-                        updateListener(.failure(PersistanceError.unexpectedValueType(value: anyValue, expected: Value.self)))
+                        updateListener(.failure(PersistenceError.unexpectedValueType(value: anyValue, expected: Value.self)))
                         return
                     }
 
@@ -140,9 +140,9 @@ public final class Persister<Value> {
         let valueGetter: ValueGetter = {
             guard let anyValue = try storage.retrieveValue(for: key) else { return nil }
             guard let transformerOutput = anyValue as? Transformer.Output else {
-                throw PersistanceError.unexpectedValueType(value: anyValue, expected: Transformer.Output.self)
+                throw PersistenceError.unexpectedValueType(value: anyValue, expected: Transformer.Output.self)
             }
-            return try transformer.untransformValue(from: transformerOutput)
+            return try transformer.untransformValue(transformerOutput)
         }
 
         let valueSetter: ValueSetter = { newValue in
@@ -166,12 +166,12 @@ public final class Persister<Value> {
                     }
 
                     guard let value = anyValue as? Transformer.Output else {
-                        updateListener(.failure(PersistanceError.unexpectedValueType(value: anyValue, expected: Transformer.Output.self)))
+                        updateListener(.failure(PersistenceError.unexpectedValueType(value: anyValue, expected: Transformer.Output.self)))
                         return
                     }
 
                     do {
-                        let untransformedValue = try transformer.untransformValue(from: value)
+                        let untransformedValue = try transformer.untransformValue(value)
                         updateListener(.success(untransformedValue))
                     } catch {
                         updateListener(.failure(error))
@@ -189,7 +189,7 @@ public final class Persister<Value> {
         let valueGetter: ValueGetter = {
             guard let value = try storage.retrieveValue(for: key) else { return nil }
 
-            return try transformer.untransformValue(from: value)
+            return try transformer.untransformValue(value)
         }
 
         let valueSetter: ValueSetter = { newValue in
@@ -213,7 +213,7 @@ public final class Persister<Value> {
                     }
 
                     do {
-                        let untransformedValue = try transformer.untransformValue(from: newValue)
+                        let untransformedValue = try transformer.untransformValue(newValue)
                         updateListener(.success(untransformedValue))
                     } catch {
                         updateListener(.failure(error))

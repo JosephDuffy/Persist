@@ -1,13 +1,13 @@
 #if os(macOS) || os(iOS) || os(tvOS)
 import Foundation
 
-open class UbiquitousKeyValueStore: Storage {
+public final class NSUbiquitousKeyValueStoreStorage: Storage {
 
     public static var `default`: Self {
         return Self(nsUbiquitousKeyValueStore: .default)
     }
 
-    public typealias Value = UbiquitousKeyValueStoreValue
+    public typealias Value = NSUbiquitousKeyValueStoreValue
 
     public let nsUbiquitousKeyValueStore: NSUbiquitousKeyValueStore
 
@@ -17,7 +17,7 @@ open class UbiquitousKeyValueStore: Storage {
         self.nsUbiquitousKeyValueStore = nsUbiquitousKeyValueStore
     }
 
-    public func storeValue(_ value: UbiquitousKeyValueStoreValue, key: String) {
+    public func storeValue(_ value: NSUbiquitousKeyValueStoreValue, key: String) {
         nsUbiquitousKeyValueStore.set(value.value, forKey: key)
 
         updateListeners[key]?.values.forEach { $0(value) }
@@ -29,12 +29,12 @@ open class UbiquitousKeyValueStore: Storage {
         updateListeners[key]?.values.forEach { $0(nil) }
     }
 
-    public func retrieveValue(for key: String) -> UbiquitousKeyValueStoreValue? {
-        if let anyValue = nsUbiquitousKeyValueStore.object(forKey: key) {
-            return UbiquitousKeyValueStoreValue(value: anyValue)
-        } else {
+    public func retrieveValue(for key: String) -> NSUbiquitousKeyValueStoreValue? {
+        guard let anyValue = nsUbiquitousKeyValueStore.object(forKey: key) else {
             return nil
         }
+
+        return NSUbiquitousKeyValueStoreValue(value: anyValue)
     }
 
     public func addUpdateListener(forKey key: String, updateListener: @escaping UpdateListener) -> Cancellable {

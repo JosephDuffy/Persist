@@ -9,6 +9,7 @@ final class UserDefaultsValueTests: XCTestCase {
             "foo": [1, 2, 3],
             "bar": true,
             "baz": "hello world",
+            "url": URL(string: "http://example.com")!,
         ]
 
         let userDefaultsValue = UserDefaultsValue(value: dictionary)
@@ -18,6 +19,7 @@ final class UserDefaultsValueTests: XCTestCase {
                 "foo": .array([.int(1), .int(2), .int(3)]),
                 "bar": .bool(true),
                 "baz": .string("hello world"),
+                "url": .url(URL(string: "http://example.com")!),
             ])
         )
     }

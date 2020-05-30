@@ -6,11 +6,17 @@ internal final class MockTransformer<Value>: Transformer {
 
     internal typealias Output = Value
 
-    func transformValue(_ value: Value) -> Value {
+    internal var errorToThrow: Error?
+
+    func transformValue(_ value: Value) throws -> Value {
+        try errorToThrow.map { throw $0 }
+
         return value
     }
 
-    func untransformValue(from output: Value) -> Value {
+    func untransformValue(_ output: Value) throws -> Value {
+        try errorToThrow.map { throw $0 }
+
         return output
     }
 

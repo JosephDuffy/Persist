@@ -12,6 +12,21 @@ public enum UserDefaultsValue: Hashable {
     indirect case array([UserDefaultsValue])
     indirect case dictionary([String: UserDefaultsValue])
 
+    func cast<Type>(to type: Type.Type) -> Type? {
+        switch self {
+        case .int(let int):
+            if type == Bool.self, int == 0 {
+                return false as? Type
+            } else if type == Bool.self, int == 1 {
+                return true as? Type
+            } else {
+                return int as? Type
+            }
+        default:
+            return value as? Type
+        }
+    }
+
     var value: Any {
         switch self {
         case .string(let string):
@@ -44,12 +59,12 @@ public enum UserDefaultsValue: Hashable {
             self = .url(url)
         } else if let int = value as? Int, value is Int {
             self = .int(int)
-        } else if let double = value as? Double, value is Double {
-            self = .double(double)
-        } else if let float = value as? Float, value is Float {
-            self = .float(float)
         } else if let bool = value as? Bool, value is Bool {
             self = .bool(bool)
+        } else if let float = value as? Float {
+            self = .float(float)
+        } else if let double = value as? Double {
+            self = .double(double)
         } else if let anyArray = value as? [Any] {
             var array: [UserDefaultsValue] = []
 

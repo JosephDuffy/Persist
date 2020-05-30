@@ -14,8 +14,8 @@ public struct AggregateTransformer<Input, Output>: Transformer {
         }
 
         untransformValueClosure = { value in
-            let firstUntransform = try secondTransformer.untransformValue(from: value)
-            return try firstTransformer.untransformValue(from: firstUntransform)
+            let firstUntransform = try secondTransformer.untransformValue(value)
+            return try firstTransformer.untransformValue(firstUntransform)
         }
     }
 
@@ -23,8 +23,8 @@ public struct AggregateTransformer<Input, Output>: Transformer {
         try transformValueClosure(value)
     }
 
-    public func untransformValue(from output: Output) throws -> Input {
-        return try untransformValueClosure(output)
+    public func untransformValue(_ value: Output) throws -> Input {
+        return try untransformValueClosure(value)
     }
 
 }

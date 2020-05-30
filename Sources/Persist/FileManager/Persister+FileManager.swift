@@ -8,7 +8,7 @@ extension Persister where Value == Data {
     ) {
         self.init(
             key: key,
-            storedBy: FileManagerStorage(fileManager: fileManager)
+            fileManager: fileManager
         )
     }
 
@@ -32,7 +32,7 @@ extension Persister {
     ) where Transformer.Input == Value, Transformer.Output == Data {
         self.init(
             key: key,
-            storedBy: FileManagerStorage(fileManager: fileManager),
+            fileManager: fileManager,
             transformer: transformer
         )
     }

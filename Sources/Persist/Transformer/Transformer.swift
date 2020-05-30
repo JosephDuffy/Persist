@@ -6,6 +6,6 @@ public protocol Transformer {
 
     func transformValue(_ value: Input) throws -> Output
 
-    func untransformValue(from output: Output) throws -> Input
+    func untransformValue(_ value: Output) throws -> Input
 
 }
