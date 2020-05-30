@@ -4,12 +4,46 @@ import XCTest
 
 final class PersistedTests: XCTestCase {
 
+    func testAnyAPI() {
+        _ = Persisted<String>(key: "test-key", storedBy: InMemoryStorage<Any>())
+    }
+
     func testAnyAPIWithTransformer() {
         struct StoredValue: Codable, Equatable {
             let property: String
         }
 
         _ = Persisted<StoredValue>(key: "test-key", storedBy: InMemoryStorage<Any>(), transformer: JSONTransformer())
+    }
+
+    func testWithTransformer() {
+        struct StoredValue: Codable, Equatable {
+            let property: String
+        }
+
+        let storage = InMemoryStorage<Data>()
+        var persisted = Persisted<StoredValue>(key: "test-key", storedBy: storage, transformer: JSONTransformer())
+        let storedValue = StoredValue(property: "value")
+
+        let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
+        let cancellable = persisted.projectedValue.addUpdateListener { result in
+            defer {
+                callsUpdateListenerExpectation.fulfill()
+            }
+
+            switch result {
+            case .success(let newValue):
+                XCTAssertEqual(newValue, storedValue, "Value passed to update listener should be the new value")
+            case .failure(let error):
+                XCTFail("Update listener should be notified of a success. Got error: \(error)")
+            }
+        }
+        _ = cancellable
+
+        persisted.wrappedValue = storedValue
+        XCTAssertEqual(persisted.wrappedValue, storedValue, "Should return untransformed value")
+
+        waitForExpectations(timeout: 1, handler: nil)
     }
 
     func testSettingWrappedValue() throws {
