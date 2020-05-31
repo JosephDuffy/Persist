@@ -5,11 +5,13 @@
 [![Documentation](https://josephduffy.github.io/Persist/badge.svg)](https://josephduffy.github.io/Persist/)
 [![SwiftPM Compatible](https://img.shields.io/badge/SwiftPM-compatible-4BC51D.svg?style=flat)](https://github.com/apple/swift-package-manager)
 
-Property wrapper for storing and retrieving values with support for transformations such as storing as JSON data.
+`Persist` is a framework that aids with storing and retrieving values, with support for transformations such as storing as JSON data.
 
 ## Usage
 
-Persist provides the `Persisted` property wrapper, which handles the persisting of values by utilising some form of storage. When creating a `Persisted` property wrapper any form of storage may be used, as long as it supports the type you wish to store.
+Persist provides the `Persister` class, which can be used to store and retieve values from various forms of storage.
+
+The `Persisted` property wrapper wraps `Persister`, making it easy to have a property that automatically persists its value.
 
 ```swift
 class Foo {
@@ -29,6 +31,27 @@ UserDefaults.standard.object(forKey: "foo-bar") // "new-value"
 - `NSUbiquitousKeyValueStore`
 - `FileManager`
 - `InMemoryStorage` (a simple wrapper around a dictionary)
+
+### Catching Errors
+
+`Persister`'s `persist(_:)` and `retrieveValue()` functions will throw if the storage or transformer throws are error.
+
+`Persited` wraps a `Persister` and exposes it as the `projectedValue`, which allows you to catch errors:
+
+```swift
+class Foo {
+    @Persisted(key: "foo-bar", userDefaults: .standard)
+    var bar: String?
+}
+
+do {
+    let foo = Foo()
+    try foo.$bar.persist("new-value")
+    try foo.$bar.retrieveValue()
+} catch {
+    // Something went wrong
+}
+```
 
 ### Subscribing to Updates
 
