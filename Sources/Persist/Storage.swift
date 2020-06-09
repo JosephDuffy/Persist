@@ -3,8 +3,10 @@
  */
 public protocol Storage: class {
 
+    /// The type of the keys used to reference values in the storage.
     associatedtype Key
 
+    /// The type of values that can be stored.
     associatedtype Value
 
     typealias UpdateListener = (Value?) -> Void
@@ -27,18 +29,18 @@ public protocol Storage: class {
     /**
      Retrieve the value for the provided key.
 
-     - throws: `PersistanceError.unexpectedValueType` if stored value that is not of type `Value`.
+     - throws: `PersistenceError.unexpectedValueType` if stored value that is not of type `Value`.
      - parameter key: The key of the value to retrieve.
      - returns: The stored value, or `nil` if no value is associated with the key.
      */
     func retrieveValue(for key: Key) throws -> Value?
 
     /**
-     Add an update listener that should be notified when a value is updated from an external source, i.e. not via any of the functions on `Storage`.
+     Add a closure that will be called when a value is updated.
 
      - parameter key: The key to subscribe to changes to.
      - parameter updateListener: A closure to call when an update occurs.
-     - returns: An object that can be used to remove the update listener and cancel future updates.
+     - returns: An object that can be used to cancel the subscription.
      */
     func addUpdateListener(forKey key: Key, updateListener: @escaping UpdateListener) -> Cancellable
 }
