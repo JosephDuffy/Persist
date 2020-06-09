@@ -3,39 +3,59 @@ import Foundation
 import Combine
 #endif
 
+/**
+ An object that can store and retrieve values from a `Storage` instance, optionally passing values through a
+ transformer.
+ */
 public final class Persister<Value> {
 
+    /// The payload that will be passed to an update listener.
     public typealias UpdatePayload = Result<Value?, Error>
 
+    /// A closure that will be called when an update occurs.
     public typealias UpdateListener = (UpdatePayload) -> Void
 
+    /// A closure that can retrieve a value.
     public typealias ValueGetter = () throws -> Value?
 
+    /// A closure that can set a value.
     public typealias ValueSetter = (Value?) throws -> Void
 
-    public typealias AddUpdateListener = (@escaping (UpdatePayload) -> Void) -> Cancellable
+    /// A closure that can add an update listener.
+    public typealias AddUpdateListener = (@escaping UpdateListener) -> Cancellable
 
     #if canImport(Combine)
+    /// A publisher that will publish updates as they occur.
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
     public var updatesPublisher: AnyPublisher<UpdatePayload, Never> {
         return updatesSubject.eraseToAnyPublisher()
     }
     #endif
 
+    /// The closure that can be used to retrieve the value. This generally wraps the `Storage` and any
+    /// `Transformer`s that are used to retrieve the value.
     private let valueGetter: ValueGetter
 
+    /// The closure that can be used to store the value. This generally wraps the `Storage` and any
+    /// `Transformer`s that are used to store the value.
     private let valueSetter: ValueSetter
 
+    /// The cancellable that wraps the updates subscription added to the storage.
     private var storageUpdateListenerCancellable: Cancellable?
 
+    /// A collection of the update listeners that will be notified when a value changes. The key (a `UUID`)
+    /// is not exposed, but rather captured by the `Cancellable` that the caller retains.
     private var updateListeners: [UUID: UpdateListener] = [:]
 
     #if canImport(Combine)
+    /// The upates subject used to publish updates.
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
     private var updatesSubject: PassthroughSubject<UpdatePayload, Never> {
         return _updatesSubject as! PassthroughSubject<UpdatePayload, Never>
     }
 
+    /// An `Any` value that will always be a `PassthroughSubject<UpdatePayload, Never>`.
+    /// This is required because Swift does not support marking stored properties as `available`.
     private lazy var _updatesSubject: Any = {
         if #available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *) {
             return PassthroughSubject<UpdatePayload, Never>()
@@ -45,6 +65,16 @@ public final class Persister<Value> {
     }()
     #endif
 
+    /**
+     Create a new `Persister` instance.
+
+     - parameter valueGetter: The closure that will be called when the `retrieveValue()`
+                              function is called.
+     - parameter valueSetter: The closure that will be called when the `persist(_:)` function is
+                              called.
+     - parameter addUpdateListener: A closure that will be called immediately to add an update
+                                    listener.
+     */
     public init(
         valueGetter: @escaping ValueGetter,
         valueSetter: @escaping ValueSetter,
@@ -56,6 +86,13 @@ public final class Persister<Value> {
         subscribeToStorageUpdates(addUpdateListener: addUpdateListener)
     }
 
+    /**
+     Create a new `Persister` instance that uses the provided `Storage` to retrieve and store values
+     against the provided key.
+
+     - parameter key: The key to retrieve and store values against.
+     - parameter storage: The storage to use to retrieve and store vales.
+     */
     public convenience init<Storage: Persist.Storage>(
         key: Storage.Key,
         storedBy storage: Storage
@@ -90,6 +127,13 @@ public final class Persister<Value> {
         )
     }
 
+    /**
+     Create a new `Persister` instance that uses the provided `Storage` to retrieve and store values
+     against the provided key.
+
+     - parameter key: The key to retrieve and store values against.
+     - parameter storage: The storage to use to retrieve and store vales.
+     */
     public convenience init<Storage: Persist.Storage>(
         key: Storage.Key,
         storedBy storage: Storage
@@ -132,6 +176,16 @@ public final class Persister<Value> {
         )
     }
 
+    /**
+     Create a new `Persister` instance that uses the provided `Storage` to retrieve and store values
+     against the provided key.  Values will be passed through the `Transformer` before being stored to
+     and being retrieved from the storage.
+
+     - parameter key: The key to retrieve and store values against.
+     - parameter storage: The storage to use to retrieve and store vales.
+     - parameter transformer: The transformer to use to transform the value when retrieving and
+                              storing values.
+     */
     public convenience init<Storage: Persist.Storage, Transformer: Persist.Transformer>(
         key: Storage.Key,
         storedBy storage: Storage,
