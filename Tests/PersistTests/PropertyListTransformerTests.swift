@@ -34,13 +34,13 @@ final class PropertyListTransformerTests: XCTestCase {
         XCTAssertEqual(transformer.decoder.userInfo[customKey] as? String, customKeyValue)
     }
 
-    func testPropertyListTransformer() {
+    func testPropertyListTransformer() throws {
         struct StoredValue: Codable, Equatable {
             let property: String
         }
 
         let storage = InMemoryStorage<Data>()
-        var persisted = Persisted<StoredValue>(key: "test-key", storedBy: storage, transformer: PropertyListTransformer())
+        var persisted = Persisted<StoredValue?>(key: "test-key", storedBy: storage, transformer: PropertyListTransformer())
         let storedValue = StoredValue(property: "value")
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
@@ -50,8 +50,8 @@ final class PropertyListTransformerTests: XCTestCase {
             }
 
             switch result {
-            case .success(let newValue):
-                XCTAssertEqual(newValue, storedValue, "Value passed to update listener should be the new value")
+            case .success(let update):
+                XCTAssertEqual(update.value, storedValue, "Value passed to update listener should be the new value")
             case .failure(let error):
                 XCTFail("Update listener should be notified of a success. Got error: \(error)")
             }

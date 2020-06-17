@@ -32,6 +32,11 @@ final class FileManagerStorageTests: XCTestCase {
         _ = Persisted(key: testFilesDirectory, fileManager: .default)
         _ = Persisted(key: testFilesDirectory, storedBy: FileManager.default, transformer: MockTransformer())
         _ = Persisted(key: testFilesDirectory, fileManager: .default, transformer: MockTransformer())
+
+        _ = Persisted(key: testFilesDirectory, storedBy: FileManager.default, defaultValue: Data())
+        _ = Persisted(key: testFilesDirectory, fileManager: .default, defaultValue: Data())
+        _ = Persisted(key: testFilesDirectory, storedBy: FileManager.default, transformer: MockTransformer(), defaultValue: Data())
+        _ = Persisted(key: testFilesDirectory, fileManager: .default, transformer: MockTransformer(), defaultValue: Data())
     }
 
     func testPersisterFileManagerAPI() {
@@ -39,6 +44,11 @@ final class FileManagerStorageTests: XCTestCase {
         _ = Persister(key: testFilesDirectory, fileManager: .default)
         _ = Persister(key: testFilesDirectory, storedBy: FileManager.default, transformer: MockTransformer())
         _ = Persister(key: testFilesDirectory, fileManager: .default, transformer: MockTransformer())
+
+        _ = Persister(key: testFilesDirectory, storedBy: FileManager.default, defaultValue: Data())
+        _ = Persister(key: testFilesDirectory, fileManager: .default, defaultValue: Data())
+        _ = Persister(key: testFilesDirectory, storedBy: FileManager.default, transformer: MockTransformer(), defaultValue: Data())
+        _ = Persister(key: testFilesDirectory, fileManager: .default, transformer: MockTransformer(), defaultValue: Data())
     }
 
     func testSettingValue() {
@@ -95,8 +105,8 @@ final class FileManagerStorageTests: XCTestCase {
             }
 
             switch result {
-            case .success(let newValue):
-                XCTAssertEqual(newValue, writtenData, "Value passed to update listener should be new data when file has been updated on disk")
+            case .success(let update):
+                XCTAssertEqual(update.value, writtenData, "Value passed to update listener should be new data when file has been updated on disk")
             case .failure(let error):
                 XCTFail("Update listener should be notified of a success. Got error: \(error)")
             }
@@ -127,8 +137,9 @@ final class FileManagerStorageTests: XCTestCase {
             }
 
             switch result {
-            case .success(let newValue):
-                XCTAssertNil(newValue, "Value passed to update listener should be `nil` when file has been deleted on disk")
+            case .success(let update):
+                XCTAssertEqual(update.value, .none)
+                XCTAssertEqual(update, .removed, "Value passed to update listener should be `.removed` when file has been deleted on disk")
             case .failure(let error):
                 XCTFail("Update listener should be notified of a success. Got error: \(error)")
             }

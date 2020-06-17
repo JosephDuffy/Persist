@@ -5,7 +5,8 @@ import XCTest
 final class PersistedTests: XCTestCase {
 
     func testAnyAPI() {
-        _ = Persisted<String>(key: "test-key", storedBy: InMemoryStorage<Any>())
+        _ = Persisted<String?>(key: "test-key", storedBy: InMemoryStorage<Any>())
+        _ = Persisted<String>(key: "test-key", storedBy: InMemoryStorage<Any>(), defaultValue: "default")
     }
 
     func testAnyAPIWithTransformer() {
@@ -13,132 +14,752 @@ final class PersistedTests: XCTestCase {
             let property: String
         }
 
-        _ = Persisted<StoredValue>(key: "test-key", storedBy: InMemoryStorage<Any>(), transformer: JSONTransformer())
+        _ = Persisted<StoredValue?>(key: "test-key", storedBy: InMemoryStorage<Any>(), transformer: JSONTransformer())
+        _ = Persisted<StoredValue>(key: "test-key", storedBy: InMemoryStorage<Any>(), transformer: JSONTransformer(), defaultValue: StoredValue(property: "default"))
     }
 
-    func testWithTransformer() {
-        struct StoredValue: Codable, Equatable {
-            let property: String
+    func testStoredValueSameAsStorage() throws {
+        let defaultValue = "default-value"
+        let storage = InMemoryStorage<String>()
+        var persisted = Persisted(key: "test-key", storedBy: storage, defaultValue: defaultValue)
+        XCTAssertEqual(persisted.wrappedValue, defaultValue, "`wrappedValue` should return the default value when a value has not been set")
+
+        let newValue = "new-value"
+
+        let callsFirstUpdateListenerExpectationTwice = expectation(description: "Calls first update listener twice")
+        callsFirstUpdateListenerExpectationTwice.expectedFulfillmentCount = 2
+        var callCount = 0
+        let firstCancellable = persisted.projectedValue.addUpdateListener() { result in
+            defer {
+                callsFirstUpdateListenerExpectationTwice.fulfill()
+                callCount += 1
+            }
+
+            switch result {
+            case .success(let update):
+                if callCount == 0 {
+                    XCTAssertEqual(update, .persisted(newValue), "Update listener should receive `persisted` update with new value")
+                } else if callCount == 1 {
+                    XCTAssertEqual(update, .removed, "Update listener should receive `removed` update")
+                }
+            case .failure:
+                XCTFail("Update should not fail")
+            }
+        }
+        _ = firstCancellable
+
+        let callsSecondUpdateListenerExpectation = expectation(description: "Calls second update listener")
+        let secondCancellable = persisted.projectedValue.addUpdateListener() { newValue in
+            defer {
+                callsSecondUpdateListenerExpectation.fulfill()
+            }
+
+            switch newValue {
+            case .success(let update):
+                XCTAssertEqual(update, .persisted("new-value"), "Update listener should receive `persisted` update with new value")
+            case .failure:
+                XCTFail("Update should not fail")
+            }
         }
 
+        persisted.wrappedValue = newValue
+        XCTAssertEqual(persisted.wrappedValue, newValue, "`wrappedValue` should return the value that been set via `wrappedValue`")
+
+        secondCancellable.cancel()
+
+        try persisted.projectedValue.removeValue()
+
+        XCTAssertEqual(persisted.wrappedValue, persisted.projectedValue.defaultValue, "`wrappedValue` should return the default value when a value has been removed")
+
+        waitForExpectations(timeout: 0.1, handler: nil)
+    }
+
+    func testStoredOptionalValueSameAsStorage() throws {
+        let key = "test-key"
+        let storage = InMemoryStorage<String>()
+        var persisted = Persisted<String?>(key: key, storedBy: storage)
+        XCTAssertNil(persisted.wrappedValue, "`wrappedValue` should return `nil` when a value has not been set")
+
+        let newValue = "new-value"
+
+        let callsFirstUpdateListenerExpectationTwice = expectation(description: "Calls first update listener twice")
+        callsFirstUpdateListenerExpectationTwice.expectedFulfillmentCount = 4
+        var callCount = 0
+        let firstCancellable = persisted.projectedValue.addUpdateListener() { result in
+            defer {
+                callsFirstUpdateListenerExpectationTwice.fulfill()
+                callCount += 1
+            }
+
+            switch result {
+            case .success(let update):
+                if callCount % 2 == 0 {
+                    XCTAssertEqual(update, .persisted(newValue), "Update listener should receive `persisted` update with new value")
+                } else {
+                    XCTAssertEqual(update, .removed, "Update listener should receive `removed` update")
+                }
+            case .failure:
+                XCTFail("Update should not fail")
+            }
+        }
+        _ = firstCancellable
+
+        let callsSecondUpdateListenerExpectation = expectation(description: "Calls second update listener")
+        let secondCancellable = persisted.projectedValue.addUpdateListener() { newValue in
+            defer {
+                callsSecondUpdateListenerExpectation.fulfill()
+            }
+
+            switch newValue {
+            case .success(let update):
+                XCTAssertEqual(update, .persisted("new-value"), "Update listener should receive `persisted` update with new value")
+            case .failure:
+                XCTFail("Update should not fail")
+            }
+        }
+
+        persisted.wrappedValue = newValue
+        XCTAssertEqual(persisted.wrappedValue, newValue, "`wrappedValue` should return the value that been set via `wrappedValue`")
+
+        secondCancellable.cancel()
+
+        persisted.wrappedValue = nil
+
+        XCTAssertNil(persisted.wrappedValue, "`wrappedValue` should return `nil` when the value has been set to `nil`")
+
+        storage.storeValue(newValue, key: key)
+
+        XCTAssertEqual(persisted.wrappedValue, newValue, "`wrappedValue` should return the value that been set via the storage")
+
+        try persisted.projectedValue.removeValue()
+
+        XCTAssertNil(persisted.wrappedValue, "`wrappedValue` should return `nil` when the value has been removed")
+
+        waitForExpectations(timeout: 0.1, handler: nil)
+    }
+
+    func testNonOptionalValueWithAnyStorage() throws {
+        let defaultValue = "default-value"
+        let storage = InMemoryStorage<Any>()
+        var persisted = Persisted(key: "test-key", storedBy: storage, defaultValue: defaultValue)
+        XCTAssertEqual(persisted.wrappedValue, defaultValue, "`wrappedValue` should return the default value when a value has not been set")
+
+        let newValue = "new-value"
+
+        let callsFirstUpdateListenerExpectationTwice = expectation(description: "Calls first update listener twice")
+        callsFirstUpdateListenerExpectationTwice.expectedFulfillmentCount = 2
+        var callCount = 0
+        let firstCancellable = persisted.projectedValue.addUpdateListener() { result in
+            defer {
+                callsFirstUpdateListenerExpectationTwice.fulfill()
+                callCount += 1
+            }
+
+            switch result {
+            case .success(let update):
+                if callCount == 0 {
+                    XCTAssertEqual(update, .persisted(newValue), "Update listener should receive `persisted` update with new value")
+                } else if callCount == 1 {
+                    XCTAssertEqual(update, .removed, "Update listener should receive `removed` update")
+                }
+            case .failure:
+                XCTFail("Update should not fail")
+            }
+        }
+        _ = firstCancellable
+
+        let callsSecondUpdateListenerExpectation = expectation(description: "Calls second update listener")
+        let secondCancellable = persisted.projectedValue.addUpdateListener() { newValue in
+            defer {
+                callsSecondUpdateListenerExpectation.fulfill()
+            }
+
+            switch newValue {
+            case .success(let update):
+                XCTAssertEqual(update, .persisted("new-value"), "Update listener should receive `persisted` update with new value")
+            case .failure:
+                XCTFail("Update should not fail")
+            }
+        }
+
+        persisted.wrappedValue = newValue
+        XCTAssertEqual(persisted.wrappedValue, newValue, "`wrappedValue` should return the value that been set via `wrappedValue`")
+
+        secondCancellable.cancel()
+
+        try persisted.projectedValue.removeValue()
+
+        XCTAssertEqual(persisted.wrappedValue, persisted.projectedValue.defaultValue, "`wrappedValue` should return the default value when a value has been removed")
+
+        waitForExpectations(timeout: 0.1, handler: nil)
+    }
+
+    func testOptionalValueWithAnyStorage() throws {
+        let key = "test-key"
+        let storage = InMemoryStorage<Any>()
+        var persisted = Persisted<String?>(key: key, storedBy: storage)
+        XCTAssertNil(persisted.wrappedValue, "`wrappedValue` should return `nil` when a value has not been set")
+
+        let newValue = "new-value"
+
+        let callsFirstUpdateListenerExpectationTwice = expectation(description: "Calls first update listener twice")
+        callsFirstUpdateListenerExpectationTwice.expectedFulfillmentCount = 4
+        var callCount = 0
+        let firstCancellable = persisted.projectedValue.addUpdateListener() { result in
+            defer {
+                callsFirstUpdateListenerExpectationTwice.fulfill()
+                callCount += 1
+            }
+
+            switch result {
+            case .success(let update):
+                if callCount % 2 == 0 {
+                    XCTAssertEqual(update, .persisted(newValue), "Update listener should receive `persisted` update with new value")
+                } else {
+                    XCTAssertEqual(update, .removed, "Update listener should receive `removed` update")
+                }
+            case .failure:
+                XCTFail("Update should not fail")
+            }
+        }
+        _ = firstCancellable
+
+        let callsSecondUpdateListenerExpectation = expectation(description: "Calls second update listener")
+        let secondCancellable = persisted.projectedValue.addUpdateListener() { newValue in
+            defer {
+                callsSecondUpdateListenerExpectation.fulfill()
+            }
+
+            switch newValue {
+            case .success(let update):
+                XCTAssertEqual(update, .persisted("new-value"), "Update listener should receive `persisted` update with new value")
+            case .failure:
+                XCTFail("Update should not fail")
+            }
+        }
+
+        persisted.wrappedValue = newValue
+        XCTAssertEqual(persisted.wrappedValue, newValue, "`wrappedValue` should return the value that been set via `wrappedValue`")
+
+        secondCancellable.cancel()
+
+        persisted.wrappedValue = nil
+
+        XCTAssertNil(persisted.wrappedValue, "`wrappedValue` should return `nil` when the value has been set to `nil`")
+
+        storage.storeValue(newValue, key: key)
+
+        XCTAssertEqual(persisted.wrappedValue, newValue, "`wrappedValue` should return the value that been set via the storage")
+
+        try persisted.projectedValue.removeValue()
+
+        XCTAssertNil(persisted.wrappedValue, "`wrappedValue` should return `nil` when the value has been removed")
+
+        waitForExpectations(timeout: 0.1, handler: nil)
+    }
+
+    func testNonOptionalValueWithAnyStorageDifferentStoredValueType() throws {
+        let key = "test-key"
+        let defaultValue = "default-value"
+        let storage = InMemoryStorage<Any>()
+        let storedValue = 123
+        let persisted = Persisted(key: key, storedBy: storage, defaultValue: defaultValue)
+
+        let callsUpdateListenerExpectation = expectation(description: "Calls first update listener")
+        let cancellable = persisted.projectedValue.addUpdateListener() { result in
+            defer {
+                callsUpdateListenerExpectation.fulfill()
+            }
+
+            switch result {
+            case .failure(PersistenceError.unexpectedValueType(let value, let expected)):
+                XCTAssertEqual(value as? Int, storedValue)
+                XCTAssert(expected == String.self)
+            default:
+                XCTFail()
+            }
+        }
+        _ = cancellable
+
+        storage.storeValue(storedValue, key: key)
+        XCTAssertEqual(persisted.wrappedValue, defaultValue, "`wrappedValue` should return default value when underlying value is of a different type")
+
+        XCTAssertThrowsError(try persisted.projectedValue.retrieveValueOrThrow(), "Retrieving a value with a different type should throw") { error in
+            switch error {
+            case PersistenceError.unexpectedValueType(let value, let expected):
+                XCTAssertEqual(value as? Int, storedValue)
+                XCTAssert(expected == String.self)
+            default:
+                XCTFail()
+            }
+        }
+
+        waitForExpectations(timeout: 0.1, handler: nil)
+    }
+
+    func testOptionalValueWithAnyStorageDifferentStoredValueType() throws {
+        let key = "test-key"
+        let storage = InMemoryStorage<Any>()
+        let storedValue = 123
+        let persisted = Persisted<String?>(key: key, storedBy: storage)
+
+        let callsUpdateListenerExpectation = expectation(description: "Calls first update listener")
+        let cancellable = persisted.projectedValue.addUpdateListener() { result in
+            defer {
+                callsUpdateListenerExpectation.fulfill()
+            }
+
+            switch result {
+            case .failure(PersistenceError.unexpectedValueType(let value, let expected)):
+                XCTAssertEqual(value as? Int, storedValue)
+                XCTAssert(expected == String.self)
+            default:
+                XCTFail()
+            }
+        }
+        _ = cancellable
+
+        storage.storeValue(storedValue, key: key)
+        XCTAssertNil(persisted.wrappedValue, "`wrappedValue` should return `nil` when underlying value is of a different type")
+
+        XCTAssertThrowsError(try persisted.projectedValue.retrieveValueOrThrow(), "Retrieving a value with a different type should throw") { error in
+            switch error {
+            case PersistenceError.unexpectedValueType(let value, let expected):
+                XCTAssertEqual(value as? Int, storedValue)
+                XCTAssert(expected == String.self)
+            default:
+                XCTFail()
+            }
+        }
+
+        waitForExpectations(timeout: 0.1, handler: nil)
+    }
+
+    func testNonOptionalValueWithAnyStorageAndTransformer() throws {
+        let defaultValue = "default-value"
+        let storage = InMemoryStorage<Any>()
+        let transformer = JSONTransformer<String>()
+        var persisted = Persisted(key: "test-key", storedBy: storage, transformer: transformer, defaultValue: defaultValue)
+        XCTAssertEqual(persisted.wrappedValue, defaultValue, "`wrappedValue` should return the default value when a value has not been set")
+
+        let callsFirstUpdateListenerExpectationTwice = expectation(description: "Calls first update listener twice")
+        callsFirstUpdateListenerExpectationTwice.expectedFulfillmentCount = 2
+        var callCount = 0
+        let firstCancellable = persisted.projectedValue.addUpdateListener() { newValue in
+            defer {
+                callsFirstUpdateListenerExpectationTwice.fulfill()
+                callCount += 1
+            }
+
+            switch newValue {
+            case .success(let update):
+                if callCount == 0 {
+                    XCTAssertEqual(update, .persisted("new-value"), "Update listener should receive `persisted` update with new value")
+                } else if callCount == 1 {
+                    XCTAssertEqual(update, .removed, "Update listener should receive `removed` update")
+                }
+            case .failure:
+                XCTFail("Update should not fail")
+            }
+        }
+        _ = firstCancellable
+
+        let callsSecondUpdateListenerExpectation = expectation(description: "Calls second update listener")
+        let secondCancellable = persisted.projectedValue.addUpdateListener() { newValue in
+            defer {
+                callsSecondUpdateListenerExpectation.fulfill()
+            }
+
+            switch newValue {
+            case .success(let update):
+                XCTAssertEqual(update, .persisted("new-value"), "Update listener should receive `persisted` update with new value")
+            case .failure:
+                XCTFail("Update should not fail")
+            }
+        }
+
+        let newValue = "new-value"
+        persisted.wrappedValue = newValue
+        XCTAssertEqual(persisted.wrappedValue, newValue, "`wrappedValue` should return the value that been set via `wrappedValue`")
+        XCTAssertTrue(storage.retrieveValue(for: "test-key") is Data, "Stored value should be transformer output")
+
+        secondCancellable.cancel()
+
+        try persisted.projectedValue.removeValue()
+
+        XCTAssertEqual(persisted.wrappedValue, persisted.projectedValue.defaultValue, "`wrappedValue` should return the default value when a value has been removed")
+
+        waitForExpectations(timeout: 0.1, handler: nil)
+    }
+
+    func testNonOptionalValueWithAnyStorageAndTransformerDifferentStoredValueType() throws {
+        let key = "test-key"
+        let storage = InMemoryStorage<Any>()
+        let transformer = JSONTransformer<String>()
+        let defaultValue = "default-value"
+        let storedValue = 123
+        let persisted = Persisted<String>(key: key, storedBy: storage, transformer: transformer, defaultValue: defaultValue)
+
+        let callsUpdateListenerExpectation = expectation(description: "Calls first update listener")
+        let cancellable = persisted.projectedValue.addUpdateListener() { result in
+            defer {
+                callsUpdateListenerExpectation.fulfill()
+            }
+
+            switch result {
+            case .failure(PersistenceError.unexpectedValueType(let value, let expected)):
+                XCTAssertEqual(value as? Int, storedValue)
+                XCTAssert(expected == Data.self, "Should expect output of formatter")
+            default:
+                XCTFail()
+            }
+        }
+        _ = cancellable
+
+        storage.storeValue(storedValue, key: key)
+        XCTAssertEqual(persisted.wrappedValue, defaultValue, "`wrappedValue` should return default value when underlying value is of a different type")
+
+        XCTAssertThrowsError(try persisted.projectedValue.retrieveValueOrThrow(), "Retrieving a value with a different type should throw") { error in
+            switch error {
+            case PersistenceError.unexpectedValueType(let value, let expected):
+                XCTAssertEqual(value as? Int, storedValue)
+                XCTAssert(expected == Data.self, "Should expect output of formatter")
+            default:
+                XCTFail()
+            }
+        }
+
+        waitForExpectations(timeout: 0.1, handler: nil)
+    }
+
+    func testNonOptionalValueWithAnyStorageAndTransformerThrowingError() throws {
+        let key = "test-key"
+        let storage = InMemoryStorage<Any>()
+        let transformer = MockTransformer<String>()
+        let errorToThrow = NSError(domain: "tests", code: -1, userInfo: nil)
+        transformer.errorToThrow = errorToThrow
+        let defaultValue = "default-value"
+        let storedValue = "stored-value"
+        let persisted = Persisted<String>(key: key, storedBy: storage, transformer: transformer, defaultValue: defaultValue)
+
+        let callsUpdateListenerExpectation = expectation(description: "Calls first update listener")
+        let cancellable = persisted.projectedValue.addUpdateListener() { result in
+            defer {
+                callsUpdateListenerExpectation.fulfill()
+            }
+
+            switch result {
+            case .failure(let error):
+                XCTAssertEqual(error as NSError, errorToThrow, "Should pass error thrown by transformer")
+            default:
+                XCTFail()
+            }
+        }
+        _ = cancellable
+
+        storage.storeValue(storedValue, key: key)
+        XCTAssertEqual(persisted.wrappedValue, defaultValue, "`wrappedValue` should return default value when underlying value is of a different type")
+
+        XCTAssertThrowsError(try persisted.projectedValue.retrieveValueOrThrow(), "Retrieving a value with a different type should throw") { error in
+            XCTAssertEqual(error as NSError, errorToThrow, "Should pass error thrown by transformer")
+        }
+
+        waitForExpectations(timeout: 0.1, handler: nil)
+    }
+
+    func testOptionalValueWithAnyStorageAndTransformerDifferentStoredValueType() throws {
+        let key = "test-key"
+        let storage = InMemoryStorage<Any>()
+        let transformer = JSONTransformer<String>()
+        let storedValue = 123
+        let persisted = Persisted<String?>(key: key, storedBy: storage, transformer: transformer)
+
+        let callsUpdateListenerExpectation = expectation(description: "Calls first update listener")
+        let cancellable = persisted.projectedValue.addUpdateListener() { result in
+            defer {
+                callsUpdateListenerExpectation.fulfill()
+            }
+
+            switch result {
+            case .failure(PersistenceError.unexpectedValueType(let value, let expected)):
+                XCTAssertEqual(value as? Int, storedValue)
+                XCTAssert(expected == Data.self, "Should expect output of formatter")
+            default:
+                XCTFail()
+            }
+        }
+        _ = cancellable
+
+        storage.storeValue(storedValue, key: key)
+        XCTAssertNil(persisted.wrappedValue, "`wrappedValue` should return `nil` when transformer throws an error")
+
+        XCTAssertThrowsError(try persisted.projectedValue.retrieveValueOrThrow(), "Retrieving a value with a different type should throw") { error in
+            switch error {
+            case PersistenceError.unexpectedValueType(let value, let expected):
+                XCTAssertEqual(value as? Int, storedValue)
+                XCTAssert(expected == Data.self, "Should expect output of formatter")
+            default:
+                XCTFail()
+            }
+        }
+
+        waitForExpectations(timeout: 0.1, handler: nil)
+    }
+
+    func testOptionalValueWithAnyStorageAndTransformerThrowingError() throws {
+        let key = "test-key"
+        let storage = InMemoryStorage<Any>()
+        let transformer = MockTransformer<String>()
+        let errorToThrow = NSError(domain: "tests", code: -1, userInfo: nil)
+        transformer.errorToThrow = errorToThrow
+        let storedValue = "stored-value"
+        let persisted = Persisted<String?>(key: key, storedBy: storage, transformer: transformer)
+
+        let callsUpdateListenerExpectation = expectation(description: "Calls first update listener")
+        let cancellable = persisted.projectedValue.addUpdateListener() { result in
+            defer {
+                callsUpdateListenerExpectation.fulfill()
+            }
+
+            switch result {
+            case .failure(let error):
+                XCTAssertEqual(error as NSError, errorToThrow, "Should pass error thrown by transformer")
+            default:
+                XCTFail()
+            }
+        }
+        _ = cancellable
+
+        storage.storeValue(storedValue, key: key)
+        XCTAssertNil(persisted.wrappedValue, "`wrappedValue` should return be `nil` when transformer throws an error")
+
+        XCTAssertThrowsError(try persisted.projectedValue.retrieveValueOrThrow(), "Retrieving a value with a different type should throw") { error in
+            XCTAssertEqual(error as NSError, errorToThrow, "Should pass error thrown by transformer")
+        }
+
+        waitForExpectations(timeout: 0.1, handler: nil)
+    }
+
+    func testOptionalValueWithAnyStorageAndTransformer() throws {
+        let storage = InMemoryStorage<Any>()
+        let transformer = JSONTransformer<String>()
+        var persisted = Persisted<String?>(key: "test-key", storedBy: storage, transformer: transformer)
+        XCTAssertNil(persisted.wrappedValue, "`wrappedValue` should return `nil` when a value has not been set")
+
+        let newValue = "new-value"
+
+        let callsFirstUpdateListenerExpectationTwice = expectation(description: "Calls first update listener twice")
+        callsFirstUpdateListenerExpectationTwice.expectedFulfillmentCount = 4
+        var callCount = 0
+        let firstCancellable = persisted.projectedValue.addUpdateListener() { result in
+            defer {
+                callsFirstUpdateListenerExpectationTwice.fulfill()
+                callCount += 1
+            }
+
+            switch result {
+            case .success(let update):
+                if callCount % 2 == 0 {
+                    XCTAssertEqual(update, .persisted("new-value"), "Update listener should receive `persisted` update with new value")
+                } else  {
+                    XCTAssertEqual(update, .removed, "Update listener should receive `removed` update")
+                }
+            case .failure:
+                XCTFail("Update should not fail")
+            }
+        }
+        _ = firstCancellable
+
+        let callsSecondUpdateListenerExpectation = expectation(description: "Calls second update listener")
+        let secondCancellable = persisted.projectedValue.addUpdateListener() { newValue in
+            defer {
+                callsSecondUpdateListenerExpectation.fulfill()
+            }
+
+            switch newValue {
+            case .success(let update):
+                XCTAssertEqual(update, .persisted("new-value"), "Update listener should receive `persisted` update with new value")
+            case .failure:
+                XCTFail("Update should not fail")
+            }
+        }
+
+        persisted.wrappedValue = newValue
+        XCTAssertEqual(persisted.wrappedValue, newValue, "`wrappedValue` should return the value that been set via `wrappedValue`")
+        XCTAssertTrue(storage.retrieveValue(for: "test-key") is Data, "Stored value should be transformer output")
+
+        secondCancellable.cancel()
+
+        persisted.wrappedValue = nil
+
+        XCTAssertNil(persisted.wrappedValue, "`wrappedValue` should return `nil` when `wrappedValue` has been set to `nil`")
+
+        persisted.wrappedValue = newValue
+
+        try persisted.projectedValue.removeValue()
+
+        XCTAssertNil(persisted.wrappedValue, "`wrappedValue` should return `nil` when a value has been removed")
+
+        waitForExpectations(timeout: 0.1, handler: nil)
+    }
+
+    func testNonOptionalValueWithTransformer() throws {
+        let defaultValue = "default-value"
         let storage = InMemoryStorage<Data>()
-        var persisted = Persisted<StoredValue>(key: "test-key", storedBy: storage, transformer: JSONTransformer())
-        let storedValue = StoredValue(property: "value")
+        let transformer = JSONTransformer<String>()
+        var persisted = Persisted(key: "test-key", storedBy: storage, transformer: transformer, defaultValue: defaultValue)
+        XCTAssertEqual(persisted.wrappedValue, defaultValue, "`wrappedValue` should return the default value when a value has not been set")
 
-        let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
-        let cancellable = persisted.projectedValue.addUpdateListener { result in
+        let callsFirstUpdateListenerExpectationTwice = expectation(description: "Calls first update listener twice")
+        callsFirstUpdateListenerExpectationTwice.expectedFulfillmentCount = 2
+        var callCount = 0
+        let firstCancellable = persisted.projectedValue.addUpdateListener() { newValue in
             defer {
-                callsUpdateListenerExpectation.fulfill()
+                callsFirstUpdateListenerExpectationTwice.fulfill()
+                callCount += 1
             }
 
-            switch result {
-            case .success(let newValue):
-                XCTAssertEqual(newValue, storedValue, "Value passed to update listener should be the new value")
-            case .failure(let error):
-                XCTFail("Update listener should be notified of a success. Got error: \(error)")
+            switch newValue {
+            case .success(let update):
+                if callCount == 0 {
+                    XCTAssertEqual(update, .persisted("new-value"), "Update listener should receive `persisted` update with new value")
+                } else if callCount == 1 {
+                    XCTAssertEqual(update, .removed, "Update listener should receive `removed` update")
+                }
+            case .failure:
+                XCTFail("Update should not fail")
             }
         }
-        _ = cancellable
+        _ = firstCancellable
 
-        persisted.wrappedValue = storedValue
-        XCTAssertEqual(persisted.wrappedValue, storedValue, "Should return untransformed value")
+        let callsSecondUpdateListenerExpectation = expectation(description: "Calls second update listener")
+        let secondCancellable = persisted.projectedValue.addUpdateListener() { newValue in
+            defer {
+                callsSecondUpdateListenerExpectation.fulfill()
+            }
 
-        waitForExpectations(timeout: 1, handler: nil)
+            switch newValue {
+            case .success(let update):
+                XCTAssertEqual(update, .persisted("new-value"), "Update listener should receive `persisted` update with new value")
+            case .failure:
+                XCTFail("Update should not fail")
+            }
+        }
+
+        let newValue = "new-value"
+        persisted.wrappedValue = newValue
+        XCTAssertEqual(persisted.wrappedValue, newValue, "`wrappedValue` should return the value that been set via `wrappedValue`")
+
+        secondCancellable.cancel()
+
+        try persisted.projectedValue.removeValue()
+
+        XCTAssertEqual(persisted.wrappedValue, persisted.projectedValue.defaultValue, "`wrappedValue` should return the default value when a value has been removed")
+
+        waitForExpectations(timeout: 0.1, handler: nil)
     }
 
-    func testSettingWrappedValue() throws {
-        struct StoredValue: Codable, Equatable {
-            let property: String
-        }
-        var persisted = Persisted<StoredValue>(key: "test-key", storedBy: InMemoryStorage())
-        let storedValue = StoredValue(property: "value")
+    func testNonOptionalValueWithThrowingTransformer() {
+        let key = "test-key"
+        let storage = InMemoryStorage<String>()
+        let transformer = MockTransformer<String>()
+        let errorToThrow = NSError(domain: "tests", code: -1, userInfo: nil)
+        transformer.errorToThrow = errorToThrow
+        let storedValue = "stored-value"
+        let defaultValue = "default-value"
+        let persisted = Persisted<String>(key: key, storedBy: storage, transformer: transformer, defaultValue: defaultValue)
 
-        let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
-        let cancellable = persisted.projectedValue.addUpdateListener { result in
+        let callsUpdateListenerExpectation = expectation(description: "Calls first update listener")
+        let cancellable = persisted.projectedValue.addUpdateListener() { result in
             defer {
                 callsUpdateListenerExpectation.fulfill()
             }
 
             switch result {
-            case .success(let newValue):
-                XCTAssertEqual(newValue, storedValue, "Value passed to update listener should be the new value")
             case .failure(let error):
-                XCTFail("Update listener should be notified of a success. Got error: \(error)")
+                XCTAssertEqual(error as NSError, errorToThrow, "Should pass error thrown by transformer")
+            default:
+                XCTFail()
             }
         }
         _ = cancellable
 
-        persisted.wrappedValue = storedValue
-        XCTAssertEqual(persisted.wrappedValue, storedValue, "Should return untransformed value")
+        storage.storeValue(storedValue, key: key)
+        XCTAssertEqual(persisted.wrappedValue, defaultValue, "`wrappedValue` should return default value when transformer throws an error")
 
-        waitForExpectations(timeout: 1, handler: nil)
+        XCTAssertThrowsError(try persisted.projectedValue.retrieveValueOrThrow(), "Retrieving a value with a different type should throw") { error in
+            XCTAssertEqual(error as NSError, errorToThrow, "Should pass error thrown by transformer")
+        }
+
+        waitForExpectations(timeout: 0.1, handler: nil)
     }
 
-    func testSettingWrappedValueToNil() throws {
-        struct StoredValue: Codable, Equatable {
-            let property: String
-        }
-        var persisted = Persisted<StoredValue>(key: "test-key", storedBy: InMemoryStorage())
-        let storedValue = StoredValue(property: "value")
-        persisted.wrappedValue = storedValue
+    func testOptionalValueWithTransformer() throws {
+        let storage = InMemoryStorage<Data>()
+        let transformer = JSONTransformer<String>()
+        var persisted = Persisted<String?>(key: "test-key", storedBy: storage, transformer: transformer)
+        XCTAssertNil(persisted.wrappedValue, "`wrappedValue` should return `nil` when a value has not been set")
 
-        let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
-        let cancellable = persisted.projectedValue.addUpdateListener { result in
+        let callsFirstUpdateListenerExpectationTwice = expectation(description: "Calls first update listener twice")
+        callsFirstUpdateListenerExpectationTwice.expectedFulfillmentCount = 4
+        var callCount = 0
+        let firstCancellable = persisted.projectedValue.addUpdateListener() { newValue in
             defer {
-                callsUpdateListenerExpectation.fulfill()
+                callsFirstUpdateListenerExpectationTwice.fulfill()
+                callCount += 1
             }
 
-            switch result {
-            case .success(let newValue):
-                XCTAssertNil(newValue, "Value passed to update listener should be nil to indicate delete")
-            case .failure(let error):
-                XCTFail("Update listener should be notified of a success. Got error: \(error)")
+            switch newValue {
+            case .success(let update):
+                if callCount % 2 == 0 {
+                    XCTAssertEqual(update, .persisted("new-value"), "Update listener should receive `persisted` update with new value")
+                } else {
+                    XCTAssertEqual(update, .removed, "Update listener should receive `removed` update")
+                }
+            case .failure:
+                XCTFail("Update should not fail")
             }
         }
-        _ = cancellable
+        _ = firstCancellable
+
+        let callsSecondUpdateListenerExpectation = expectation(description: "Calls second update listener")
+        let secondCancellable = persisted.projectedValue.addUpdateListener() { newValue in
+            defer {
+                callsSecondUpdateListenerExpectation.fulfill()
+            }
+
+            switch newValue {
+            case .success(let update):
+                XCTAssertEqual(update, .persisted("new-value"), "Update listener should receive `persisted` update with new value")
+            case .failure:
+                XCTFail("Update should not fail")
+            }
+        }
+
+        let newValue = "new-value"
+        persisted.wrappedValue = newValue
+        XCTAssertEqual(persisted.wrappedValue, newValue, "`wrappedValue` should return the value that been set via `wrappedValue`")
+
+        secondCancellable.cancel()
 
         persisted.wrappedValue = nil
 
-        XCTAssertNil(persisted.wrappedValue, "Should return nil when value has been deleted")
+        XCTAssertNil(persisted.wrappedValue, "`wrappedValue` should return `nil` when `wrappedValue` has been set to `nil`")
 
-        waitForExpectations(timeout: 1, handler: nil)
-    }
+        persisted.wrappedValue = newValue
 
-    func testSettingWrappedValueToNilWithTransformer() throws {
-        struct StoredValue: Codable, Equatable {
-            let property: String
-        }
-        var persisted = Persisted<StoredValue>(key: "test-key", storedBy: InMemoryStorage(), transformer: JSONTransformer())
-        let storedValue = StoredValue(property: "value")
-        persisted.wrappedValue = storedValue
+        try persisted.projectedValue.removeValue()
 
-        let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
-        let cancellable = persisted.projectedValue.addUpdateListener { result in
-            defer {
-                callsUpdateListenerExpectation.fulfill()
-            }
+        XCTAssertNil(persisted.wrappedValue, "`wrappedValue` should return `nil` when a value has been removed")
 
-            switch result {
-            case .success(let newValue):
-                XCTAssertNil(newValue, "Value passed to update listener should be nil to indicate delete")
-            case .failure(let error):
-                XCTFail("Update listener should be notified of a success. Got error: \(error)")
-            }
-        }
-        _ = cancellable
-
-        persisted.wrappedValue = nil
-
-        XCTAssertNil(persisted.wrappedValue, "Should return nil when value has been deleted")
-
-        waitForExpectations(timeout: 1, handler: nil)
+        waitForExpectations(timeout: 0.1, handler: nil)
     }
 
     func testAnyStorageSettingWithDifferentStoredValueType() throws {
         let key = "key"
         let actualValue = "test"
         let storage = InMemoryStorage<Any>()
-        let persister = Persister<Int>(key: key, storedBy: storage)
+        let persister = Persister<Int?>(key: key, storedBy: storage)
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
         let cancellable = persister.addUpdateListener() { newValue in
@@ -158,7 +779,7 @@ final class PersistedTests: XCTestCase {
 
         storage.storeValue(actualValue, key: "key")
 
-        XCTAssertThrowsError(try persister.retrieveValue(), "Retrieving a value with a different type should throw") { error in
+        XCTAssertThrowsError(try persister.retrieveValueOrThrow(), "Retrieving a value with a different type should throw") { error in
             switch error {
             case PersistenceError.unexpectedValueType(let value, let expected):
                 XCTAssertEqual(value as? String, actualValue)
@@ -175,7 +796,7 @@ final class PersistedTests: XCTestCase {
         let key = "key"
         let actualValue = "test"
         let storage = InMemoryStorage<Any>()
-        let persister = Persister<Int>(key: key, storedBy: storage, transformer: JSONTransformer())
+        let persister = Persister<Int?>(key: key, storedBy: storage, transformer: JSONTransformer())
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
         let cancellable = persister.addUpdateListener() { newValue in
@@ -195,7 +816,7 @@ final class PersistedTests: XCTestCase {
 
         storage.storeValue(actualValue, key: "key")
 
-        XCTAssertThrowsError(try persister.retrieveValue(), "Retrieving a value with a different type should throw") { error in
+        XCTAssertThrowsError(try persister.retrieveValueOrThrow(), "Retrieving a value with a different type should throw") { error in
             switch error {
             case PersistenceError.unexpectedValueType(let value, let expected):
                 XCTAssertEqual(value as? String, actualValue)
@@ -213,7 +834,7 @@ final class PersistedTests: XCTestCase {
         let actualValue = "test"
         let storage = InMemoryStorage<Any>()
         let transformer = MockTransformer<Int>()
-        let persister = Persister<Int>(key: key, storedBy: storage, transformer: transformer)
+        let persister = Persister<Int?>(key: key, storedBy: storage, transformer: transformer)
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
         let cancellable = persister.addUpdateListener() { newValue in
@@ -233,7 +854,7 @@ final class PersistedTests: XCTestCase {
 
         storage.storeValue(actualValue, key: key)
 
-        XCTAssertThrowsError(try persister.retrieveValue(), "Retrieving a value with a different type should throw") { error in
+        XCTAssertThrowsError(try persister.retrieveValueOrThrow(), "Retrieving a value with a different type should throw") { error in
             switch error {
             case PersistenceError.unexpectedValueType(let value, let expected):
                 XCTAssertEqual(value as? String, actualValue)
@@ -246,182 +867,12 @@ final class PersistedTests: XCTestCase {
         waitForExpectations(timeout: 0.1)
     }
 
-    func testAnyStorageSettingWithTransformerError() {
-        let key = "key"
-        let actualValue = "test"
-        let storage = InMemoryStorage<Any>()
-        let transformer = MockTransformer<String>()
-        let transformerError = NSError(domain: "persist-tests-domain", code: 1, userInfo: nil)
-        let persister = Persister<String>(key: key, storedBy: storage, transformer: transformer)
-
-        transformer.errorToThrow = transformerError
-
-        XCTAssertThrowsError(try persister.persist(actualValue), "Setting a value when the transformer throws should throw") { error in
-            XCTAssertEqual(error as NSError, transformerError, "Should throw error thrown by transformer")
-        }
-    }
-
-    func testAnyStorageRetievingWithTransformerError() throws {
-        let key = "key"
-        let storedValue = "test"
-        let storage = InMemoryStorage<Any>()
-        let transformer = MockTransformer<String>()
-        let transformerError = NSError(domain: "persist-tests-domain", code: 1, userInfo: nil)
-        let persister = Persister<String>(key: key, storedBy: storage, transformer: transformer)
-
-        try persister.persist(storedValue)
-        transformer.errorToThrow = transformerError
-
-        XCTAssertThrowsError(try persister.retrieveValue(), "Retrieving a value when the transformer throws should throw") { error in
-            XCTAssertEqual(error as NSError, transformerError, "Should throw error thrown by transformer")
-        }
-    }
-
-    func testAnyStorageUpdateListenerTransformerError() {
-        let key = "key"
-        let storedValue = "test"
-        let storage = InMemoryStorage<Any>()
-        let transformer = MockTransformer<String>()
-        let transformerError = NSError(domain: "persist-tests-domain", code: 1, userInfo: nil)
-        let persister = Persister<String>(key: key, storedBy: storage, transformer: transformer)
-        transformer.errorToThrow = transformerError
-
-        let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
-        let cancellable = persister.addUpdateListener() { newValue in
-            defer {
-                callsUpdateListenerExpectation.fulfill()
-            }
-
-            switch newValue {
-            case .failure(let error):
-                XCTAssertEqual(error as NSError, transformerError, "Should pass error thrown by transformer")
-            default:
-                XCTFail()
-            }
-        }
-        _ = cancellable
-
-        storage.storeValue(storedValue, key: key)
-
-        waitForExpectations(timeout: 1, handler: nil)
-    }
-
-    func testAnyStorageSettingWithoutTransformer() throws {
-        struct StoredValue: Codable, Equatable {
-            let property: String
-        }
-        var persisted = Persisted<StoredValue>(key: "test-key", storedBy: InMemoryStorage<Any>())
-        let storedValue = StoredValue(property: "value")
-
-        let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
-        let cancellable = persisted.projectedValue.addUpdateListener { result in
-            defer {
-                callsUpdateListenerExpectation.fulfill()
-            }
-
-            switch result {
-            case .success(let newValue):
-                XCTAssertEqual(newValue, storedValue, "Value passed to update listener should be the new value")
-            case .failure(let error):
-                XCTFail("Update listener should be notified of a success. Got error: \(error)")
-            }
-        }
-        _ = cancellable
-
-        persisted.wrappedValue = storedValue
-        XCTAssertEqual(persisted.wrappedValue, storedValue, "Should return untransformed value")
-
-        waitForExpectations(timeout: 1, handler: nil)
-    }
-
-    func testAnyStorageDeletingWithoutTransformer() throws {
-        struct StoredValue: Codable, Equatable {
-            let property: String
-        }
-        var persisted = Persisted<StoredValue>(key: "test-key", storedBy: InMemoryStorage<Any>())
-
-        let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
-        let cancellable = persisted.projectedValue.addUpdateListener { result in
-            defer {
-                callsUpdateListenerExpectation.fulfill()
-            }
-
-            switch result {
-            case .success(let newValue):
-                XCTAssertNil(newValue, "Value passed to update listener should be nil to indicate delete")
-            case .failure(let error):
-                XCTFail("Update listener should be notified of a success. Got error: \(error)")
-            }
-        }
-        _ = cancellable
-
-        persisted.wrappedValue = nil
-        XCTAssertNil(persisted.wrappedValue, "Should return nil when value has been deleted")
-
-        waitForExpectations(timeout: 1, handler: nil)
-    }
-
-    func testAnyStorageSettingWithTransformer() throws {
-        struct StoredValue: Codable, Equatable {
-            let property: String
-        }
-        var persisted = Persisted<StoredValue>(key: "test-key", storedBy: InMemoryStorage<Any>(), transformer: JSONTransformer())
-        let storedValue = StoredValue(property: "value")
-
-        let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
-        let cancellable = persisted.projectedValue.addUpdateListener { result in
-            defer {
-                callsUpdateListenerExpectation.fulfill()
-            }
-
-            switch result {
-            case .success(let newValue):
-                XCTAssertEqual(newValue, storedValue, "Value passed to update listener should be the new value")
-            case .failure(let error):
-                XCTFail("Update listener should be notified of a success. Got error: \(error)")
-            }
-        }
-        _ = cancellable
-
-        persisted.wrappedValue = storedValue
-        XCTAssertEqual(persisted.wrappedValue, storedValue, "Should return untransformed value")
-
-        waitForExpectations(timeout: 1, handler: nil)
-    }
-
-    func testAnyStorageDeletingWithTransformer() throws {
-        struct StoredValue: Codable, Equatable {
-            let property: String
-        }
-        var persisted = Persisted<StoredValue>(key: "test-key", storedBy: InMemoryStorage<Any>(), transformer: JSONTransformer())
-
-        let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
-        let cancellable = persisted.projectedValue.addUpdateListener { result in
-            defer {
-                callsUpdateListenerExpectation.fulfill()
-            }
-
-            switch result {
-            case .success(let newValue):
-                XCTAssertNil(newValue, "Value passed to update listener should be nil to indicate delete")
-            case .failure(let error):
-                XCTFail("Update listener should be notified of a success. Got error: \(error)")
-            }
-        }
-        _ = cancellable
-
-        persisted.wrappedValue = nil
-        XCTAssertNil(persisted.wrappedValue, "Should return nil when value has been deleted")
-
-        waitForExpectations(timeout: 1, handler: nil)
-    }
-
     func testDefaultValueStoreWhenNil() {
         let key = "test-key"
         let defaultValue = "default"
         let storage = InMemoryStorage<String>()
         let transformer = MockTransformer<String>()
-        var persisted = Persisted<String>(key: key, defaultValue: defaultValue, storedBy: storage, transformer: transformer, defaultValuePersistBehaviour: .persistWhenNil)
+        var persisted = Persisted<String?>(key: key, storedBy: storage, transformer: transformer, defaultValue: defaultValue, defaultValuePersistBehaviour: .persistWhenNil)
 
         transformer.errorToThrow = NSError(domain: "perist-tests", code: 1, userInfo: nil)
         XCTAssertEqual(persisted.wrappedValue, defaultValue)
@@ -444,7 +895,7 @@ final class PersistedTests: XCTestCase {
         let defaultValue = "default"
         let storage = InMemoryStorage<String>()
         let transformer = MockTransformer<String>()
-        var persisted = Persisted<String>(key: key, defaultValue: defaultValue, storedBy: storage, transformer: transformer, defaultValuePersistBehaviour: .persistOnError)
+        var persisted = Persisted<String?>(key: key, storedBy: storage, transformer: transformer, defaultValue: defaultValue, defaultValuePersistBehaviour: .persistOnError)
 
         XCTAssertEqual(persisted.wrappedValue, defaultValue)
         XCTAssertNil(storage.retrieveValue(for: key), "Default value should not be persisted when nil is returned")
@@ -467,7 +918,7 @@ final class PersistedTests: XCTestCase {
         let key = "test-key"
         let defaultValue = "default"
         let storage = InMemoryStorage<String>()
-        var persisted = Persisted<String>(key: key, defaultValue: defaultValue, storedBy: storage)
+        var persisted = Persisted<String?>(key: key, storedBy: storage, defaultValue: defaultValue)
 
         XCTAssertEqual(persisted.wrappedValue, defaultValue)
         XCTAssertNil(storage.retrieveValue(for: key), "Default value should not be persisted when retrieved")

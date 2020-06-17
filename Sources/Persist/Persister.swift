@@ -3,14 +3,35 @@ import Foundation
 import Combine
 #endif
 
+extension Persister.Update: Hashable where Value: Hashable {}
+extension Persister.Update: Equatable where Value: Equatable {}
+
 /**
  An object that can store and retrieve values from a `Storage` instance, optionally passing values through a
  transformer.
  */
 public final class Persister<Value> {
+    /// An update that was performed by a persister.
+    public enum Update {
+        /// The was persisted.
+        case persisted(Value)
+
+        /// The value was removed.
+        case removed
+
+        /// The value after the update. `nil` indicates the value was removed.
+        public var value: Value? {
+            switch self {
+            case .persisted(let value):
+                return value
+            case .removed:
+                return nil
+            }
+        }
+    }
 
     /// The payload that will be passed to an update listener.
-    public typealias UpdatePayload = Result<Value?, Error>
+    public typealias UpdatePayload = Result<Update, Error>
 
     /// A closure that will be called when an update occurs.
     public typealias UpdateListener = (UpdatePayload) -> Void
@@ -19,7 +40,10 @@ public final class Persister<Value> {
     public typealias ValueGetter = () throws -> Value?
 
     /// A closure that can set a value.
-    public typealias ValueSetter = (Value?) throws -> Void
+    public typealias ValueSetter = (Value) throws -> Void
+
+    /// A closure that can remove a value.
+    public typealias ValueRemover = () throws -> Void
 
     /// A closure that can add an update listener.
     public typealias AddUpdateListener = (@escaping UpdateListener) -> Cancellable
@@ -32,6 +56,10 @@ public final class Persister<Value> {
     }
     #endif
 
+    public var defaultValue: Value
+
+    public var defaultValuePersistBehaviour: DefaultValuePersistOption
+
     /// The closure that can be used to retrieve the value. This generally wraps the `Storage` and any
     /// `Transformer`s that are used to retrieve the value.
     private let valueGetter: ValueGetter
@@ -39,6 +67,9 @@ public final class Persister<Value> {
     /// The closure that can be used to store the value. This generally wraps the `Storage` and any
     /// `Transformer`s that are used to store the value.
     private let valueSetter: ValueSetter
+
+    /// The closure that can be used to store the value. This generally wraps the `Storage`.
+    private let valueRemover: ValueRemover
 
     /// The cancellable that wraps the updates subscription added to the storage.
     private var storageUpdateListenerCancellable: Cancellable?
@@ -68,23 +99,29 @@ public final class Persister<Value> {
     /**
      Create a new `Persister` instance.
 
-     - parameter valueGetter: The closure that will be called when the `retrieveValue()`
-                              function is called.
-     - parameter valueSetter: The closure that will be called when the `persist(_:)` function is
-                              called.
-     - parameter addUpdateListener: A closure that will be called immediately to add an update
-                                    listener.
+     - parameter valueGetter: The closure that will be called when the `retrieveValue()` function is called.
+     - parameter valueSetter: The closure that will be called when the `persist(_:)` function is called.
+     - parameter valueRemover: The closure that will be called when the `removeValue()` function is called.
+     - parameter addUpdateListener: A closure that will be called immediately to add an update listener.
      */
     public init(
         valueGetter: @escaping ValueGetter,
         valueSetter: @escaping ValueSetter,
+        valueRemover: @escaping ValueRemover,
+        defaultValue: Value,
+        defaultValuePersistBehaviour: DefaultValuePersistOption = [],
         addUpdateListener: AddUpdateListener
     ) {
         self.valueGetter = valueGetter
         self.valueSetter = valueSetter
+        self.valueRemover = valueRemover
+        self.defaultValue = defaultValue
+        self.defaultValuePersistBehaviour = defaultValuePersistBehaviour
 
         subscribeToStorageUpdates(addUpdateListener: addUpdateListener)
     }
+
+    // MARK: - Storage.Value == Value
 
     /**
      Create a new `Persister` instance that uses the provided `Storage` to retrieve and store values
@@ -95,8 +132,55 @@ public final class Persister<Value> {
      */
     public convenience init<Storage: Persist.Storage>(
         key: Storage.Key,
-        storedBy storage: Storage
+        storedBy storage: Storage,
+        defaultValue: Value,
+        defaultValuePersistBehaviour: DefaultValuePersistOption = []
     ) where Storage.Value == Value {
+        let valueGetter: ValueGetter = {
+            guard let value = try storage.retrieveValue(for: key) else { return nil }
+            return value
+        }
+
+        let valueSetter: ValueSetter = { newValue in
+            try storage.storeValue(newValue, key: key)
+        }
+
+        let valueRemover: ValueRemover = {
+            try storage.removeValue(for: key)
+        }
+
+        self.init(
+            valueGetter: valueGetter,
+            valueSetter: valueSetter,
+            valueRemover: valueRemover,
+            defaultValue: defaultValue,
+            defaultValuePersistBehaviour: defaultValuePersistBehaviour,
+            addUpdateListener: { updateListener in
+                return storage.addUpdateListener(forKey: key) { newValue in
+                    guard let value = newValue else {
+                        updateListener(.success(.removed))
+                        return
+                    }
+
+                    updateListener(.success(.persisted(value)))
+                }
+            }
+        )
+    }
+
+    /**
+     Create a new `Persister` instance that uses the provided `Storage` to retrieve and store values
+     against the provided key.
+
+     - parameter key: The key to retrieve and store values against.
+     - parameter storage: The storage to use to retrieve and store vales.
+     */
+    public convenience init<Storage: Persist.Storage, WrappedValue>(
+        key: Storage.Key,
+        storedBy storage: Storage,
+        defaultValue: Value = nil,
+        defaultValuePersistBehaviour: DefaultValuePersistOption = []
+    ) where Storage.Value == WrappedValue, Value == Optional<WrappedValue> {
         let valueGetter: ValueGetter = {
             guard let value = try storage.retrieveValue(for: key) else { return nil }
             return value
@@ -111,17 +195,79 @@ public final class Persister<Value> {
             try storage.storeValue(newValue, key: key)
         }
 
+        let valueRemover: ValueRemover = {
+            try storage.removeValue(for: key)
+        }
+
         self.init(
             valueGetter: valueGetter,
             valueSetter: valueSetter,
+            valueRemover: valueRemover,
+            defaultValue: defaultValue,
+            defaultValuePersistBehaviour: defaultValuePersistBehaviour,
             addUpdateListener: { updateListener in
                 return storage.addUpdateListener(forKey: key) { newValue in
                     guard let value = newValue else {
-                        updateListener(.success(nil))
+                        updateListener(.success(.removed))
                         return
                     }
 
-                    updateListener(.success(value))
+                    updateListener(.success(.persisted(value)))
+                }
+            }
+        )
+    }
+
+    // MARK: - Storage.Value == Any
+
+    /**
+     Create a new `Persister` instance that uses the provided `Storage` to retrieve and store values
+     against the provided key.
+
+     - parameter key: The key to retrieve and store values against.
+     - parameter storage: The storage to use to retrieve and store vales.
+     */
+    public convenience init<Storage: Persist.Storage>(
+        key: Storage.Key,
+        storedBy storage: Storage,
+        defaultValue: Value,
+        defaultValuePersistBehaviour: DefaultValuePersistOption = []
+    ) where Storage.Value == Any {
+        let valueGetter: ValueGetter = {
+            guard let anyValue = try storage.retrieveValue(for: key) else { return nil }
+            guard let value = anyValue as? Value else {
+                throw PersistenceError.unexpectedValueType(value: anyValue, expected: Value.self)
+            }
+            return value
+        }
+
+        let valueSetter: ValueSetter = { newValue in
+            try storage.storeValue(newValue, key: key)
+        }
+
+        let valueRemover: ValueRemover = {
+            try storage.removeValue(for: key)
+        }
+
+        self.init(
+            valueGetter: valueGetter,
+            valueSetter: valueSetter,
+            valueRemover: valueRemover,
+            defaultValue: defaultValue,
+            defaultValuePersistBehaviour: defaultValuePersistBehaviour,
+            addUpdateListener: { updateListener in
+                return storage.addUpdateListener(forKey: key) { newValue in
+                    guard let anyValue = newValue else {
+                        updateListener(.success(.removed))
+                        return
+                    }
+
+                    guard let value = anyValue as? Value else {
+                        updateListener(.failure(PersistenceError.unexpectedValueType(value: anyValue, expected: Value.self)))
+                        return
+                    }
+
+                    updateListener(.success(.persisted(value)))
                 }
             }
         )
@@ -134,14 +280,16 @@ public final class Persister<Value> {
      - parameter key: The key to retrieve and store values against.
      - parameter storage: The storage to use to retrieve and store vales.
      */
-    public convenience init<Storage: Persist.Storage>(
+    public convenience init<Storage: Persist.Storage, WrappedValue>(
         key: Storage.Key,
-        storedBy storage: Storage
-    ) where Storage.Value == Any {
+        storedBy storage: Storage,
+        defaultValue: Value = nil,
+        defaultValuePersistBehaviour: DefaultValuePersistOption = []
+    ) where Storage.Value == Any, Value == Optional<WrappedValue> {
         let valueGetter: ValueGetter = {
             guard let anyValue = try storage.retrieveValue(for: key) else { return nil }
-            guard let value = anyValue as? Value else {
-                throw PersistenceError.unexpectedValueType(value: anyValue, expected: Value.self)
+            guard let value = anyValue as? WrappedValue else {
+                throw PersistenceError.unexpectedValueType(value: anyValue, expected: WrappedValue.self)
             }
             return value
         }
@@ -155,22 +303,94 @@ public final class Persister<Value> {
             try storage.storeValue(newValue, key: key)
         }
 
+        let valueRemover: ValueRemover = {
+            try storage.removeValue(for: key)
+        }
+
         self.init(
             valueGetter: valueGetter,
             valueSetter: valueSetter,
+            valueRemover: valueRemover,
+            defaultValue: defaultValue,
+            defaultValuePersistBehaviour: defaultValuePersistBehaviour,
             addUpdateListener: { updateListener in
                 return storage.addUpdateListener(forKey: key) { newValue in
                     guard let anyValue = newValue else {
-                        updateListener(.success(nil))
+                        updateListener(.success(.removed))
                         return
                     }
 
-                    guard let value = anyValue as? Value else {
-                        updateListener(.failure(PersistenceError.unexpectedValueType(value: anyValue, expected: Value.self)))
+                    guard let value = anyValue as? WrappedValue else {
+                        updateListener(.failure(PersistenceError.unexpectedValueType(value: anyValue, expected: WrappedValue.self)))
                         return
                     }
 
-                    updateListener(.success(value))
+                    updateListener(.success(.persisted(value)))
+                }
+            }
+        )
+    }
+
+    // MARK: - Storage.Value == Any, Transformer.Input == Value
+
+    /**
+     Create a new `Persister` instance that uses the provided `Storage` to retrieve and store values
+     against the provided key.  Values will be passed through the `Transformer` before being stored to
+     and being retrieved from the storage.
+
+     - parameter key: The key to retrieve and store values against.
+     - parameter storage: The storage to use to retrieve and store vales.
+     - parameter transformer: The transformer to use to transform the value when retrieving and
+                              storing values.
+     */
+    public convenience init<Storage: Persist.Storage, Transformer: Persist.Transformer>(
+        key: Storage.Key,
+        storedBy storage: Storage,
+        transformer: Transformer,
+        defaultValue: Value,
+        defaultValuePersistBehaviour: DefaultValuePersistOption = []
+    ) where Storage.Value == Any, Transformer.Input == Value {
+        let valueGetter: ValueGetter = {
+            guard let anyValue = try storage.retrieveValue(for: key) else { return nil }
+            guard let transformerOutput = anyValue as? Transformer.Output else {
+                throw PersistenceError.unexpectedValueType(value: anyValue, expected: Transformer.Output.self)
+            }
+            return try transformer.untransformValue(transformerOutput)
+        }
+
+        let valueSetter: ValueSetter = { newValue in
+            let transformedValue = try transformer.transformValue(newValue)
+            try storage.storeValue(transformedValue, key: key)
+        }
+
+        let valueRemover: ValueRemover = {
+            try storage.removeValue(for: key)
+        }
+
+        self.init(
+            valueGetter: valueGetter,
+            valueSetter: valueSetter,
+            valueRemover: valueRemover,
+            defaultValue: defaultValue,
+            defaultValuePersistBehaviour: defaultValuePersistBehaviour,
+            addUpdateListener: { updateListener in
+                return storage.addUpdateListener(forKey: key) { newValue in
+                    guard let anyValue = newValue else {
+                        updateListener(.success(.removed))
+                        return
+                    }
+
+                    guard let value = anyValue as? Transformer.Output else {
+                        updateListener(.failure(PersistenceError.unexpectedValueType(value: anyValue, expected: Transformer.Output.self)))
+                        return
+                    }
+
+                    do {
+                        let untransformedValue = try transformer.untransformValue(value)
+                        updateListener(.success(.persisted(untransformedValue)))
+                    } catch {
+                        updateListener(.failure(error))
+                    }
                 }
             }
         )
@@ -186,11 +406,13 @@ public final class Persister<Value> {
      - parameter transformer: The transformer to use to transform the value when retrieving and
                               storing values.
      */
-    public convenience init<Storage: Persist.Storage, Transformer: Persist.Transformer>(
+    public convenience init<Storage: Persist.Storage, Transformer: Persist.Transformer, WrappedValue>(
         key: Storage.Key,
         storedBy storage: Storage,
-        transformer: Transformer
-    ) where Storage.Value == Any, Transformer.Input == Value {
+        transformer: Transformer,
+        defaultValue: Value = nil,
+        defaultValuePersistBehaviour: DefaultValuePersistOption = []
+    ) where Storage.Value == Any, Transformer.Input == WrappedValue, Value == WrappedValue? {
         let valueGetter: ValueGetter = {
             guard let anyValue = try storage.retrieveValue(for: key) else { return nil }
             guard let transformerOutput = anyValue as? Transformer.Output else {
@@ -209,13 +431,20 @@ public final class Persister<Value> {
             try storage.storeValue(transformedValue, key: key)
         }
 
+        let valueRemover: ValueRemover = {
+            try storage.removeValue(for: key)
+        }
+
         self.init(
             valueGetter: valueGetter,
             valueSetter: valueSetter,
+            valueRemover: valueRemover,
+            defaultValue: defaultValue,
+            defaultValuePersistBehaviour: defaultValuePersistBehaviour,
             addUpdateListener: { updateListener in
                 return storage.addUpdateListener(forKey: key) { newValue in
                     guard let anyValue = newValue else {
-                        updateListener(.success(nil))
+                        updateListener(.success(.removed))
                         return
                     }
 
@@ -226,7 +455,7 @@ public final class Persister<Value> {
 
                     do {
                         let untransformedValue = try transformer.untransformValue(value)
-                        updateListener(.success(untransformedValue))
+                        updateListener(.success(.persisted(untransformedValue)))
                     } catch {
                         updateListener(.failure(error))
                     }
@@ -235,11 +464,61 @@ public final class Persister<Value> {
         )
     }
 
+    // MARK: - Transformer.Input == Value, Transformer.Output == Storage.Value
+
     public convenience init<Storage: Persist.Storage, Transformer: Persist.Transformer>(
         key: Storage.Key,
         storedBy storage: Storage,
-        transformer: Transformer
+        transformer: Transformer,
+        defaultValue: Value,
+        defaultValuePersistBehaviour: DefaultValuePersistOption = []
     ) where Transformer.Input == Value, Transformer.Output == Storage.Value {
+        let valueGetter: ValueGetter = {
+            guard let value = try storage.retrieveValue(for: key) else { return nil }
+
+            return try transformer.untransformValue(value)
+        }
+
+        let valueSetter: ValueSetter = { newValue in
+            let transformedValue = try transformer.transformValue(newValue)
+            try storage.storeValue(transformedValue, key: key)
+        }
+
+        let valueRemover: ValueRemover = {
+            try storage.removeValue(for: key)
+        }
+
+        self.init(
+            valueGetter: valueGetter,
+            valueSetter: valueSetter,
+            valueRemover: valueRemover,
+            defaultValue: defaultValue,
+            defaultValuePersistBehaviour: defaultValuePersistBehaviour,
+            addUpdateListener: { updateListener in
+                return storage.addUpdateListener(forKey: key) { newValue in
+                    guard let newValue = newValue else {
+                        updateListener(.success(.removed))
+                        return
+                    }
+
+                    do {
+                        let untransformedValue = try transformer.untransformValue(newValue)
+                        updateListener(.success(.persisted(untransformedValue)))
+                    } catch {
+                        updateListener(.failure(error))
+                    }
+                }
+            }
+        )
+    }
+
+    public convenience init<Storage: Persist.Storage, Transformer: Persist.Transformer, WrappedValue>(
+        key: Storage.Key,
+        storedBy storage: Storage,
+        transformer: Transformer,
+        defaultValue: Value = nil,
+        defaultValuePersistBehaviour: DefaultValuePersistOption = []
+    ) where Transformer.Input == WrappedValue, Transformer.Output == Storage.Value, Value == WrappedValue? {
         let valueGetter: ValueGetter = {
             guard let value = try storage.retrieveValue(for: key) else { return nil }
 
@@ -256,19 +535,26 @@ public final class Persister<Value> {
             try storage.storeValue(transformedValue, key: key)
         }
 
+        let valueRemover: ValueRemover = {
+            try storage.removeValue(for: key)
+        }
+
         self.init(
             valueGetter: valueGetter,
             valueSetter: valueSetter,
+            valueRemover: valueRemover,
+            defaultValue: defaultValue,
+            defaultValuePersistBehaviour: defaultValuePersistBehaviour,
             addUpdateListener: { updateListener in
                 return storage.addUpdateListener(forKey: key) { newValue in
                     guard let newValue = newValue else {
-                        updateListener(.success(nil))
+                        updateListener(.success(.removed))
                         return
                     }
 
                     do {
                         let untransformedValue = try transformer.untransformValue(newValue)
-                        updateListener(.success(untransformedValue))
+                        updateListener(.success(.persisted(untransformedValue)))
                     } catch {
                         updateListener(.failure(error))
                     }
@@ -277,12 +563,62 @@ public final class Persister<Value> {
         )
     }
 
-    public func persist(_ newValue: Value?) throws {
+    // MARK: - Functions
+
+    public func persist(_ newValue: Value) throws {
         try valueSetter(newValue)
     }
 
-    public func retrieveValue() throws -> Value? {
-        return try valueGetter()
+    /**
+     Attempts to retrieve the value from the storage. If the value is `nil` or an error occurs when retrieving
+     the value the default value will be returned.
+
+     If the `persistWhenNil` option has been provided and the storage returns `nil` the default value
+     will be persisted.
+
+     If the `persistOnError` option has been provided and there is an error retrieving the value the default
+     value will be persisted.
+
+     - returns: The persisted value, or the default value if no value has been persisted or an error occurs.
+     */
+    public func retrieveValue() -> Value {
+        do {
+            return try retrieveValueOrThrow()
+        } catch {
+            if defaultValuePersistBehaviour.contains(.persistOnError) {
+                try? persist(defaultValue)
+            }
+
+            return defaultValue
+        }
+    }
+
+    /**
+     Attempts to retrieve the value from the storage. If the value is `nil` the default value will be returned.
+
+     If the `persistWhenNil` option has been provided and the storage returns `nil` the default value
+     will be persisted.
+
+     If the `persistOnError` option has been provided and there is an error retrieving the value the default
+    value will **not** be persisted and the error will be thrown.
+
+     - throws: Any error thrown while retrieving the value.
+     - returns: The persisted value, or the default value if no value has been persisted.
+     */
+    public func retrieveValueOrThrow() throws -> Value {
+        if let retrieveValue = try valueGetter() {
+            return retrieveValue
+        }
+        
+        if defaultValuePersistBehaviour.contains(.persistWhenNil) {
+            try? persist(defaultValue)
+        }
+
+        return defaultValue
+    }
+
+    public func removeValue() throws {
+        return try valueRemover()
     }
 
     public func addUpdateListener(_ updateListener: @escaping UpdateListener) -> Cancellable {
@@ -294,7 +630,7 @@ public final class Persister<Value> {
         }
     }
 
-    private func notifyUpdateListenersOfResult(_ result: Result<Value?, Error>) {
+    private func notifyUpdateListenersOfResult(_ result: UpdatePayload) {
         updateListeners.values.forEach { $0(result) }
 
         #if canImport(Combine)
@@ -306,9 +642,7 @@ public final class Persister<Value> {
 
     private func subscribeToStorageUpdates(addUpdateListener: AddUpdateListener) {
         storageUpdateListenerCancellable = addUpdateListener { [weak self] result in
-            guard let self = self else { return }
-
-            self.notifyUpdateListenersOfResult(result)
+            self?.notifyUpdateListenersOfResult(result)
         }
     }
 

@@ -8,106 +8,124 @@ final class NSUbiquitousKeyValueStoreStorageTests: XCTestCase {
     private let nsUbiquitousKeyValueStoreStorage = NSUbiquitousKeyValueStoreStorage.default
 
     func testPersistedNSUbiquitousKeyValueStoreAPI() {
-        _ = Persisted<Double>(key: "test", storedBy: NSUbiquitousKeyValueStore.default)
-        _ = Persisted<Double>(key: "test", storedBy: NSUbiquitousKeyValueStoreStorage.default)
+        _ = Persisted<Double?>(key: "test", storedBy: NSUbiquitousKeyValueStore.default)
+        _ = Persisted<Double?>(key: "test", storedBy: NSUbiquitousKeyValueStoreStorage.default)
+        _ = Persisted(key: "test", storedBy: NSUbiquitousKeyValueStore.default, defaultValue: 123)
+        _ = Persisted(key: "test", storedBy: NSUbiquitousKeyValueStoreStorage.default, defaultValue: 123)
 
-        _ = Persisted<Double>(key: "test", nsUbiquitousKeyValueStore: .default)
-        _ = Persisted<Double>(key: "test", nsUbiquitousKeyValueStoreStorage: .default)
+        _ = Persisted<Double?>(key: "test", nsUbiquitousKeyValueStore: .default)
+        _ = Persisted<Double?>(key: "test", nsUbiquitousKeyValueStoreStorage: .default)
+        _ = Persisted(key: "test", nsUbiquitousKeyValueStore: .default, defaultValue: 123)
+        _ = Persisted(key: "test", nsUbiquitousKeyValueStoreStorage: .default, defaultValue: 123)
 
-        _ = Persisted<Double>(key: "test", storedBy: NSUbiquitousKeyValueStore.default, transformer: MockTransformer())
-        _ = Persisted<Double>(key: "test", storedBy: NSUbiquitousKeyValueStoreStorage.default, transformer: MockTransformer())
+        _ = Persisted<Double?>(key: "test", storedBy: NSUbiquitousKeyValueStore.default, transformer: MockTransformer())
+        _ = Persisted<Double?>(key: "test", storedBy: NSUbiquitousKeyValueStoreStorage.default, transformer: MockTransformer())
+        _ = Persisted(key: "test", storedBy: NSUbiquitousKeyValueStore.default, transformer: MockTransformer(), defaultValue: 123)
+        _ = Persisted(key: "test", storedBy: NSUbiquitousKeyValueStoreStorage.default, transformer: MockTransformer(), defaultValue: 123)
 
-        _ = Persisted<Double>(key: "test", nsUbiquitousKeyValueStore: .default, transformer: MockTransformer())
-        _ = Persisted<Double>(key: "test", nsUbiquitousKeyValueStoreStorage: .default, transformer: MockTransformer())
+        _ = Persisted<Double?>(key: "test", storedBy: NSUbiquitousKeyValueStore.default, transformer: JSONTransformer())
+        _ = Persisted<Double?>(key: "test", storedBy: NSUbiquitousKeyValueStoreStorage.default, transformer: JSONTransformer())
+        _ = Persisted(key: "test", storedBy: NSUbiquitousKeyValueStore.default, transformer: JSONTransformer(), defaultValue: 123)
+        _ = Persisted(key: "test", storedBy: NSUbiquitousKeyValueStoreStorage.default, transformer: JSONTransformer(), defaultValue: 123)
+
+        _ = Persisted<Double?>(key: "test", nsUbiquitousKeyValueStore: .default, transformer: MockTransformer())
+        _ = Persisted<Double?>(key: "test", nsUbiquitousKeyValueStoreStorage: .default, transformer: MockTransformer())
+        _ = Persisted(key: "test", nsUbiquitousKeyValueStore: .default, transformer: MockTransformer(), defaultValue: 123)
+        _ = Persisted(key: "test", nsUbiquitousKeyValueStoreStorage: .default, transformer: MockTransformer(), defaultValue: 123)
+
+        _ = Persisted<Double?>(key: "test", nsUbiquitousKeyValueStore: .default, transformer: JSONTransformer())
+        _ = Persisted<Double?>(key: "test", nsUbiquitousKeyValueStoreStorage: .default, transformer: JSONTransformer())
+        _ = Persisted(key: "test", nsUbiquitousKeyValueStore: .default, transformer: JSONTransformer(), defaultValue: 123)
+        _ = Persisted(key: "test", nsUbiquitousKeyValueStoreStorage: .default, transformer: JSONTransformer(), defaultValue: 123)
     }
 
     func testPersisterNSUbiquitousKeyValueStoreAPI() {
-        _ = Persister<Double>(key: "test", storedBy: NSUbiquitousKeyValueStore.default)
-        _ = Persister<Double>(key: "test", storedBy: NSUbiquitousKeyValueStoreStorage.default)
+        _ = Persister<Double?>(key: "test", storedBy: NSUbiquitousKeyValueStore.default)
+        _ = Persister<Double?>(key: "test", storedBy: NSUbiquitousKeyValueStoreStorage.default)
+        _ = Persister(key: "test", storedBy: NSUbiquitousKeyValueStore.default, defaultValue: 123)
+        _ = Persister(key: "test", storedBy: NSUbiquitousKeyValueStoreStorage.default, defaultValue: 123)
 
-        _ = Persister<Double>(key: "test", nsUbiquitousKeyValueStore: .default)
-        _ = Persister<Double>(key: "test", nsUbiquitousKeyValueStoreStorage: .default)
+        _ = Persister<Double?>(key: "test", nsUbiquitousKeyValueStore: .default)
+        _ = Persister<Double?>(key: "test", nsUbiquitousKeyValueStoreStorage: .default)
+        _ = Persister(key: "test", nsUbiquitousKeyValueStore: .default, defaultValue: 123)
+        _ = Persister(key: "test", nsUbiquitousKeyValueStoreStorage: .default, defaultValue: 123)
 
-        _ = Persister<Double>(key: "test", storedBy: NSUbiquitousKeyValueStore.default, transformer: MockTransformer())
-        _ = Persister<Double>(key: "test", storedBy: NSUbiquitousKeyValueStoreStorage.default, transformer: MockTransformer())
+        _ = Persister<Double?>(key: "test", storedBy: NSUbiquitousKeyValueStore.default, transformer: MockTransformer())
+        _ = Persister<Double?>(key: "test", storedBy: NSUbiquitousKeyValueStoreStorage.default, transformer: MockTransformer())
+        _ = Persister(key: "test", storedBy: NSUbiquitousKeyValueStore.default, transformer: MockTransformer(), defaultValue: 123)
+        _ = Persister(key: "test", storedBy: NSUbiquitousKeyValueStoreStorage.default, transformer: MockTransformer(), defaultValue: 123)
 
-        _ = Persister<Double>(key: "test", nsUbiquitousKeyValueStore: .default, transformer: MockTransformer())
-        _ = Persister<Double>(key: "test", nsUbiquitousKeyValueStoreStorage: .default, transformer: MockTransformer())
-    }
+        _ = Persister<Double?>(key: "test", storedBy: NSUbiquitousKeyValueStore.default, transformer: JSONTransformer())
+        _ = Persister<Double?>(key: "test", storedBy: NSUbiquitousKeyValueStoreStorage.default, transformer: JSONTransformer())
+        _ = Persister(key: "test", storedBy: NSUbiquitousKeyValueStore.default, transformer: JSONTransformer(), defaultValue: 123)
+        _ = Persister(key: "test", storedBy: NSUbiquitousKeyValueStoreStorage.default, transformer: JSONTransformer(), defaultValue: 123)
 
-    func testStoredInUbiquitousKeyValueStore() {
-        class Foo {
-            @StoredInNSUbiquitousKeyValueStore
-            var bar: String?
+        _ = Persister<Double?>(key: "test", nsUbiquitousKeyValueStore: .default, transformer: MockTransformer())
+        _ = Persister<Double?>(key: "test", nsUbiquitousKeyValueStoreStorage: .default, transformer: MockTransformer())
+        _ = Persister(key: "test", nsUbiquitousKeyValueStore: .default, transformer: MockTransformer(), defaultValue: 123)
+        _ = Persister(key: "test", nsUbiquitousKeyValueStoreStorage: .default, transformer: MockTransformer(), defaultValue: 123)
 
-            init(nsUbiquitousKeyValueStoreStorage: NSUbiquitousKeyValueStoreStorage) {
-                _bar = StoredInNSUbiquitousKeyValueStore(
-                    key: "foo-bar",
-                    storedBy: nsUbiquitousKeyValueStoreStorage
-                )
-            }
-        }
-
-        let foo = Foo(nsUbiquitousKeyValueStoreStorage: nsUbiquitousKeyValueStoreStorage)
-        foo.bar = "new-value"
-        XCTAssertEqual(nsUbiquitousKeyValueStoreStorage.nsUbiquitousKeyValueStore.string(forKey: "foo-bar"), "new-value")
+        _ = Persister<Double?>(key: "test", nsUbiquitousKeyValueStore: .default, transformer: JSONTransformer())
+        _ = Persister<Double?>(key: "test", nsUbiquitousKeyValueStoreStorage: .default, transformer: JSONTransformer())
+        _ = Persister(key: "test", nsUbiquitousKeyValueStore: .default, transformer: JSONTransformer(), defaultValue: 123)
+        _ = Persister(key: "test", nsUbiquitousKeyValueStoreStorage: .default, transformer: JSONTransformer(), defaultValue: 123)
     }
 
     func testPersisterWithBoolFalse() throws {
-        let persister = Persister<Bool>(key: "test", nsUbiquitousKeyValueStoreStorage: nsUbiquitousKeyValueStoreStorage)
+        let persister = Persister<Bool?>(key: "test", nsUbiquitousKeyValueStoreStorage: nsUbiquitousKeyValueStoreStorage)
         let bool = false
 
         try persister.persist(bool)
-        XCTAssertEqual(try persister.retrieveValue(), bool)
+        XCTAssertEqual(persister.retrieveValue(), bool)
     }
 
     func testPersisterWithBoolTrue() throws {
-        let persister = Persister<Bool>(key: "test", nsUbiquitousKeyValueStoreStorage: nsUbiquitousKeyValueStoreStorage)
+        let persister = Persister<Bool?>(key: "test", nsUbiquitousKeyValueStoreStorage: nsUbiquitousKeyValueStoreStorage)
         let bool = true
 
         try persister.persist(bool)
-        XCTAssertEqual(try persister.retrieveValue(), bool)
+        XCTAssertEqual(persister.retrieveValue(), bool)
     }
 
     func testPersisterWithInt64() throws {
-        let persister = Persister<Int64>(key: "test", nsUbiquitousKeyValueStoreStorage: nsUbiquitousKeyValueStoreStorage)
+        let persister = Persister<Int64?>(key: "test", nsUbiquitousKeyValueStoreStorage: nsUbiquitousKeyValueStoreStorage)
         let int64: Int64 = 0
 
         try persister.persist(int64)
-        XCTAssertEqual(try persister.retrieveValue(), int64)
+        XCTAssertEqual(persister.retrieveValue(), int64)
     }
 
     func testPersisterWithDouble() throws {
-        let persister = Persister<Double>(key: "test", nsUbiquitousKeyValueStoreStorage: nsUbiquitousKeyValueStoreStorage)
+        let persister = Persister<Double?>(key: "test", nsUbiquitousKeyValueStoreStorage: nsUbiquitousKeyValueStoreStorage)
         let double = 1.23
 
         try persister.persist(double)
-        XCTAssertEqual(try persister.retrieveValue(), double)
+        XCTAssertEqual(persister.retrieveValue(), double)
     }
 
     func testPersisterWithArray() throws {
-        let persister = Persister<[Int64]>(key: "test", nsUbiquitousKeyValueStoreStorage: nsUbiquitousKeyValueStoreStorage)
+        let persister = Persister<[Int64]?>(key: "test", nsUbiquitousKeyValueStoreStorage: nsUbiquitousKeyValueStoreStorage)
         let array: [Int64] = [1, 2, 0, 6]
 
         try persister.persist(array)
-        XCTAssertEqual(try persister.retrieveValue(), array)
+        XCTAssertEqual(persister.retrieveValue(), array)
     }
 
     func testPersisterWithDictionary() throws {
-        let persister = Persister<[String: [Int64]]>(key: "test", nsUbiquitousKeyValueStoreStorage: nsUbiquitousKeyValueStoreStorage)
+        let persister = Persister<[String: [Int64]]?>(key: "test", nsUbiquitousKeyValueStoreStorage: nsUbiquitousKeyValueStoreStorage)
         let dictionary: [String: [Int64]] = [
             "foo": [1, 2, 0, 6],
             "bar": [0, 4, 7],
         ]
 
         try persister.persist(dictionary)
-        XCTAssertEqual(try persister.retrieveValue(), dictionary)
+        XCTAssertEqual(persister.retrieveValue(), dictionary)
     }
 
     func testRetrieveValueOfDifferentType() {
         let key = "key"
         let actualValue = "test"
-        let persister = Persister<Int64>(key: key, nsUbiquitousKeyValueStoreStorage: nsUbiquitousKeyValueStoreStorage)
+        let persister = Persister<Int64?>(key: key, nsUbiquitousKeyValueStoreStorage: nsUbiquitousKeyValueStoreStorage)
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
         let cancellable = persister.addUpdateListener() { newValue in
@@ -127,7 +145,7 @@ final class NSUbiquitousKeyValueStoreStorageTests: XCTestCase {
 
         nsUbiquitousKeyValueStoreStorage.storeValue(.string(actualValue), key: key)
 
-        XCTAssertThrowsError(try persister.retrieveValue(), "Retrieving a value with a different type should throw") { error in
+        XCTAssertThrowsError(try persister.retrieveValueOrThrow(), "Retrieving a value with a different type should throw") { error in
             switch error {
             case PersistenceError.unexpectedValueType(let value, let expected):
                 XCTAssertEqual(value as? String, actualValue)
@@ -231,7 +249,7 @@ final class NSUbiquitousKeyValueStoreStorageTests: XCTestCase {
                 _bar = Persisted(
                     key: "bar",
                     storedBy: nsUbiquitousKeyValueStoreStorage,
-                    transformer: JSONTransformer()
+                    transformer: JSONTransformer<Bar>()
                 )
             }
         }
@@ -355,7 +373,7 @@ final class NSUbiquitousKeyValueStoreStorageTests: XCTestCase {
     func testPersisterUpdateListenerUpdateViaPersister() throws {
         let key = "test"
         let setValue = "value"
-        let persister = Persister<String>(key: key, storedBy: nsUbiquitousKeyValueStoreStorage)
+        let persister = Persister<String?>(key: key, storedBy: nsUbiquitousKeyValueStoreStorage)
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
         let updateListenerCancellable = persister.addUpdateListener() { result in
@@ -364,8 +382,8 @@ final class NSUbiquitousKeyValueStoreStorageTests: XCTestCase {
             }
 
             switch result {
-            case .success(let value):
-                XCTAssertEqual(value, setValue)
+            case .success(let update):
+                XCTAssertEqual(update.value, setValue)
             case .failure(let error):
                 XCTFail("Should return a success for updated values, not \(error)")
             }
@@ -381,8 +399,8 @@ final class NSUbiquitousKeyValueStoreStorageTests: XCTestCase {
                 }
 
                 switch result {
-                case .success(let value):
-                    XCTAssertEqual(value, setValue)
+                case .success(let update):
+                    XCTAssertEqual(update.value, setValue)
                 case .failure:
                     XCTFail("Should return a success for updated values")
                 }

@@ -9,7 +9,8 @@ final class PersisterTests: XCTestCase {
             let property: String
         }
         let storage = InMemoryStorage<Any>()
-        let persister = Persister<StoredValue>(key: "test", storedBy: storage)
+        let defaultValue = StoredValue(property: "default")
+        let persister = Persister<StoredValue>(key: "test", storedBy: storage, defaultValue: defaultValue)
         let storedValue = StoredValue(property: "value")
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
@@ -19,8 +20,8 @@ final class PersisterTests: XCTestCase {
             }
 
             switch result {
-            case .success(let newValue):
-                XCTAssertEqual(newValue, storedValue, "Value passed to update listener should be the new, untransformed, value")
+            case .success(let update):
+                XCTAssertEqual(update.value, storedValue, "Value passed to update listener should be the new, untransformed, value")
             case .failure(let error):
                 XCTFail("Update listener should be notified of a success. Got error: \(error)")
             }
@@ -28,7 +29,7 @@ final class PersisterTests: XCTestCase {
         _ = cancellable
 
         try persister.persist(storedValue)
-        XCTAssertEqual(try persister.retrieveValue(), storedValue, "Should retrieve stored value")
+        XCTAssertEqual(persister.retrieveValue(), storedValue, "Should retrieve stored value")
         XCTAssertEqual(storage.retrieveValue(for: "test") as? StoredValue, storedValue, "Should store value in storage")
 
         waitForExpectations(timeout: 1, handler: nil)
@@ -36,7 +37,8 @@ final class PersisterTests: XCTestCase {
 
     func testStoringValueWithSpecficStorageType() throws {
         let storage = InMemoryStorage<String>()
-        let persister = Persister(key: "test", storedBy: storage)
+        let defaultValue = "default"
+        let persister = Persister(key: "test", storedBy: storage, defaultValue: defaultValue)
         let storedValue = "stored-value"
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
@@ -46,8 +48,8 @@ final class PersisterTests: XCTestCase {
             }
 
             switch result {
-            case .success(let newValue):
-                XCTAssertEqual(newValue, storedValue, "Value passed to update listener should be the new, untransformed, value")
+            case .success(let update):
+                XCTAssertEqual(update.value, storedValue, "Value passed to update listener should be the new, untransformed, value")
             case .failure(let error):
                 XCTFail("Update listener should be notified of a success. Got error: \(error)")
             }
@@ -55,7 +57,7 @@ final class PersisterTests: XCTestCase {
         _ = cancellable
 
         try persister.persist(storedValue)
-        XCTAssertEqual(try persister.retrieveValue(), storedValue, "Should retrieve stored value")
+        XCTAssertEqual(persister.retrieveValue(), storedValue, "Should retrieve stored value")
         XCTAssertEqual(storage.retrieveValue(for: "test"), storedValue, "Should store value in storage")
 
         waitForExpectations(timeout: 1, handler: nil)
@@ -66,7 +68,8 @@ final class PersisterTests: XCTestCase {
             let property: String
         }
         let storage = InMemoryStorage<Data>()
-        let persister = Persister<StoredValue>(key: "test", storedBy: storage, transformer: JSONTransformer())
+        let defaultValue = StoredValue(property: "default")
+        let persister = Persister<StoredValue>(key: "test", storedBy: storage, transformer: JSONTransformer(), defaultValue: defaultValue)
         let storedValue = StoredValue(property: "value")
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
@@ -76,8 +79,8 @@ final class PersisterTests: XCTestCase {
             }
 
             switch result {
-            case .success(let newValue):
-                XCTAssertEqual(newValue, storedValue, "Value passed to update listener should be the new, untransformed, value")
+            case .success(let update):
+                XCTAssertEqual(update.value, storedValue, "Value passed to update listener should be the new, untransformed, value")
             case .failure(let error):
                 XCTFail("Update listener should be notified of a success. Got error: \(error)")
             }
@@ -86,7 +89,7 @@ final class PersisterTests: XCTestCase {
 
         try persister.persist(storedValue)
         XCTAssertNotNil(storage.retrieveValue(for: "test"), "Should store encoded data in storage")
-        XCTAssertEqual(try persister.retrieveValue(), storedValue, "Should return untransformed value")
+        XCTAssertEqual(persister.retrieveValue(), storedValue, "Should return untransformed value")
 
         waitForExpectations(timeout: 1, handler: nil)
     }

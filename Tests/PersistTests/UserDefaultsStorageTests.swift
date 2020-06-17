@@ -11,31 +11,67 @@ final class UserDefaultsStorageTests: XCTestCase {
     }
 
     func testPersistedUserDefaultsAPI() {
-        _ = Persisted<Int>(key: "test", storedBy: UserDefaults.standard)
-        _ = Persisted<Int>(key: "test", storedBy: UserDefaultsStorage.standard)
+        _ = Persisted<Double?>(key: "test", storedBy: UserDefaults.standard)
+        _ = Persisted<Double?>(key: "test", storedBy: UserDefaultsStorage.standard)
+        _ = Persisted(key: "test", storedBy: UserDefaults.standard, defaultValue: 123)
+        _ = Persisted(key: "test", storedBy: UserDefaultsStorage.standard, defaultValue: 123)
 
-        _ = Persisted<Int>(key: "test", userDefaults: .standard)
-        _ = Persisted<Int>(key: "test", userDefaultsStorage: .standard)
+        _ = Persisted<Double?>(key: "test", userDefaults: .standard)
+        _ = Persisted<Double?>(key: "test", userDefaultsStorage: .standard)
+        _ = Persisted(key: "test", userDefaults: .standard, defaultValue: 123)
+        _ = Persisted(key: "test", userDefaultsStorage: .standard, defaultValue: 123)
 
-        _ = Persisted<Int>(key: "test", storedBy: UserDefaults.standard, transformer: MockTransformer())
-        _ = Persisted<Int>(key: "test", storedBy: UserDefaultsStorage.standard, transformer: MockTransformer())
+        _ = Persisted<Double?>(key: "test", storedBy: UserDefaults.standard, transformer: MockTransformer())
+        _ = Persisted<Double?>(key: "test", storedBy: UserDefaultsStorage.standard, transformer: MockTransformer())
+        _ = Persisted(key: "test", storedBy: UserDefaults.standard, transformer: MockTransformer(), defaultValue: 123)
+        _ = Persisted(key: "test", storedBy: UserDefaultsStorage.standard, transformer: MockTransformer(), defaultValue: 123)
 
-        _ = Persisted<Int>(key: "test", userDefaults: .standard, transformer: MockTransformer())
-        _ = Persisted<Int>(key: "test", userDefaultsStorage: .standard, transformer: MockTransformer())
+        _ = Persisted<Double?>(key: "test", storedBy: UserDefaults.standard, transformer: JSONTransformer())
+        _ = Persisted<Double?>(key: "test", storedBy: UserDefaultsStorage.standard, transformer: JSONTransformer())
+        _ = Persisted(key: "test", storedBy: UserDefaults.standard, transformer: JSONTransformer(), defaultValue: 123)
+        _ = Persisted(key: "test", storedBy: UserDefaultsStorage.standard, transformer: JSONTransformer(), defaultValue: 123)
+
+        _ = Persisted<Double?>(key: "test", userDefaults: .standard, transformer: MockTransformer())
+        _ = Persisted<Double?>(key: "test", userDefaultsStorage: .standard, transformer: MockTransformer())
+        _ = Persisted(key: "test", userDefaults: .standard, transformer: MockTransformer(), defaultValue: 123)
+        _ = Persisted(key: "test", userDefaultsStorage: .standard, transformer: MockTransformer(), defaultValue: 123)
+
+        _ = Persisted<Double?>(key: "test", userDefaults: .standard, transformer: JSONTransformer())
+        _ = Persisted<Double?>(key: "test", userDefaultsStorage: .standard, transformer: JSONTransformer())
+        _ = Persisted(key: "test", userDefaults: .standard, transformer: JSONTransformer(), defaultValue: 123)
+        _ = Persisted(key: "test", userDefaultsStorage: .standard, transformer: JSONTransformer(), defaultValue: 123)
     }
 
     func testPersisterUserDefaultsAPI() {
-        _ = Persister<Int>(key: "test", storedBy: UserDefaults.standard)
-        _ = Persister<Int>(key: "test", storedBy: UserDefaultsStorage.standard)
+        _ = Persister<Double?>(key: "test", storedBy: UserDefaults.standard)
+        _ = Persister<Double?>(key: "test", storedBy: UserDefaultsStorage.standard)
+        _ = Persister(key: "test", storedBy: UserDefaults.standard, defaultValue: 123)
+        _ = Persister(key: "test", storedBy: UserDefaultsStorage.standard, defaultValue: 123)
 
-        _ = Persister<Int>(key: "test", userDefaults: .standard)
-        _ = Persister<Int>(key: "test", userDefaultsStorage: .standard)
+        _ = Persister<Double?>(key: "test", userDefaults: .standard)
+        _ = Persister<Double?>(key: "test", userDefaultsStorage: .standard)
+        _ = Persister(key: "test", userDefaults: .standard, defaultValue: 123)
+        _ = Persister(key: "test", userDefaultsStorage: .standard, defaultValue: 123)
 
-        _ = Persister<Int>(key: "test", storedBy: UserDefaults.standard, transformer: MockTransformer())
-        _ = Persister<Int>(key: "test", storedBy: UserDefaultsStorage.standard, transformer: MockTransformer())
+        _ = Persister<Double?>(key: "test", storedBy: UserDefaults.standard, transformer: MockTransformer())
+        _ = Persister<Double?>(key: "test", storedBy: UserDefaultsStorage.standard, transformer: MockTransformer())
+        _ = Persister(key: "test", storedBy: UserDefaults.standard, transformer: MockTransformer(), defaultValue: 123)
+        _ = Persister(key: "test", storedBy: UserDefaultsStorage.standard, transformer: MockTransformer(), defaultValue: 123)
 
-        _ = Persister<Int>(key: "test", userDefaults: .standard, transformer: MockTransformer())
-        _ = Persister<Int>(key: "test", userDefaultsStorage: .standard, transformer: MockTransformer())
+        _ = Persister<Double?>(key: "test", storedBy: UserDefaults.standard, transformer: JSONTransformer())
+        _ = Persister<Double?>(key: "test", storedBy: UserDefaultsStorage.standard, transformer: JSONTransformer())
+        _ = Persister(key: "test", storedBy: UserDefaults.standard, transformer: JSONTransformer(), defaultValue: 123)
+        _ = Persister(key: "test", storedBy: UserDefaultsStorage.standard, transformer: JSONTransformer(), defaultValue: 123)
+
+        _ = Persister<Double?>(key: "test", userDefaults: .standard, transformer: MockTransformer())
+        _ = Persister<Double?>(key: "test", userDefaultsStorage: .standard, transformer: MockTransformer())
+        _ = Persister(key: "test", userDefaults: .standard, transformer: MockTransformer(), defaultValue: 123)
+        _ = Persister(key: "test", userDefaultsStorage: .standard, transformer: MockTransformer(), defaultValue: 123)
+
+        _ = Persister<Double?>(key: "test", userDefaults: .standard, transformer: JSONTransformer())
+        _ = Persister<Double?>(key: "test", userDefaultsStorage: .standard, transformer: JSONTransformer())
+        _ = Persister(key: "test", userDefaults: .standard, transformer: JSONTransformer(), defaultValue: 123)
+        _ = Persister(key: "test", userDefaultsStorage: .standard, transformer: JSONTransformer(), defaultValue: 123)
     }
 
     func testUserDefaultsStorageSuiteNameInitialiser() {
@@ -50,92 +86,77 @@ final class UserDefaultsStorageTests: XCTestCase {
         XCTAssertNil(storage, "UserDefaultsStorage(suiteName:) should return `nil` for the global domain")
     }
 
-    func testStoredInUserDefaults() {
-        class Foo {
-            @StoredInUserDefaults
-            var bar: String?
-
-            init(userDefaults: UserDefaults) {
-                _bar = StoredInUserDefaults(key: "foo-bar", userDefaults: userDefaults)
-            }
-        }
-
-        let foo = Foo(userDefaults: userDefaults)
-        foo.bar = "new-value"
-        XCTAssertEqual(userDefaults.string(forKey: "foo-bar"), "new-value")
-    }
-
     func testPersisterWithURL() throws {
-        let persister = Persister<URL>(key: "test", userDefaults: userDefaults)
+        let persister = Persister<URL?>(key: "test", userDefaults: userDefaults)
         let url = URL(string: "http://example.com")!
 
         try persister.persist(url)
-        XCTAssertEqual(try persister.retrieveValue(), url)
+        XCTAssertEqual(try persister.retrieveValueOrThrow(), url)
     }
 
     func testPersisterWithBoolFalse() throws {
-        let persister = Persister<Bool>(key: "test", userDefaults: userDefaults)
+        let persister = Persister<Bool?>(key: "test", userDefaults: userDefaults)
         let bool = false
 
         try persister.persist(bool)
-        XCTAssertEqual(try persister.retrieveValue(), bool)
+        XCTAssertEqual(try persister.retrieveValueOrThrow(), bool)
     }
 
     func testPersisterWithBoolTrue() throws {
-        let persister = Persister<Bool>(key: "test", userDefaults: userDefaults)
+        let persister = Persister<Bool?>(key: "test", userDefaults: userDefaults)
         let bool = true
 
         try persister.persist(bool)
-        XCTAssertEqual(try persister.retrieveValue(), bool)
+        XCTAssertEqual(try persister.retrieveValueOrThrow(), bool)
     }
 
     func testPersisterWithInt() throws {
-        let persister = Persister<Int>(key: "test", userDefaults: userDefaults)
+        let persister = Persister<Int?>(key: "test", userDefaults: userDefaults)
         let int = 0
 
         try persister.persist(int)
-        XCTAssertEqual(try persister.retrieveValue(), int)
+        XCTAssertEqual(try persister.retrieveValueOrThrow(), int)
     }
 
     func testPersisterWithDouble() throws {
-        let persister = Persister<Double>(key: "test", userDefaults: userDefaults)
+        let persister = Persister<Double?>(key: "test", userDefaults: userDefaults)
         let double = 1.23
 
         try persister.persist(double)
-        XCTAssertEqual(try persister.retrieveValue(), double)
+        XCTAssertEqual(try persister.retrieveValueOrThrow(), double)
     }
 
     func testPersisterWithFloat() throws {
-        let persister = Persister<Float>(key: "test", userDefaults: userDefaults)
+        let persister = Persister<Float?>(key: "test", userDefaults: userDefaults)
         let float: Float = 1.23
 
         try persister.persist(float)
-        XCTAssertEqual(try persister.retrieveValue()!, float, accuracy: 0.1)
+        XCTAssertEqual(try persister.retrieveValueOrThrow()!, float, accuracy: 0.1)
     }
 
     func testPersisterWithArray() throws {
-        let persister = Persister<[Int]>(key: "test", userDefaults: userDefaults)
+        let persister = Persister<[Int]?>(key: "test", userDefaults: userDefaults)
         let array = [1, 2, 0, 6]
 
         try persister.persist(array)
-        XCTAssertEqual(try persister.retrieveValue(), array)
+        XCTAssertEqual(try persister.retrieveValueOrThrow(), array)
     }
 
     func testPersisterWithDictionary() throws {
-        let persister = Persister<[String: [Int]]>(key: "test", userDefaults: userDefaults)
+        let persister = Persister<[String: [Int]]?>(key: "test", userDefaults: userDefaults)
         let dictionary = [
             "foo": [1, 2, 0, 6],
             "bar": [0, 4, 7],
         ]
 
         try persister.persist(dictionary)
-        XCTAssertEqual(try persister.retrieveValue(), dictionary)
+        XCTAssertEqual(try persister.retrieveValueOrThrow(), dictionary)
     }
 
     func testRetrieveValueOfDifferentType() {
         let key = "key"
         let actualValue = "test"
-        let persister = Persister<Int>(key: key, userDefaults: userDefaults)
+        let persister = Persister<Int?>(key: key, userDefaults: userDefaults)
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
         let cancellable = persister.addUpdateListener() { newValue in
@@ -155,7 +176,7 @@ final class UserDefaultsStorageTests: XCTestCase {
 
         userDefaults.set(actualValue, forKey: "key")
 
-        XCTAssertThrowsError(try persister.retrieveValue(), "Retrieving a value with a different type should throw") { error in
+        XCTAssertThrowsError(try persister.retrieveValueOrThrow(), "Retrieving a value with a different type should throw") { error in
             switch error {
             case PersistenceError.unexpectedValueType(let value, let expected):
                 XCTAssertEqual(value as? String, actualValue)
@@ -305,7 +326,7 @@ final class UserDefaultsStorageTests: XCTestCase {
             var bar: Bar?
 
             init(userDefaults: UserDefaults) {
-                _bar = Persisted(key: "bar", userDefaults: userDefaults, transformer: JSONTransformer())
+                _bar = Persisted<Bar?>(key: "bar", userDefaults: userDefaults, transformer: JSONTransformer())
             }
         }
 
@@ -351,7 +372,7 @@ final class UserDefaultsStorageTests: XCTestCase {
     func testPersisterUpdateListenerUpdateViaUserDefaults() {
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
 
-        let persister = Persister<String>(key: "test", userDefaults: userDefaults)
+        let persister = Persister<String?>(key: "test", userDefaults: userDefaults)
         let cancellable = persister.addUpdateListener() { _ in
             callsUpdateListenerExpectation.fulfill()
         }
@@ -364,7 +385,7 @@ final class UserDefaultsStorageTests: XCTestCase {
     func testPersisterUpdateListenerUpdateViaPersister() throws {
         let key = "test"
         let setValue = "value"
-        let persister = Persister<String>(key: key, userDefaults: userDefaults)
+        let persister = Persister<String?>(key: key, userDefaults: userDefaults)
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
         let updateListenerCancellable = persister.addUpdateListener() { result in
@@ -373,8 +394,8 @@ final class UserDefaultsStorageTests: XCTestCase {
             }
 
             switch result {
-            case .success(let value):
-                XCTAssertEqual(value, setValue)
+            case .success(let update):
+                XCTAssertEqual(update, .persisted(setValue))
             case .failure(let error):
                 XCTFail("Should return a success for updated values, not \(error)")
             }
@@ -390,8 +411,8 @@ final class UserDefaultsStorageTests: XCTestCase {
                 }
 
                 switch result {
-                case .success(let value):
-                    XCTAssertEqual(value, setValue)
+                case .success(let update):
+                    XCTAssertEqual(update, .persisted(setValue))
                 case .failure:
                     XCTFail("Should return a success for updated values")
                 }

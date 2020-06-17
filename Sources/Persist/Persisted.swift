@@ -3,27 +3,9 @@ import Foundation
 @propertyWrapper
 public struct Persisted<Value> {
 
-    public var wrappedValue: Value? {
-        mutating get {
-            do {
-                if let retrieveValue = try projectedValue.retrieveValue() {
-                    return retrieveValue
-                } else if let defaultValue = defaultValue {
-                    if defaultValuePersistBehaviour.contains(.persistWhenNil) {
-                        try? projectedValue.persist(defaultValue)
-                    }
-
-                    return defaultValue
-                }
-
-                return nil
-            } catch {
-                if defaultValuePersistBehaviour.contains(.persistOnError) {
-                    try? projectedValue.persist(defaultValue)
-                }
-
-                return defaultValue
-            }
+    public var wrappedValue: Value {
+        get {
+            return projectedValue.retrieveValue()
         }
         set {
             try? projectedValue.persist(newValue)
@@ -32,69 +14,136 @@ public struct Persisted<Value> {
 
     public private(set) var projectedValue: Persister<Value>
 
-    public var defaultValue: Value?
-
-    public var defaultValuePersistBehaviour: DefaultValuePersistOption
-
-    public init(
-        persister: Persister<Value>,
-        defaultValue: Value? = nil,
-        defaultValuePersistBehaviour: DefaultValuePersistOption = []
-    ) {
-        self.defaultValue = defaultValue
-        self.defaultValuePersistBehaviour = defaultValuePersistBehaviour
-
+    public init(persister: Persister<Value>) {
         projectedValue = persister
     }
 
+    // MARK: - Storage.Value == Value
+
     public init<Storage: Persist.Storage>(
         key: Storage.Key,
-        defaultValue: Value? = nil,
         storedBy storage: Storage,
+        defaultValue: Value,
         defaultValuePersistBehaviour: DefaultValuePersistOption = []
     ) where Storage.Value == Value {
-        self.defaultValue = defaultValue
-        self.defaultValuePersistBehaviour = defaultValuePersistBehaviour
-
-        projectedValue = Persister(key: key, storedBy: storage)
+        projectedValue = Persister(
+            key: key,
+            storedBy: storage,
+            defaultValue: defaultValue,
+            defaultValuePersistBehaviour: defaultValuePersistBehaviour
+        )
     }
+
+    public init<Storage: Persist.Storage, WrappedValue>(
+        key: Storage.Key,
+        storedBy storage: Storage,
+        defaultValue: Value = nil,
+        defaultValuePersistBehaviour: DefaultValuePersistOption = []
+    ) where Storage.Value == WrappedValue, Value == Optional<WrappedValue> {
+        projectedValue = Persister(
+            key: key,
+            storedBy: storage,
+            defaultValue: defaultValue,
+            defaultValuePersistBehaviour: defaultValuePersistBehaviour
+        )
+    }
+
+    // MARK: - Storage.Value == Any
 
     public init<Storage: Persist.Storage>(
         key: Storage.Key,
-        defaultValue: Value? = nil,
         storedBy storage: Storage,
+        defaultValue: Value,
         defaultValuePersistBehaviour: DefaultValuePersistOption = []
     ) where Storage.Value == Any {
-        self.defaultValue = defaultValue
-        self.defaultValuePersistBehaviour = defaultValuePersistBehaviour
-
-        projectedValue = Persister(key: key, storedBy: storage)
+        projectedValue = Persister(
+            key: key,
+            storedBy: storage,
+            defaultValue: defaultValue,
+            defaultValuePersistBehaviour: defaultValuePersistBehaviour
+        )
     }
+
+    public init<Storage: Persist.Storage, WrappedValue>(
+        key: Storage.Key,
+        storedBy storage: Storage,
+        defaultValue: Value = nil,
+        defaultValuePersistBehaviour: DefaultValuePersistOption = []
+    ) where Storage.Value == Any, Value == Optional<WrappedValue> {
+        projectedValue = Persister(
+            key: key,
+            storedBy: storage,
+            defaultValue: defaultValue,
+            defaultValuePersistBehaviour: defaultValuePersistBehaviour
+        )
+    }
+
+    // MARK: - Storage.Value == Any, Transformer.Input == Value
 
     public init<Storage: Persist.Storage, Transformer: Persist.Transformer>(
         key: Storage.Key,
-        defaultValue: Value? = nil,
         storedBy storage: Storage,
         transformer: Transformer,
+        defaultValue: Value,
         defaultValuePersistBehaviour: DefaultValuePersistOption = []
     ) where Storage.Value == Any, Transformer.Input == Value {
-        self.defaultValue = defaultValue
-        self.defaultValuePersistBehaviour = defaultValuePersistBehaviour
-
-        projectedValue = Persister(key: key, storedBy: storage, transformer: transformer)
+        projectedValue = Persister(
+            key: key,
+            storedBy: storage,
+            transformer: transformer,
+            defaultValue: defaultValue,
+            defaultValuePersistBehaviour: defaultValuePersistBehaviour
+        )
     }
+
+    public init<Storage: Persist.Storage, Transformer: Persist.Transformer, WrappedValue>(
+        key: Storage.Key,
+        storedBy storage: Storage,
+        transformer: Transformer,
+        defaultValue: Value = nil,
+        defaultValuePersistBehaviour: DefaultValuePersistOption = []
+    ) where Storage.Value == Any, Transformer.Input == WrappedValue, Value == WrappedValue? {
+        projectedValue = Persister(
+            key: key,
+            storedBy: storage,
+            transformer: transformer,
+            defaultValue: defaultValue,
+            defaultValuePersistBehaviour: defaultValuePersistBehaviour
+        )
+    }
+
+    // MARK: - Transformer.Input == Value, Transformer.Output == Storage.Value
 
     public init<Storage: Persist.Storage, Transformer: Persist.Transformer>(
         key: Storage.Key,
-        defaultValue: Value? = nil,
         storedBy storage: Storage,
         transformer: Transformer,
+        defaultValue: Value,
         defaultValuePersistBehaviour: DefaultValuePersistOption = []
     ) where Transformer.Input == Value, Transformer.Output == Storage.Value {
-        self.defaultValue = defaultValue
-        self.defaultValuePersistBehaviour = defaultValuePersistBehaviour
+        projectedValue = Persister(
+            key: key,
+            storedBy: storage,
+            transformer: transformer,
+            defaultValue: defaultValue,
+            defaultValuePersistBehaviour: defaultValuePersistBehaviour
+        )
+    }
 
-        projectedValue = Persister(key: key, storedBy: storage, transformer: transformer)
+    public init<Storage: Persist.Storage, Transformer: Persist.Transformer, WrappedValue>(
+        key: Storage.Key,
+        storedBy storage: Storage,
+        transformer: Transformer,
+        defaultValue: Value = nil,
+        defaultValuePersistBehaviour: DefaultValuePersistOption = []
+    ) where Transformer.Input == WrappedValue, Transformer.Output == Storage.Value, Value == Optional<WrappedValue> {
+        projectedValue = Persister(
+            key: key,
+            storedBy: storage,
+            transformer: transformer,
+            defaultValue: defaultValue,
+            defaultValuePersistBehaviour: defaultValuePersistBehaviour
+        )
     }
 
 }
