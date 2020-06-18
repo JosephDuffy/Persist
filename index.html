@@ -13,7 +13,7 @@
     <a title="  Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="index.html"> Docs</a> (21% documented)</p>
+        <p><a href="index.html"> Docs</a> (28% documented)</p>
         <p class="header-right"><a href="https://github.com/JosephDuffy/Persist"><img src="img/gh.png"/>View on GitHub</a></p>
       </div>
     </header>
@@ -44,6 +44,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="Classes/Persister.html">Persister</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/Persister/Update.html">– Update</a>
               </li>
               <li class="nav-group-task">
                 <a href="Classes/UserDefaultsStorage.html">UserDefaultsStorage</a>
@@ -90,12 +93,6 @@
               </li>
               <li class="nav-group-task">
                 <a href="Extensions/Int64.html">Int64</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="Extensions/StoredInNSUbiquitousKeyValueStore.html">StoredInNSUbiquitousKeyValueStore</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="Extensions/StoredInUserDefaults.html">StoredInUserDefaults</a>
               </li>
               <li class="nav-group-task">
                 <a href="Extensions/String.html">String</a>
@@ -148,17 +145,6 @@
               </li>
             </ul>
           </li>
-          <li class="nav-group-name">
-            <a href="Typealiases.html">Type Aliases</a>
-            <ul class="nav-group-tasks">
-              <li class="nav-group-task">
-                <a href="Typealiases.html#/s:7Persist33StoredInNSUbiquitousKeyValueStorea">StoredInNSUbiquitousKeyValueStore</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="Typealiases.html#/s:7Persist20StoredInUserDefaultsa">StoredInUserDefaults</a>
-              </li>
-            </ul>
-          </li>
         </ul>
       </nav>
       <article class="main-content">
@@ -172,22 +158,28 @@
 <a href="https://josephduffy.github.io/Persist/"><img src="https://josephduffy.github.io/Persist/badge.svg" alt="Documentation"></a>
 <a href="https://github.com/apple/swift-package-manager"><img src="https://img.shields.io/badge/SwiftPM-compatible-4BC51D.svg?style=flat" alt="SwiftPM Compatible"></a></p>
 
-<p>Property wrapper for storing and retrieving values with support for transformations such as storing as JSON data.</p>
+<p><code>Persist</code> is a framework that aids with storing and retrieving values, with support for transformations such as storing as JSON data.</p>
 <h2 id='usage' class='heading'>Usage</h2>
 
-<p>Persist provides the <code><a href="Structs/Persisted.html">Persisted</a></code> property wrapper, which handles the persisting of values by utilising some form of storage. When creating a <code><a href="Structs/Persisted.html">Persisted</a></code> property wrapper any form of storage may be used, as long as it supports the type you wish to store.</p>
+<p>Persist provides the <code><a href="Classes/Persister.html">Persister</a></code> class, which can be used to store and retieve values from various forms of storage.</p>
+
+<p>The <code><a href="Structs/Persisted.html">Persisted</a></code> property wrapper wraps <code><a href="Classes/Persister.html">Persister</a></code>, making it easy to have a property that automatically persists its value.</p>
 <pre class="highlight swift"><code><span class="kd">class</span> <span class="kt">Foo</span> <span class="p">{</span>
-    <span class="kd">@Persisted</span><span class="p">(</span><span class="nv">key</span><span class="p">:</span> <span class="s">"foo-bar"</span><span class="p">,</span> <span class="nv">userDefaults</span><span class="p">:</span> <span class="o">.</span><span class="n">standard</span><span class="p">)</span>
-    <span class="k">var</span> <span class="nv">bar</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span>
+    <span class="kd">@Persisted</span><span class="p">(</span><span class="nv">key</span><span class="p">:</span> <span class="s">"foo-bar"</span><span class="p">,</span> <span class="nv">userDefaults</span><span class="p">:</span> <span class="o">.</span><span class="n">standard</span><span class="p">,</span> <span class="n">defaultValue</span><span class="p">:</span> <span class="s">"bar-default"</span><span class="p">)</span>
+    <span class="k">var</span> <span class="nv">bar</span><span class="p">:</span> <span class="kt">String</span>
+
+    <span class="kd">@Persisted</span><span class="p">(</span><span class="nv">key</span><span class="p">:</span> <span class="s">"foo-baz"</span><span class="p">,</span> <span class="nv">userDefaults</span><span class="p">:</span> <span class="o">.</span><span class="n">standard</span><span class="p">)</span>
+    <span class="k">var</span> <span class="nv">baz</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span>
 <span class="p">}</span>
 
 <span class="k">let</span> <span class="nv">foo</span> <span class="o">=</span> <span class="kt">Foo</span><span class="p">()</span>
-<span class="n">foo</span><span class="o">.</span><span class="n">bar</span> <span class="c1">// nil</span>
-<span class="n">foo</span><span class="o">.</span><span class="n">bar</span> <span class="o">=</span> <span class="s">"new-value"</span>
-<span class="kt">UserDefaults</span><span class="o">.</span><span class="n">standard</span><span class="o">.</span><span class="nf">object</span><span class="p">(</span><span class="nv">forKey</span><span class="p">:</span> <span class="s">"foo-bar"</span><span class="p">)</span> <span class="c1">// "new-value"</span>
+<span class="n">foo</span><span class="o">.</span><span class="n">bar</span> <span class="c1">// "bar-default"</span>
+<span class="n">foo</span><span class="o">.</span><span class="n">baz</span> <span class="c1">// nil</span>
+<span class="n">foo</span><span class="o">.</span><span class="n">baz</span> <span class="o">=</span> <span class="s">"new-value"</span>
+<span class="kt">UserDefaults</span><span class="o">.</span><span class="n">standard</span><span class="o">.</span><span class="nf">object</span><span class="p">(</span><span class="nv">forKey</span><span class="p">:</span> <span class="s">"foo-baz"</span><span class="p">)</span> <span class="c1">// "new-value"</span>
 </code></pre>
 
-<p><code>Persist</code> includes out-of-the-box supports for:</p>
+<p><code>Persist</code> includes out-of-the-box support for:</p>
 
 <ul>
 <li><code>UserDefaults</code></li>
@@ -195,6 +187,24 @@
 <li><code>FileManager</code></li>
 <li><code><a href="Classes/InMemoryStorage.html">InMemoryStorage</a></code> (a simple wrapper around a dictionary)</li>
 </ul>
+<h3 id='catching-errors' class='heading'>Catching Errors</h3>
+
+<p><code><a href="Classes/Persister.html">Persister</a></code>&lsquo;s <code>persist(_:)</code> and <code>retrieveValueOrThrow()</code> functions will throw if the storage or transformer throws are error.</p>
+
+<p><code>Persited</code> wraps a <code><a href="Classes/Persister.html">Persister</a></code> and exposes it as the <code>projectedValue</code>, which allows you to catch errors:</p>
+<pre class="highlight swift"><code><span class="kd">class</span> <span class="kt">Foo</span> <span class="p">{</span>
+    <span class="kd">@Persisted</span><span class="p">(</span><span class="nv">key</span><span class="p">:</span> <span class="s">"foo-bar"</span><span class="p">,</span> <span class="nv">userDefaults</span><span class="p">:</span> <span class="o">.</span><span class="n">standard</span><span class="p">)</span>
+    <span class="k">var</span> <span class="nv">bar</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span>
+<span class="p">}</span>
+
+<span class="k">do</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="nv">foo</span> <span class="o">=</span> <span class="kt">Foo</span><span class="p">()</span>
+    <span class="k">try</span> <span class="n">foo</span><span class="o">.</span><span class="err">$</span><span class="n">bar</span><span class="o">.</span><span class="nf">persist</span><span class="p">(</span><span class="s">"new-value"</span><span class="p">)</span>
+    <span class="k">try</span> <span class="n">foo</span><span class="o">.</span><span class="err">$</span><span class="n">bar</span><span class="o">.</span><span class="nf">retrieveValueOrThrow</span><span class="p">()</span>
+<span class="p">}</span> <span class="k">catch</span> <span class="p">{</span>
+    <span class="c1">// Something went wrong</span>
+<span class="p">}</span>
+</code></pre>
 <h3 id='subscribing-to-updates' class='heading'>Subscribing to Updates</h3>
 
 <p>When targeting macOS 10.15, iOS 13, tvOS 13, or watchOS 6 or greater Combine can be used to subscribe to updates:</p>
@@ -216,8 +226,15 @@
 <span class="p">}</span>
 
 <span class="k">let</span> <span class="nv">foo</span> <span class="o">=</span> <span class="kt">Foo</span><span class="p">()</span>
-<span class="k">let</span> <span class="nv">cancellable</span> <span class="o">=</span> <span class="n">foo</span><span class="o">.</span><span class="err">$</span><span class="n">bar</span><span class="o">.</span><span class="nf">addUpdateListener</span><span class="p">()</span> <span class="p">{</span> <span class="n">_</span> <span class="k">in</span>
-    <span class="nf">print</span><span class="p">(</span><span class="s">"Value updated"</span><span class="p">)</span>
+<span class="k">let</span> <span class="nv">cancellable</span> <span class="o">=</span> <span class="n">foo</span><span class="o">.</span><span class="err">$</span><span class="n">bar</span><span class="o">.</span><span class="nf">addUpdateListener</span><span class="p">()</span> <span class="p">{</span> <span class="n">result</span> <span class="k">in</span>
+    <span class="k">switch</span> <span class="n">result</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="o">.</span><span class="nf">success</span><span class="p">(</span><span class="o">.</span><span class="nf">persisted</span><span class="p">(</span><span class="k">let</span> <span class="nv">newValue</span><span class="p">)):</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"Value updated to"</span><span class="p">,</span> <span class="n">newValue</span><span class="p">)</span>
+    <span class="k">case</span> <span class="o">.</span><span class="nf">success</span><span class="p">(</span><span class="o">.</span><span class="n">removed</span><span class="p">):</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"Value has been removed"</span><span class="p">)</span>
+    <span class="k">case</span> <span class="o">.</span><span class="nf">failure</span><span class="p">(</span><span class="k">let</span> <span class="nv">error</span><span class="p">):</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"An error occured:"</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span>
+    <span class="p">}</span>
 <span class="p">}</span>
 </code></pre>
 <h3 id='transformers' class='heading'>Transformers</h3>
@@ -233,11 +250,13 @@
 <span class="p">}</span>
 
 <span class="k">let</span> <span class="nv">foo</span> <span class="o">=</span> <span class="kt">Foo</span><span class="p">()</span>
-<span class="k">let</span> <span class="nv">cancellable</span> <span class="o">=</span> <span class="n">foo</span><span class="o">.</span><span class="err">$</span><span class="n">bar</span><span class="o">.</span><span class="nf">addUpdateListener</span><span class="p">()</span> <span class="p">{</span> <span class="n">updateResult</span> <span class="k">in</span>
-    <span class="k">switch</span> <span class="n">updateResult</span> <span class="p">{</span>
-    <span class="k">case</span> <span class="o">.</span><span class="nf">success</span><span class="p">(</span><span class="k">let</span> <span class="nv">bar</span><span class="p">):</span>
-        <span class="c1">// `bar` is always `Bar?` despite being transformed to JSON `Data` by `JSONTransformer`</span>
-        <span class="nf">print</span><span class="p">(</span><span class="s">"Bar updated:"</span><span class="p">,</span> <span class="n">bar</span> <span class="p">??</span> <span class="s">"removed"</span><span class="p">)</span>
+<span class="k">let</span> <span class="nv">cancellable</span> <span class="o">=</span> <span class="n">foo</span><span class="o">.</span><span class="err">$</span><span class="n">bar</span><span class="o">.</span><span class="nf">addUpdateListener</span><span class="p">()</span> <span class="p">{</span> <span class="n">result</span> <span class="k">in</span>
+    <span class="k">switch</span> <span class="n">result</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="o">.</span><span class="nf">success</span><span class="p">(</span><span class="o">.</span><span class="nf">persisted</span><span class="p">(</span><span class="k">let</span> <span class="nv">bar</span><span class="p">)):</span>
+        <span class="c1">// `bar` is always `Bar` despite being transformed to JSON `Data` by `JSONTransformer`</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"Value updated to"</span><span class="p">,</span> <span class="n">bar</span><span class="p">)</span>
+    <span class="k">case</span> <span class="o">.</span><span class="nf">success</span><span class="p">(</span><span class="o">.</span><span class="n">removed</span><span class="p">):</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"Value has been removed"</span><span class="p">)</span>
     <span class="k">case</span> <span class="o">.</span><span class="nf">failure</span><span class="p">(</span><span class="k">let</span> <span class="nv">error</span><span class="p">):</span>
         <span class="nf">print</span><span class="p">(</span><span class="s">"Error updating bar:"</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span>
     <span class="p">}</span>
@@ -350,7 +369,7 @@
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2020 <a class="link" href="" target="_blank" rel="external">Joseph Duffy</a>. All rights reserved. (Last updated: 2020-05-30)</p>
+          <p>&copy; 2020 <a class="link" href="" target="_blank" rel="external">Joseph Duffy</a>. All rights reserved. (Last updated: 2020-06-18)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
