@@ -15,17 +15,21 @@ The `Persisted` property wrapper wraps `Persister`, making it easy to have a pro
 
 ```swift
 class Foo {
-    @Persisted(key: "foo-bar", userDefaults: .standard)
-    var bar: String?
+    @Persisted(key: "foo-bar", userDefaults: .standard, defaultValue: "bar-default")
+    var bar: String
+
+    @Persisted(key: "foo-baz", userDefaults: .standard)
+    var baz: String?
 }
 
 let foo = Foo()
-foo.bar // nil
-foo.bar = "new-value"
-UserDefaults.standard.object(forKey: "foo-bar") // "new-value"
+foo.bar // "bar-default"
+foo.baz // nil
+foo.baz = "new-value"
+UserDefaults.standard.object(forKey: "foo-baz") // "new-value"
 ```
 
-`Persist` includes out-of-the-box supports for:
+`Persist` includes out-of-the-box support for:
 
 - `UserDefaults`
 - `NSUbiquitousKeyValueStore`
@@ -34,7 +38,7 @@ UserDefaults.standard.object(forKey: "foo-bar") // "new-value"
 
 ### Catching Errors
 
-`Persister`'s `persist(_:)` and `retrieveValue()` functions will throw if the storage or transformer throws are error.
+`Persister`'s `persist(_:)` and `retrieveValueOrThrow()` functions will throw if the storage or transformer throws are error.
 
 `Persited` wraps a `Persister` and exposes it as the `projectedValue`, which allows you to catch errors:
 
@@ -47,7 +51,7 @@ class Foo {
 do {
     let foo = Foo()
     try foo.$bar.persist("new-value")
-    try foo.$bar.retrieveValue()
+    try foo.$bar.retrieveValueOrThrow()
 } catch {
     // Something went wrong
 }
@@ -78,8 +82,15 @@ class Foo {
 }
 
 let foo = Foo()
-let cancellable = foo.$bar.addUpdateListener() { _ in
-    print("Value updated")
+let cancellable = foo.$bar.addUpdateListener() { result in
+    switch result {
+    case .success(.persisted(let newValue)):
+        print("Value updated to", newValue)
+    case .success(.removed):
+        print("Value has been removed")
+    case .failure(let error):
+        print("An error occured:", error)
+    }
 }
 ```
 
@@ -98,11 +109,13 @@ class Foo {
 }
 
 let foo = Foo()
-let cancellable = foo.$bar.addUpdateListener() { updateResult in
-    switch updateResult {
-    case .success(let bar):
-        // `bar` is always `Bar?` despite being transformed to JSON `Data` by `JSONTransformer`
-        print("Bar updated:", bar ?? "removed")
+let cancellable = foo.$bar.addUpdateListener() { result in
+    switch result {
+    case .success(.persisted(let bar)):
+        // `bar` is always `Bar` despite being transformed to JSON `Data` by `JSONTransformer`
+        print("Value updated to", bar)
+    case .success(.removed):
+        print("Value has been removed")
     case .failure(let error):
         print("Error updating bar:", error)
     }
