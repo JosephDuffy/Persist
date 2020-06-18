@@ -336,25 +336,27 @@ final class PersistedTests: XCTestCase {
     }
 
     func testNonOptionalValueWithAnyStorageAndTransformer() throws {
-        let defaultValue = "default-value"
+        let defaultValue: CodableStruct = "default-value"
         let storage = InMemoryStorage<Any>()
-        let transformer = JSONTransformer<String>()
+        let transformer = JSONTransformer<CodableStruct>()
         var persisted = Persisted(key: "test-key", storedBy: storage, transformer: transformer, defaultValue: defaultValue)
         XCTAssertEqual(persisted.wrappedValue, defaultValue, "`wrappedValue` should return the default value when a value has not been set")
+
+        let newValue: CodableStruct = "new-value"
 
         let callsFirstUpdateListenerExpectationTwice = expectation(description: "Calls first update listener twice")
         callsFirstUpdateListenerExpectationTwice.expectedFulfillmentCount = 2
         var callCount = 0
-        let firstCancellable = persisted.projectedValue.addUpdateListener() { newValue in
+        let firstCancellable = persisted.projectedValue.addUpdateListener() { result in
             defer {
                 callsFirstUpdateListenerExpectationTwice.fulfill()
                 callCount += 1
             }
 
-            switch newValue {
+            switch result {
             case .success(let update):
                 if callCount == 0 {
-                    XCTAssertEqual(update, .persisted("new-value"), "Update listener should receive `persisted` update with new value")
+                    XCTAssertEqual(update, .persisted(newValue), "Update listener should receive `persisted` update with new value")
                 } else if callCount == 1 {
                     XCTAssertEqual(update, .removed, "Update listener should receive `removed` update")
                 }
@@ -365,20 +367,19 @@ final class PersistedTests: XCTestCase {
         _ = firstCancellable
 
         let callsSecondUpdateListenerExpectation = expectation(description: "Calls second update listener")
-        let secondCancellable = persisted.projectedValue.addUpdateListener() { newValue in
+        let secondCancellable = persisted.projectedValue.addUpdateListener() { result in
             defer {
                 callsSecondUpdateListenerExpectation.fulfill()
             }
 
-            switch newValue {
+            switch result {
             case .success(let update):
-                XCTAssertEqual(update, .persisted("new-value"), "Update listener should receive `persisted` update with new value")
+                XCTAssertEqual(update, .persisted(newValue), "Update listener should receive `persisted` update with new value")
             case .failure:
                 XCTFail("Update should not fail")
             }
         }
 
-        let newValue = "new-value"
         persisted.wrappedValue = newValue
         XCTAssertEqual(persisted.wrappedValue, newValue, "`wrappedValue` should return the value that been set via `wrappedValue`")
         XCTAssertTrue(storage.retrieveValue(for: "test-key") is Data, "Stored value should be transformer output")
@@ -395,10 +396,10 @@ final class PersistedTests: XCTestCase {
     func testNonOptionalValueWithAnyStorageAndTransformerDifferentStoredValueType() throws {
         let key = "test-key"
         let storage = InMemoryStorage<Any>()
-        let transformer = JSONTransformer<String>()
-        let defaultValue = "default-value"
+        let transformer = JSONTransformer<CodableStruct>()
+        let defaultValue: CodableStruct = "default-value"
         let storedValue = 123
-        let persisted = Persisted<String>(key: key, storedBy: storage, transformer: transformer, defaultValue: defaultValue)
+        let persisted = Persisted(key: key, storedBy: storage, transformer: transformer, defaultValue: defaultValue)
 
         let callsUpdateListenerExpectation = expectation(description: "Calls first update listener")
         let cancellable = persisted.projectedValue.addUpdateListener() { result in
@@ -470,9 +471,9 @@ final class PersistedTests: XCTestCase {
     func testOptionalValueWithAnyStorageAndTransformerDifferentStoredValueType() throws {
         let key = "test-key"
         let storage = InMemoryStorage<Any>()
-        let transformer = JSONTransformer<String>()
+        let transformer = JSONTransformer<CodableStruct>()
         let storedValue = 123
-        let persisted = Persisted<String?>(key: key, storedBy: storage, transformer: transformer)
+        let persisted = Persisted<CodableStruct?>(key: key, storedBy: storage, transformer: transformer)
 
         let callsUpdateListenerExpectation = expectation(description: "Calls first update listener")
         let cancellable = persisted.projectedValue.addUpdateListener() { result in
@@ -542,11 +543,11 @@ final class PersistedTests: XCTestCase {
 
     func testOptionalValueWithAnyStorageAndTransformer() throws {
         let storage = InMemoryStorage<Any>()
-        let transformer = JSONTransformer<String>()
-        var persisted = Persisted<String?>(key: "test-key", storedBy: storage, transformer: transformer)
+        let transformer = JSONTransformer<CodableStruct>()
+        var persisted = Persisted<CodableStruct?>(key: "test-key", storedBy: storage, transformer: transformer)
         XCTAssertNil(persisted.wrappedValue, "`wrappedValue` should return `nil` when a value has not been set")
 
-        let newValue = "new-value"
+        let newValue: CodableStruct = "new-value"
 
         let callsFirstUpdateListenerExpectationTwice = expectation(description: "Calls first update listener twice")
         callsFirstUpdateListenerExpectationTwice.expectedFulfillmentCount = 4
@@ -604,25 +605,30 @@ final class PersistedTests: XCTestCase {
     }
 
     func testNonOptionalValueWithTransformer() throws {
-        let defaultValue = "default-value"
+        struct CodableType: Codable, Equatable {
+            let property: String
+        }
+        let defaultValue = CodableType(property: "default-value")
         let storage = InMemoryStorage<Data>()
-        let transformer = JSONTransformer<String>()
+        let transformer = JSONTransformer<CodableType>()
         var persisted = Persisted(key: "test-key", storedBy: storage, transformer: transformer, defaultValue: defaultValue)
         XCTAssertEqual(persisted.wrappedValue, defaultValue, "`wrappedValue` should return the default value when a value has not been set")
+
+        let newValue = CodableType(property: "new-value")
 
         let callsFirstUpdateListenerExpectationTwice = expectation(description: "Calls first update listener twice")
         callsFirstUpdateListenerExpectationTwice.expectedFulfillmentCount = 2
         var callCount = 0
-        let firstCancellable = persisted.projectedValue.addUpdateListener() { newValue in
+        let firstCancellable = persisted.projectedValue.addUpdateListener() { result in
             defer {
                 callsFirstUpdateListenerExpectationTwice.fulfill()
                 callCount += 1
             }
 
-            switch newValue {
+            switch result {
             case .success(let update):
                 if callCount == 0 {
-                    XCTAssertEqual(update, .persisted("new-value"), "Update listener should receive `persisted` update with new value")
+                    XCTAssertEqual(update, .persisted(newValue), "Update listener should receive `persisted` update with new value")
                 } else if callCount == 1 {
                     XCTAssertEqual(update, .removed, "Update listener should receive `removed` update")
                 }
@@ -633,20 +639,19 @@ final class PersistedTests: XCTestCase {
         _ = firstCancellable
 
         let callsSecondUpdateListenerExpectation = expectation(description: "Calls second update listener")
-        let secondCancellable = persisted.projectedValue.addUpdateListener() { newValue in
+        let secondCancellable = persisted.projectedValue.addUpdateListener() { result in
             defer {
                 callsSecondUpdateListenerExpectation.fulfill()
             }
 
-            switch newValue {
+            switch result {
             case .success(let update):
-                XCTAssertEqual(update, .persisted("new-value"), "Update listener should receive `persisted` update with new value")
+                XCTAssertEqual(update, .persisted(newValue), "Update listener should receive `persisted` update with new value")
             case .failure:
                 XCTFail("Update should not fail")
             }
         }
 
-        let newValue = "new-value"
         persisted.wrappedValue = newValue
         XCTAssertEqual(persisted.wrappedValue, newValue, "`wrappedValue` should return the value that been set via `wrappedValue`")
 
@@ -654,7 +659,7 @@ final class PersistedTests: XCTestCase {
 
         try persisted.projectedValue.removeValue()
 
-        XCTAssertEqual(persisted.wrappedValue, persisted.projectedValue.defaultValue, "`wrappedValue` should return the default value when a value has been removed")
+        XCTAssertEqual(persisted.wrappedValue, defaultValue, "`wrappedValue` should return the default value when a value has been removed")
 
         waitForExpectations(timeout: 0.1, handler: nil)
     }
@@ -696,23 +701,25 @@ final class PersistedTests: XCTestCase {
 
     func testOptionalValueWithTransformer() throws {
         let storage = InMemoryStorage<Data>()
-        let transformer = JSONTransformer<String>()
-        var persisted = Persisted<String?>(key: "test-key", storedBy: storage, transformer: transformer)
+        let transformer = JSONTransformer<CodableStruct>()
+        var persisted = Persisted<CodableStruct?>(key: "test-key", storedBy: storage, transformer: transformer)
         XCTAssertNil(persisted.wrappedValue, "`wrappedValue` should return `nil` when a value has not been set")
+
+        let newValue: CodableStruct = "new-value"
 
         let callsFirstUpdateListenerExpectationTwice = expectation(description: "Calls first update listener twice")
         callsFirstUpdateListenerExpectationTwice.expectedFulfillmentCount = 4
         var callCount = 0
-        let firstCancellable = persisted.projectedValue.addUpdateListener() { newValue in
+        let firstCancellable = persisted.projectedValue.addUpdateListener() { result in
             defer {
                 callsFirstUpdateListenerExpectationTwice.fulfill()
                 callCount += 1
             }
 
-            switch newValue {
+            switch result {
             case .success(let update):
                 if callCount % 2 == 0 {
-                    XCTAssertEqual(update, .persisted("new-value"), "Update listener should receive `persisted` update with new value")
+                    XCTAssertEqual(update, .persisted(newValue), "Update listener should receive `persisted` update with new value")
                 } else {
                     XCTAssertEqual(update, .removed, "Update listener should receive `removed` update")
                 }
@@ -723,20 +730,19 @@ final class PersistedTests: XCTestCase {
         _ = firstCancellable
 
         let callsSecondUpdateListenerExpectation = expectation(description: "Calls second update listener")
-        let secondCancellable = persisted.projectedValue.addUpdateListener() { newValue in
+        let secondCancellable = persisted.projectedValue.addUpdateListener() { result in
             defer {
                 callsSecondUpdateListenerExpectation.fulfill()
             }
 
-            switch newValue {
+            switch result {
             case .success(let update):
-                XCTAssertEqual(update, .persisted("new-value"), "Update listener should receive `persisted` update with new value")
+                XCTAssertEqual(update, .persisted(newValue), "Update listener should receive `persisted` update with new value")
             case .failure:
                 XCTFail("Update should not fail")
             }
         }
 
-        let newValue = "new-value"
         persisted.wrappedValue = newValue
         XCTAssertEqual(persisted.wrappedValue, newValue, "`wrappedValue` should return the value that been set via `wrappedValue`")
 

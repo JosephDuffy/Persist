@@ -10,7 +10,7 @@ final class JSONTransformerTests: XCTestCase {
         let coderUserInfo: [CodingUserInfoKey: Any] = [
             customKey: customKeyValue,
         ]
-        let transformer = JSONTransformer<String>(coderUserInfo: coderUserInfo)
+        let transformer = JSONTransformer<CodableStruct>(coderUserInfo: coderUserInfo)
         XCTAssertEqual(transformer.encoder.userInfo[customKey] as? String, customKeyValue)
         XCTAssertEqual(transformer.decoder.userInfo[customKey] as? String, customKeyValue)
     }
