@@ -56,7 +56,7 @@ extension Persisted where Value: StorableInUserDefaults {
 
 extension Persisted {
 
-    // MARK: - Value: StorableInNSUbiquitousKeyValueStore?
+    // MARK: - Value: StorableInUserDefaults?
 
     /**
      Create a new instance that stores the value against the `key`, storing values in the specified
@@ -105,7 +105,7 @@ extension Persisted {
         )
     }
 
-    // MARK: - Transformer.Input == Value, Transformer.Output: StorableInNSUbiquitousKeyValueStore
+    // MARK: - Transformer.Input == Value, Transformer.Output: StorableInUserDefaults
 
     /**
      Create a new instance that stores the value against the `key`,  storing values in the specified
@@ -166,7 +166,7 @@ extension Persisted {
         )
     }
 
-    // MARK: - Transformer.Input == WrappedValue, Transformer.Output: StorableInNSUbiquitousKeyValueStore
+    // MARK: - Transformer.Input == WrappedValue, Transformer.Output: StorableInUserDefaults
 
     /**
      Create a new instance that stores the value against the `key`,  storing values in the specified
