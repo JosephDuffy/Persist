@@ -14,7 +14,7 @@
     <a title="FileManagerStorage Class Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html"> Docs</a> (28% documented)</p>
+        <p><a href="../index.html"> Docs</a> (100% documented)</p>
         <p class="header-right"><a href="https://github.com/JosephDuffy/Persist"><img src="../img/gh.png"/>View on GitHub</a></p>
       </div>
     </header>
@@ -32,9 +32,6 @@
             <a href="../Classes.html">Classes</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="../Classes/Cancellable.html">Cancellable</a>
-              </li>
-              <li class="nav-group-task">
                 <a href="../Classes/FileManagerStorage.html">FileManagerStorage</a>
               </li>
               <li class="nav-group-task">
@@ -48,6 +45,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/Persister/Update.html">– Update</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Subscription.html">Subscription</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/UserDefaultsStorage.html">UserDefaultsStorage</a>
@@ -107,6 +107,9 @@
             <a href="../Protocols.html">Protocols</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
+                <a href="../Protocols/Cancellable.html">Cancellable</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Protocols/StorableInNSUbiquitousKeyValueStore.html">StorableInNSUbiquitousKeyValueStore</a>
               </li>
               <li class="nav-group-task">
@@ -139,9 +142,6 @@
                 <a href="../Structs/PropertyListTransformer.html">PropertyListTransformer</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Structs/StorableInNSUbiquitousKeyValueStoreTransformer.html">StorableInNSUbiquitousKeyValueStoreTransformer</a>
-              </li>
-              <li class="nav-group-task">
                 <a href="../Structs/StorableInUserDefaultsTransformer.html">StorableInUserDefaultsTransformer</a>
               </li>
             </ul>
@@ -158,7 +158,8 @@
 
                 </div>
               </div>
-            
+            <p>A <code><a href="../Protocols/Storage.html">Storage</a></code> wrapper around <code>FileManager</code>.</p>
+
           </section>
           <section class="section task-group-section">
             <div class="task-group">
@@ -166,9 +167,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:7Persist7StorageP5ValueQa"></a>
+                    <a name="/s:7Persist18FileManagerStorageC5Valuea"></a>
                     <a name="//apple_ref/swift/Alias/Value" class="dashAnchor"></a>
-                    <a class="token" href="#/s:7Persist7StorageP5ValueQa">Value</a>
+                    <a class="token" href="#/s:7Persist18FileManagerStorageC5Valuea">Value</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -176,13 +177,41 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        
+                        <p>The value type the <code>FileManagerStorage</code> can store.</p>
+
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">typealias</span> <span class="kt">Value</span> <span class="o">=</span> <span class="kt">Data</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:7Persist18FileManagerStorageC7defaultACvpZ"></a>
+                    <a name="//apple_ref/swift/Variable/default" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7Persist18FileManagerStorageC7defaultACvpZ">default</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns the default singleton instance.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="kd">static</span> <span class="kd">var</span> <span class="p">`</span><span class="nv">default</span><span class="p">`:</span> <span class="kt">FileManagerStorage</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
 
                         </div>
                       </div>
@@ -202,7 +231,13 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        
+                        <p>Create a new <code>FileManagerStorage</code> wrapper around the provided <code>FileManager</code>.</p>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    The <code>FileManager</code> is not used to write the data to disk.
+
+</div>
+
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -212,15 +247,34 @@
 
                         </div>
                       </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>fileManager</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The file manager to use for storage. Defaults to <code><a href="../Classes/FileManagerStorage.html#/s:7Persist18FileManagerStorageC7defaultACvpZ">default</a></code>.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </section>
                   </div>
                 </li>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:7Persist7StorageP10storeValue_3keyy0D0Qz_3KeyQztKF"></a>
+                    <a name="/s:7Persist18FileManagerStorageC10storeValue_3keyy10Foundation4DataV_AF3URLVtKF"></a>
                     <a name="//apple_ref/swift/Method/storeValue(_:key:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:7Persist7StorageP10storeValue_3keyy0D0Qz_3KeyQztKF">storeValue(_:<wbr>key:<wbr>)</a>
+                    <a class="token" href="#/s:7Persist18FileManagerStorageC10storeValue_3keyy10Foundation4DataV_AF3URLVtKF">storeValue(_:<wbr>key:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -228,7 +282,13 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        
+                        <p>Store the provided data at the provided file URL.</p>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    The <code>FileManager</code> is not used to write the data to disk.
+
+</div>
+
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -238,15 +298,46 @@
 
                         </div>
                       </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>data</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The data to store.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>url</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The URL of the file to save the data to. Must be a file URL.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </section>
                   </div>
                 </li>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:7Persist7StorageP11removeValue3fory3KeyQz_tKF"></a>
+                    <a name="/s:7Persist18FileManagerStorageC11removeValue3fory10Foundation3URLV_tKF"></a>
                     <a name="//apple_ref/swift/Method/removeValue(for:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:7Persist7StorageP11removeValue3fory3KeyQz_tKF">removeValue(for:<wbr>)</a>
+                    <a class="token" href="#/s:7Persist18FileManagerStorageC11removeValue3fory10Foundation3URLV_tKF">removeValue(for:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -254,7 +345,8 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        
+                        <p>Delete the file at the provided URL.</p>
+
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -264,15 +356,34 @@
 
                         </div>
                       </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>url</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The URL of the file to delete.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </section>
                   </div>
                 </li>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:7Persist7StorageP13retrieveValue3for0D0QzSg3KeyQz_tKF"></a>
+                    <a name="/s:7Persist18FileManagerStorageC13retrieveValue3for10Foundation4DataVSgAF3URLV_tF"></a>
                     <a name="//apple_ref/swift/Method/retrieveValue(for:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:7Persist7StorageP13retrieveValue3for0D0QzSg3KeyQz_tKF">retrieveValue(for:<wbr>)</a>
+                    <a class="token" href="#/s:7Persist18FileManagerStorageC13retrieveValue3for10Foundation4DataVSgAF3URLV_tF">retrieveValue(for:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -280,7 +391,8 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        
+                        <p>Returns the contents of the file at the specified URL.</p>
+
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -290,15 +402,38 @@
 
                         </div>
                       </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>url</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The URL of the file whose content will be returned.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The contents of the file, or <code>nil</code> if the URL is a directory or an error occurs.</p>
+                      </div>
                     </section>
                   </div>
                 </li>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:7Persist7StorageP17addUpdateListener6forKey06updateE0AA11CancellableC0G0Qz_y5ValueQzSgctF"></a>
+                    <a name="/s:7Persist18FileManagerStorageC17addUpdateListener6forKey06updateG0AA12SubscriptionC10Foundation3URLV_yAI4DataVSgctF"></a>
                     <a name="//apple_ref/swift/Method/addUpdateListener(forKey:updateListener:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:7Persist7StorageP17addUpdateListener6forKey06updateE0AA11CancellableC0G0Qz_y5ValueQzSgctF">addUpdateListener(forKey:<wbr>updateListener:<wbr>)</a>
+                    <a class="token" href="#/s:7Persist18FileManagerStorageC17addUpdateListener6forKey06updateG0AA12SubscriptionC10Foundation3URLV_yAI4DataVSgctF">addUpdateListener(forKey:<wbr>updateListener:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -306,15 +441,56 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        
+                        <p>Add a closure that will be called when the file at the provided URL is updated.</p>
+<div class="aside aside-important">
+    <p class="aside-title">Important</p>
+    The closure will <strong>only</strong> be called if the file is updated by this instance of the <code>FileManagerStorage</code>.
+
+</div>
+
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">addUpdateListener</span><span class="p">(</span><span class="n">forKey</span> <span class="nv">url</span><span class="p">:</span> <span class="kt">URL</span><span class="p">,</span> <span class="nv">updateListener</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt">UpdateListener</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Cancellable.html">Cancellable</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">addUpdateListener</span><span class="p">(</span><span class="n">forKey</span> <span class="nv">url</span><span class="p">:</span> <span class="kt">URL</span><span class="p">,</span> <span class="nv">updateListener</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt">UpdateListener</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Subscription.html">Subscription</a></span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>url</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The URL to monitor.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>updateListener</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The closure to call when the file changes.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>An object that represents the subscription and can be used to cancel further updates.</p>
                       </div>
                     </section>
                   </div>
@@ -324,7 +500,7 @@
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2020 <a class="link" href="" target="_blank" rel="external">Joseph Duffy</a>. All rights reserved. (Last updated: 2020-06-18)</p>
+          <p>&copy; 2020 <a class="link" href="" target="_blank" rel="external">Joseph Duffy</a>. All rights reserved. (Last updated: 2020-06-19)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
