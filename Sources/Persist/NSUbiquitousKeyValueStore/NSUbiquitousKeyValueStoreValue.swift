@@ -1,16 +1,36 @@
 #if os(macOS) || os(iOS) || os(tvOS)
 import Foundation
 
+/**
+ A value that can be stored in `NSUbiquitousKeyValueStore`.
+ */
 public enum NSUbiquitousKeyValueStoreValue: Hashable {
+    /// A `String` value.
     case string(String)
+
+    /// A `Data` value.
     case data(Data)
+
+    /// A `Bool` value.
     case bool(Bool)
+
+    /// An `Int64` value.
     case int64(Int64)
+
+    /// A `Double` value.
     case double(Double)
+
+    /// An array of `NSUbiquitousKeyValueStoreValue` values.
     indirect case array([NSUbiquitousKeyValueStoreValue])
+
+    /// Dictionary of `NSUbiquitousKeyValueStoreValue` values keyed by `String`s.
     indirect case dictionary([String: NSUbiquitousKeyValueStoreValue])
 
-    func cast<Type>(to type: Type.Type) -> Type? {
+    /**
+     Case the value to the provided type. This is required because `NSUbiquitousKeyValueStoreValue`
+     stores `Bool`s as `Int64`s.
+     */
+    internal func cast<Type>(to type: Type.Type) -> Type? {
         switch self {
         case .int64(let int64):
             if type == Bool.self {
@@ -27,7 +47,8 @@ public enum NSUbiquitousKeyValueStoreValue: Hashable {
         }
     }
 
-    var value: Any {
+    /// The underlying value.
+    internal var value: Any {
         switch self {
         case .string(let string):
             return string
@@ -46,6 +67,13 @@ public enum NSUbiquitousKeyValueStoreValue: Hashable {
         }
     }
 
+    /**
+     Attempt to create a new instance from the provided value.
+
+     - parameter value: The underlying value.
+     - returns: An instance of `NSUbiquitousKeyValueStoreValue`, or `nil` if the provided
+        `value` is not storable in `NSUbiquitousKeyValueStore`.
+     */
     internal init?(value: Any) {
         if let string = value as? String {
             self = .string(string)

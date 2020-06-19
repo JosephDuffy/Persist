@@ -1,18 +1,41 @@
 #if os(macOS) || os(iOS) || os(tvOS) || os(watchOS)
 import Foundation
 
+/**
+ A value that can be stored in `UserDefaults`.
+ */
 public enum UserDefaultsValue: Hashable {
+    /// A `String` value.
     case string(String)
+
+    /// A `Data` value.
     case data(Data)
+
+    /// A `URL` value.
     case url(URL)
+
+    /// A `Bool` value.
     case bool(Bool)
+
+    /// An `Int` value.
     case int(Int)
+
+    /// A `Double` value.
     case double(Double)
+
+    /// A `Float` value.
     case float(Float)
+
+    /// An `Array` value.
     indirect case array([UserDefaultsValue])
+
+    /// A `Dictionary` value.
     indirect case dictionary([String: UserDefaultsValue])
 
-    func cast<Type>(to type: Type.Type) -> Type? {
+    /**
+     Case the value to the provided type. This is required because `UserDefaults` stores `Bool`s as `Int`s.
+     */
+    internal func cast<Type>(to type: Type.Type) -> Type? {
         switch self {
         case .int(let int):
             if type == Bool.self, int == 0 {
@@ -27,6 +50,7 @@ public enum UserDefaultsValue: Hashable {
         }
     }
 
+    /// The underlying value.
     var value: Any {
         switch self {
         case .string(let string):
@@ -50,6 +74,13 @@ public enum UserDefaultsValue: Hashable {
         }
     }
 
+    /**
+     Attempt to create a new instance from the provided value.
+
+     - parameter value: The underlying value.
+     - returns: An instance of `UserDefaultsValue`, or `nil` if the provided `value` is not
+        storable in `UserDefaults`.
+     */
     internal init?(value: Any) {
         if let string = value as? String {
             self = .string(string)

@@ -56,8 +56,10 @@ public final class Persister<Value> {
     }
     #endif
 
+    /// The default value that will be returned when a value has been be persisted or an error occurs.
     public var defaultValue: Value
 
+    /// An option set that describes when to persist the default value.
     public var defaultValuePersistBehaviour: DefaultValuePersistOption
 
     /// The closure that can be used to retrieve the value. This generally wraps the `Storage` and any
@@ -79,7 +81,7 @@ public final class Persister<Value> {
     private var updateListeners: [UUID: UpdateListener] = [:]
 
     #if canImport(Combine)
-    /// The upates subject used to publish updates.
+    /// The upates subject that publishes updates.
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
     private var updatesSubject: PassthroughSubject<UpdatePayload, Never> {
         return _updatesSubject as! PassthroughSubject<UpdatePayload, Never>
@@ -102,6 +104,8 @@ public final class Persister<Value> {
      - parameter valueGetter: The closure that will be called when the `retrieveValue()` function is called.
      - parameter valueSetter: The closure that will be called when the `persist(_:)` function is called.
      - parameter valueRemover: The closure that will be called when the `removeValue()` function is called.
+     - parameter defaultValue: The value to use when a value has not yet been stored, or an error occurs.
+     - parameter defaultValuePersistBehaviour: An option set that describes when to persist the default value. Defaults to `[]`.
      - parameter addUpdateListener: A closure that will be called immediately to add an update listener.
      */
     public init(
@@ -124,11 +128,13 @@ public final class Persister<Value> {
     // MARK: - Storage.Value == Value
 
     /**
-     Create a new `Persister` instance that uses the provided `Storage` to retrieve and store values
-     against the provided key.
+     Create a new instance that stores the value against the `key` using `storage`, defaulting to
+     `defaultValue`.
 
-     - parameter key: The key to retrieve and store values against.
-     - parameter storage: The storage to use to retrieve and store vales.
+     - parameter key: The key to store the value against
+     - parameter storage: The storage to use to persist and retrieve the value.
+     - parameter defaultValue: The value to use when a value has not yet been stored, or an error occurs.
+     - parameter defaultValuePersistBehaviour: An option set that describes when to persist the default value. Defaults to `[]`.
      */
     public convenience init<Storage: Persist.Storage>(
         key: Storage.Key,
@@ -466,6 +472,17 @@ public final class Persister<Value> {
 
     // MARK: - Transformer.Input == Value, Transformer.Output == Storage.Value
 
+    /**
+     Create a new instance that stores the value against the `key` using `storage`, defaulting to
+     `defaultValue`. Values stored will be processed by the provided transformer before being persisted
+     and after being retrieved from the storage.
+
+     - parameter key: The key to store the value against
+     - parameter storage: The storage to use to persist and retrieve the value.
+     - parameter transformer: A transformer to transform the value before being persisted and after being retrieved from the storage
+     - parameter defaultValue: The value to use when a value has not yet been stored, or an error occurs.
+     - parameter defaultValuePersistBehaviour: An option set that describes when to persist the default value. Defaults to `[]`.
+     */
     public convenience init<Storage: Persist.Storage, Transformer: Persist.Transformer>(
         key: Storage.Key,
         storedBy storage: Storage,
@@ -512,6 +529,17 @@ public final class Persister<Value> {
         )
     }
 
+    /**
+     Create a new instance that stores the value against the `key` using `storage`, defaulting to
+     `defaultValue`. Values stored will be processed by the provided transformer before being persisted
+     and after being retrieved from the storage.
+
+     - parameter key: The key to store the value against
+     - parameter storage: The storage to use to persist and retrieve the value.
+     - parameter transformer: A transformer to transform the value before being persisted and after being retrieved from the storage
+     - parameter defaultValue: The value to use when a value has not yet been stored, or an error occurs. Defaults to `nil`.
+     - parameter defaultValuePersistBehaviour: An option set that describes when to persist the default value. Defaults to `[]`.
+     */
     public convenience init<Storage: Persist.Storage, Transformer: Persist.Transformer, WrappedValue>(
         key: Storage.Key,
         storedBy storage: Storage,
@@ -565,6 +593,11 @@ public final class Persister<Value> {
 
     // MARK: - Functions
 
+    /**
+     Persist the provided value.
+
+     - throws: Any errors thrown by the storage.
+     */
     public func persist(_ newValue: Value) throws {
         try valueSetter(newValue)
     }
@@ -617,10 +650,21 @@ public final class Persister<Value> {
         return defaultValue
     }
 
+    /**
+     Remove the value.
+
+     - throws: Any errors thrown by the storage.
+     */
     public func removeValue() throws {
         return try valueRemover()
     }
 
+    /**
+     Add a closure that will be called when the storage notifies the persister of an update.
+
+     - parameter updateListener: The closure to call when an update occurs.
+     - returns: An object that represents the closure's subscription to changes. This object must be retained by the caller.
+     */
     public func addUpdateListener(_ updateListener: @escaping UpdateListener) -> Subscription {
         let uuid = UUID()
         updateListeners[uuid] = updateListener

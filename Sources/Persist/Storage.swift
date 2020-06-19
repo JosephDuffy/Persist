@@ -9,6 +9,7 @@ public protocol Storage: class {
     /// The type of values that can be stored.
     associatedtype Value
 
+    /// A closure that will be called when an update occurs.
     typealias UpdateListener = (Value?) -> Void
 
     /**
@@ -40,7 +41,7 @@ public protocol Storage: class {
 
      - parameter key: The key to subscribe to changes to.
      - parameter updateListener: A closure to call when an update occurs.
-     - returns: An object that can be used to cancel the subscription.
+     - returns: An object that represents the closure's subscription to changes. This object must be retained by the caller.
      */
     func addUpdateListener(forKey key: Key, updateListener: @escaping UpdateListener) -> Subscription
 }
