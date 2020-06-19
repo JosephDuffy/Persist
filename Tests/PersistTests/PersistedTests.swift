@@ -29,7 +29,7 @@ final class PersistedTests: XCTestCase {
         let callsFirstUpdateListenerExpectationTwice = expectation(description: "Calls first update listener twice")
         callsFirstUpdateListenerExpectationTwice.expectedFulfillmentCount = 2
         var callCount = 0
-        let firstCancellable = persisted.projectedValue.addUpdateListener() { result in
+        let firstSubscription = persisted.projectedValue.addUpdateListener() { result in
             defer {
                 callsFirstUpdateListenerExpectationTwice.fulfill()
                 callCount += 1
@@ -46,10 +46,10 @@ final class PersistedTests: XCTestCase {
                 XCTFail("Update should not fail")
             }
         }
-        _ = firstCancellable
+        _ = firstSubscription
 
         let callsSecondUpdateListenerExpectation = expectation(description: "Calls second update listener")
-        let secondCancellable = persisted.projectedValue.addUpdateListener() { newValue in
+        let secondSubscription = persisted.projectedValue.addUpdateListener() { newValue in
             defer {
                 callsSecondUpdateListenerExpectation.fulfill()
             }
@@ -65,7 +65,7 @@ final class PersistedTests: XCTestCase {
         persisted.wrappedValue = newValue
         XCTAssertEqual(persisted.wrappedValue, newValue, "`wrappedValue` should return the value that been set via `wrappedValue`")
 
-        secondCancellable.cancel()
+        secondSubscription.cancel()
 
         try persisted.projectedValue.removeValue()
 
@@ -85,7 +85,7 @@ final class PersistedTests: XCTestCase {
         let callsFirstUpdateListenerExpectationTwice = expectation(description: "Calls first update listener twice")
         callsFirstUpdateListenerExpectationTwice.expectedFulfillmentCount = 4
         var callCount = 0
-        let firstCancellable = persisted.projectedValue.addUpdateListener() { result in
+        let firstSubscription = persisted.projectedValue.addUpdateListener() { result in
             defer {
                 callsFirstUpdateListenerExpectationTwice.fulfill()
                 callCount += 1
@@ -102,10 +102,10 @@ final class PersistedTests: XCTestCase {
                 XCTFail("Update should not fail")
             }
         }
-        _ = firstCancellable
+        _ = firstSubscription
 
         let callsSecondUpdateListenerExpectation = expectation(description: "Calls second update listener")
-        let secondCancellable = persisted.projectedValue.addUpdateListener() { newValue in
+        let secondSubscription = persisted.projectedValue.addUpdateListener() { newValue in
             defer {
                 callsSecondUpdateListenerExpectation.fulfill()
             }
@@ -121,7 +121,7 @@ final class PersistedTests: XCTestCase {
         persisted.wrappedValue = newValue
         XCTAssertEqual(persisted.wrappedValue, newValue, "`wrappedValue` should return the value that been set via `wrappedValue`")
 
-        secondCancellable.cancel()
+        secondSubscription.cancel()
 
         persisted.wrappedValue = nil
 
@@ -149,7 +149,7 @@ final class PersistedTests: XCTestCase {
         let callsFirstUpdateListenerExpectationTwice = expectation(description: "Calls first update listener twice")
         callsFirstUpdateListenerExpectationTwice.expectedFulfillmentCount = 2
         var callCount = 0
-        let firstCancellable = persisted.projectedValue.addUpdateListener() { result in
+        let firstSubscription = persisted.projectedValue.addUpdateListener() { result in
             defer {
                 callsFirstUpdateListenerExpectationTwice.fulfill()
                 callCount += 1
@@ -166,10 +166,10 @@ final class PersistedTests: XCTestCase {
                 XCTFail("Update should not fail")
             }
         }
-        _ = firstCancellable
+        _ = firstSubscription
 
         let callsSecondUpdateListenerExpectation = expectation(description: "Calls second update listener")
-        let secondCancellable = persisted.projectedValue.addUpdateListener() { newValue in
+        let secondSubscription = persisted.projectedValue.addUpdateListener() { newValue in
             defer {
                 callsSecondUpdateListenerExpectation.fulfill()
             }
@@ -185,7 +185,7 @@ final class PersistedTests: XCTestCase {
         persisted.wrappedValue = newValue
         XCTAssertEqual(persisted.wrappedValue, newValue, "`wrappedValue` should return the value that been set via `wrappedValue`")
 
-        secondCancellable.cancel()
+        secondSubscription.cancel()
 
         try persisted.projectedValue.removeValue()
 
@@ -205,7 +205,7 @@ final class PersistedTests: XCTestCase {
         let callsFirstUpdateListenerExpectationTwice = expectation(description: "Calls first update listener twice")
         callsFirstUpdateListenerExpectationTwice.expectedFulfillmentCount = 4
         var callCount = 0
-        let firstCancellable = persisted.projectedValue.addUpdateListener() { result in
+        let firstSubscription = persisted.projectedValue.addUpdateListener() { result in
             defer {
                 callsFirstUpdateListenerExpectationTwice.fulfill()
                 callCount += 1
@@ -222,10 +222,10 @@ final class PersistedTests: XCTestCase {
                 XCTFail("Update should not fail")
             }
         }
-        _ = firstCancellable
+        _ = firstSubscription
 
         let callsSecondUpdateListenerExpectation = expectation(description: "Calls second update listener")
-        let secondCancellable = persisted.projectedValue.addUpdateListener() { newValue in
+        let secondSubscription = persisted.projectedValue.addUpdateListener() { newValue in
             defer {
                 callsSecondUpdateListenerExpectation.fulfill()
             }
@@ -241,7 +241,7 @@ final class PersistedTests: XCTestCase {
         persisted.wrappedValue = newValue
         XCTAssertEqual(persisted.wrappedValue, newValue, "`wrappedValue` should return the value that been set via `wrappedValue`")
 
-        secondCancellable.cancel()
+        secondSubscription.cancel()
 
         persisted.wrappedValue = nil
 
@@ -266,7 +266,7 @@ final class PersistedTests: XCTestCase {
         let persisted = Persisted(key: key, storedBy: storage, defaultValue: defaultValue)
 
         let callsUpdateListenerExpectation = expectation(description: "Calls first update listener")
-        let cancellable = persisted.projectedValue.addUpdateListener() { result in
+        let subscription = persisted.projectedValue.addUpdateListener() { result in
             defer {
                 callsUpdateListenerExpectation.fulfill()
             }
@@ -279,7 +279,7 @@ final class PersistedTests: XCTestCase {
                 XCTFail()
             }
         }
-        _ = cancellable
+        _ = subscription
 
         storage.storeValue(storedValue, key: key)
         XCTAssertEqual(persisted.wrappedValue, defaultValue, "`wrappedValue` should return default value when underlying value is of a different type")
@@ -304,7 +304,7 @@ final class PersistedTests: XCTestCase {
         let persisted = Persisted<String?>(key: key, storedBy: storage)
 
         let callsUpdateListenerExpectation = expectation(description: "Calls first update listener")
-        let cancellable = persisted.projectedValue.addUpdateListener() { result in
+        let subscription = persisted.projectedValue.addUpdateListener() { result in
             defer {
                 callsUpdateListenerExpectation.fulfill()
             }
@@ -317,7 +317,7 @@ final class PersistedTests: XCTestCase {
                 XCTFail()
             }
         }
-        _ = cancellable
+        _ = subscription
 
         storage.storeValue(storedValue, key: key)
         XCTAssertNil(persisted.wrappedValue, "`wrappedValue` should return `nil` when underlying value is of a different type")
@@ -347,7 +347,7 @@ final class PersistedTests: XCTestCase {
         let callsFirstUpdateListenerExpectationTwice = expectation(description: "Calls first update listener twice")
         callsFirstUpdateListenerExpectationTwice.expectedFulfillmentCount = 2
         var callCount = 0
-        let firstCancellable = persisted.projectedValue.addUpdateListener() { result in
+        let firstSubscription = persisted.projectedValue.addUpdateListener() { result in
             defer {
                 callsFirstUpdateListenerExpectationTwice.fulfill()
                 callCount += 1
@@ -364,10 +364,10 @@ final class PersistedTests: XCTestCase {
                 XCTFail("Update should not fail")
             }
         }
-        _ = firstCancellable
+        _ = firstSubscription
 
         let callsSecondUpdateListenerExpectation = expectation(description: "Calls second update listener")
-        let secondCancellable = persisted.projectedValue.addUpdateListener() { result in
+        let secondSubscription = persisted.projectedValue.addUpdateListener() { result in
             defer {
                 callsSecondUpdateListenerExpectation.fulfill()
             }
@@ -384,7 +384,7 @@ final class PersistedTests: XCTestCase {
         XCTAssertEqual(persisted.wrappedValue, newValue, "`wrappedValue` should return the value that been set via `wrappedValue`")
         XCTAssertTrue(storage.retrieveValue(for: "test-key") is Data, "Stored value should be transformer output")
 
-        secondCancellable.cancel()
+        secondSubscription.cancel()
 
         try persisted.projectedValue.removeValue()
 
@@ -402,7 +402,7 @@ final class PersistedTests: XCTestCase {
         let persisted = Persisted(key: key, storedBy: storage, transformer: transformer, defaultValue: defaultValue)
 
         let callsUpdateListenerExpectation = expectation(description: "Calls first update listener")
-        let cancellable = persisted.projectedValue.addUpdateListener() { result in
+        let subscription = persisted.projectedValue.addUpdateListener() { result in
             defer {
                 callsUpdateListenerExpectation.fulfill()
             }
@@ -415,7 +415,7 @@ final class PersistedTests: XCTestCase {
                 XCTFail()
             }
         }
-        _ = cancellable
+        _ = subscription
 
         storage.storeValue(storedValue, key: key)
         XCTAssertEqual(persisted.wrappedValue, defaultValue, "`wrappedValue` should return default value when underlying value is of a different type")
@@ -444,7 +444,7 @@ final class PersistedTests: XCTestCase {
         let persisted = Persisted<String>(key: key, storedBy: storage, transformer: transformer, defaultValue: defaultValue)
 
         let callsUpdateListenerExpectation = expectation(description: "Calls first update listener")
-        let cancellable = persisted.projectedValue.addUpdateListener() { result in
+        let subscription = persisted.projectedValue.addUpdateListener() { result in
             defer {
                 callsUpdateListenerExpectation.fulfill()
             }
@@ -456,7 +456,7 @@ final class PersistedTests: XCTestCase {
                 XCTFail()
             }
         }
-        _ = cancellable
+        _ = subscription
 
         storage.storeValue(storedValue, key: key)
         XCTAssertEqual(persisted.wrappedValue, defaultValue, "`wrappedValue` should return default value when underlying value is of a different type")
@@ -476,7 +476,7 @@ final class PersistedTests: XCTestCase {
         let persisted = Persisted<CodableStruct?>(key: key, storedBy: storage, transformer: transformer)
 
         let callsUpdateListenerExpectation = expectation(description: "Calls first update listener")
-        let cancellable = persisted.projectedValue.addUpdateListener() { result in
+        let subscription = persisted.projectedValue.addUpdateListener() { result in
             defer {
                 callsUpdateListenerExpectation.fulfill()
             }
@@ -489,7 +489,7 @@ final class PersistedTests: XCTestCase {
                 XCTFail()
             }
         }
-        _ = cancellable
+        _ = subscription
 
         storage.storeValue(storedValue, key: key)
         XCTAssertNil(persisted.wrappedValue, "`wrappedValue` should return `nil` when transformer throws an error")
@@ -517,7 +517,7 @@ final class PersistedTests: XCTestCase {
         let persisted = Persisted<String?>(key: key, storedBy: storage, transformer: transformer)
 
         let callsUpdateListenerExpectation = expectation(description: "Calls first update listener")
-        let cancellable = persisted.projectedValue.addUpdateListener() { result in
+        let subscription = persisted.projectedValue.addUpdateListener() { result in
             defer {
                 callsUpdateListenerExpectation.fulfill()
             }
@@ -529,7 +529,7 @@ final class PersistedTests: XCTestCase {
                 XCTFail()
             }
         }
-        _ = cancellable
+        _ = subscription
 
         storage.storeValue(storedValue, key: key)
         XCTAssertNil(persisted.wrappedValue, "`wrappedValue` should return be `nil` when transformer throws an error")
@@ -552,7 +552,7 @@ final class PersistedTests: XCTestCase {
         let callsFirstUpdateListenerExpectationTwice = expectation(description: "Calls first update listener twice")
         callsFirstUpdateListenerExpectationTwice.expectedFulfillmentCount = 4
         var callCount = 0
-        let firstCancellable = persisted.projectedValue.addUpdateListener() { result in
+        let firstSubscription = persisted.projectedValue.addUpdateListener() { result in
             defer {
                 callsFirstUpdateListenerExpectationTwice.fulfill()
                 callCount += 1
@@ -569,10 +569,10 @@ final class PersistedTests: XCTestCase {
                 XCTFail("Update should not fail")
             }
         }
-        _ = firstCancellable
+        _ = firstSubscription
 
         let callsSecondUpdateListenerExpectation = expectation(description: "Calls second update listener")
-        let secondCancellable = persisted.projectedValue.addUpdateListener() { newValue in
+        let secondSubscription = persisted.projectedValue.addUpdateListener() { newValue in
             defer {
                 callsSecondUpdateListenerExpectation.fulfill()
             }
@@ -589,7 +589,7 @@ final class PersistedTests: XCTestCase {
         XCTAssertEqual(persisted.wrappedValue, newValue, "`wrappedValue` should return the value that been set via `wrappedValue`")
         XCTAssertTrue(storage.retrieveValue(for: "test-key") is Data, "Stored value should be transformer output")
 
-        secondCancellable.cancel()
+        secondSubscription.cancel()
 
         persisted.wrappedValue = nil
 
@@ -619,7 +619,7 @@ final class PersistedTests: XCTestCase {
         let callsFirstUpdateListenerExpectationTwice = expectation(description: "Calls first update listener twice")
         callsFirstUpdateListenerExpectationTwice.expectedFulfillmentCount = 2
         var callCount = 0
-        let firstCancellable = persisted.projectedValue.addUpdateListener() { result in
+        let firstSubscription = persisted.projectedValue.addUpdateListener() { result in
             defer {
                 callsFirstUpdateListenerExpectationTwice.fulfill()
                 callCount += 1
@@ -636,10 +636,10 @@ final class PersistedTests: XCTestCase {
                 XCTFail("Update should not fail")
             }
         }
-        _ = firstCancellable
+        _ = firstSubscription
 
         let callsSecondUpdateListenerExpectation = expectation(description: "Calls second update listener")
-        let secondCancellable = persisted.projectedValue.addUpdateListener() { result in
+        let secondSubscription = persisted.projectedValue.addUpdateListener() { result in
             defer {
                 callsSecondUpdateListenerExpectation.fulfill()
             }
@@ -655,7 +655,7 @@ final class PersistedTests: XCTestCase {
         persisted.wrappedValue = newValue
         XCTAssertEqual(persisted.wrappedValue, newValue, "`wrappedValue` should return the value that been set via `wrappedValue`")
 
-        secondCancellable.cancel()
+        secondSubscription.cancel()
 
         try persisted.projectedValue.removeValue()
 
@@ -675,7 +675,7 @@ final class PersistedTests: XCTestCase {
         let persisted = Persisted<String>(key: key, storedBy: storage, transformer: transformer, defaultValue: defaultValue)
 
         let callsUpdateListenerExpectation = expectation(description: "Calls first update listener")
-        let cancellable = persisted.projectedValue.addUpdateListener() { result in
+        let subscription = persisted.projectedValue.addUpdateListener() { result in
             defer {
                 callsUpdateListenerExpectation.fulfill()
             }
@@ -687,7 +687,7 @@ final class PersistedTests: XCTestCase {
                 XCTFail()
             }
         }
-        _ = cancellable
+        _ = subscription
 
         storage.storeValue(storedValue, key: key)
         XCTAssertEqual(persisted.wrappedValue, defaultValue, "`wrappedValue` should return default value when transformer throws an error")
@@ -710,7 +710,7 @@ final class PersistedTests: XCTestCase {
         let callsFirstUpdateListenerExpectationTwice = expectation(description: "Calls first update listener twice")
         callsFirstUpdateListenerExpectationTwice.expectedFulfillmentCount = 4
         var callCount = 0
-        let firstCancellable = persisted.projectedValue.addUpdateListener() { result in
+        let firstSubscription = persisted.projectedValue.addUpdateListener() { result in
             defer {
                 callsFirstUpdateListenerExpectationTwice.fulfill()
                 callCount += 1
@@ -727,10 +727,10 @@ final class PersistedTests: XCTestCase {
                 XCTFail("Update should not fail")
             }
         }
-        _ = firstCancellable
+        _ = firstSubscription
 
         let callsSecondUpdateListenerExpectation = expectation(description: "Calls second update listener")
-        let secondCancellable = persisted.projectedValue.addUpdateListener() { result in
+        let secondSubscription = persisted.projectedValue.addUpdateListener() { result in
             defer {
                 callsSecondUpdateListenerExpectation.fulfill()
             }
@@ -746,7 +746,7 @@ final class PersistedTests: XCTestCase {
         persisted.wrappedValue = newValue
         XCTAssertEqual(persisted.wrappedValue, newValue, "`wrappedValue` should return the value that been set via `wrappedValue`")
 
-        secondCancellable.cancel()
+        secondSubscription.cancel()
 
         persisted.wrappedValue = nil
 
@@ -768,7 +768,7 @@ final class PersistedTests: XCTestCase {
         let persister = Persister<Int?>(key: key, storedBy: storage)
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
-        let cancellable = persister.addUpdateListener() { newValue in
+        let subscription = persister.addUpdateListener() { newValue in
             defer {
                 callsUpdateListenerExpectation.fulfill()
             }
@@ -781,7 +781,7 @@ final class PersistedTests: XCTestCase {
                 XCTFail()
             }
         }
-        _ = cancellable
+        _ = subscription
 
         storage.storeValue(actualValue, key: "key")
 
@@ -805,7 +805,7 @@ final class PersistedTests: XCTestCase {
         let persister = Persister<Int?>(key: key, storedBy: storage, transformer: JSONTransformer())
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
-        let cancellable = persister.addUpdateListener() { newValue in
+        let subscription = persister.addUpdateListener() { newValue in
             defer {
                 callsUpdateListenerExpectation.fulfill()
             }
@@ -818,7 +818,7 @@ final class PersistedTests: XCTestCase {
                 XCTFail()
             }
         }
-        _ = cancellable
+        _ = subscription
 
         storage.storeValue(actualValue, key: "key")
 
@@ -843,7 +843,7 @@ final class PersistedTests: XCTestCase {
         let persister = Persister<Int?>(key: key, storedBy: storage, transformer: transformer)
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
-        let cancellable = persister.addUpdateListener() { newValue in
+        let subscription = persister.addUpdateListener() { newValue in
             defer {
                 callsUpdateListenerExpectation.fulfill()
             }
@@ -856,7 +856,7 @@ final class PersistedTests: XCTestCase {
                 XCTFail()
             }
         }
-        _ = cancellable
+        _ = subscription
 
         storage.storeValue(actualValue, key: key)
 

@@ -14,7 +14,7 @@ final class PersisterTests: XCTestCase {
         let storedValue = StoredValue(property: "value")
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
-        let cancellable = persister.addUpdateListener { result in
+        let subscription = persister.addUpdateListener { result in
             defer {
                 callsUpdateListenerExpectation.fulfill()
             }
@@ -26,7 +26,7 @@ final class PersisterTests: XCTestCase {
                 XCTFail("Update listener should be notified of a success. Got error: \(error)")
             }
         }
-        _ = cancellable
+        _ = subscription
 
         try persister.persist(storedValue)
         XCTAssertEqual(persister.retrieveValue(), storedValue, "Should retrieve stored value")
@@ -42,7 +42,7 @@ final class PersisterTests: XCTestCase {
         let storedValue = "stored-value"
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
-        let cancellable = persister.addUpdateListener { result in
+        let subscription = persister.addUpdateListener { result in
             defer {
                 callsUpdateListenerExpectation.fulfill()
             }
@@ -54,7 +54,7 @@ final class PersisterTests: XCTestCase {
                 XCTFail("Update listener should be notified of a success. Got error: \(error)")
             }
         }
-        _ = cancellable
+        _ = subscription
 
         try persister.persist(storedValue)
         XCTAssertEqual(persister.retrieveValue(), storedValue, "Should retrieve stored value")
@@ -73,7 +73,7 @@ final class PersisterTests: XCTestCase {
         let storedValue = StoredValue(property: "value")
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
-        let cancellable = persister.addUpdateListener { result in
+        let subscription = persister.addUpdateListener { result in
             defer {
                 callsUpdateListenerExpectation.fulfill()
             }
@@ -85,7 +85,7 @@ final class PersisterTests: XCTestCase {
                 XCTFail("Update listener should be notified of a success. Got error: \(error)")
             }
         }
-        _ = cancellable
+        _ = subscription
 
         try persister.persist(storedValue)
         XCTAssertNotNil(storage.retrieveValue(for: "test"), "Should store encoded data in storage")

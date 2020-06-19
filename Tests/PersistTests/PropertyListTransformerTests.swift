@@ -44,7 +44,7 @@ final class PropertyListTransformerTests: XCTestCase {
         let storedValue = StoredValue(property: "value")
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
-        let cancellable = persisted.projectedValue.addUpdateListener { result in
+        let subscription = persisted.projectedValue.addUpdateListener { result in
             defer {
                 callsUpdateListenerExpectation.fulfill()
             }
@@ -56,7 +56,7 @@ final class PropertyListTransformerTests: XCTestCase {
                 XCTFail("Update listener should be notified of a success. Got error: \(error)")
             }
         }
-        _ = cancellable
+        _ = subscription
 
         persisted.wrappedValue = storedValue
         XCTAssertEqual(persisted.wrappedValue, storedValue, "Should return untransformed value")

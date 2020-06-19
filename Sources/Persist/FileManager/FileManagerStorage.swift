@@ -28,12 +28,12 @@ public final class FileManagerStorage: Storage {
         return fileManager.contents(atPath: url.path)
     }
 
-    public func addUpdateListener(forKey url: URL, updateListener: @escaping UpdateListener) -> Cancellable {
+    public func addUpdateListener(forKey url: URL, updateListener: @escaping UpdateListener) -> Subscription {
         let uuid = UUID()
 
         updateListeners[url, default: [:]][uuid] = updateListener
 
-        return Cancellable { [weak self] in
+        return Subscription { [weak self] in
             self?.updateListeners[url]?.removeValue(forKey: uuid)
         }
     }

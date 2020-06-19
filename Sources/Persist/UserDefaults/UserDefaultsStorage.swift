@@ -49,13 +49,13 @@ public final class UserDefaultsStorage: Storage {
         return nil
     }
 
-    public func addUpdateListener(forKey key: String, updateListener: @escaping UpdateListener) -> Cancellable {
+    public func addUpdateListener(forKey key: String, updateListener: @escaping UpdateListener) -> Subscription {
         let observer = KeyPathObserver(updateListener: updateListener)
         userDefaults.addObserver(observer, forKeyPath: key, options: .new, context: nil)
-        let cancellable = Cancellable { [weak userDefaults] in
+        let subscription = Subscription { [weak userDefaults] in
             userDefaults?.removeObserver(observer, forKeyPath: key)
         }
-        return cancellable
+        return subscription
     }
 
 }

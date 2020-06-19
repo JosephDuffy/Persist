@@ -99,7 +99,7 @@ final class FileManagerStorageTests: XCTestCase {
         let writtenData = UUID().uuidString.data(using: .utf8)!
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
-        let cancellable = persister.addUpdateListener { result in
+        let subscription = persister.addUpdateListener { result in
             defer {
                 callsUpdateListenerExpectation.fulfill()
             }
@@ -111,7 +111,7 @@ final class FileManagerStorageTests: XCTestCase {
                 XCTFail("Update listener should be notified of a success. Got error: \(error)")
             }
         }
-        _ = cancellable
+        _ = subscription
 
         try storage.storeValue(writtenData, key: dataURL)
 
@@ -131,7 +131,7 @@ final class FileManagerStorageTests: XCTestCase {
         try storedData.write(to: dataURL)
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
-        let cancellable = persister.addUpdateListener { result in
+        let subscription = persister.addUpdateListener { result in
             defer {
                 callsUpdateListenerExpectation.fulfill()
             }
@@ -144,7 +144,7 @@ final class FileManagerStorageTests: XCTestCase {
                 XCTFail("Update listener should be notified of a success. Got error: \(error)")
             }
         }
-        _ = cancellable
+        _ = subscription
 
         try storage.removeValue(for: dataURL)
 

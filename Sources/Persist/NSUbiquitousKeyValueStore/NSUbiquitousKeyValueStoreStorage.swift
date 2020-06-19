@@ -37,11 +37,11 @@ public final class NSUbiquitousKeyValueStoreStorage: Storage {
         return NSUbiquitousKeyValueStoreValue(value: anyValue)
     }
 
-    public func addUpdateListener(forKey key: String, updateListener: @escaping UpdateListener) -> Cancellable {
+    public func addUpdateListener(forKey key: String, updateListener: @escaping UpdateListener) -> Subscription {
         return addUpdateListener(forKey: key, notificationCenter: .default, updateListener: updateListener)
     }
 
-    public func addUpdateListener(forKey key: String, notificationCenter: NotificationCenter, updateListener: @escaping UpdateListener) -> Cancellable {
+    public func addUpdateListener(forKey key: String, notificationCenter: NotificationCenter, updateListener: @escaping UpdateListener) -> Subscription {
         let notificationObserver = notificationCenter.addObserver(
             forName: NSUbiquitousKeyValueStore.didChangeExternallyNotification,
             object: nsUbiquitousKeyValueStore,
@@ -59,7 +59,7 @@ public final class NSUbiquitousKeyValueStoreStorage: Storage {
 
         updateListeners[key, default: [:]][uuid] = updateListener
 
-        let cancellable = Cancellable { [weak self] in
+        let subscription = Subscription { [weak self] in
             self?.updateListeners[key]?.removeValue(forKey: uuid)
 
             notificationCenter.removeObserver(
@@ -68,7 +68,7 @@ public final class NSUbiquitousKeyValueStoreStorage: Storage {
                 object: self?.nsUbiquitousKeyValueStore
             )
         }
-        return cancellable
+        return subscription
     }
 
 }

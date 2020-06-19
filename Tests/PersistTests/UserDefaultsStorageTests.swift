@@ -159,7 +159,7 @@ final class UserDefaultsStorageTests: XCTestCase {
         let persister = Persister<Int?>(key: key, userDefaults: userDefaults)
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
-        let cancellable = persister.addUpdateListener() { newValue in
+        let subscription = persister.addUpdateListener() { newValue in
             defer {
                 callsUpdateListenerExpectation.fulfill()
             }
@@ -172,7 +172,7 @@ final class UserDefaultsStorageTests: XCTestCase {
                 XCTFail()
             }
         }
-        _ = cancellable
+        _ = subscription
 
         userDefaults.set(actualValue, forKey: "key")
 
@@ -195,14 +195,14 @@ final class UserDefaultsStorageTests: XCTestCase {
         let storage = UserDefaultsStorage(userDefaults: userDefaults)
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
-        let cancellable = storage.addUpdateListener(forKey: key) { newValue in
+        let subscription = storage.addUpdateListener(forKey: key) { newValue in
             defer {
                 callsUpdateListenerExpectation.fulfill()
             }
 
             XCTAssertEqual(newValue, .string(value), "Value passed to update listener should be new value")
         }
-        _ = cancellable
+        _ = subscription
 
         storage.storeValue(.string(value), key: key)
 
@@ -224,14 +224,14 @@ final class UserDefaultsStorageTests: XCTestCase {
         let storage = UserDefaultsStorage(userDefaults: userDefaults)
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
-        let cancellable = storage.addUpdateListener(forKey: key) { newValue in
+        let subscription = storage.addUpdateListener(forKey: key) { newValue in
             defer {
                 callsUpdateListenerExpectation.fulfill()
             }
 
             XCTAssertEqual(newValue, userDefaultsValue, "Value passed to update listener should be new value")
         }
-        _ = cancellable
+        _ = subscription
 
         storage.storeValue(userDefaultsValue, key: key)
 
@@ -253,14 +253,14 @@ final class UserDefaultsStorageTests: XCTestCase {
         let storage = UserDefaultsStorage(userDefaults: userDefaults)
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
-        let cancellable = storage.addUpdateListener(forKey: key) { newValue in
+        let subscription = storage.addUpdateListener(forKey: key) { newValue in
             defer {
                 callsUpdateListenerExpectation.fulfill()
             }
 
             XCTAssertEqual(newValue, userDefaultsValue, "Value passed to update listener should be new value")
         }
-        _ = cancellable
+        _ = subscription
 
         storage.storeValue(userDefaultsValue, key: key)
 
@@ -275,14 +275,14 @@ final class UserDefaultsStorageTests: XCTestCase {
         let storage = UserDefaultsStorage(userDefaults: userDefaults)
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
-        let cancellable = storage.addUpdateListener(forKey: "key") { newValue in
+        let subscription = storage.addUpdateListener(forKey: "key") { newValue in
             defer {
                 callsUpdateListenerExpectation.fulfill()
             }
 
             XCTAssertEqual(newValue, .url(url), "Value passed to update listener should be new value")
         }
-        _ = cancellable
+        _ = subscription
 
         storage.storeValue(.url(url), key: "key")
 
@@ -299,14 +299,14 @@ final class UserDefaultsStorageTests: XCTestCase {
         storage.storeValue(.url(url), key: "key")
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
-        let cancellable = storage.addUpdateListener(forKey: "key") { newValue in
+        let subscription = storage.addUpdateListener(forKey: "key") { newValue in
             defer {
                 callsUpdateListenerExpectation.fulfill()
             }
 
             XCTAssertNil(newValue, "Value passed to update listener should be nil for removed values")
         }
-        _ = cancellable
+        _ = subscription
 
         storage.removeValue(for: "key")
 
@@ -344,10 +344,10 @@ final class UserDefaultsStorageTests: XCTestCase {
         callsUpdateListenerExpectation.expectedFulfillmentCount = 1
         callsUpdateListenerExpectation.assertForOverFulfill = true
 
-        let cancellable = storage.addUpdateListener(forKey: "test") { _ in
+        let subscription = storage.addUpdateListener(forKey: "test") { _ in
             callsUpdateListenerExpectation.fulfill()
         }
-        _ = cancellable
+        _ = subscription
         storage.storeValue(.string("test"), key: "test")
 
         waitForExpectations(timeout: 1)
@@ -360,10 +360,10 @@ final class UserDefaultsStorageTests: XCTestCase {
         callsUpdateListenerExpectation.expectedFulfillmentCount = 1
         callsUpdateListenerExpectation.assertForOverFulfill = true
 
-        let cancellable = storage.addUpdateListener(forKey: "test") { _ in
+        let subscription = storage.addUpdateListener(forKey: "test") { _ in
             callsUpdateListenerExpectation.fulfill()
         }
-        _ = cancellable
+        _ = subscription
         userDefaults.set("test", forKey: "test")
 
         waitForExpectations(timeout: 1)
@@ -373,10 +373,10 @@ final class UserDefaultsStorageTests: XCTestCase {
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
 
         let persister = Persister<String?>(key: "test", userDefaults: userDefaults)
-        let cancellable = persister.addUpdateListener() { _ in
+        let subscription = persister.addUpdateListener() { _ in
             callsUpdateListenerExpectation.fulfill()
         }
-        _ = cancellable
+        _ = subscription
         userDefaults.set("test", forKey: "test")
 
         waitForExpectations(timeout: 1)
@@ -388,7 +388,7 @@ final class UserDefaultsStorageTests: XCTestCase {
         let persister = Persister<String?>(key: key, userDefaults: userDefaults)
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
-        let updateListenerCancellable = persister.addUpdateListener() { result in
+        let updateListenerSubscription = persister.addUpdateListener() { result in
             defer {
                 callsUpdateListenerExpectation.fulfill()
             }
@@ -400,12 +400,12 @@ final class UserDefaultsStorageTests: XCTestCase {
                 XCTFail("Should return a success for updated values, not \(error)")
             }
         }
-        _ = updateListenerCancellable
+        _ = updateListenerSubscription
 
-        var combineCancellable: Any?
+        var combineSubscription: Any?
         if #available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *) {
             let callsPublisherSubscribersExpectation = expectation(description: "Calls publisher subscribers")
-            combineCancellable = persister.updatesPublisher.sink { result in
+            combineSubscription = persister.updatesPublisher.sink { result in
                 defer {
                     callsPublisherSubscribersExpectation.fulfill()
                 }
@@ -417,7 +417,7 @@ final class UserDefaultsStorageTests: XCTestCase {
                     XCTFail("Should return a success for updated values")
                 }
             }
-            _ = combineCancellable
+            _ = combineSubscription
         }
 
         try persister.persist(setValue)

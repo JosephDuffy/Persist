@@ -68,7 +68,7 @@ class Foo {
 }
 
 let foo = Foo()
-let cancellable = foo.$bar.updatesPublisher.sink { _ in
+let subscription = foo.$bar.updatesPublisher.sink { _ in
     print("Value updated")
 }
 ```
@@ -82,7 +82,7 @@ class Foo {
 }
 
 let foo = Foo()
-let cancellable = foo.$bar.addUpdateListener() { result in
+let subscription = foo.$bar.addUpdateListener() { result in
     switch result {
     case .success(.persisted(let newValue)):
         print("Value updated to", newValue)
@@ -109,7 +109,7 @@ class Foo {
 }
 
 let foo = Foo()
-let cancellable = foo.$bar.addUpdateListener() { result in
+let subscription = foo.$bar.addUpdateListener() { result in
     switch result {
     case .success(.persisted(let bar)):
         // `bar` is always `Bar` despite being transformed to JSON `Data` by `JSONTransformer`

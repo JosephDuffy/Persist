@@ -28,12 +28,12 @@ open class InMemoryStorage<StoredValue>: Storage {
         return dictionary[key]
     }
 
-    open func addUpdateListener(forKey key: String, updateListener: @escaping UpdateListener) -> Cancellable {
+    open func addUpdateListener(forKey key: String, updateListener: @escaping UpdateListener) -> Subscription {
         let uuid = UUID()
 
         updateListeners[key, default: [:]][uuid] = updateListener
 
-        return Cancellable { [weak self] in
+        return Subscription { [weak self] in
             self?.updateListeners[key]?.removeValue(forKey: uuid)
         }
     }

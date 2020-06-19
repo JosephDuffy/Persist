@@ -1,21 +1,12 @@
-public class Cancellable {
+/**
+ A protocol indicating that a update listener can be cancelled.
 
-    public typealias CancelClosure = () -> Void
-
-    private var cancelClosure: CancelClosure?
-
-    public init(cancel: @escaping CancelClosure) {
-        cancelClosure = cancel
-    }
-
-    deinit {
-        cancel()
-    }
-
-    public func cancel() {
-        guard let cancelClosure = cancelClosure else { return }
-        cancelClosure()
-        self.cancelClosure = nil
-    }
-
+ Implementations of this protocol must call the `cancel` function on `deinit`.
+ */
+public protocol Cancellable: class {
+    /**
+     Stop further updates being sent to the update listener, freeing any resources held on to by the
+     subscription.
+     */
+    func cancel()
 }

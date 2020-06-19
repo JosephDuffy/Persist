@@ -128,7 +128,7 @@ final class NSUbiquitousKeyValueStoreStorageTests: XCTestCase {
         let persister = Persister<Int64?>(key: key, nsUbiquitousKeyValueStoreStorage: nsUbiquitousKeyValueStoreStorage)
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
-        let cancellable = persister.addUpdateListener() { newValue in
+        let subscription = persister.addUpdateListener() { newValue in
             defer {
                 callsUpdateListenerExpectation.fulfill()
             }
@@ -141,7 +141,7 @@ final class NSUbiquitousKeyValueStoreStorageTests: XCTestCase {
                 XCTFail()
             }
         }
-        _ = cancellable
+        _ = subscription
 
         nsUbiquitousKeyValueStoreStorage.storeValue(.string(actualValue), key: key)
 
@@ -163,14 +163,14 @@ final class NSUbiquitousKeyValueStoreStorageTests: XCTestCase {
         let value = "test"
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
-        let cancellable = nsUbiquitousKeyValueStoreStorage.addUpdateListener(forKey: key) { newValue in
+        let subscription = nsUbiquitousKeyValueStoreStorage.addUpdateListener(forKey: key) { newValue in
             defer {
                 callsUpdateListenerExpectation.fulfill()
             }
 
             XCTAssertEqual(newValue, .string(value), "Value passed to update listener should be new value")
         }
-        _ = cancellable
+        _ = subscription
 
         nsUbiquitousKeyValueStoreStorage.storeValue(.string(value), key: key)
 
@@ -191,14 +191,14 @@ final class NSUbiquitousKeyValueStoreStorageTests: XCTestCase {
         ])
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
-        let cancellable = nsUbiquitousKeyValueStoreStorage.addUpdateListener(forKey: key) { newValue in
+        let subscription = nsUbiquitousKeyValueStoreStorage.addUpdateListener(forKey: key) { newValue in
             defer {
                 callsUpdateListenerExpectation.fulfill()
             }
 
             XCTAssertEqual(newValue, ubiquitousKeyValueStoreValue, "Value passed to update listener should be new value")
         }
-        _ = cancellable
+        _ = subscription
 
         nsUbiquitousKeyValueStoreStorage.storeValue(ubiquitousKeyValueStoreValue, key: key)
 
@@ -219,14 +219,14 @@ final class NSUbiquitousKeyValueStoreStorageTests: XCTestCase {
         ])
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
-        let cancellable = nsUbiquitousKeyValueStoreStorage.addUpdateListener(forKey: key) { newValue in
+        let subscription = nsUbiquitousKeyValueStoreStorage.addUpdateListener(forKey: key) { newValue in
             defer {
                 callsUpdateListenerExpectation.fulfill()
             }
 
             XCTAssertEqual(newValue, ubiquitousKeyValueStoreValue, "Value passed to update listener should be new value")
         }
-        _ = cancellable
+        _ = subscription
 
         nsUbiquitousKeyValueStoreStorage.storeValue(ubiquitousKeyValueStoreValue, key: key)
 
@@ -266,10 +266,10 @@ final class NSUbiquitousKeyValueStoreStorageTests: XCTestCase {
         callsUpdateListenerExpectation.expectedFulfillmentCount = 1
         callsUpdateListenerExpectation.assertForOverFulfill = true
 
-        let cancellable = nsUbiquitousKeyValueStoreStorage.addUpdateListener(forKey: "test") { _ in
+        let subscription = nsUbiquitousKeyValueStoreStorage.addUpdateListener(forKey: "test") { _ in
             callsUpdateListenerExpectation.fulfill()
         }
-        _ = cancellable
+        _ = subscription
         nsUbiquitousKeyValueStoreStorage.storeValue(.string("test"), key: "test")
 
         waitForExpectations(timeout: 1)
@@ -283,14 +283,14 @@ final class NSUbiquitousKeyValueStoreStorageTests: XCTestCase {
         callsUpdateListenerExpectation.assertForOverFulfill = true
 
         let updatedValue = "updated-value"
-        let cancellable = nsUbiquitousKeyValueStoreStorage.addUpdateListener(forKey: "test") { update in
+        let subscription = nsUbiquitousKeyValueStoreStorage.addUpdateListener(forKey: "test") { update in
             defer {
                 callsUpdateListenerExpectation.fulfill()
             }
 
             XCTAssertEqual(update, .string(updatedValue), "New value should be retrieved and passed to update listeners")
         }
-        _ = cancellable
+        _ = subscription
 
         nsUbiquitousKeyValueStoreStorage.nsUbiquitousKeyValueStore.set(updatedValue, forKey: "test")
         NotificationCenter.default.post(
@@ -311,14 +311,14 @@ final class NSUbiquitousKeyValueStoreStorageTests: XCTestCase {
         callsUpdateListenerExpectation.expectedFulfillmentCount = 1
         callsUpdateListenerExpectation.assertForOverFulfill = true
 
-        let cancellable = nsUbiquitousKeyValueStoreStorage.addUpdateListener(forKey: "test") { update in
+        let subscription = nsUbiquitousKeyValueStoreStorage.addUpdateListener(forKey: "test") { update in
             defer {
                 callsUpdateListenerExpectation.fulfill()
             }
 
             XCTAssertEqual(update, nil, "New value should be retrieved and passed to update listeners")
         }
-        _ = cancellable
+        _ = subscription
 
         nsUbiquitousKeyValueStoreStorage.nsUbiquitousKeyValueStore.removeObject(forKey: "test")
         XCTAssertNil(nsUbiquitousKeyValueStoreStorage.retrieveValue(for: "test"))
@@ -340,14 +340,14 @@ final class NSUbiquitousKeyValueStoreStorageTests: XCTestCase {
         callsUpdateListenerExpectation.expectedFulfillmentCount = 1
         callsUpdateListenerExpectation.assertForOverFulfill = true
 
-        let cancellable = nsUbiquitousKeyValueStoreStorage.addUpdateListener(forKey: "test") { update in
+        let subscription = nsUbiquitousKeyValueStoreStorage.addUpdateListener(forKey: "test") { update in
             defer {
                 callsUpdateListenerExpectation.fulfill()
             }
 
             XCTAssertEqual(update, nil, "New value should be retrieved and passed to update listeners")
         }
-        _ = cancellable
+        _ = subscription
 
         nsUbiquitousKeyValueStoreStorage.removeValue(for: "test")
 
@@ -360,10 +360,10 @@ final class NSUbiquitousKeyValueStoreStorageTests: XCTestCase {
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
         callsUpdateListenerExpectation.isInverted = true
-        let cancellable = nsUbiquitousKeyValueStoreStorage.addUpdateListener(forKey: "test") { update in
+        let subscription = nsUbiquitousKeyValueStoreStorage.addUpdateListener(forKey: "test") { update in
             callsUpdateListenerExpectation.fulfill()
         }
-        _ = cancellable
+        _ = subscription
 
         nsUbiquitousKeyValueStoreStorage.removeValue(for: "test2")
 
@@ -376,7 +376,7 @@ final class NSUbiquitousKeyValueStoreStorageTests: XCTestCase {
         let persister = Persister<String?>(key: key, storedBy: nsUbiquitousKeyValueStoreStorage)
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
-        let updateListenerCancellable = persister.addUpdateListener() { result in
+        let updateListenerSubscription = persister.addUpdateListener() { result in
             defer {
                 callsUpdateListenerExpectation.fulfill()
             }
@@ -388,12 +388,12 @@ final class NSUbiquitousKeyValueStoreStorageTests: XCTestCase {
                 XCTFail("Should return a success for updated values, not \(error)")
             }
         }
-        _ = updateListenerCancellable
+        _ = updateListenerSubscription
 
-        var combineCancellable: Any?
+        var combineSubscription: Any?
         if #available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *) {
             let callsPublisherSubscribersExpectation = expectation(description: "Calls publisher subscribers")
-            combineCancellable = persister.updatesPublisher.sink { result in
+            combineSubscription = persister.updatesPublisher.sink { result in
                 defer {
                     callsPublisherSubscribersExpectation.fulfill()
                 }
@@ -405,7 +405,7 @@ final class NSUbiquitousKeyValueStoreStorageTests: XCTestCase {
                     XCTFail("Should return a success for updated values")
                 }
             }
-            _ = combineCancellable
+            _ = combineSubscription
         }
 
         try persister.persist(setValue)

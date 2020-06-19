@@ -46,7 +46,7 @@ public final class Persister<Value> {
     public typealias ValueRemover = () throws -> Void
 
     /// A closure that can add an update listener.
-    public typealias AddUpdateListener = (@escaping UpdateListener) -> Cancellable
+    public typealias AddUpdateListener = (@escaping UpdateListener) -> Subscription
 
     #if canImport(Combine)
     /// A publisher that will publish updates as they occur.
@@ -71,11 +71,11 @@ public final class Persister<Value> {
     /// The closure that can be used to store the value. This generally wraps the `Storage`.
     private let valueRemover: ValueRemover
 
-    /// The cancellable that wraps the updates subscription added to the storage.
-    private var storageUpdateListenerCancellable: Cancellable?
+    /// The subscription to updates from the storage.
+    private var storageUpdateListenerSubscription: Subscription?
 
     /// A collection of the update listeners that will be notified when a value changes. The key (a `UUID`)
-    /// is not exposed, but rather captured by the `Cancellable` that the caller retains.
+    /// is not exposed, but rather captured by the `Subscription` that the caller retains.
     private var updateListeners: [UUID: UpdateListener] = [:]
 
     #if canImport(Combine)
@@ -621,11 +621,11 @@ public final class Persister<Value> {
         return try valueRemover()
     }
 
-    public func addUpdateListener(_ updateListener: @escaping UpdateListener) -> Cancellable {
+    public func addUpdateListener(_ updateListener: @escaping UpdateListener) -> Subscription {
         let uuid = UUID()
         updateListeners[uuid] = updateListener
 
-        return Cancellable { [weak self] in
+        return Subscription { [weak self] in
             self?.updateListeners.removeValue(forKey: uuid)
         }
     }
@@ -641,7 +641,7 @@ public final class Persister<Value> {
     }
 
     private func subscribeToStorageUpdates(addUpdateListener: AddUpdateListener) {
-        storageUpdateListenerCancellable = addUpdateListener { [weak self] result in
+        storageUpdateListenerSubscription = addUpdateListener { [weak self] result in
             self?.notifyUpdateListenersOfResult(result)
         }
     }

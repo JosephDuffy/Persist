@@ -42,5 +42,5 @@ public protocol Storage: class {
      - parameter updateListener: A closure to call when an update occurs.
      - returns: An object that can be used to cancel the subscription.
      */
-    func addUpdateListener(forKey key: Key, updateListener: @escaping UpdateListener) -> Cancellable
+    func addUpdateListener(forKey key: Key, updateListener: @escaping UpdateListener) -> Subscription
 }
