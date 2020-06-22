@@ -67,7 +67,7 @@ public final class FileManagerStorage: Storage {
      - parameter updateListener: The closure to call when the file changes.
      - returns: An object that represents the subscription and can be used to cancel further updates.
      */
-    public func addUpdateListener(forKey url: URL, updateListener: @escaping UpdateListener) -> Subscription {
+    public func addUpdateListener(forKey url: URL, updateListener: @escaping UpdateListener) -> Cancellable {
         let uuid = UUID()
 
         updateListeners[url, default: [:]][uuid] = updateListener

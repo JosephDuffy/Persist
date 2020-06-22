@@ -3,11 +3,17 @@
  */
 public final class Subscription: Cancellable {
 
-    internal typealias CancelClosure = () -> Void
+    /// A closure that will be called when the subscription is cancelled.
+    public typealias CancelClosure = () -> Void
 
     private var cancelClosure: CancelClosure?
 
-    internal init(cancel: @escaping CancelClosure) {
+    /**
+     Create a new subscription that will call the provided closure when cancelled.
+
+     - parameter cancel: The closure to call when the subscription is cancelled.
+     */
+    public init(cancel: @escaping CancelClosure) {
         cancelClosure = cancel
     }
 
