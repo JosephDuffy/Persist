@@ -350,7 +350,7 @@ transformer.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">typealias</span> <span class="kt">AddUpdateListener</span> <span class="o">=</span> <span class="p">(</span><span class="kd">@escaping</span> <span class="kt"><a href="../Classes/Persister.html#/s:7Persist9PersisterC14UpdateListenera">UpdateListener</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Subscription.html">Subscription</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">typealias</span> <span class="kt">AddUpdateListener</span> <span class="o">=</span> <span class="p">(</span><span class="kd">@escaping</span> <span class="kt"><a href="../Classes/Persister.html#/s:7Persist9PersisterC14UpdateListenera">UpdateListener</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Protocols/Cancellable.html">Cancellable</a></span></code></pre>
 
                         </div>
                       </div>
@@ -442,9 +442,9 @@ transformer.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:7Persist9PersisterC11valueGetter0C6Setter0C7Remover12defaultValue0ghA9Behaviour17addUpdateListenerACyxGxSgyKc_yxKcyyKcxAA07DefaulthA6OptionVAA12SubscriptionCys6ResultOyAC0K0Oyx_Gs5Error_pGcXEtcfc"></a>
+                    <a name="/s:7Persist9PersisterC11valueGetter0C6Setter0C7Remover12defaultValue0ghA9Behaviour17addUpdateListenerACyxGxSgyKc_yxKcyyKcxAA07DefaulthA6OptionVAA11Cancellable_pys6ResultOyAC0K0Oyx_Gs5Error_pGcXEtcfc"></a>
                     <a name="//apple_ref/swift/Method/init(valueGetter:valueSetter:valueRemover:defaultValue:defaultValuePersistBehaviour:addUpdateListener:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:7Persist9PersisterC11valueGetter0C6Setter0C7Remover12defaultValue0ghA9Behaviour17addUpdateListenerACyxGxSgyKc_yxKcyyKcxAA07DefaulthA6OptionVAA12SubscriptionCys6ResultOyAC0K0Oyx_Gs5Error_pGcXEtcfc">init(valueGetter:<wbr>valueSetter:<wbr>valueRemover:<wbr>defaultValue:<wbr>defaultValuePersistBehaviour:<wbr>addUpdateListener:<wbr>)</a>
+                    <a class="token" href="#/s:7Persist9PersisterC11valueGetter0C6Setter0C7Remover12defaultValue0ghA9Behaviour17addUpdateListenerACyxGxSgyKc_yxKcyyKcxAA07DefaulthA6OptionVAA11Cancellable_pys6ResultOyAC0K0Oyx_Gs5Error_pGcXEtcfc">init(valueGetter:<wbr>valueSetter:<wbr>valueRemover:<wbr>defaultValue:<wbr>defaultValuePersistBehaviour:<wbr>addUpdateListener:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1406,9 +1406,9 @@ value will <strong>not</strong> be persisted and the error will be thrown.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:7Persist9PersisterC17addUpdateListeneryAA12SubscriptionCys6ResultOyAC0D0Oyx_Gs5Error_pGcF"></a>
+                    <a name="/s:7Persist9PersisterC17addUpdateListeneryAA11Cancellable_pys6ResultOyAC0D0Oyx_Gs5Error_pGcF"></a>
                     <a name="//apple_ref/swift/Method/addUpdateListener(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:7Persist9PersisterC17addUpdateListeneryAA12SubscriptionCys6ResultOyAC0D0Oyx_Gs5Error_pGcF">addUpdateListener(_:<wbr>)</a>
+                    <a class="token" href="#/s:7Persist9PersisterC17addUpdateListeneryAA11Cancellable_pys6ResultOyAC0D0Oyx_Gs5Error_pGcF">addUpdateListener(_:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1423,7 +1423,7 @@ value will <strong>not</strong> be persisted and the error will be thrown.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">addUpdateListener</span><span class="p">(</span><span class="n">_</span> <span class="nv">updateListener</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Classes/Persister.html#/s:7Persist9PersisterC14UpdateListenera">UpdateListener</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Subscription.html">Subscription</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">addUpdateListener</span><span class="p">(</span><span class="n">_</span> <span class="nv">updateListener</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Classes/Persister.html#/s:7Persist9PersisterC14UpdateListenera">UpdateListener</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Protocols/Cancellable.html">Cancellable</a></span></code></pre>
 
                         </div>
                       </div>
@@ -5506,7 +5506,7 @@ retrieved from the storage.</p>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2020 <a class="link" href="" target="_blank" rel="external">Joseph Duffy</a>. All rights reserved. (Last updated: 2020-06-19)</p>
+          <p>&copy; 2020 <a class="link" href="" target="_blank" rel="external">Joseph Duffy</a>. All rights reserved. (Last updated: 2020-06-22)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
