@@ -383,7 +383,7 @@ final class NSUbiquitousKeyValueStoreStorageTests: XCTestCase {
 
             switch result {
             case .success(let update):
-                XCTAssertEqual(update.value, setValue)
+                XCTAssertEqual(update.newValue, setValue)
             case .failure(let error):
                 XCTFail("Should return a success for updated values, not \(error)")
             }
@@ -400,7 +400,7 @@ final class NSUbiquitousKeyValueStoreStorageTests: XCTestCase {
 
                 switch result {
                 case .success(let update):
-                    XCTAssertEqual(update.value, setValue)
+                    XCTAssertEqual(update.newValue, setValue)
                 case .failure:
                     XCTFail("Should return a success for updated values")
                 }
