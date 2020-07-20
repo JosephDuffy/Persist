@@ -40,7 +40,7 @@ final class PersistedTests: XCTestCase {
                 if callCount == 0 {
                     XCTAssertEqual(update, .persisted(newValue), "Update listener should receive `persisted` update with new value")
                 } else if callCount == 1 {
-                    XCTAssertEqual(update, .removed, "Update listener should receive `removed` update")
+                    XCTAssertEqual(update.event, .removed, "Update listener should receive `removed` update")
                 }
             case .failure:
                 XCTFail("Update should not fail")
@@ -96,7 +96,7 @@ final class PersistedTests: XCTestCase {
                 if callCount % 2 == 0 {
                     XCTAssertEqual(update, .persisted(newValue), "Update listener should receive `persisted` update with new value")
                 } else {
-                    XCTAssertEqual(update, .removed, "Update listener should receive `removed` update")
+                    XCTAssertEqual(update.event, .removed, "Update listener should receive `removed` update")
                 }
             case .failure:
                 XCTFail("Update should not fail")
@@ -160,7 +160,7 @@ final class PersistedTests: XCTestCase {
                 if callCount == 0 {
                     XCTAssertEqual(update, .persisted(newValue), "Update listener should receive `persisted` update with new value")
                 } else if callCount == 1 {
-                    XCTAssertEqual(update, .removed, "Update listener should receive `removed` update")
+                    XCTAssertEqual(update.event, .removed, "Update listener should receive `removed` update")
                 }
             case .failure:
                 XCTFail("Update should not fail")
@@ -216,7 +216,7 @@ final class PersistedTests: XCTestCase {
                 if callCount % 2 == 0 {
                     XCTAssertEqual(update, .persisted(newValue), "Update listener should receive `persisted` update with new value")
                 } else {
-                    XCTAssertEqual(update, .removed, "Update listener should receive `removed` update")
+                    XCTAssertEqual(update.event, .removed, "Update listener should receive `removed` update")
                 }
             case .failure:
                 XCTFail("Update should not fail")
@@ -358,7 +358,7 @@ final class PersistedTests: XCTestCase {
                 if callCount == 0 {
                     XCTAssertEqual(update, .persisted(newValue), "Update listener should receive `persisted` update with new value")
                 } else if callCount == 1 {
-                    XCTAssertEqual(update, .removed, "Update listener should receive `removed` update")
+                    XCTAssertEqual(update.event, .removed, "Update listener should receive `removed` update")
                 }
             case .failure:
                 XCTFail("Update should not fail")
@@ -563,7 +563,7 @@ final class PersistedTests: XCTestCase {
                 if callCount % 2 == 0 {
                     XCTAssertEqual(update, .persisted("new-value"), "Update listener should receive `persisted` update with new value")
                 } else  {
-                    XCTAssertEqual(update, .removed, "Update listener should receive `removed` update")
+                    XCTAssertEqual(update.event, .removed, "Update listener should receive `removed` update")
                 }
             case .failure:
                 XCTFail("Update should not fail")
@@ -630,7 +630,7 @@ final class PersistedTests: XCTestCase {
                 if callCount == 0 {
                     XCTAssertEqual(update, .persisted(newValue), "Update listener should receive `persisted` update with new value")
                 } else if callCount == 1 {
-                    XCTAssertEqual(update, .removed, "Update listener should receive `removed` update")
+                    XCTAssertEqual(update.event, .removed, "Update listener should receive `removed` update")
                 }
             case .failure:
                 XCTFail("Update should not fail")
@@ -721,7 +721,7 @@ final class PersistedTests: XCTestCase {
                 if callCount % 2 == 0 {
                     XCTAssertEqual(update, .persisted(newValue), "Update listener should receive `persisted` update with new value")
                 } else {
-                    XCTAssertEqual(update, .removed, "Update listener should receive `removed` update")
+                    XCTAssertEqual(update.event, .removed, "Update listener should receive `removed` update")
                 }
             case .failure:
                 XCTFail("Update should not fail")

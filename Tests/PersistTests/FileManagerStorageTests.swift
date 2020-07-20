@@ -106,7 +106,7 @@ final class FileManagerStorageTests: XCTestCase {
 
             switch result {
             case .success(let update):
-                XCTAssertEqual(update.value, writtenData, "Value passed to update listener should be new data when file has been updated on disk")
+                XCTAssertEqual(update.newValue, writtenData, "Value passed to update listener should be new data when file has been updated on disk")
             case .failure(let error):
                 XCTFail("Update listener should be notified of a success. Got error: \(error)")
             }
@@ -138,8 +138,8 @@ final class FileManagerStorageTests: XCTestCase {
 
             switch result {
             case .success(let update):
-                XCTAssertEqual(update.value, .none)
-                XCTAssertEqual(update, .removed, "Value passed to update listener should be `.removed` when file has been deleted on disk")
+                XCTAssertEqual(update.newValue, .none)
+                XCTAssertEqual(update.event, .removed, "Value passed to update listener should be `.removed` when file has been deleted on disk")
             case .failure(let error):
                 XCTFail("Update listener should be notified of a success. Got error: \(error)")
             }

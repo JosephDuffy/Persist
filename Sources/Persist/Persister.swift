@@ -3,6 +3,8 @@ import Foundation
 import Combine
 #endif
 
+extension Persister.Update.Event: Hashable where Value: Hashable {}
+extension Persister.Update.Event: Equatable where Value: Equatable {}
 extension Persister.Update: Hashable where Value: Hashable {}
 extension Persister.Update: Equatable where Value: Equatable {}
 
@@ -12,21 +14,47 @@ extension Persister.Update: Equatable where Value: Equatable {}
  */
 public final class Persister<Value> {
     /// An update that was performed by a persister.
-    public enum Update {
-        /// The was persisted.
-        case persisted(Value)
+    public struct Update {
+        public static func persisted(_ persistedValue: Value) -> Update {
+            return Update(newValue: persistedValue, event: .persisted(persistedValue))
+        }
 
-        /// The value was removed.
-        case removed
+        public static func removed(defaultValue: Value) -> Update {
+            return Update(newValue: defaultValue, event: .removed)
+        }
 
-        /// The value after the update. `nil` indicates the value was removed.
-        public var value: Value? {
-            switch self {
-            case .persisted(let value):
-                return value
-            case .removed:
-                return nil
+        public enum Event {
+            /// The was persisted.
+            case persisted(Value)
+
+            /// The value was removed.
+            case removed
+
+            /// The value after the update. `nil` indicates the value was removed.
+            public var value: Value? {
+                switch self {
+                case .persisted(let value):
+                    return value
+                case .removed:
+                    return nil
+                }
             }
+        }
+
+        /// The new value, after the update. If the value was removed this will be the default value.
+        public let newValue: Value
+
+        @available(*, deprecated, renamed: "newValue")
+        public var value: Value {
+            return newValue
+        }
+
+        /// The event that triggered the update.
+        public let event: Event
+
+        private init(newValue: Value, event: Event) {
+            self.newValue = newValue
+            self.event = event
         }
     }
 
@@ -164,7 +192,7 @@ public final class Persister<Value> {
             addUpdateListener: { updateListener in
                 return storage.addUpdateListener(forKey: key) { newValue in
                     guard let value = newValue else {
-                        updateListener(.success(.removed))
+                        updateListener(.success(.removed(defaultValue: defaultValue)))
                         return
                     }
 
@@ -214,7 +242,7 @@ public final class Persister<Value> {
             addUpdateListener: { updateListener in
                 return storage.addUpdateListener(forKey: key) { newValue in
                     guard let value = newValue else {
-                        updateListener(.success(.removed))
+                        updateListener(.success(.removed(defaultValue: defaultValue)))
                         return
                     }
 
@@ -264,7 +292,7 @@ public final class Persister<Value> {
             addUpdateListener: { updateListener in
                 return storage.addUpdateListener(forKey: key) { newValue in
                     guard let anyValue = newValue else {
-                        updateListener(.success(.removed))
+                        updateListener(.success(.removed(defaultValue: defaultValue)))
                         return
                     }
 
@@ -322,7 +350,7 @@ public final class Persister<Value> {
             addUpdateListener: { updateListener in
                 return storage.addUpdateListener(forKey: key) { newValue in
                     guard let anyValue = newValue else {
-                        updateListener(.success(.removed))
+                        updateListener(.success(.removed(defaultValue: defaultValue)))
                         return
                     }
 
@@ -382,7 +410,7 @@ public final class Persister<Value> {
             addUpdateListener: { updateListener in
                 return storage.addUpdateListener(forKey: key) { newValue in
                     guard let anyValue = newValue else {
-                        updateListener(.success(.removed))
+                        updateListener(.success(.removed(defaultValue: defaultValue)))
                         return
                     }
 
@@ -450,7 +478,7 @@ public final class Persister<Value> {
             addUpdateListener: { updateListener in
                 return storage.addUpdateListener(forKey: key) { newValue in
                     guard let anyValue = newValue else {
-                        updateListener(.success(.removed))
+                        updateListener(.success(.removed(defaultValue: defaultValue)))
                         return
                     }
 
@@ -514,7 +542,7 @@ public final class Persister<Value> {
             addUpdateListener: { updateListener in
                 return storage.addUpdateListener(forKey: key) { newValue in
                     guard let newValue = newValue else {
-                        updateListener(.success(.removed))
+                        updateListener(.success(.removed(defaultValue: defaultValue)))
                         return
                     }
 
@@ -576,7 +604,7 @@ public final class Persister<Value> {
             addUpdateListener: { updateListener in
                 return storage.addUpdateListener(forKey: key) { newValue in
                     guard let newValue = newValue else {
-                        updateListener(.success(.removed))
+                        updateListener(.success(.removed(defaultValue: defaultValue)))
                         return
                     }
 

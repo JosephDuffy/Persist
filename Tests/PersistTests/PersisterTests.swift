@@ -21,7 +21,7 @@ final class PersisterTests: XCTestCase {
 
             switch result {
             case .success(let update):
-                XCTAssertEqual(update.value, storedValue, "Value passed to update listener should be the new, untransformed, value")
+                XCTAssertEqual(update.newValue, storedValue, "Value passed to update listener should be the new, untransformed, value")
             case .failure(let error):
                 XCTFail("Update listener should be notified of a success. Got error: \(error)")
             }
@@ -49,7 +49,7 @@ final class PersisterTests: XCTestCase {
 
             switch result {
             case .success(let update):
-                XCTAssertEqual(update.value, storedValue, "Value passed to update listener should be the new, untransformed, value")
+                XCTAssertEqual(update.newValue, storedValue, "Value passed to update listener should be the new, untransformed, value")
             case .failure(let error):
                 XCTFail("Update listener should be notified of a success. Got error: \(error)")
             }
@@ -80,7 +80,7 @@ final class PersisterTests: XCTestCase {
 
             switch result {
             case .success(let update):
-                XCTAssertEqual(update.value, storedValue, "Value passed to update listener should be the new, untransformed, value")
+                XCTAssertEqual(update.newValue, storedValue, "Value passed to update listener should be the new, untransformed, value")
             case .failure(let error):
                 XCTFail("Update listener should be notified of a success. Got error: \(error)")
             }
