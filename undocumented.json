@@ -1,6 +1,47 @@
 {
   "warnings": [
-
+    {
+      "file": "/Users/runner/work/Persist/Persist/Sources/Persist/Persister.swift",
+      "line": 6,
+      "symbol": "Persister.Update.Event",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/Persist/Persist/Sources/Persist/Persister.swift",
+      "line": 7,
+      "symbol": "Persister.Update.Event",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/Persist/Persist/Sources/Persist/Persister.swift",
+      "line": 18,
+      "symbol": "Persister.Update.persisted(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/Persist/Persist/Sources/Persist/Persister.swift",
+      "line": 22,
+      "symbol": "Persister.Update.removed(defaultValue:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/Persist/Persist/Sources/Persist/Persister.swift",
+      "line": 26,
+      "symbol": "Persister.Update.Event",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/Persist/Persist/Sources/Persist/Persister.swift",
+      "line": 48,
+      "symbol": "Persister.Update.value",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    }
   ],
-  "source_directory": "/Users/runner/runners/2.263.0/work/Persist/Persist"
+  "source_directory": "/Users/runner/work/Persist/Persist"
 }
