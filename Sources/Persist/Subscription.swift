@@ -1,7 +1,10 @@
 /**
  An object that represents a subscription to a `Storage` update.
  */
-public final class Subscription: Cancellable {
+open class Subscription: Cancellable {
+    public static func == (lhs: Subscription, rhs: Subscription) -> Bool {
+        return ObjectIdentifier(lhs) == ObjectIdentifier(rhs)
+    }
 
     /// A closure that will be called when the subscription is cancelled.
     public typealias CancelClosure = () -> Void
@@ -25,10 +28,13 @@ public final class Subscription: Cancellable {
      Cancel the update subscription, preventing further updates being sent to the update listener, freeing any
      resources held on to by the subscription.
      */
-    public func cancel() {
+    open func cancel() {
         guard let cancelClosure = cancelClosure else { return }
         cancelClosure()
         self.cancelClosure = nil
     }
 
+    open func hash(into hasher: inout Hasher) {
+        ObjectIdentifier(self).hash(into: &hasher)
+    }
 }
