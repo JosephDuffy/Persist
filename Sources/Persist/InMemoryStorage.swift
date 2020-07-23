@@ -56,7 +56,7 @@ open class InMemoryStorage<StoredValue>: Storage {
      - parameter updateListener: The closure to call when an update occurs.
      - returns: An object that represents the closure's subscription to changes. This object must be retained by the caller.
      */
-    open func addUpdateListener(forKey key: String, updateListener: @escaping UpdateListener) -> Cancellable {
+    open func addUpdateListener(forKey key: String, updateListener: @escaping UpdateListener) -> Subscription {
         let uuid = UUID()
 
         updateListeners[key, default: [:]][uuid] = updateListener
