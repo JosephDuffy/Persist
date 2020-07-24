@@ -4,7 +4,7 @@ on: [push]
 
 jobs:
   macos_tests:
-    name: macOS Tests (SwiftPM)
+    name: macOS Tests (SwiftPM, Xcode ${{ matrix.xcode }})
     runs-on: macos-latest
     strategy:
       fail-fast: false
@@ -37,7 +37,7 @@ jobs:
           fail_ci_if_error: true
 
   xcode_tests:
-    name: ${{ matrix.platform }} Tests (Xcode)
+    name: ${{ matrix.platform }} Tests (Xcode ${{ matrix.xcode }})
     runs-on: macos-latest
     strategy:
       fail-fast: false
@@ -76,7 +76,7 @@ jobs:
           fail_ci_if_error: true
 
   watchos_build:
-    name: watchOS Build (Xcode)
+    name: watchOS Build (Xcode ${{ matrix.xcode }})
     runs-on: macos-latest
     strategy:
       fail-fast: false
