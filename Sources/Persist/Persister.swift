@@ -74,7 +74,7 @@ public final class Persister<Value> {
     public typealias ValueRemover = () throws -> Void
 
     /// A closure that can add an update listener.
-    public typealias AddUpdateListener = (@escaping UpdateListener) -> Subscription
+    public typealias AddUpdateListener = (_ updateListener: @escaping UpdateListener, _ defaultValueGetter: @escaping () -> Value) -> Subscription
 
     #if canImport(Combine)
     /// A publisher that will publish updates as they occur.
@@ -85,10 +85,14 @@ public final class Persister<Value> {
     #endif
 
     /// The default value that will be returned when a value has been be persisted or an error occurs.
-    public var defaultValue: Value
+    public lazy var defaultValue: Value = {
+        return _defaultValue()
+    }()
 
     /// An option set that describes when to persist the default value.
     public var defaultValuePersistBehaviour: DefaultValuePersistOption
+
+    private let _defaultValue: () -> Value
 
     /// The closure that can be used to retrieve the value. This generally wraps the `Storage` and any
     /// `Transformer`s that are used to retrieve the value.
@@ -132,7 +136,7 @@ public final class Persister<Value> {
      - parameter valueGetter: The closure that will be called when the `retrieveValue()` function is called.
      - parameter valueSetter: The closure that will be called when the `persist(_:)` function is called.
      - parameter valueRemover: The closure that will be called when the `removeValue()` function is called.
-     - parameter defaultValue: The value to use when a value has not yet been stored, or an error occurs.
+     - parameter defaultValue: The value to use when a value has not yet been stored, or an error occurs. This value is lazily evaluated.
      - parameter defaultValuePersistBehaviour: An option set that describes when to persist the default value. Defaults to `[]`.
      - parameter addUpdateListener: A closure that will be called immediately to add an update listener.
      */
@@ -140,14 +144,14 @@ public final class Persister<Value> {
         valueGetter: @escaping ValueGetter,
         valueSetter: @escaping ValueSetter,
         valueRemover: @escaping ValueRemover,
-        defaultValue: Value,
+        defaultValue: @autoclosure @escaping () -> Value,
         defaultValuePersistBehaviour: DefaultValuePersistOption = [],
         addUpdateListener: AddUpdateListener
     ) {
         self.valueGetter = valueGetter
         self.valueSetter = valueSetter
         self.valueRemover = valueRemover
-        self.defaultValue = defaultValue
+        _defaultValue = defaultValue
         self.defaultValuePersistBehaviour = defaultValuePersistBehaviour
 
         subscribeToStorageUpdates(addUpdateListener: addUpdateListener)
@@ -167,7 +171,7 @@ public final class Persister<Value> {
     public convenience init<Storage: Persist.Storage>(
         key: Storage.Key,
         storedBy storage: Storage,
-        defaultValue: Value,
+        defaultValue: @autoclosure @escaping () -> Value,
         defaultValuePersistBehaviour: DefaultValuePersistOption = []
     ) where Storage.Value == Value {
         let valueGetter: ValueGetter = {
@@ -187,12 +191,12 @@ public final class Persister<Value> {
             valueGetter: valueGetter,
             valueSetter: valueSetter,
             valueRemover: valueRemover,
-            defaultValue: defaultValue,
+            defaultValue: defaultValue(),
             defaultValuePersistBehaviour: defaultValuePersistBehaviour,
-            addUpdateListener: { updateListener in
+            addUpdateListener: { updateListener, defaultValueGetter in
                 return storage.addUpdateListener(forKey: key) { newValue in
                     guard let value = newValue else {
-                        updateListener(.success(.removed(defaultValue: defaultValue)))
+                        updateListener(.success(.removed(defaultValue: defaultValueGetter())))
                         return
                     }
 
@@ -212,7 +216,7 @@ public final class Persister<Value> {
     public convenience init<Storage: Persist.Storage, WrappedValue>(
         key: Storage.Key,
         storedBy storage: Storage,
-        defaultValue: Value = nil,
+        defaultValue: @autoclosure @escaping () -> Value = nil,
         defaultValuePersistBehaviour: DefaultValuePersistOption = []
     ) where Storage.Value == WrappedValue, Value == Optional<WrappedValue> {
         let valueGetter: ValueGetter = {
@@ -237,12 +241,12 @@ public final class Persister<Value> {
             valueGetter: valueGetter,
             valueSetter: valueSetter,
             valueRemover: valueRemover,
-            defaultValue: defaultValue,
+            defaultValue: defaultValue(),
             defaultValuePersistBehaviour: defaultValuePersistBehaviour,
-            addUpdateListener: { updateListener in
+            addUpdateListener: { updateListener, defaultValueGetter in
                 return storage.addUpdateListener(forKey: key) { newValue in
                     guard let value = newValue else {
-                        updateListener(.success(.removed(defaultValue: defaultValue)))
+                        updateListener(.success(.removed(defaultValue: defaultValueGetter())))
                         return
                     }
 
@@ -264,7 +268,7 @@ public final class Persister<Value> {
     public convenience init<Storage: Persist.Storage>(
         key: Storage.Key,
         storedBy storage: Storage,
-        defaultValue: Value,
+        defaultValue: @autoclosure @escaping () -> Value,
         defaultValuePersistBehaviour: DefaultValuePersistOption = []
     ) where Storage.Value == Any {
         let valueGetter: ValueGetter = {
@@ -287,12 +291,12 @@ public final class Persister<Value> {
             valueGetter: valueGetter,
             valueSetter: valueSetter,
             valueRemover: valueRemover,
-            defaultValue: defaultValue,
+            defaultValue: defaultValue(),
             defaultValuePersistBehaviour: defaultValuePersistBehaviour,
-            addUpdateListener: { updateListener in
+            addUpdateListener: { updateListener, defaultValueGetter in
                 return storage.addUpdateListener(forKey: key) { newValue in
                     guard let anyValue = newValue else {
-                        updateListener(.success(.removed(defaultValue: defaultValue)))
+                        updateListener(.success(.removed(defaultValue: defaultValueGetter())))
                         return
                     }
 
@@ -317,7 +321,7 @@ public final class Persister<Value> {
     public convenience init<Storage: Persist.Storage, WrappedValue>(
         key: Storage.Key,
         storedBy storage: Storage,
-        defaultValue: Value = nil,
+        defaultValue: @autoclosure @escaping () -> Value = nil,
         defaultValuePersistBehaviour: DefaultValuePersistOption = []
     ) where Storage.Value == Any, Value == Optional<WrappedValue> {
         let valueGetter: ValueGetter = {
@@ -345,12 +349,12 @@ public final class Persister<Value> {
             valueGetter: valueGetter,
             valueSetter: valueSetter,
             valueRemover: valueRemover,
-            defaultValue: defaultValue,
+            defaultValue: defaultValue(),
             defaultValuePersistBehaviour: defaultValuePersistBehaviour,
-            addUpdateListener: { updateListener in
+            addUpdateListener: { updateListener, defaultValueGetter in
                 return storage.addUpdateListener(forKey: key) { newValue in
                     guard let anyValue = newValue else {
-                        updateListener(.success(.removed(defaultValue: defaultValue)))
+                        updateListener(.success(.removed(defaultValue: defaultValueGetter())))
                         return
                     }
 
@@ -381,7 +385,7 @@ public final class Persister<Value> {
         key: Storage.Key,
         storedBy storage: Storage,
         transformer: Transformer,
-        defaultValue: Value,
+        defaultValue: @autoclosure @escaping () -> Value,
         defaultValuePersistBehaviour: DefaultValuePersistOption = []
     ) where Storage.Value == Any, Transformer.Input == Value {
         let valueGetter: ValueGetter = {
@@ -405,12 +409,12 @@ public final class Persister<Value> {
             valueGetter: valueGetter,
             valueSetter: valueSetter,
             valueRemover: valueRemover,
-            defaultValue: defaultValue,
+            defaultValue: defaultValue(),
             defaultValuePersistBehaviour: defaultValuePersistBehaviour,
-            addUpdateListener: { updateListener in
+            addUpdateListener: { updateListener, defaultValueGetter in
                 return storage.addUpdateListener(forKey: key) { newValue in
                     guard let anyValue = newValue else {
-                        updateListener(.success(.removed(defaultValue: defaultValue)))
+                        updateListener(.success(.removed(defaultValue: defaultValueGetter())))
                         return
                     }
 
@@ -444,7 +448,7 @@ public final class Persister<Value> {
         key: Storage.Key,
         storedBy storage: Storage,
         transformer: Transformer,
-        defaultValue: Value = nil,
+        defaultValue: @autoclosure @escaping () -> Value = nil,
         defaultValuePersistBehaviour: DefaultValuePersistOption = []
     ) where Storage.Value == Any, Transformer.Input == WrappedValue, Value == WrappedValue? {
         let valueGetter: ValueGetter = {
@@ -473,12 +477,12 @@ public final class Persister<Value> {
             valueGetter: valueGetter,
             valueSetter: valueSetter,
             valueRemover: valueRemover,
-            defaultValue: defaultValue,
+            defaultValue: defaultValue(),
             defaultValuePersistBehaviour: defaultValuePersistBehaviour,
-            addUpdateListener: { updateListener in
+            addUpdateListener: { updateListener, defaultValueGetter in
                 return storage.addUpdateListener(forKey: key) { newValue in
                     guard let anyValue = newValue else {
-                        updateListener(.success(.removed(defaultValue: defaultValue)))
+                        updateListener(.success(.removed(defaultValue: defaultValueGetter())))
                         return
                     }
 
@@ -515,7 +519,7 @@ public final class Persister<Value> {
         key: Storage.Key,
         storedBy storage: Storage,
         transformer: Transformer,
-        defaultValue: Value,
+        defaultValue: @autoclosure @escaping () -> Value,
         defaultValuePersistBehaviour: DefaultValuePersistOption = []
     ) where Transformer.Input == Value, Transformer.Output == Storage.Value {
         let valueGetter: ValueGetter = {
@@ -537,12 +541,12 @@ public final class Persister<Value> {
             valueGetter: valueGetter,
             valueSetter: valueSetter,
             valueRemover: valueRemover,
-            defaultValue: defaultValue,
+            defaultValue: defaultValue(),
             defaultValuePersistBehaviour: defaultValuePersistBehaviour,
-            addUpdateListener: { updateListener in
+            addUpdateListener: { updateListener, defaultValueGetter in
                 return storage.addUpdateListener(forKey: key) { newValue in
                     guard let newValue = newValue else {
-                        updateListener(.success(.removed(defaultValue: defaultValue)))
+                        updateListener(.success(.removed(defaultValue: defaultValueGetter())))
                         return
                     }
 
@@ -572,7 +576,7 @@ public final class Persister<Value> {
         key: Storage.Key,
         storedBy storage: Storage,
         transformer: Transformer,
-        defaultValue: Value = nil,
+        defaultValue: @autoclosure @escaping () -> Value = nil,
         defaultValuePersistBehaviour: DefaultValuePersistOption = []
     ) where Transformer.Input == WrappedValue, Transformer.Output == Storage.Value, Value == WrappedValue? {
         let valueGetter: ValueGetter = {
@@ -599,12 +603,12 @@ public final class Persister<Value> {
             valueGetter: valueGetter,
             valueSetter: valueSetter,
             valueRemover: valueRemover,
-            defaultValue: defaultValue,
+            defaultValue: defaultValue(),
             defaultValuePersistBehaviour: defaultValuePersistBehaviour,
-            addUpdateListener: { updateListener in
+            addUpdateListener: { updateListener, defaultValueGetter in
                 return storage.addUpdateListener(forKey: key) { newValue in
                     guard let newValue = newValue else {
-                        updateListener(.success(.removed(defaultValue: defaultValue)))
+                        updateListener(.success(.removed(defaultValue: defaultValueGetter())))
                         return
                     }
 
@@ -713,9 +717,12 @@ public final class Persister<Value> {
     }
 
     private func subscribeToStorageUpdates(addUpdateListener: AddUpdateListener) {
-        storageUpdateListenerCancellable = addUpdateListener { [weak self] result in
-            self?.notifyUpdateListenersOfResult(result)
-        }
+        storageUpdateListenerCancellable = addUpdateListener(
+            { [weak self] result in
+                self?.notifyUpdateListenersOfResult(result)
+            },
+            { [unowned self] in self.defaultValue }
+        )
     }
 
 }

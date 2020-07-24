@@ -17,13 +17,13 @@ extension Persisted where Value: StorableInUserDefaults {
     public init(
         key: String,
         storedBy userDefaultsStorage: UserDefaultsStorage,
-        defaultValue: Value,
+        defaultValue: @autoclosure @escaping () -> Value,
         defaultValuePersistBehaviour: DefaultValuePersistOption = []
     ) {
         self.init(
             key: key,
             userDefaultsStorage: userDefaultsStorage,
-            defaultValue: defaultValue,
+            defaultValue: defaultValue(),
             defaultValuePersistBehaviour: defaultValuePersistBehaviour
         )
     }
@@ -40,14 +40,14 @@ extension Persisted where Value: StorableInUserDefaults {
     public init(
         key: String,
         userDefaultsStorage: UserDefaultsStorage,
-        defaultValue: Value,
+        defaultValue: @autoclosure @escaping () -> Value,
         defaultValuePersistBehaviour: DefaultValuePersistOption = []
     ) {
         self.init(
             key: key,
             storedBy: userDefaultsStorage,
             transformer: StorableInUserDefaultsTransformer<Value>(),
-            defaultValue: defaultValue,
+            defaultValue: defaultValue(),
             defaultValuePersistBehaviour: defaultValuePersistBehaviour
         )
     }
@@ -124,14 +124,14 @@ extension Persisted {
         key: String,
         storedBy userDefaultsStorage: UserDefaultsStorage,
         transformer: Transformer,
-        defaultValue: Value,
+        defaultValue: @autoclosure @escaping () -> Value,
         defaultValuePersistBehaviour: DefaultValuePersistOption = []
     ) where Transformer.Input == Value, Transformer.Output: StorableInUserDefaults {
         self.init(
             key: key,
             userDefaultsStorage: userDefaultsStorage,
             transformer: transformer,
-            defaultValue: defaultValue,
+            defaultValue: defaultValue(),
             defaultValuePersistBehaviour: defaultValuePersistBehaviour
         )
     }
@@ -153,7 +153,7 @@ extension Persisted {
         key: String,
         userDefaultsStorage: UserDefaultsStorage,
         transformer: Transformer,
-        defaultValue: Value,
+        defaultValue: @autoclosure @escaping () -> Value,
         defaultValuePersistBehaviour: DefaultValuePersistOption = []
     ) where Transformer.Input == Value, Transformer.Output: StorableInUserDefaults {
         let aggregateTransformer = transformer.append(transformer: StorableInUserDefaultsTransformer<Transformer.Output>())
@@ -161,7 +161,7 @@ extension Persisted {
             key: key,
             storedBy: userDefaultsStorage,
             transformer: aggregateTransformer,
-            defaultValue: defaultValue,
+            defaultValue: defaultValue(),
             defaultValuePersistBehaviour: defaultValuePersistBehaviour
         )
     }

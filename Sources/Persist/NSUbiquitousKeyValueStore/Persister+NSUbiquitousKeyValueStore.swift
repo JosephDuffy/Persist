@@ -17,13 +17,13 @@ extension Persister where Value: StorableInNSUbiquitousKeyValueStore {
     public convenience init(
         key: String,
         storedBy nsUbiquitousKeyValueStore: NSUbiquitousKeyValueStore,
-        defaultValue: Value,
+        defaultValue: @autoclosure @escaping () -> Value,
         defaultValuePersistBehaviour: DefaultValuePersistOption = []
     ) {
         self.init(
             key: key,
             nsUbiquitousKeyValueStore: nsUbiquitousKeyValueStore,
-            defaultValue: defaultValue,
+            defaultValue: defaultValue(),
             defaultValuePersistBehaviour: defaultValuePersistBehaviour
         )
     }
@@ -40,14 +40,14 @@ extension Persister where Value: StorableInNSUbiquitousKeyValueStore {
     public convenience init(
         key: String,
         nsUbiquitousKeyValueStore: NSUbiquitousKeyValueStore,
-        defaultValue: Value,
+        defaultValue: @autoclosure @escaping () -> Value,
         defaultValuePersistBehaviour: DefaultValuePersistOption = []
     ) {
         self.init(
             key: key,
             storedBy: NSUbiquitousKeyValueStoreStorage(nsUbiquitousKeyValueStore: nsUbiquitousKeyValueStore),
             transformer: StorableInNSUbiquitousKeyValueStoreTransformer<Value>(),
-            defaultValue: defaultValue,
+            defaultValue: defaultValue(),
             defaultValuePersistBehaviour: defaultValuePersistBehaviour
         )
     }
@@ -124,14 +124,14 @@ extension Persister {
         key: String,
         storedBy nsUbiquitousKeyValueStore: NSUbiquitousKeyValueStore,
         transformer: Transformer,
-        defaultValue: Value,
+        defaultValue: @autoclosure @escaping () -> Value,
         defaultValuePersistBehaviour: DefaultValuePersistOption = []
     ) where Transformer.Input == Value, Transformer.Output: StorableInNSUbiquitousKeyValueStore {
         self.init(
             key: key,
             nsUbiquitousKeyValueStore: nsUbiquitousKeyValueStore,
             transformer: transformer,
-            defaultValue: defaultValue,
+            defaultValue: defaultValue(),
             defaultValuePersistBehaviour: defaultValuePersistBehaviour
         )
     }
@@ -153,7 +153,7 @@ extension Persister {
         key: String,
         nsUbiquitousKeyValueStore: NSUbiquitousKeyValueStore,
         transformer: Transformer,
-        defaultValue: Value,
+        defaultValue: @autoclosure @escaping () -> Value,
         defaultValuePersistBehaviour: DefaultValuePersistOption = []
     ) where Transformer.Input == Value, Transformer.Output: StorableInNSUbiquitousKeyValueStore {
         let aggregateTransformer = transformer.append(transformer: StorableInNSUbiquitousKeyValueStoreTransformer<Transformer.Output>())
@@ -161,7 +161,7 @@ extension Persister {
             key: key,
             storedBy: NSUbiquitousKeyValueStoreStorage(nsUbiquitousKeyValueStore: nsUbiquitousKeyValueStore),
             transformer: aggregateTransformer,
-            defaultValue: defaultValue,
+            defaultValue: defaultValue(),
             defaultValuePersistBehaviour: defaultValuePersistBehaviour
         )
     }
