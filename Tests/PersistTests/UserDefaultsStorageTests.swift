@@ -12,66 +12,42 @@ final class UserDefaultsStorageTests: XCTestCase {
 
     func testPersistedUserDefaultsAPI() {
         _ = Persisted<Double?>(key: "test", storedBy: UserDefaults.standard)
-        _ = Persisted<Double?>(key: "test", storedBy: UserDefaultsStorage.standard)
         _ = Persisted(key: "test", storedBy: UserDefaults.standard, defaultValue: 123)
-        _ = Persisted(key: "test", storedBy: UserDefaultsStorage.standard, defaultValue: 123)
 
         _ = Persisted<Double?>(key: "test", userDefaults: .standard)
-        _ = Persisted<Double?>(key: "test", userDefaultsStorage: .standard)
         _ = Persisted(key: "test", userDefaults: .standard, defaultValue: 123)
-        _ = Persisted(key: "test", userDefaultsStorage: .standard, defaultValue: 123)
 
         _ = Persisted<Double?>(key: "test", storedBy: UserDefaults.standard, transformer: MockTransformer())
-        _ = Persisted<Double?>(key: "test", storedBy: UserDefaultsStorage.standard, transformer: MockTransformer())
         _ = Persisted(key: "test", storedBy: UserDefaults.standard, transformer: MockTransformer(), defaultValue: 123)
-        _ = Persisted(key: "test", storedBy: UserDefaultsStorage.standard, transformer: MockTransformer(), defaultValue: 123)
 
         _ = Persisted<Double?>(key: "test", storedBy: UserDefaults.standard, transformer: JSONTransformer())
-        _ = Persisted<Double?>(key: "test", storedBy: UserDefaultsStorage.standard, transformer: JSONTransformer())
         _ = Persisted(key: "test", storedBy: UserDefaults.standard, transformer: JSONTransformer(), defaultValue: 123)
-        _ = Persisted(key: "test", storedBy: UserDefaultsStorage.standard, transformer: JSONTransformer(), defaultValue: 123)
 
         _ = Persisted<Double?>(key: "test", userDefaults: .standard, transformer: MockTransformer())
-        _ = Persisted<Double?>(key: "test", userDefaultsStorage: .standard, transformer: MockTransformer())
         _ = Persisted(key: "test", userDefaults: .standard, transformer: MockTransformer(), defaultValue: 123)
-        _ = Persisted(key: "test", userDefaultsStorage: .standard, transformer: MockTransformer(), defaultValue: 123)
 
         _ = Persisted<Double?>(key: "test", userDefaults: .standard, transformer: JSONTransformer())
-        _ = Persisted<Double?>(key: "test", userDefaultsStorage: .standard, transformer: JSONTransformer())
         _ = Persisted(key: "test", userDefaults: .standard, transformer: JSONTransformer(), defaultValue: 123)
-        _ = Persisted(key: "test", userDefaultsStorage: .standard, transformer: JSONTransformer(), defaultValue: 123)
     }
 
     func testPersisterUserDefaultsAPI() {
         _ = Persister<Double?>(key: "test", storedBy: UserDefaults.standard)
-        _ = Persister<Double?>(key: "test", storedBy: UserDefaultsStorage.standard)
         _ = Persister(key: "test", storedBy: UserDefaults.standard, defaultValue: 123)
-        _ = Persister(key: "test", storedBy: UserDefaultsStorage.standard, defaultValue: 123)
 
         _ = Persister<Double?>(key: "test", userDefaults: .standard)
-        _ = Persister<Double?>(key: "test", userDefaultsStorage: .standard)
         _ = Persister(key: "test", userDefaults: .standard, defaultValue: 123)
-        _ = Persister(key: "test", userDefaultsStorage: .standard, defaultValue: 123)
 
         _ = Persister<Double?>(key: "test", storedBy: UserDefaults.standard, transformer: MockTransformer())
-        _ = Persister<Double?>(key: "test", storedBy: UserDefaultsStorage.standard, transformer: MockTransformer())
         _ = Persister(key: "test", storedBy: UserDefaults.standard, transformer: MockTransformer(), defaultValue: 123)
-        _ = Persister(key: "test", storedBy: UserDefaultsStorage.standard, transformer: MockTransformer(), defaultValue: 123)
 
         _ = Persister<Double?>(key: "test", storedBy: UserDefaults.standard, transformer: JSONTransformer())
-        _ = Persister<Double?>(key: "test", storedBy: UserDefaultsStorage.standard, transformer: JSONTransformer())
         _ = Persister(key: "test", storedBy: UserDefaults.standard, transformer: JSONTransformer(), defaultValue: 123)
-        _ = Persister(key: "test", storedBy: UserDefaultsStorage.standard, transformer: JSONTransformer(), defaultValue: 123)
 
         _ = Persister<Double?>(key: "test", userDefaults: .standard, transformer: MockTransformer())
-        _ = Persister<Double?>(key: "test", userDefaultsStorage: .standard, transformer: MockTransformer())
         _ = Persister(key: "test", userDefaults: .standard, transformer: MockTransformer(), defaultValue: 123)
-        _ = Persister(key: "test", userDefaultsStorage: .standard, transformer: MockTransformer(), defaultValue: 123)
 
         _ = Persister<Double?>(key: "test", userDefaults: .standard, transformer: JSONTransformer())
-        _ = Persister<Double?>(key: "test", userDefaultsStorage: .standard, transformer: JSONTransformer())
         _ = Persister(key: "test", userDefaults: .standard, transformer: JSONTransformer(), defaultValue: 123)
-        _ = Persister(key: "test", userDefaultsStorage: .standard, transformer: JSONTransformer(), defaultValue: 123)
     }
 
     func testUserDefaultsStorageSuiteNameInitialiser() {
