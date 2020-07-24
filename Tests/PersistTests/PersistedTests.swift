@@ -936,5 +936,77 @@ final class PersistedTests: XCTestCase {
         XCTAssertEqual(storage.retrieveValue(for: key), updatedValue, "Updated value should be persisted when set")
     }
 
+    func testDefaultValueIsEvaluatedLazily() {
+        final class Foo {
+            init(onInit: () -> Void) {
+                onInit()
+            }
+        }
+
+        var initCallCount = 0
+
+        let key = "test-key"
+        let storage = InMemoryStorage<Foo>()
+        let persisted = Persisted(key: key, storedBy: storage, defaultValue: Foo(onInit: { initCallCount += 1 }))
+
+        XCTAssertTrue(initCallCount == 0, "Should not initialise default value during initalisation")
+
+        _ = persisted.projectedValue.defaultValue
+
+        XCTAssertTrue(initCallCount == 1, "Accessing default value should initialise default value")
+
+        _ = persisted.projectedValue.defaultValue
+
+        XCTAssertTrue(initCallCount == 1, "Multiple accesses to default value should initialise default value once")
+    }
+
+    func testOptionalDefaultValueIsEvaluatedLazily() {
+        final class Foo {
+            init(onInit: () -> Void) {
+                onInit()
+            }
+        }
+
+        var initCallCount = 0
+
+        let key = "test-key"
+        let storage = InMemoryStorage<Foo>()
+        let persisted = Persisted<Foo?>(key: key, storedBy: storage, defaultValue: Foo(onInit: { initCallCount += 1 }))
+
+        XCTAssertTrue(initCallCount == 0, "Should not initialise default value during initalisation")
+
+        _ = persisted.projectedValue.defaultValue
+
+        XCTAssertTrue(initCallCount == 1, "Accessing default value should initialise default value")
+
+        _ = persisted.projectedValue.defaultValue
+
+        XCTAssertTrue(initCallCount == 1, "Multiple accesses to default value should initialise default value once")
+    }
+
+    func testOptionalDefaultValueWithTransformerIsEvaluatedLazily() {
+        final class Foo {
+            init(onInit: () -> Void) {
+                onInit()
+            }
+        }
+
+        var initCallCount = 0
+
+        let key = "test-key"
+        let storage = InMemoryStorage<Foo>()
+        let persisted = Persisted<Foo?>(key: key, storedBy: storage, transformer: MockTransformer<Foo>(), defaultValue: Foo(onInit: { initCallCount += 1 }))
+
+        XCTAssertTrue(initCallCount == 0, "Should not initialise default value during initalisation")
+
+        _ = persisted.projectedValue.defaultValue
+
+        XCTAssertTrue(initCallCount == 1, "Accessing default value should initialise default value")
+
+        _ = persisted.projectedValue.defaultValue
+
+        XCTAssertTrue(initCallCount == 1, "Multiple accesses to default value should initialise default value once")
+    }
+
 }
 #endif

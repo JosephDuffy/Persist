@@ -1,141 +1,44 @@
 #if !os(watchOS)
 import XCTest
-@testable import Persist
+import Persist
 
-final class PersisterTests: XCTestCase {
-
-    func testStoringValueWithAnyStorageType() throws {
-        struct StoredValue: Codable, Equatable {
-            let property: String
+final class PersisterFileManagerTests: XCTestCase {
+    
+    var testFilesDirectory: URL {
+        let basePath: URL
+        if #available(macOS 10.12, iOS 10.0, tvOS 10.0, *) {
+            basePath = FileManager.default.temporaryDirectory
+        } else {
+            basePath = Bundle.allBundles.first(where: { $0.bundlePath.hasSuffix(".xctest") })!.bundleURL
         }
-        let storage = InMemoryStorage<Any>()
-        let defaultValue = StoredValue(property: "default")
-        let persister = Persister<StoredValue>(key: "test", storedBy: storage, defaultValue: defaultValue)
-        let storedValue = StoredValue(property: "value")
-
-        let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
-        let subscription = persister.addUpdateListener { result in
-            defer {
-                callsUpdateListenerExpectation.fulfill()
-            }
-
-            switch result {
-            case .success(let update):
-                XCTAssertEqual(update.newValue, storedValue, "Value passed to update listener should be the new, untransformed, value")
-                XCTAssertEqual(update.event.value, storedValue, "Event value passed to update listener should be the new, untransformed, value")
-            case .failure(let error):
-                XCTFail("Update listener should be notified of a success. Got error: \(error)")
-            }
-        }
-        _ = subscription
-
-        try persister.persist(storedValue)
-        XCTAssertEqual(persister.retrieveValue(), storedValue, "Should retrieve stored value")
-        XCTAssertEqual(storage.retrieveValue(for: "test") as? StoredValue, storedValue, "Should store value in storage")
-
-        waitForExpectations(timeout: 1, handler: nil)
+        
+        return basePath.appendingPathComponent("PersistPersisterFileManagerTestFiles", isDirectory: true)
     }
-
-    func testStoringValueWithSpecficStorageType() throws {
-        let storage = InMemoryStorage<String>()
-        let defaultValue = "default"
-        let persister = Persister(key: "test", storedBy: storage, defaultValue: defaultValue)
-        let storedValue = "stored-value"
-
-        let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
-        let subscription = persister.addUpdateListener { result in
-            defer {
-                callsUpdateListenerExpectation.fulfill()
-            }
-
-            switch result {
-            case .success(let update):
-                XCTAssertEqual(update.newValue, storedValue, "Value passed to update listener should be the new, untransformed, value")
-                XCTAssertEqual(update.event.value, storedValue, "Event value passed to update listener should be the new, untransformed, value")
-            case .failure(let error):
-                XCTFail("Update listener should be notified of a success. Got error: \(error)")
-            }
-        }
-        _ = subscription
-
-        try persister.persist(storedValue)
-        XCTAssertEqual(persister.retrieveValue(), storedValue, "Should retrieve stored value")
-        XCTAssertEqual(storage.retrieveValue(for: "test"), storedValue, "Should store value in storage")
-
-        waitForExpectations(timeout: 1, handler: nil)
+    
+    override func setUpWithError() throws {
+        try FileManager.default.createDirectory(at: testFilesDirectory, withIntermediateDirectories: true, attributes: nil)
+        
+        try super.setUpWithError()
     }
-
-    func testStoringTransformedValue() throws {
-        struct StoredValue: Codable, Equatable {
-            let property: String
-        }
-        let storage = InMemoryStorage<Data>()
-        let defaultValue = StoredValue(property: "default")
-        let persister = Persister<StoredValue>(key: "test", storedBy: storage, transformer: JSONTransformer(), defaultValue: defaultValue)
-        let storedValue = StoredValue(property: "value")
-
-        let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
-        let subscription = persister.addUpdateListener { result in
-            defer {
-                callsUpdateListenerExpectation.fulfill()
-            }
-
-            switch result {
-            case .success(let update):
-                XCTAssertEqual(update.newValue, storedValue, "Value passed to update listener should be the new, untransformed, value")
-                XCTAssertEqual(update.event.value, storedValue, "Event value passed to update listener should be the new, untransformed, value")
-            case .failure(let error):
-                XCTFail("Update listener should be notified of a success. Got error: \(error)")
-            }
-        }
-        _ = subscription
-
-        try persister.persist(storedValue)
-        XCTAssertNotNil(storage.retrieveValue(for: "test"), "Should store encoded data in storage")
-        XCTAssertEqual(persister.retrieveValue(), storedValue, "Should return untransformed value")
-
-        waitForExpectations(timeout: 1, handler: nil)
+    
+    override func tearDownWithError() throws {
+        try FileManager.default.removeItem(at: testFilesDirectory)
+        
+        try super.tearDownWithError()
     }
-
-    func testRemovingValue() throws {
-        let storage = InMemoryStorage<String>()
-        let defaultValue = "default"
-        let persister = Persister(key: "test", storedBy: storage, defaultValue: defaultValue)
-        try persister.persist("stored-value")
-
+    
+    func testValue_storedByInitialiser() throws {
+        let defaultValue = Data("default".utf8)
+        let dataURL = testFilesDirectory.appendingPathComponent("\(UUID().uuidString).data", isDirectory: false)
+        let persister = Persister(key: dataURL, storedBy: FileManager.default, defaultValue: defaultValue)
+        let storedValue = Data("stored-value".utf8)
+        
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
         let subscription = persister.addUpdateListener { result in
             defer {
                 callsUpdateListenerExpectation.fulfill()
             }
-
-            switch result {
-            case .success(let update):
-                XCTAssertEqual(update.newValue, defaultValue, "Value passed to update listener should be the default value")
-                XCTAssertNil(update.event.value, "Event value passed to update listener should be `nil``")
-            case .failure(let error):
-                XCTFail("Update listener should be notified of a success. Got error: \(error)")
-            }
-        }
-        _ = subscription
-
-        try persister.removeValue()
-        XCTAssertNil(storage.retrieveValue(for: "test"), "Should remove value from storage")
-
-        waitForExpectations(timeout: 1, handler: nil)
-    }
-
-    func testOptionalValue() throws {
-        let storage = InMemoryStorage<String>()
-        let persister = Persister<String?>(key: "test", storedBy: storage)
-        let storedValue = "stored-value"
-
-        let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
-        let subscription = persister.addUpdateListener { result in
-            defer {
-                callsUpdateListenerExpectation.fulfill()
-            }
-
+            
             switch result {
             case .success(let update):
                 XCTAssertEqual(update.newValue, storedValue, "Value passed to update listener should be new value")
@@ -145,25 +48,135 @@ final class PersisterTests: XCTestCase {
             }
         }
         _ = subscription
-
+        
+        XCTAssert(persister.retrieveValue() == defaultValue, "Should return default value")
+        try persister.persist(storedValue)
+        
+        waitForExpectations(timeout: 1, handler: nil)
+    }
+    
+    func testValue_fileManagerInitialiser() throws {
+        let defaultValue = Data("default".utf8)
+        let dataURL = testFilesDirectory.appendingPathComponent("\(UUID().uuidString).data", isDirectory: false)
+        let persister = Persister(key: dataURL, fileManager: FileManager.default, defaultValue: defaultValue)
+        let storedValue = Data("stored-value".utf8)
+        
+        let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
+        let subscription = persister.addUpdateListener { result in
+            defer {
+                callsUpdateListenerExpectation.fulfill()
+            }
+            
+            switch result {
+            case .success(let update):
+                XCTAssertEqual(update.newValue, storedValue, "Value passed to update listener should be new value")
+                XCTAssert(update.event.value == storedValue, "Event value passed to update listener should be new value")
+            case .failure(let error):
+                XCTFail("Update listener should be notified of a success. Got error: \(error)")
+            }
+        }
+        _ = subscription
+        
+        XCTAssert(persister.retrieveValue() == defaultValue, "Should return default value")
+        try persister.persist(storedValue)
+        
+        waitForExpectations(timeout: 1, handler: nil)
+    }
+    
+    func testValueWithTransformer_storedByInitialiser() throws {
+        let defaultValue = Data("default".utf8)
+        let dataURL = testFilesDirectory.appendingPathComponent("\(UUID().uuidString).data", isDirectory: false)
+        let persister = Persister(key: dataURL, storedBy: FileManager.default, transformer: MockTransformer(), defaultValue: defaultValue)
+        let storedValue = Data("stored-value".utf8)
+        
+        let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
+        let subscription = persister.addUpdateListener { result in
+            defer {
+                callsUpdateListenerExpectation.fulfill()
+            }
+            
+            switch result {
+            case .success(let update):
+                XCTAssertEqual(update.newValue, storedValue, "Value passed to update listener should be new value")
+                XCTAssert(update.event.value == storedValue, "Event value passed to update listener should be new value")
+            case .failure(let error):
+                XCTFail("Update listener should be notified of a success. Got error: \(error)")
+            }
+        }
+        _ = subscription
+        
+        XCTAssert(persister.retrieveValue() == defaultValue, "Should return default value")
+        try persister.persist(storedValue)
+        
+        waitForExpectations(timeout: 1, handler: nil)
+    }
+    
+    func testValueWithTransformer_fileManagerInitialiser() throws {
+        let defaultValue = Data("default".utf8)
+        let dataURL = testFilesDirectory.appendingPathComponent("\(UUID().uuidString).data", isDirectory: false)
+        let persister = Persister(key: dataURL, fileManager: FileManager.default, transformer: MockTransformer(), defaultValue: defaultValue)
+        let storedValue = Data("stored-value".utf8)
+        
+        let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
+        let subscription = persister.addUpdateListener { result in
+            defer {
+                callsUpdateListenerExpectation.fulfill()
+            }
+            
+            switch result {
+            case .success(let update):
+                XCTAssertEqual(update.newValue, storedValue, "Value passed to update listener should be new value")
+                XCTAssert(update.event.value == storedValue, "Event value passed to update listener should be new value")
+            case .failure(let error):
+                XCTFail("Update listener should be notified of a success. Got error: \(error)")
+            }
+        }
+        _ = subscription
+        
+        XCTAssert(persister.retrieveValue() == defaultValue, "Should return default value")
+        try persister.persist(storedValue)
+        
+        waitForExpectations(timeout: 1, handler: nil)
+    }
+    
+    func testOptionalValue_storedByInitialiser() throws {
+        let dataURL = testFilesDirectory.appendingPathComponent("\(UUID().uuidString).data", isDirectory: false)
+        let persister = Persister<Data?>(key: dataURL, storedBy: FileManager.default)
+        let storedValue = Data("stored-value".utf8)
+        
+        let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
+        let subscription = persister.addUpdateListener { result in
+            defer {
+                callsUpdateListenerExpectation.fulfill()
+            }
+            
+            switch result {
+            case .success(let update):
+                XCTAssertEqual(update.newValue, storedValue, "Value passed to update listener should be new value")
+                XCTAssert(update.event.value == storedValue, "Event value passed to update listener should be new value")
+            case .failure(let error):
+                XCTFail("Update listener should be notified of a success. Got error: \(error)")
+            }
+        }
+        _ = subscription
+        
         XCTAssertNil(persister.retrieveValue(), "Default value should be `nil`")
         try persister.persist(storedValue)
-
+        
         waitForExpectations(timeout: 1, handler: nil)
     }
-
-    func testOptionalValueWithDefault() throws {
-        let storage = InMemoryStorage<String>()
-        let defaultValue = "default"
-        let persister = Persister<String?>(key: "test", storedBy: storage, defaultValue: defaultValue)
-        let storedValue = "stored-value"
-
+    
+    func testOptionalValue_fileManagerInitialiser() throws {
+        let dataURL = testFilesDirectory.appendingPathComponent("\(UUID().uuidString).data", isDirectory: false)
+        let persister = Persister<Data?>(key: dataURL, fileManager: FileManager.default)
+        let storedValue = Data("stored-value".utf8)
+        
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
         let subscription = persister.addUpdateListener { result in
             defer {
                 callsUpdateListenerExpectation.fulfill()
             }
-
+            
             switch result {
             case .success(let update):
                 XCTAssertEqual(update.newValue, storedValue, "Value passed to update listener should be new value")
@@ -173,24 +186,53 @@ final class PersisterTests: XCTestCase {
             }
         }
         _ = subscription
-
+        
+        XCTAssertNil(persister.retrieveValue(), "Default value should be `nil`")
+        try persister.persist(storedValue)
+        
+        waitForExpectations(timeout: 1, handler: nil)
+    }
+    
+    func testOptionalValueWithDefault_storedByInitialiser() throws {
+        let defaultValue = Data("default".utf8)
+        let dataURL = testFilesDirectory.appendingPathComponent("\(UUID().uuidString).data", isDirectory: false)
+        let persister = Persister<Data?>(key: dataURL, storedBy: FileManager.default, defaultValue: defaultValue)
+        let storedValue = Data("stored-value".utf8)
+        
+        let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
+        let subscription = persister.addUpdateListener { result in
+            defer {
+                callsUpdateListenerExpectation.fulfill()
+            }
+            
+            switch result {
+            case .success(let update):
+                XCTAssertEqual(update.newValue, storedValue, "Value passed to update listener should be new value")
+                XCTAssert(update.event.value == storedValue, "Event value passed to update listener should be new value")
+            case .failure(let error):
+                XCTFail("Update listener should be notified of a success. Got error: \(error)")
+            }
+        }
+        _ = subscription
+        
         XCTAssert(persister.retrieveValue() == defaultValue, "Default value should be passed default value")
         try persister.persist(storedValue)
-
+        
         waitForExpectations(timeout: 1, handler: nil)
     }
-
-    func testOptionalValueWithAnyStorage() throws {
-        let storage = InMemoryStorage<Any>()
-        let persister = Persister<String?>(key: "test", storedBy: storage)
-        let storedValue = "stored-value"
-
+    
+    func testOptionalValueWithDefault_fileManagerInitialiser() throws {
+        let defaultValue = Data("default".utf8)
+        let dataURL = testFilesDirectory.appendingPathComponent("\(UUID().uuidString).data", isDirectory: false)
+        let persister = Persister<Data?>(key: dataURL, fileManager: FileManager.default, defaultValue: defaultValue)
+        let storedValue = Data("stored-value".utf8)
+        
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
         let subscription = persister.addUpdateListener { result in
             defer {
                 callsUpdateListenerExpectation.fulfill()
             }
-
+            
             switch result {
             case .success(let update):
                 XCTAssertEqual(update.newValue, storedValue, "Value passed to update listener should be new value")
@@ -200,52 +242,24 @@ final class PersisterTests: XCTestCase {
             }
         }
         _ = subscription
-
-        XCTAssertNil(persister.retrieveValue(), "Default value should be `nil`")
-        try persister.persist(storedValue)
-
-        waitForExpectations(timeout: 1, handler: nil)
-    }
-
-    func testOptionalValueWithAnyStorageWithDefault() throws {
-        let storage = InMemoryStorage<Any>()
-        let defaultValue = "default"
-        let persister = Persister<String?>(key: "test", storedBy: storage, defaultValue: defaultValue)
-        let storedValue = "stored-value"
-
-        let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
-        let subscription = persister.addUpdateListener { result in
-            defer {
-                callsUpdateListenerExpectation.fulfill()
-            }
-
-            switch result {
-            case .success(let update):
-                XCTAssertEqual(update.newValue, storedValue, "Value passed to update listener should be new value")
-                XCTAssert(update.event.value == storedValue, "Event value passed to update listener should be new value")
-            case .failure(let error):
-                XCTFail("Update listener should be notified of a success. Got error: \(error)")
-            }
-        }
-        _ = subscription
-
+        
         XCTAssert(persister.retrieveValue() == defaultValue, "Default value should be passed default value")
         try persister.persist(storedValue)
-
+        
         waitForExpectations(timeout: 1, handler: nil)
     }
-
-    func testOptionalValueWithTransformer() throws {
-        let storage = InMemoryStorage<String>()
-        let persister = Persister<String?>(key: "test", storedBy: storage, transformer: MockTransformer())
-        let storedValue = "stored-value"
-
+    
+    func testOptionalValueWithTransformer_storedByInitialiser() throws {
+        let dataURL = testFilesDirectory.appendingPathComponent("\(UUID().uuidString).data", isDirectory: false)
+        let persister = Persister<Data?>(key: dataURL, storedBy: FileManager.default, transformer: MockTransformer())
+        let storedValue = Data("stored-value".utf8)
+        
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
         let subscription = persister.addUpdateListener { result in
             defer {
                 callsUpdateListenerExpectation.fulfill()
             }
-
+            
             switch result {
             case .success(let update):
                 XCTAssertEqual(update.newValue, storedValue, "Value passed to update listener should be new value")
@@ -255,24 +269,24 @@ final class PersisterTests: XCTestCase {
             }
         }
         _ = subscription
-
+        
         XCTAssertNil(persister.retrieveValue(), "Default value should be `nil`")
         try persister.persist(storedValue)
-
+        
         waitForExpectations(timeout: 1, handler: nil)
     }
-
-    func testOptionalValueWithAnyStorageAnyTransformer() throws {
-        let storage = InMemoryStorage<Any>()
-        let persister = Persister<String?>(key: "test", storedBy: storage, transformer: MockTransformer())
-        let storedValue = "stored-value"
-
+    
+    func testOptionalValueWithTransformer_fileManagerInitialiser() throws {
+        let dataURL = testFilesDirectory.appendingPathComponent("\(UUID().uuidString).data", isDirectory: false)
+        let persister = Persister<Data?>(key: dataURL, fileManager: FileManager.default, transformer: MockTransformer())
+        let storedValue = Data("stored-value".utf8)
+        
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
         let subscription = persister.addUpdateListener { result in
             defer {
                 callsUpdateListenerExpectation.fulfill()
             }
-
+            
             switch result {
             case .success(let update):
                 XCTAssertEqual(update.newValue, storedValue, "Value passed to update listener should be new value")
@@ -282,70 +296,12 @@ final class PersisterTests: XCTestCase {
             }
         }
         _ = subscription
-
+        
         XCTAssertNil(persister.retrieveValue(), "Default value should be `nil`")
         try persister.persist(storedValue)
-
+        
         waitForExpectations(timeout: 1, handler: nil)
     }
-
-    #if canImport(Combine)
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    func testSettingValueUpdatesPublisher() throws {
-        let storage = InMemoryStorage<String>()
-        let defaultValue = "default"
-        let persister = Persister(key: "test", storedBy: storage, defaultValue: defaultValue)
-        let storedValue = "stored-value"
-
-        let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
-        let subscription = persister.updatesPublisher.sink { result in
-            defer {
-                callsUpdateListenerExpectation.fulfill()
-            }
-
-            switch result {
-            case .success(let update):
-                XCTAssertEqual(update.newValue, storedValue, "Value passed to update listener should be the stored value")
-                XCTAssert(update.event.value == storedValue, "Event value passed to update listener should be stored value")
-            case .failure(let error):
-                XCTFail("Update listener should be notified of a success. Got error: \(error)")
-            }
-        }
-        _ = subscription
-
-        try persister.persist(storedValue)
-
-        waitForExpectations(timeout: 1, handler: nil)
-    }
-
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    func testRemovingValueUpdatesPublisher() throws {
-        let storage = InMemoryStorage<String>()
-        let defaultValue = "default"
-        let persister = Persister(key: "test", storedBy: storage, defaultValue: defaultValue)
-        try persister.persist("stored-value")
-
-        let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
-        let subscription = persister.updatesPublisher.sink { result in
-            defer {
-                callsUpdateListenerExpectation.fulfill()
-            }
-
-            switch result {
-            case .success(let update):
-                XCTAssertEqual(update.newValue, defaultValue, "Value passed to update listener should be the default value")
-                XCTAssertNil(update.event.value, "Event value passed to update listener should be `nil``")
-            case .failure(let error):
-                XCTFail("Update listener should be notified of a success. Got error: \(error)")
-            }
-        }
-        _ = subscription
-
-        try persister.removeValue()
-
-        waitForExpectations(timeout: 1, handler: nil)
-    }
-    #endif
-
+    
 }
 #endif

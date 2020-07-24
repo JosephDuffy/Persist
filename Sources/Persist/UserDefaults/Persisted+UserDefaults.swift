@@ -17,13 +17,13 @@ extension Persisted where Value: StorableInUserDefaults {
     public init(
         key: String,
         storedBy userDefaults: UserDefaults,
-        defaultValue: Value,
+        defaultValue: @autoclosure @escaping () -> Value,
         defaultValuePersistBehaviour: DefaultValuePersistOption = []
     ) {
         self.init(
             key: key,
             userDefaults: userDefaults,
-            defaultValue: defaultValue,
+            defaultValue: defaultValue(),
             defaultValuePersistBehaviour: defaultValuePersistBehaviour
         )
     }
@@ -40,14 +40,14 @@ extension Persisted where Value: StorableInUserDefaults {
     public init(
         key: String,
         userDefaults: UserDefaults,
-        defaultValue: Value,
+        defaultValue: @autoclosure @escaping () -> Value,
         defaultValuePersistBehaviour: DefaultValuePersistOption = []
     ) {
         self.init(
             key: key,
             storedBy: UserDefaultsStorage(userDefaults: userDefaults),
             transformer: StorableInUserDefaultsTransformer<Value>(),
-            defaultValue: defaultValue,
+            defaultValue: defaultValue(),
             defaultValuePersistBehaviour: defaultValuePersistBehaviour
         )
     }
@@ -70,13 +70,13 @@ extension Persisted {
     public init<WrappedValue>(
         key: String,
         storedBy userDefaults: UserDefaults,
-        defaultValue: WrappedValue? = nil,
+        defaultValue: @autoclosure @escaping () -> Value = nil,
         defaultValuePersistBehaviour: DefaultValuePersistOption = []
     ) where WrappedValue: StorableInUserDefaults, Value == WrappedValue? {
         self.init(
             key: key,
             userDefaults: userDefaults,
-            defaultValue: defaultValue,
+            defaultValue: defaultValue(),
             defaultValuePersistBehaviour: defaultValuePersistBehaviour
         )
     }
@@ -93,14 +93,14 @@ extension Persisted {
     public init<WrappedValue>(
         key: String,
         userDefaults: UserDefaults,
-        defaultValue: WrappedValue? = nil,
+        defaultValue: @autoclosure @escaping () -> Value = nil,
         defaultValuePersistBehaviour: DefaultValuePersistOption = []
     ) where WrappedValue: StorableInUserDefaults, Value == WrappedValue? {
         self.init(
             key: key,
             storedBy: UserDefaultsStorage(userDefaults: userDefaults),
             transformer: StorableInUserDefaultsTransformer<WrappedValue>(),
-            defaultValue: defaultValue,
+            defaultValue: defaultValue(),
             defaultValuePersistBehaviour: defaultValuePersistBehaviour
         )
     }
@@ -124,14 +124,14 @@ extension Persisted {
         key: String,
         storedBy userDefaults: UserDefaults,
         transformer: Transformer,
-        defaultValue: Value,
+        defaultValue: @autoclosure @escaping () -> Value,
         defaultValuePersistBehaviour: DefaultValuePersistOption = []
     ) where Transformer.Input == Value, Transformer.Output: StorableInUserDefaults {
         self.init(
             key: key,
             userDefaults: userDefaults,
             transformer: transformer,
-            defaultValue: defaultValue,
+            defaultValue: defaultValue(),
             defaultValuePersistBehaviour: defaultValuePersistBehaviour
         )
     }
@@ -153,7 +153,7 @@ extension Persisted {
         key: String,
         userDefaults: UserDefaults,
         transformer: Transformer,
-        defaultValue: Value,
+        defaultValue: @autoclosure @escaping () -> Value,
         defaultValuePersistBehaviour: DefaultValuePersistOption = []
     ) where Transformer.Input == Value, Transformer.Output: StorableInUserDefaults {
         let aggregateTransformer = transformer.append(transformer: StorableInUserDefaultsTransformer<Transformer.Output>())
@@ -161,7 +161,7 @@ extension Persisted {
             key: key,
             storedBy: UserDefaultsStorage(userDefaults: userDefaults),
             transformer: aggregateTransformer,
-            defaultValue: defaultValue,
+            defaultValue: defaultValue(),
             defaultValuePersistBehaviour: defaultValuePersistBehaviour
         )
     }
@@ -185,14 +185,14 @@ extension Persisted {
         key: String,
         storedBy userDefaults: UserDefaults,
         transformer: Transformer,
-        defaultValue: WrappedValue? = nil,
+        defaultValue: @autoclosure @escaping () -> Value = nil,
         defaultValuePersistBehaviour: DefaultValuePersistOption = []
     ) where Transformer.Input == WrappedValue, Transformer.Output: StorableInUserDefaults, Value == WrappedValue? {
         self.init(
             key: key,
             userDefaults: userDefaults,
             transformer: transformer,
-            defaultValue: defaultValue,
+            defaultValue: defaultValue(),
             defaultValuePersistBehaviour: defaultValuePersistBehaviour
         )
     }
@@ -214,7 +214,7 @@ extension Persisted {
         key: String,
         userDefaults: UserDefaults,
         transformer: Transformer,
-        defaultValue: WrappedValue? = nil,
+        defaultValue: @autoclosure @escaping () -> Value = nil,
         defaultValuePersistBehaviour: DefaultValuePersistOption = []
     ) where Transformer.Input == WrappedValue, Transformer.Output: StorableInUserDefaults, Value == WrappedValue? {
         let aggregateTransformer = transformer.append(transformer: StorableInUserDefaultsTransformer<Transformer.Output>())
@@ -222,7 +222,7 @@ extension Persisted {
             key: key,
             storedBy: UserDefaultsStorage(userDefaults: userDefaults),
             transformer: aggregateTransformer,
-            defaultValue: defaultValue,
+            defaultValue: defaultValue(),
             defaultValuePersistBehaviour: defaultValuePersistBehaviour
         )
     }

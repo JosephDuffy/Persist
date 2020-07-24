@@ -2,7 +2,7 @@
 import XCTest
 @testable import Persist
 
-final class FileManagerStorageTests: XCTestCase {
+final class FileManagerTests: XCTestCase {
 
     var testFilesDirectory: URL {
         let basePath: URL

@@ -14,10 +14,10 @@ extension Persisted where Value == Data {
     public init(
         key: URL,
         storedBy fileManager: FileManager,
-        defaultValue: Value,
+        defaultValue: @autoclosure @escaping () -> Value,
         defaultValuePersistBehaviour: DefaultValuePersistOption = []
     ) {
-        self.init(key: key, fileManager: fileManager, defaultValue: defaultValue, defaultValuePersistBehaviour: defaultValuePersistBehaviour)
+        self.init(key: key, fileManager: fileManager, defaultValue: defaultValue(), defaultValuePersistBehaviour: defaultValuePersistBehaviour)
     }
 
     /**
@@ -32,10 +32,10 @@ extension Persisted where Value == Data {
     public init(
         key: URL,
         fileManager: FileManager,
-        defaultValue: Value,
+        defaultValue: @autoclosure @escaping () -> Value,
         defaultValuePersistBehaviour: DefaultValuePersistOption = []
     ) {
-        self.init(key: key, storedBy: FileManagerStorage(fileManager: fileManager), defaultValue: defaultValue, defaultValuePersistBehaviour: defaultValuePersistBehaviour)
+        self.init(key: key, storedBy: FileManagerStorage(fileManager: fileManager), defaultValue: defaultValue(), defaultValuePersistBehaviour: defaultValuePersistBehaviour)
     }
 
 }
@@ -54,10 +54,10 @@ extension Persisted where Value == Data? {
     public init(
         key: URL,
         storedBy fileManager: FileManager,
-        defaultValue: Value = nil,
+        defaultValue: @autoclosure @escaping () -> Value = nil,
         defaultValuePersistBehaviour: DefaultValuePersistOption = []
     ) {
-        self.init(key: key, fileManager: fileManager, defaultValue: defaultValue, defaultValuePersistBehaviour: defaultValuePersistBehaviour)
+        self.init(key: key, fileManager: fileManager, defaultValue: defaultValue(), defaultValuePersistBehaviour: defaultValuePersistBehaviour)
     }
 
     /**
@@ -72,10 +72,10 @@ extension Persisted where Value == Data? {
     public init(
         key: URL,
         fileManager: FileManager,
-        defaultValue: Value = nil,
+        defaultValue: @autoclosure @escaping () -> Value = nil,
         defaultValuePersistBehaviour: DefaultValuePersistOption = []
     ) {
-        let persister = Persister(key: key, storedBy: fileManager, defaultValue: defaultValue, defaultValuePersistBehaviour: defaultValuePersistBehaviour)
+        let persister = Persister(key: key, storedBy: fileManager, defaultValue: defaultValue(), defaultValuePersistBehaviour: defaultValuePersistBehaviour)
         self.init(persister: persister)
     }
 
@@ -100,10 +100,10 @@ extension Persisted {
         key: URL,
         storedBy fileManager: FileManager,
         transformer: Transformer,
-        defaultValue: Value,
+        defaultValue: @autoclosure @escaping () -> Value,
         defaultValuePersistBehaviour: DefaultValuePersistOption = []
     ) where Transformer.Input == Value, Transformer.Output == Data {
-        self.init(key: key, fileManager: fileManager, transformer: transformer, defaultValue: defaultValue, defaultValuePersistBehaviour: defaultValuePersistBehaviour)
+        self.init(key: key, fileManager: fileManager, transformer: transformer, defaultValue: defaultValue(), defaultValuePersistBehaviour: defaultValuePersistBehaviour)
     }
 
     /**
@@ -123,10 +123,10 @@ extension Persisted {
         key: URL,
         fileManager: FileManager,
         transformer: Transformer,
-        defaultValue: Value,
+        defaultValue: @autoclosure @escaping () -> Value,
         defaultValuePersistBehaviour: DefaultValuePersistOption = []
     ) where Transformer.Input == Value, Transformer.Output == Data {
-        let persister = Persister(key: key, fileManager: fileManager, transformer: transformer, defaultValue: defaultValue)
+        let persister = Persister(key: key, fileManager: fileManager, transformer: transformer, defaultValue: defaultValue())
         self.init(persister: persister)
     }
 
@@ -147,10 +147,10 @@ extension Persisted {
         key: URL,
         storedBy fileManager: FileManager,
         transformer: Transformer,
-        defaultValue: Value = nil,
+        defaultValue: @autoclosure @escaping () -> Value = nil,
         defaultValuePersistBehaviour: DefaultValuePersistOption = []
     ) where Value == WrappedValue?, Transformer.Input == WrappedValue, Transformer.Output == Data {
-        self.init(key: key, fileManager: fileManager, transformer: transformer, defaultValue: defaultValue, defaultValuePersistBehaviour: defaultValuePersistBehaviour)
+        self.init(key: key, fileManager: fileManager, transformer: transformer, defaultValue: defaultValue(), defaultValuePersistBehaviour: defaultValuePersistBehaviour)
     }
 
     /**
@@ -170,10 +170,10 @@ extension Persisted {
         key: URL,
         fileManager: FileManager,
         transformer: Transformer,
-        defaultValue: Value = nil,
+        defaultValue: @autoclosure @escaping () -> Value = nil,
         defaultValuePersistBehaviour: DefaultValuePersistOption = []
     ) where Value == WrappedValue?, Transformer.Input == WrappedValue, Transformer.Output == Data {
-        let persister = Persister(key: key, storedBy: FileManagerStorage(fileManager: fileManager), transformer: transformer, defaultValue: defaultValue, defaultValuePersistBehaviour: defaultValuePersistBehaviour)
+        let persister = Persister(key: key, storedBy: FileManagerStorage(fileManager: fileManager), transformer: transformer, defaultValue: defaultValue(), defaultValuePersistBehaviour: defaultValuePersistBehaviour)
         self.init(persister: persister)
     }
 
