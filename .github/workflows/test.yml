@@ -9,7 +9,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        xcode: ["11.5"]
+        xcode: ["11.5", "12_beta"]
 
     steps:
       - uses: actions/checkout@v2
@@ -42,7 +42,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        xcode: ["11.5"]
+        xcode: ["11.5", "12_beta"]
         platform: ["iOS", "tvOS"]
 
     steps:
@@ -81,7 +81,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        xcode: ["11.5"]
+        xcode: ["11.5", "12_beta"]
 
     steps:
       - uses: actions/checkout@v2
