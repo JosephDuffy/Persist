@@ -107,18 +107,23 @@ public final class Persister<Value> {
     /// The upates subject that publishes updates.
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
     private var updatesSubject: PassthroughSubject<UpdatePayload, Never> {
-        return _updatesSubject as! PassthroughSubject<UpdatePayload, Never>
+        getUpdatesSubject()
     }
 
     /// An `Any` value that will always be a `PassthroughSubject<UpdatePayload, Never>`.
     /// This is required because Swift does not support marking stored properties as `available`.
-    private lazy var _updatesSubject: Any = {
-        if #available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *) {
-            return PassthroughSubject<UpdatePayload, Never>()
-        } else {
-            preconditionFailure()
+    private var _updatesSubject: Any?
+
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    private func getUpdatesSubject() -> PassthroughSubject<UpdatePayload, Never> {
+        if let updatesSubject = _updatesSubject as? PassthroughSubject<UpdatePayload, Never> {
+            return updatesSubject
         }
-    }()
+
+        let updatesSubject = PassthroughSubject<UpdatePayload, Never>()
+        _updatesSubject = updatesSubject
+        return updatesSubject
+    }
     #endif
 
     /**
