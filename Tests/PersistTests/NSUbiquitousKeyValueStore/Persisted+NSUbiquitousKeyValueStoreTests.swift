@@ -1,4 +1,4 @@
-#if !os(watchOS)
+#if os(macOS) || os(iOS) || os(tvOS)
 import XCTest
 @testable import Persist
 
