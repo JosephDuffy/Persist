@@ -7,7 +7,7 @@ let package = Package(
         .macOS(.v10_10),
     ],
     dependencies: [
-        .package(url: "https://github.com/JosephDuffy/xcutils.git", from: "0.1.0"),
+        .package(url: "https://github.com/JosephDuffy/xcutils.git", .branch("master")),
     ],
     targets: [
         .target(name: "CIDependencies")

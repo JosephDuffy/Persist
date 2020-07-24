@@ -3,7 +3,7 @@ name: Release
 on:
   push:
     tags:
-      - 'v*'
+      - "v*"
 
 jobs:
   create_release:
@@ -11,36 +11,36 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-    - name: Fetch tag
-      run: git fetch --depth=1 origin +${{ github.ref }}:${{ github.ref }}
+      - name: Fetch tag
+        run: git fetch --depth=1 origin +${{ github.ref }}:${{ github.ref }}
 
-    - name: Get the release version
-      id: release_version
-      run: echo "::set-output name=version::${GITHUB_REF/refs\/tags\//}"
+      - name: Get the release version
+        id: release_version
+        run: echo "::set-output name=version::${GITHUB_REF/refs\/tags\//}"
 
-    - name: Get release description
-      run: |
-        description="$(git tag -ln --format=$'%(contents:subject)\n\n%(contents:body)' ${{ steps.release_version.outputs.version }})"
-        # Fix set-output for multiline strings: https://github.community/t/set-output-truncates-multiline-strings/16852
-        description="${description//'%'/'%25'}"
-        description="${description//$'\n'/'%0A'}"
-        description="${description//$'\r'/'%0D'}"
-        echo "$description"
-        echo "::set-output name=description::$description"
-      id: release_description
+      - name: Get release description
+        run: |
+          description="$(git tag -ln --format=$'%(contents:subject)\n\n%(contents:body)' ${{ steps.release_version.outputs.version }})"
+          # Fix set-output for multiline strings: https://github.community/t/set-output-truncates-multiline-strings/16852
+          description="${description//'%'/'%25'}"
+          description="${description//$'\n'/'%0A'}"
+          description="${description//$'\r'/'%0D'}"
+          echo "$description"
+          echo "::set-output name=description::$description"
+        id: release_description
 
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: ${{ steps.release_version.outputs.version }}
-        release_name: ${{ steps.release_version.outputs.version }}
-        body: ${{ steps.release_description.outputs.description }}
-        prerelease: ${{ startsWith(steps.release_version.outputs.version, 'v0.') || contains(steps.release_version.outputs.version, '-') }}
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.release_version.outputs.version }}
+          release_name: ${{ steps.release_version.outputs.version }}
+          body: ${{ steps.release_description.outputs.description }}
+          prerelease: ${{ startsWith(steps.release_version.outputs.version, 'v0.') || contains(steps.release_version.outputs.version, '-') }}
 
   build_docs:
     name: Build Docs
@@ -48,34 +48,34 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        xcode: ["11.4"]
+        xcode: ["11.5"]
 
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-    - name: Select Xcode ${{ matrix.xcode }}
-      run: sudo xcode-select --switch /Applications/Xcode_${{ matrix.xcode }}.app
+      - name: Select Xcode ${{ matrix.xcode }}
+        run: sudo xcode-select --switch /Applications/Xcode_${{ matrix.xcode }}.app
 
-    - name: Setup Ruby
-      uses: ruby/setup-ruby@v1
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
 
-    - uses: actions/cache@v1
-      with:
-        path: vendor/bundle
-        key: ${{ runner.os }}-gems-${{ hashFiles('.ruby-version') }}-${{ hashFiles('**/Gemfile.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-gems-${{ hashFiles('.ruby-version') }}-
+      - uses: actions/cache@v1
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('.ruby-version') }}-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-${{ hashFiles('.ruby-version') }}-
 
-    - name: Bundle install
-      run: |
-        bundle config path vendor/bundle
-        bundle install --jobs 4 --retry 3
+      - name: Bundle install
+        run: |
+          bundle config path vendor/bundle
+          bundle install --jobs 4 --retry 3
 
-    - name: Build docs
-      run: bundle exec jazzy
+      - name: Build docs
+        run: bundle exec jazzy
 
-    - name: Upload Docs
-      uses: peaceiris/actions-gh-pages@v3
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: docs
+      - name: Upload Docs
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: docs
