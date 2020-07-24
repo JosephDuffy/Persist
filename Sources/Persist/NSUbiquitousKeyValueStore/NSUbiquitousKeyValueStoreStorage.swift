@@ -4,18 +4,13 @@ import Foundation
 /**
  A `Storage` wrapper around an `NSUbiquitousKeyValueStore` instance.
  */
-public final class NSUbiquitousKeyValueStoreStorage: Storage {
+internal final class NSUbiquitousKeyValueStoreStorage: Storage {
 
     /// The value type the `NSUbiquitousKeyValueStoreStorage` can store.
-    public typealias Value = NSUbiquitousKeyValueStoreValue
-
-    /// An instance that wraps the `NSUbiquitousKeyValueStore.default` store.
-    public static var `default`: Self {
-        return Self(nsUbiquitousKeyValueStore: .default)
-    }
+    internal typealias Value = NSUbiquitousKeyValueStoreValue
 
     /// The `NSUbiquitousKeyValueStore` this instance wraps.
-    public let nsUbiquitousKeyValueStore: NSUbiquitousKeyValueStore
+    internal let nsUbiquitousKeyValueStore: NSUbiquitousKeyValueStore
 
     private var updateListeners: [String: [UUID: UpdateListener]] = [:]
 
@@ -24,7 +19,7 @@ public final class NSUbiquitousKeyValueStoreStorage: Storage {
 
      - parameter nsUbiquitousKeyValueStore: The store to use to store and retrieve values.
      */
-    public required init(nsUbiquitousKeyValueStore: NSUbiquitousKeyValueStore) {
+    internal required init(nsUbiquitousKeyValueStore: NSUbiquitousKeyValueStore) {
         self.nsUbiquitousKeyValueStore = nsUbiquitousKeyValueStore
     }
 
@@ -34,7 +29,7 @@ public final class NSUbiquitousKeyValueStoreStorage: Storage {
      - parameter value: The value to store.
      - parameter key: The key to store the value against.
      */
-    public func storeValue(_ value: NSUbiquitousKeyValueStoreValue, key: String) {
+    internal func storeValue(_ value: NSUbiquitousKeyValueStoreValue, key: String) {
         nsUbiquitousKeyValueStore.set(value.value, forKey: key)
 
         updateListeners[key]?.values.forEach { $0(value) }
@@ -45,7 +40,7 @@ public final class NSUbiquitousKeyValueStoreStorage: Storage {
 
      - parameter key: The key of the value to be removed.
      */
-    public func removeValue(for key: String) {
+    internal func removeValue(for key: String) {
         nsUbiquitousKeyValueStore.removeObject(forKey: key)
 
         updateListeners[key]?.values.forEach { $0(nil) }
@@ -57,7 +52,7 @@ public final class NSUbiquitousKeyValueStoreStorage: Storage {
      - parameter key: The key of the value to retrieve.
      - returns: The stored value, or `nil` if the a value does not exist for the specified key.
      */
-    public func retrieveValue(for key: String) -> NSUbiquitousKeyValueStoreValue? {
+    internal func retrieveValue(for key: String) -> NSUbiquitousKeyValueStoreValue? {
         guard let anyValue = nsUbiquitousKeyValueStore.object(forKey: key) else {
             return nil
         }
@@ -72,7 +67,7 @@ public final class NSUbiquitousKeyValueStoreStorage: Storage {
      - parameter updateListener: The closure to call when an update occurs.
      - returns: An object that represents the closure's subscription to changes. This object must be retained by the caller.
      */
-    public func addUpdateListener(forKey key: String, updateListener: @escaping UpdateListener) -> Subscription {
+    internal func addUpdateListener(forKey key: String, updateListener: @escaping UpdateListener) -> Subscription {
         return addUpdateListener(forKey: key, notificationCenter: .default, updateListener: updateListener)
     }
 
@@ -84,7 +79,7 @@ public final class NSUbiquitousKeyValueStoreStorage: Storage {
      - parameter updateListener: The closure to call when an update occurs.
      - returns: An object that represents the closure's subscription to changes. This object must be retained by the caller.
     */
-    public func addUpdateListener(forKey key: String, notificationCenter: NotificationCenter, updateListener: @escaping UpdateListener) -> Subscription {
+    internal func addUpdateListener(forKey key: String, notificationCenter: NotificationCenter, updateListener: @escaping UpdateListener) -> Subscription {
         let notificationObserver = notificationCenter.addObserver(
             forName: NSUbiquitousKeyValueStore.didChangeExternallyNotification,
             object: nsUbiquitousKeyValueStore,

@@ -4,18 +4,13 @@ import Foundation
 /**
  A `Storage` wrapper around a `UserDefaults` instance.
  */
-public final class UserDefaultsStorage: Storage {
+internal final class UserDefaultsStorage: Storage {
 
     /// The value type the `UserDefaultsStorage` can store.
-    public typealias Value = UserDefaultsValue
-
-    /// An instance that wraps the `UserDefaults.standard` store.
-    public static var standard: UserDefaultsStorage {
-        return UserDefaultsStorage(userDefaults: .standard)
-    }
+    internal typealias Value = UserDefaultsValue
 
     /// The `UserDefaults` this instance wraps.
-    public let userDefaults: UserDefaults
+    internal let userDefaults: UserDefaults
 
     private var updateListeners: [String: [UUID: UpdateListener]] = [:]
 
@@ -24,7 +19,7 @@ public final class UserDefaultsStorage: Storage {
 
      - parameter userDefaults: The user defaults to use to store and retrieve values.
      */
-    public init(userDefaults: UserDefaults) {
+    internal init(userDefaults: UserDefaults) {
         self.userDefaults = userDefaults
     }
 
@@ -35,7 +30,7 @@ public final class UserDefaultsStorage: Storage {
 
      - parameter suiteName: The domain identifier of the search list.
      */
-    public init?(suiteName: String?) {
+    internal init?(suiteName: String?) {
         guard let userDefaults = UserDefaults(suiteName: suiteName) else { return nil }
         self.userDefaults = userDefaults
     }
@@ -46,7 +41,7 @@ public final class UserDefaultsStorage: Storage {
      - parameter value: The value to store.
      - parameter key: The key to store the value against.
      */
-    public func storeValue(_ value: UserDefaultsValue, key: String) {
+    internal func storeValue(_ value: UserDefaultsValue, key: String) {
         switch value {
         case .url(let url):
             userDefaults.set(url, forKey: key)
@@ -60,7 +55,7 @@ public final class UserDefaultsStorage: Storage {
 
      - parameter key: The key of the value to be removed.
      */
-    public func removeValue(for key: String) {
+    internal func removeValue(for key: String) {
         userDefaults.removeObject(forKey: key)
     }
 
@@ -70,7 +65,7 @@ public final class UserDefaultsStorage: Storage {
      - parameter key: The key of the value to retrieve.
      - returns: The stored value, or `nil` if the a value does not exist for the specified key.
      */
-    public func retrieveValue(for key: String) -> UserDefaultsValue? {
+    internal func retrieveValue(for key: String) -> UserDefaultsValue? {
         if let url = userDefaults.url(forKey: key), userDefaults.object(forKey: key) is Data {
             // `url(forKey:)` will return a URL for values that were not set as
             // URLs. URLs are stored in UserDefaults as Data so checking
@@ -91,7 +86,7 @@ public final class UserDefaultsStorage: Storage {
      - parameter updateListener: The closure to call when an update occurs.
      - returns: An object that represents the closure's subscription to changes. This object must be retained by the caller.
      */
-    public func addUpdateListener(forKey key: String, updateListener: @escaping UpdateListener) -> Subscription {
+    internal func addUpdateListener(forKey key: String, updateListener: @escaping UpdateListener) -> Subscription {
         let observer = KeyPathObserver(updateListener: updateListener)
         userDefaults.addObserver(observer, forKeyPath: key, options: .new, context: nil)
         let subscription = Subscription { [weak userDefaults] in

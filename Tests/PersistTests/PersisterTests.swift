@@ -22,6 +22,7 @@ final class PersisterTests: XCTestCase {
             switch result {
             case .success(let update):
                 XCTAssertEqual(update.newValue, storedValue, "Value passed to update listener should be the new, untransformed, value")
+                XCTAssertEqual(update.event.value, storedValue, "Event value passed to update listener should be the new, untransformed, value")
             case .failure(let error):
                 XCTFail("Update listener should be notified of a success. Got error: \(error)")
             }
@@ -50,6 +51,7 @@ final class PersisterTests: XCTestCase {
             switch result {
             case .success(let update):
                 XCTAssertEqual(update.newValue, storedValue, "Value passed to update listener should be the new, untransformed, value")
+                XCTAssertEqual(update.event.value, storedValue, "Event value passed to update listener should be the new, untransformed, value")
             case .failure(let error):
                 XCTFail("Update listener should be notified of a success. Got error: \(error)")
             }
@@ -81,6 +83,7 @@ final class PersisterTests: XCTestCase {
             switch result {
             case .success(let update):
                 XCTAssertEqual(update.newValue, storedValue, "Value passed to update listener should be the new, untransformed, value")
+                XCTAssertEqual(update.event.value, storedValue, "Event value passed to update listener should be the new, untransformed, value")
             case .failure(let error):
                 XCTFail("Update listener should be notified of a success. Got error: \(error)")
             }
@@ -93,6 +96,92 @@ final class PersisterTests: XCTestCase {
 
         waitForExpectations(timeout: 1, handler: nil)
     }
+
+    func testRemovingValue() throws {
+        let storage = InMemoryStorage<String>()
+        let defaultValue = "default"
+        let persister = Persister(key: "test", storedBy: storage, defaultValue: defaultValue)
+        try persister.persist("stored-value")
+
+        let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
+        let subscription = persister.addUpdateListener { result in
+            defer {
+                callsUpdateListenerExpectation.fulfill()
+            }
+
+            switch result {
+            case .success(let update):
+                XCTAssertEqual(update.newValue, defaultValue, "Value passed to update listener should be the default value")
+                XCTAssertNil(update.event.value, "Event value passed to update listener should be `nil``")
+            case .failure(let error):
+                XCTFail("Update listener should be notified of a success. Got error: \(error)")
+            }
+        }
+        _ = subscription
+
+        try persister.removeValue()
+        XCTAssertNil(storage.retrieveValue(for: "test"), "Should remove value from storage")
+
+        waitForExpectations(timeout: 1, handler: nil)
+    }
+
+    #if canImport(Combine)
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    func testSettingValueUpdatesPublisher() throws {
+        let storage = InMemoryStorage<String>()
+        let defaultValue = "default"
+        let persister = Persister(key: "test", storedBy: storage, defaultValue: defaultValue)
+        let storedValue = "stored-value"
+
+        let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
+        let subscription = persister.updatesPublisher.sink { result in
+            defer {
+                callsUpdateListenerExpectation.fulfill()
+            }
+
+            switch result {
+            case .success(let update):
+                XCTAssertEqual(update.newValue, storedValue, "Value passed to update listener should be the stored value")
+                XCTAssert(update.event.value == storedValue, "Event value passed to update listener should be stored value")
+            case .failure(let error):
+                XCTFail("Update listener should be notified of a success. Got error: \(error)")
+            }
+        }
+        _ = subscription
+
+        try persister.persist(storedValue)
+
+        waitForExpectations(timeout: 1, handler: nil)
+    }
+
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    func testRemovingValueUpdatesPublisher() throws {
+        let storage = InMemoryStorage<String>()
+        let defaultValue = "default"
+        let persister = Persister(key: "test", storedBy: storage, defaultValue: defaultValue)
+        try persister.persist("stored-value")
+
+        let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
+        let subscription = persister.updatesPublisher.sink { result in
+            defer {
+                callsUpdateListenerExpectation.fulfill()
+            }
+
+            switch result {
+            case .success(let update):
+                XCTAssertEqual(update.newValue, defaultValue, "Value passed to update listener should be the default value")
+                XCTAssertNil(update.event.value, "Event value passed to update listener should be `nil``")
+            case .failure(let error):
+                XCTFail("Update listener should be notified of a success. Got error: \(error)")
+            }
+        }
+        _ = subscription
+
+        try persister.removeValue()
+
+        waitForExpectations(timeout: 1, handler: nil)
+    }
+    #endif
 
 }
 #endif
