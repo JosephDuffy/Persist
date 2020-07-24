@@ -2,9 +2,9 @@
 import XCTest
 import Persist
 
-final class UserDefaultsTests: XCTestCase {
+final class UserDefaultsTestsAPITests: XCTestCase {
 
-    func testPersistedUserDefaultsAPI() {
+    func testPersistedAPI() {
         _ = Persisted<Double?>(key: "test", storedBy: UserDefaults.standard)
         _ = Persisted(key: "test", storedBy: UserDefaults.standard, defaultValue: 123)
 
@@ -24,7 +24,7 @@ final class UserDefaultsTests: XCTestCase {
         _ = Persisted(key: "test", userDefaults: .standard, transformer: JSONTransformer(), defaultValue: 123)
     }
 
-    func testPersisterUserDefaultsAPI() {
+    func testPersisterAPI() {
         _ = Persister<Double?>(key: "test", storedBy: UserDefaults.standard)
         _ = Persister(key: "test", storedBy: UserDefaults.standard, defaultValue: 123)
 
