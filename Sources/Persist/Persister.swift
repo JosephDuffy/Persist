@@ -15,14 +15,23 @@ extension Persister.Update: Equatable where Value: Equatable {}
 public final class Persister<Value> {
     /// An update that was performed by a persister.
     public struct Update {
+        /// Create and return a new `Update` for a persisted value.
+        ///
+        /// - Parameter persistedValue: The value that was persisted.
+        /// - Returns: The created `Update`.
         public static func persisted(_ persistedValue: Value) -> Update {
             return Update(newValue: persistedValue, event: .persisted(persistedValue))
         }
 
+        /// Create and return a new `Update` for a removed value.
+        ///
+        /// - Parameter defaultValue: The default value that will be falled back to.
+        /// - Returns: The created `Update`.
         public static func removed(defaultValue: Value) -> Update {
             return Update(newValue: defaultValue, event: .removed)
         }
 
+        /// An event that triggers an update.
         public enum Event {
             /// The was persisted.
             case persisted(Value)
