@@ -44,11 +44,6 @@ public final class Persister<Value> {
         /// The new value, after the update. If the value was removed this will be the default value.
         public let newValue: Value
 
-        @available(*, deprecated, renamed: "newValue")
-        public var value: Value {
-            return newValue
-        }
-
         /// The event that triggered the update.
         public let event: Event
 
