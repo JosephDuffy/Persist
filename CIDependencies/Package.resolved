@@ -6,8 +6,8 @@
         "repositoryURL": "https://github.com/apple/swift-argument-parser",
         "state": {
           "branch": null,
-          "revision": "223d62adc52d51669ae2ee19bdb8b7d9fd6fcd9c",
-          "version": "0.0.6"
+          "revision": "eb51f949cdd0c9d88abba9ce79d37eb7ea1231d0",
+          "version": "0.2.0"
         }
       },
       {
@@ -23,9 +23,9 @@
         "package": "xcutils",
         "repositoryURL": "https://github.com/JosephDuffy/xcutils.git",
         "state": {
-          "branch": null,
-          "revision": "0454a5dd89b680a841ada3138cd90f6c606b2d28",
-          "version": "0.1.0"
+          "branch": "master",
+          "revision": "0351c9bb8518df223221b608bafea182a2587a8f",
+          "version": null
         }
       }
     ]

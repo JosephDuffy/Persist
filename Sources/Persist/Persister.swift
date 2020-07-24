@@ -15,14 +15,23 @@ extension Persister.Update: Equatable where Value: Equatable {}
 public final class Persister<Value> {
     /// An update that was performed by a persister.
     public struct Update {
+        /// Create and return a new `Update` for a persisted value.
+        ///
+        /// - Parameter persistedValue: The value that was persisted.
+        /// - Returns: The created `Update`.
         public static func persisted(_ persistedValue: Value) -> Update {
             return Update(newValue: persistedValue, event: .persisted(persistedValue))
         }
 
+        /// Create and return a new `Update` for a removed value.
+        ///
+        /// - Parameter defaultValue: The default value that will be falled back to.
+        /// - Returns: The created `Update`.
         public static func removed(defaultValue: Value) -> Update {
             return Update(newValue: defaultValue, event: .removed)
         }
 
+        /// An event that triggers an update.
         public enum Event {
             /// The was persisted.
             case persisted(Value)
@@ -107,18 +116,23 @@ public final class Persister<Value> {
     /// The upates subject that publishes updates.
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
     private var updatesSubject: PassthroughSubject<UpdatePayload, Never> {
-        return _updatesSubject as! PassthroughSubject<UpdatePayload, Never>
+        getUpdatesSubject()
     }
 
     /// An `Any` value that will always be a `PassthroughSubject<UpdatePayload, Never>`.
     /// This is required because Swift does not support marking stored properties as `available`.
-    private lazy var _updatesSubject: Any = {
-        if #available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *) {
-            return PassthroughSubject<UpdatePayload, Never>()
-        } else {
-            preconditionFailure()
+    private var _updatesSubject: Any?
+
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    private func getUpdatesSubject() -> PassthroughSubject<UpdatePayload, Never> {
+        if let updatesSubject = _updatesSubject as? PassthroughSubject<UpdatePayload, Never> {
+            return updatesSubject
         }
-    }()
+
+        let updatesSubject = PassthroughSubject<UpdatePayload, Never>()
+        _updatesSubject = updatesSubject
+        return updatesSubject
+    }
     #endif
 
     /**
