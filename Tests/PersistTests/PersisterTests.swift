@@ -125,6 +125,7 @@ final class PersisterTests: XCTestCase {
         waitForExpectations(timeout: 1, handler: nil)
     }
 
+    #if canImport(Combine)
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
     func testSettingValueUpdatesPublisher() throws {
         let storage = InMemoryStorage<String>()
@@ -180,6 +181,7 @@ final class PersisterTests: XCTestCase {
 
         waitForExpectations(timeout: 1, handler: nil)
     }
+    #endif
 
 }
 #endif
