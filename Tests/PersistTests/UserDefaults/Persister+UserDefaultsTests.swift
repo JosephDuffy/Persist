@@ -2,7 +2,7 @@
 import XCTest
 @testable import Persist
 
-final class PersistedUserDefaultsTests: XCTestCase {
+final class PersisterUserDefaultsTests: XCTestCase {
 
     private let userDefaults = UserDefaults(suiteName: "test-suite")!
 
@@ -12,11 +12,11 @@ final class PersistedUserDefaultsTests: XCTestCase {
 
     func testValue_storedByInitialiser() throws {
         let defaultValue = "default"
-        var persisted = Persisted<String>(key: "test", storedBy: userDefaults, defaultValue: defaultValue)
+        let persister = Persister<String>(key: "test", storedBy: userDefaults, defaultValue: defaultValue)
         let storedValue = "stored-value"
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
-        let subscription = persisted.projectedValue.addUpdateListener { result in
+        let subscription = persister.addUpdateListener { result in
             defer {
                 callsUpdateListenerExpectation.fulfill()
             }
@@ -31,19 +31,19 @@ final class PersistedUserDefaultsTests: XCTestCase {
         }
         _ = subscription
 
-        XCTAssert(persisted.wrappedValue == defaultValue, "Should return default value")
-        persisted.wrappedValue = storedValue
+        XCTAssert(persister.retrieveValue() == defaultValue, "Should return default value")
+        try persister.persist(storedValue)
 
         waitForExpectations(timeout: 1, handler: nil)
     }
 
     func testValue_userDefaultsInitialiser() throws {
         let defaultValue = "default"
-        var persisted = Persisted<String>(key: "test", userDefaults: userDefaults, defaultValue: defaultValue)
+        let persister = Persister<String>(key: "test", userDefaults: userDefaults, defaultValue: defaultValue)
         let storedValue = "stored-value"
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
-        let subscription = persisted.projectedValue.addUpdateListener { result in
+        let subscription = persister.addUpdateListener { result in
             defer {
                 callsUpdateListenerExpectation.fulfill()
             }
@@ -58,19 +58,19 @@ final class PersistedUserDefaultsTests: XCTestCase {
         }
         _ = subscription
 
-        XCTAssert(persisted.wrappedValue == defaultValue, "Should return default value")
-        persisted.wrappedValue = storedValue
+        XCTAssert(persister.retrieveValue() == defaultValue, "Should return default value")
+        try persister.persist(storedValue)
 
         waitForExpectations(timeout: 1, handler: nil)
     }
 
     func testValueWithTransformer_storedByInitialiser() throws {
         let defaultValue = "default"
-        var persisted = Persisted<String>(key: "test", storedBy: userDefaults, transformer: MockTransformer(), defaultValue: defaultValue)
+        let persister = Persister<String>(key: "test", storedBy: userDefaults, transformer: MockTransformer(), defaultValue: defaultValue)
         let storedValue = "stored-value"
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
-        let subscription = persisted.projectedValue.addUpdateListener { result in
+        let subscription = persister.addUpdateListener { result in
             defer {
                 callsUpdateListenerExpectation.fulfill()
             }
@@ -85,19 +85,19 @@ final class PersistedUserDefaultsTests: XCTestCase {
         }
         _ = subscription
 
-        XCTAssert(persisted.wrappedValue == defaultValue, "Should return default value")
-        persisted.wrappedValue = storedValue
+        XCTAssert(persister.retrieveValue() == defaultValue, "Should return default value")
+        try persister.persist(storedValue)
 
         waitForExpectations(timeout: 1, handler: nil)
     }
 
     func testValueWithTransformer_userDefaultsInitialiser() throws {
         let defaultValue = "default"
-        var persisted = Persisted<String>(key: "test", userDefaults: userDefaults, transformer: MockTransformer(), defaultValue: defaultValue)
+        let persister = Persister<String>(key: "test", userDefaults: userDefaults, transformer: MockTransformer(), defaultValue: defaultValue)
         let storedValue = "stored-value"
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
-        let subscription = persisted.projectedValue.addUpdateListener { result in
+        let subscription = persister.addUpdateListener { result in
             defer {
                 callsUpdateListenerExpectation.fulfill()
             }
@@ -112,18 +112,18 @@ final class PersistedUserDefaultsTests: XCTestCase {
         }
         _ = subscription
 
-        XCTAssert(persisted.wrappedValue == defaultValue, "Should return default value")
-        persisted.wrappedValue = storedValue
+        XCTAssert(persister.retrieveValue() == defaultValue, "Should return default value")
+        try persister.persist(storedValue)
 
         waitForExpectations(timeout: 1, handler: nil)
     }
 
     func testOptionalValue_storedByInitialiser() throws {
-        var persisted = Persisted<String?>(key: "test", storedBy: userDefaults)
+        let persister = Persister<String?>(key: "test", storedBy: userDefaults)
         let storedValue = "stored-value"
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
-        let subscription = persisted.projectedValue.addUpdateListener { result in
+        let subscription = persister.addUpdateListener { result in
             defer {
                 callsUpdateListenerExpectation.fulfill()
             }
@@ -138,18 +138,18 @@ final class PersistedUserDefaultsTests: XCTestCase {
         }
         _ = subscription
 
-        XCTAssertNil(persisted.wrappedValue, "Default value should be `nil`")
-        persisted.wrappedValue = storedValue
+        XCTAssertNil(persister.retrieveValue(), "Default value should be `nil`")
+        try persister.persist(storedValue)
 
         waitForExpectations(timeout: 1, handler: nil)
     }
 
     func testOptionalValue_userDefaultsInitialiser() throws {
-        var persisted = Persisted<String?>(key: "test", userDefaults: userDefaults)
+        let persister = Persister<String?>(key: "test", userDefaults: userDefaults)
         let storedValue = "stored-value"
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
-        let subscription = persisted.projectedValue.addUpdateListener { result in
+        let subscription = persister.addUpdateListener { result in
             defer {
                 callsUpdateListenerExpectation.fulfill()
             }
@@ -164,19 +164,19 @@ final class PersistedUserDefaultsTests: XCTestCase {
         }
         _ = subscription
 
-        XCTAssertNil(persisted.wrappedValue, "Default value should be `nil`")
-        persisted.wrappedValue = storedValue
+        XCTAssertNil(persister.retrieveValue(), "Default value should be `nil`")
+        try persister.persist(storedValue)
 
         waitForExpectations(timeout: 1, handler: nil)
     }
 
     func testOptionalValueWithDefault_storedByInitialiser() throws {
         let defaultValue = "default"
-        var persisted = Persisted<String?>(key: "test", storedBy: userDefaults, defaultValue: defaultValue)
+        let persister = Persister<String?>(key: "test", storedBy: userDefaults, defaultValue: defaultValue)
         let storedValue = "stored-value"
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
-        let subscription = persisted.projectedValue.addUpdateListener { result in
+        let subscription = persister.addUpdateListener { result in
             defer {
                 callsUpdateListenerExpectation.fulfill()
             }
@@ -191,19 +191,19 @@ final class PersistedUserDefaultsTests: XCTestCase {
         }
         _ = subscription
 
-        XCTAssert(persisted.wrappedValue == defaultValue, "Default value should be passed default value")
-        persisted.wrappedValue = storedValue
+        XCTAssert(persister.retrieveValue() == defaultValue, "Default value should be passed default value")
+        try persister.persist(storedValue)
 
         waitForExpectations(timeout: 1, handler: nil)
     }
 
     func testOptionalValueWithDefault_userDefaultsInitialiser() throws {
         let defaultValue = "default"
-        var persisted = Persisted<String?>(key: "test", userDefaults: userDefaults, defaultValue: defaultValue)
+        let persister = Persister<String?>(key: "test", userDefaults: userDefaults, defaultValue: defaultValue)
         let storedValue = "stored-value"
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
-        let subscription = persisted.projectedValue.addUpdateListener { result in
+        let subscription = persister.addUpdateListener { result in
             defer {
                 callsUpdateListenerExpectation.fulfill()
             }
@@ -218,18 +218,18 @@ final class PersistedUserDefaultsTests: XCTestCase {
         }
         _ = subscription
 
-        XCTAssert(persisted.wrappedValue == defaultValue, "Default value should be passed default value")
-        persisted.wrappedValue = storedValue
+        XCTAssert(persister.retrieveValue() == defaultValue, "Default value should be passed default value")
+        try persister.persist(storedValue)
 
         waitForExpectations(timeout: 1, handler: nil)
     }
 
     func testOptionalValueWithTransformer_storedByInitialiser() throws {
-        var persisted = Persisted<String?>(key: "test", storedBy: userDefaults, transformer: MockTransformer())
+        let persister = Persister<String?>(key: "test", storedBy: userDefaults, transformer: MockTransformer())
         let storedValue = "stored-value"
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
-        let subscription = persisted.projectedValue.addUpdateListener { result in
+        let subscription = persister.addUpdateListener { result in
             defer {
                 callsUpdateListenerExpectation.fulfill()
             }
@@ -244,18 +244,18 @@ final class PersistedUserDefaultsTests: XCTestCase {
         }
         _ = subscription
 
-        XCTAssertNil(persisted.wrappedValue, "Default value should be `nil`")
-        persisted.wrappedValue = storedValue
+        XCTAssertNil(persister.retrieveValue(), "Default value should be `nil`")
+        try persister.persist(storedValue)
 
         waitForExpectations(timeout: 1, handler: nil)
     }
 
     func testOptionalValueWithTransformer_userDefaultsInitialiser() throws {
-        var persisted = Persisted<String?>(key: "test", userDefaults: userDefaults, transformer: MockTransformer())
+        let persister = Persister<String?>(key: "test", userDefaults: userDefaults, transformer: MockTransformer())
         let storedValue = "stored-value"
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
-        let subscription = persisted.projectedValue.addUpdateListener { result in
+        let subscription = persister.addUpdateListener { result in
             defer {
                 callsUpdateListenerExpectation.fulfill()
             }
@@ -270,8 +270,8 @@ final class PersistedUserDefaultsTests: XCTestCase {
         }
         _ = subscription
 
-        XCTAssertNil(persisted.wrappedValue, "Default value should be `nil`")
-        persisted.wrappedValue = storedValue
+        XCTAssertNil(persister.retrieveValue(), "Default value should be `nil`")
+        try persister.persist(storedValue)
 
         waitForExpectations(timeout: 1, handler: nil)
     }
