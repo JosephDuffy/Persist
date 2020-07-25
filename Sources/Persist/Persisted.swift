@@ -53,6 +53,29 @@ public struct Persisted<Value> {
 
     /**
      Create a new instance that stores the value against the `key` using `storage`, defaulting to
+     `wrappedValue`.
+
+     - parameter wrappedValue: The value to use when a value has not yet been stored, or an error occurs.
+     - parameter key: The key to store the value against
+     - parameter storage: The storage to use to persist and retrieve the value.
+     - parameter defaultValuePersistBehaviour: An option set that describes when to persist the default value. Defaults to `[]`.
+     */
+    public init<Storage: Persist.Storage>(
+        wrappedValue: Value,
+        key: Storage.Key,
+        storedBy storage: Storage,
+        defaultValuePersistBehaviour: DefaultValuePersistOption = []
+    ) where Storage.Value == Value {
+        projectedValue = Persister(
+            key: key,
+            storedBy: storage,
+            defaultValue: wrappedValue,
+            defaultValuePersistBehaviour: defaultValuePersistBehaviour
+        )
+    }
+
+    /**
+     Create a new instance that stores the value against the `key` using `storage`, defaulting to
      `defaultValue`.
 
      - parameter key: The key to store the value against
@@ -70,6 +93,29 @@ public struct Persisted<Value> {
             key: key,
             storedBy: storage,
             defaultValue: defaultValue(),
+            defaultValuePersistBehaviour: defaultValuePersistBehaviour
+        )
+    }
+
+    /**
+     Create a new instance that stores the value against the `key` using `storage`, defaulting to
+     `wrappedValue`.
+
+     - parameter wrappedValue: The value to use when a value has not yet been stored, or an error occurs.
+     - parameter key: The key to store the value against
+     - parameter storage: The storage to use to persist and retrieve the value.
+     - parameter defaultValuePersistBehaviour: An option set that describes when to persist the default value. Defaults to `[]`.
+     */
+    public init<Storage: Persist.Storage, WrappedValue>(
+        wrappedValue: Value,
+        key: Storage.Key,
+        storedBy storage: Storage,
+        defaultValuePersistBehaviour: DefaultValuePersistOption = []
+    ) where Storage.Value == WrappedValue, Value == Optional<WrappedValue> {
+        projectedValue = Persister(
+            key: key,
+            storedBy: storage,
+            defaultValue: wrappedValue,
             defaultValuePersistBehaviour: defaultValuePersistBehaviour
         )
     }
@@ -101,6 +147,29 @@ public struct Persisted<Value> {
 
     /**
      Create a new instance that stores the value against the `key` using `storage`, defaulting to
+     `wrappedValue`.
+
+     - parameter wrappedValue: The value to use when a value has not yet been stored, or an error occurs.
+     - parameter key: The key to store the value against
+     - parameter storage: The storage to use to persist and retrieve the value.
+     - parameter defaultValuePersistBehaviour: An option set that describes when to persist the default value. Defaults to `[]`.
+     */
+    public init<Storage: Persist.Storage>(
+        wrappedValue: Value,
+        key: Storage.Key,
+        storedBy storage: Storage,
+        defaultValuePersistBehaviour: DefaultValuePersistOption = []
+    ) where Storage.Value == Any {
+        projectedValue = Persister(
+            key: key,
+            storedBy: storage,
+            defaultValue: wrappedValue,
+            defaultValuePersistBehaviour: defaultValuePersistBehaviour
+        )
+    }
+
+    /**
+     Create a new instance that stores the value against the `key` using `storage`, defaulting to
      `defaultValue`.
 
      - parameter key: The key to store the value against
@@ -119,6 +188,29 @@ public struct Persisted<Value> {
             key: key,
             storedBy: storage,
             defaultValue: defaultValue(),
+            defaultValuePersistBehaviour: defaultValuePersistBehaviour
+        )
+    }
+
+    /**
+     Create a new instance that stores the value against the `key` using `storage`, defaulting to
+     `wrappedValue`.
+
+     - parameter wrappedValue: The value to use when a value has not yet been stored, or an error occurs.
+     - parameter key: The key to store the value against
+     - parameter storage: The storage to use to persist and retrieve the value.
+     - parameter defaultValuePersistBehaviour: An option set that describes when to persist the default value. Defaults to `[]`.
+     */
+    public init<Storage: Persist.Storage, WrappedValue>(
+        wrappedValue: Value,
+        key: Storage.Key,
+        storedBy storage: Storage,
+        defaultValuePersistBehaviour: DefaultValuePersistOption = []
+    ) where Storage.Value == Any, Value == Optional<WrappedValue> {
+        projectedValue = Persister(
+            key: key,
+            storedBy: storage,
+            defaultValue: wrappedValue,
             defaultValuePersistBehaviour: defaultValuePersistBehaviour
         )
     }
@@ -157,6 +249,33 @@ public struct Persisted<Value> {
      `defaultValue`. Values stored will be processed by the provided transformer before being persisted
      and after being retrieved from the storage.
 
+     - parameter wrappedValue: The value to use when a value has not yet been stored, or an error occurs.
+     - parameter key: The key to store the value against
+     - parameter storage: The storage to use to persist and retrieve the value.
+     - parameter transformer: A transformer to transform the value before being persisted and after being retrieved from the storage
+     - parameter defaultValuePersistBehaviour: An option set that describes when to persist the default value. Defaults to `[]`.
+     */
+    public init<Storage: Persist.Storage, Transformer: Persist.Transformer>(
+        wrappedValue: Value,
+        key: Storage.Key,
+        storedBy storage: Storage,
+        transformer: Transformer,
+        defaultValuePersistBehaviour: DefaultValuePersistOption = []
+    ) where Storage.Value == Any, Transformer.Input == Value {
+        projectedValue = Persister(
+            key: key,
+            storedBy: storage,
+            transformer: transformer,
+            defaultValue: wrappedValue,
+            defaultValuePersistBehaviour: defaultValuePersistBehaviour
+        )
+    }
+
+    /**
+     Create a new instance that stores the value against the `key` using `storage`, defaulting to
+     `defaultValue`. Values stored will be processed by the provided transformer before being persisted
+     and after being retrieved from the storage.
+
      - parameter key: The key to store the value against
      - parameter storage: The storage to use to persist and retrieve the value.
      - parameter transformer: A transformer to transform the value before being persisted and after being retrieved from the storage
@@ -175,6 +294,33 @@ public struct Persisted<Value> {
             storedBy: storage,
             transformer: transformer,
             defaultValue: defaultValue(),
+            defaultValuePersistBehaviour: defaultValuePersistBehaviour
+        )
+    }
+
+    /**
+     Create a new instance that stores the value against the `key` using `storage`, defaulting to
+     `wrappedValue`. Values stored will be processed by the provided transformer before being persisted
+     and after being retrieved from the storage.
+
+     - parameter wrappedValue: The value to use when a value has not yet been stored, or an error occurs.
+     - parameter key: The key to store the value against.
+     - parameter storage: The storage to use to persist and retrieve the value.
+     - parameter transformer: A transformer to transform the value before being persisted and after being retrieved from the storage.
+     - parameter defaultValuePersistBehaviour: An option set that describes when to persist the default value. Defaults to `[]`.
+     */
+    public init<Storage: Persist.Storage, Transformer: Persist.Transformer, WrappedValue>(
+        wrappedValue: Value,
+        key: Storage.Key,
+        storedBy storage: Storage,
+        transformer: Transformer,
+        defaultValuePersistBehaviour: DefaultValuePersistOption = []
+    ) where Storage.Value == Any, Transformer.Input == WrappedValue, Value == WrappedValue? {
+        projectedValue = Persister(
+            key: key,
+            storedBy: storage,
+            transformer: transformer,
+            defaultValue: wrappedValue,
             defaultValuePersistBehaviour: defaultValuePersistBehaviour
         )
     }
@@ -210,6 +356,33 @@ public struct Persisted<Value> {
 
     /**
      Create a new instance that stores the value against the `key` using `storage`, defaulting to
+     `wrappedValue`. Values stored will be processed by the provided transformer before being persisted
+     and after being retrieved from the storage.
+
+     - parameter wrappedValue: The value to use when a value has not yet been stored, or an error occurs.
+     - parameter key: The key to store the value against
+     - parameter storage: The storage to use to persist and retrieve the value.
+     - parameter transformer: A transformer to transform the value before being persisted and after being retrieved from the storage
+     - parameter defaultValuePersistBehaviour: An option set that describes when to persist the default value. Defaults to `[]`.
+     */
+    public init<Storage: Persist.Storage, Transformer: Persist.Transformer>(
+        wrappedValue: Value,
+        key: Storage.Key,
+        storedBy storage: Storage,
+        transformer: Transformer,
+        defaultValuePersistBehaviour: DefaultValuePersistOption = []
+    ) where Transformer.Input == Value, Transformer.Output == Storage.Value {
+        projectedValue = Persister(
+            key: key,
+            storedBy: storage,
+            transformer: transformer,
+            defaultValue: wrappedValue,
+            defaultValuePersistBehaviour: defaultValuePersistBehaviour
+        )
+    }
+
+    /**
+     Create a new instance that stores the value against the `key` using `storage`, defaulting to
      `defaultValue`. Values stored will be processed by the provided transformer before being persisted
      and after being retrieved from the storage.
 
@@ -231,6 +404,33 @@ public struct Persisted<Value> {
             storedBy: storage,
             transformer: transformer,
             defaultValue: defaultValue(),
+            defaultValuePersistBehaviour: defaultValuePersistBehaviour
+        )
+    }
+
+    /**
+     Create a new instance that stores the value against the `key` using `storage`, defaulting to
+     `wrappedValue`. Values stored will be processed by the provided transformer before being persisted
+     and after being retrieved from the storage.
+
+     - parameter wrappedValue: The value to use when a value has not yet been stored, or an error occurs.
+     - parameter key: The key to store the value against
+     - parameter storage: The storage to use to persist and retrieve the value.
+     - parameter transformer: A transformer to transform the value before being persisted and after being retrieved from the storage
+     - parameter defaultValuePersistBehaviour: An option set that describes when to persist the default value. Defaults to `[]`.
+     */
+    public init<Storage: Persist.Storage, Transformer: Persist.Transformer, WrappedValue>(
+        wrappedValue: Value,
+        key: Storage.Key,
+        storedBy storage: Storage,
+        transformer: Transformer,
+        defaultValuePersistBehaviour: DefaultValuePersistOption = []
+    ) where Transformer.Input == WrappedValue, Transformer.Output == Storage.Value, Value == Optional<WrappedValue> {
+        projectedValue = Persister(
+            key: key,
+            storedBy: storage,
+            transformer: transformer,
+            defaultValue: wrappedValue,
             defaultValuePersistBehaviour: defaultValuePersistBehaviour
         )
     }
