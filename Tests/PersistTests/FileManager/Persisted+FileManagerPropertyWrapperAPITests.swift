@@ -6,40 +6,40 @@ final class PersistedFileManagerPropertyWrapperAPITests: XCTestCase {
 
     func testPropertyWrapperAPI() {
         struct PropertyWrappers {
-            @Persisted(key: URL(fileURLWithPath: "/dev/null", isDirectory: false), storedBy: FileManager.default, defaultValuePersistBehaviour: [])
+            @Persisted(key: URL(fileURLWithPath: "/random-nonexistant-file", isDirectory: false), storedBy: FileManager.default, defaultValuePersistBehaviour: [])
             var dataValue_storedByAPI = Data("default".utf8)
 
-            @Persisted(key: URL(fileURLWithPath: "/dev/null", isDirectory: false), fileManager: .default, defaultValuePersistBehaviour: [])
+            @Persisted(key: URL(fileURLWithPath: "/random-nonexistant-file", isDirectory: false), fileManager: .default, defaultValuePersistBehaviour: [])
             var dataValue_fileManagerAPI = Data("default".utf8)
 
-            @Persisted(key: URL(fileURLWithPath: "/dev/null", isDirectory: false), storedBy: FileManager.default, defaultValuePersistBehaviour: [])
+            @Persisted(key: URL(fileURLWithPath: "/random-nonexistant-file", isDirectory: false), storedBy: FileManager.default, defaultValuePersistBehaviour: [])
             var optionalDataValue_storedByAPI: Data?
 
-            @Persisted(key: URL(fileURLWithPath: "/dev/null", isDirectory: false), fileManager: .default, defaultValuePersistBehaviour: [])
+            @Persisted(key: URL(fileURLWithPath: "/random-nonexistant-file", isDirectory: false), fileManager: .default, defaultValuePersistBehaviour: [])
             var optionalDataValue_fileManagerAPI: Data?
 
-            @Persisted(key: URL(fileURLWithPath: "/dev/null", isDirectory: false), storedBy: FileManager.default, defaultValuePersistBehaviour: [])
+            @Persisted(key: URL(fileURLWithPath: "/random-nonexistant-file", isDirectory: false), storedBy: FileManager.default, defaultValuePersistBehaviour: [])
             var optionalDataValueExplicitDefault_storedByAPI: Data? = nil
 
-            @Persisted(key: URL(fileURLWithPath: "/dev/null", isDirectory: false), fileManager: .default, defaultValuePersistBehaviour: [])
+            @Persisted(key: URL(fileURLWithPath: "/random-nonexistant-file", isDirectory: false), fileManager: .default, defaultValuePersistBehaviour: [])
             var optionalDataValueExplicitDefault_fileManagerAPI: Data? = nil
 
-            @Persisted(key: URL(fileURLWithPath: "/dev/null", isDirectory: false), storedBy: FileManager.default, transformer: MockTransformer<Data>(), defaultValuePersistBehaviour: [])
+            @Persisted(key: URL(fileURLWithPath: "/random-nonexistant-file", isDirectory: false), storedBy: FileManager.default, transformer: MockTransformer<Data>(), defaultValuePersistBehaviour: [])
             var stringDataWithTransformer_storedByAPI = Data("default".utf8)
 
-            @Persisted(key: URL(fileURLWithPath: "/dev/null", isDirectory: false), fileManager: .default, transformer: MockTransformer<Data>(), defaultValuePersistBehaviour: [])
+            @Persisted(key: URL(fileURLWithPath: "/random-nonexistant-file", isDirectory: false), fileManager: .default, transformer: MockTransformer<Data>(), defaultValuePersistBehaviour: [])
             var stringDataWithTransformer_fileManagerAPI = Data("default".utf8)
 
-            @Persisted(key: URL(fileURLWithPath: "/dev/null", isDirectory: false), storedBy: FileManager.default, transformer: MockTransformer<Data>(), defaultValuePersistBehaviour: [])
+            @Persisted(key: URL(fileURLWithPath: "/random-nonexistant-file", isDirectory: false), storedBy: FileManager.default, transformer: MockTransformer<Data>(), defaultValuePersistBehaviour: [])
             var optionalDataValueWithTransformer_storedByAPI: Data?
 
-            @Persisted(key: URL(fileURLWithPath: "/dev/null", isDirectory: false), fileManager: .default, transformer: MockTransformer<Data>(), defaultValuePersistBehaviour: [])
+            @Persisted(key: URL(fileURLWithPath: "/random-nonexistant-file", isDirectory: false), fileManager: .default, transformer: MockTransformer<Data>(), defaultValuePersistBehaviour: [])
             var optionalDataValueWithTransformer_fileManagerAPI: Data?
 
-            @Persisted(key: URL(fileURLWithPath: "/dev/null", isDirectory: false), storedBy: FileManager.default, transformer: MockTransformer<Data>(), defaultValuePersistBehaviour: [])
+            @Persisted(key: URL(fileURLWithPath: "/random-nonexistant-file", isDirectory: false), storedBy: FileManager.default, transformer: MockTransformer<Data>(), defaultValuePersistBehaviour: [])
             var optionalDataValueWithTransformerExplicitDefault_storedByAPI: Data? = nil
 
-            @Persisted(key: URL(fileURLWithPath: "/dev/null", isDirectory: false), fileManager: .default, transformer: MockTransformer<Data>(), defaultValuePersistBehaviour: [])
+            @Persisted(key: URL(fileURLWithPath: "/random-nonexistant-file", isDirectory: false), fileManager: .default, transformer: MockTransformer<Data>(), defaultValuePersistBehaviour: [])
             var optionalDataValueWithTransformerExplicitDefault_fileManagerAPI: Data? = nil
         }
 
