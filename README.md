@@ -5,11 +5,11 @@
 [![Documentation](https://josephduffy.github.io/Persist/badge.svg)](https://josephduffy.github.io/Persist/)
 [![SwiftPM Compatible](https://img.shields.io/badge/SwiftPM-compatible-4BC51D.svg?style=flat)](https://github.com/apple/swift-package-manager)
 
-`Persist` is a framework that aids with storing and retrieving values, with support for transformations such as storing as JSON data.
+`Persist` is a framework that aids with persisting and retrieving values, with support for transformations such as storing as JSON data.
 
 ## Usage
 
-Persist provides the `Persister` class, which can be used to store and retieve values from various forms of storage.
+Persist provides the `Persister` class, which can be used to persist and retrieve values from various forms of storage.
 
 The `Persisted` property wrapper wraps `Persister`, making it easy to have a property that automatically persists its value.
 
@@ -29,7 +29,7 @@ foo.baz = "new-value"
 UserDefaults.standard.object(forKey: "foo-baz") // "new-value"
 ```
 
-`Persist` includes out-of-the-box support for:
+`Persist` includes out of the box support for:
 
 - `UserDefaults`
 - `NSUbiquitousKeyValueStore`
@@ -40,7 +40,7 @@ UserDefaults.standard.object(forKey: "foo-baz") // "new-value"
 
 `Persister`'s `persist(_:)` and `retrieveValueOrThrow()` functions will throw if the storage or transformer throws are error.
 
-`Persited` wraps a `Persister` and exposes it as the `projectedValue`, which allows you to catch errors:
+`Persisted` wraps a `Persister` and exposes it as the `projectedValue`, which allows you to catch errors:
 
 ```swift
 class Foo {
@@ -68,8 +68,22 @@ class Foo {
 }
 
 let foo = Foo()
-let subscription = foo.$bar.updatesPublisher.sink { _ in
-    print("Value updated")
+let subscription = foo.$bar.updatesPublisher.sink { result in
+    switch result {
+    case .success(let update):
+        print("New value:", update.newValue)
+
+        switch update.event {
+        case .persisted(let newValue):
+            print("Value updated to:", newValue)
+            // `update.newValue` will be new value
+        case .removed:
+            print("Value was deleted")
+            // `update.newValue` will be default value
+        }
+    case .failure(let error):
+        print("Error occurred retrieving value after update:", error)
+    }
 }
 ```
 
@@ -84,12 +98,19 @@ class Foo {
 let foo = Foo()
 let subscription = foo.$bar.addUpdateListener() { result in
     switch result {
-    case .success(.persisted(let newValue)):
-        print("Value updated to", newValue)
-    case .success(.removed):
-        print("Value has been removed")
+    case .success(let update):
+        print("New value:", update.newValue)
+
+        switch update.event {
+        case .persisted(let newValue):
+            print("Value updated to:", newValue)
+            // `update.newValue` will be new value
+        case .removed:
+            print("Value was deleted")
+            // `update.newValue` will be default value
+        }
     case .failure(let error):
-        print("An error occured:", error)
+        print("Error occurred retrieving value after update:", error)
     }
 }
 ```
@@ -111,13 +132,19 @@ class Foo {
 let foo = Foo()
 let subscription = foo.$bar.addUpdateListener() { result in
     switch result {
-    case .success(.persisted(let bar)):
-        // `bar` is always `Bar` despite being transformed to JSON `Data` by `JSONTransformer`
-        print("Value updated to", bar)
-    case .success(.removed):
-        print("Value has been removed")
+    case .success(let update):
+        // `update.newValue` is a `Bar?`
+        print("New value:", update.newValue)
+
+        switch update.event {
+        case .persisted(let bar):
+            // `bar` is the decoded `Bar`
+            print("Value updated to:", bar)
+        case .removed:
+            print("Value was deleted")
+        }
     case .failure(let error):
-        print("Error updating bar:", error)
+        print("Error occurred retrieving value after update:", error)
     }
 }
 ```
@@ -126,7 +153,7 @@ Transformers are typesafe, e.g. `JSONTransformer` is only usable when the value 
 
 #### Chaining Transformers
 
-If a value should go through mutliple transformers you can chain them.
+If a value should go through multiple transformers you can chain them.
 
 ```swift
 struct Bar: Codable {
@@ -164,12 +191,40 @@ A default value may be provided that will be used when the persister returns `ni
 
 ```swift
 struct Foo {
-    @Persisted(key: "bar", userDefaults: .standard, defaultValue: "default")
-    var bar: Bar!
+    @Persisted(key: "bar", userDefaults: .standard)
+    var bar = "default"
 }
 
 var foo = Foo()
 foo.bar // "default"
+```
+
+When provided as the `defaultValue` parameter the value is evaluated lazily when first required.
+
+```swift
+func makeUUID() -> UUID {
+    print("Making UUID")
+    return UUID()
+}
+
+struct Foo {
+    @Persisted(key: "bar", userDefaults: .standard, defaultValue: makeUUID())
+    var bar: UUID
+}
+
+/**
+ This would not print anything because the default value is never required.
+ */
+var foo = Foo()
+foo.bar = UUID()
+
+/**
+ This would print "Making UUID" once.
+ */
+var foo = Foo()
+let firstCall = foo.bar
+let secondCall = foo.bar
+firstCall == secondCall // true
 ```
 
 The default value can be optionally stored when used, either due to an error or because the storage returned `nil`. This can be useful when the first value is random and should be persisted between app launches once initially created.
@@ -179,8 +234,8 @@ struct Foo {
     @Persisted(key: "persistedWhenNilInt", userDefaults: .standard, defaultValue: Int.random(in: 1...10), defaultValuePersistBehaviour: .persistWhenNil)
     var persistedWhenNilInt: Int!
 
-    @Persisted(key: "notPersistedWhenNilRandomInt", userDefaults: .standard, defaultValue: Int.random(in: 1...10))
-    var notPersistedWhenNilRandomInt: Int!
+    @Persisted(key: "notPersistedWhenNilInt", userDefaults: .standard, defaultValue: Int.random(in: 1...10))
+    var notPersistedWhenNilInt: Int!
 }
 
 var foo = Foo()
@@ -190,18 +245,18 @@ foo.persistedWhenNilInt // 3
 UserDefaults.standard.object(forKey: "persistedWhenNilInt") // 3
 foo.persistedWhenNilInt // 3
 
-UserDefaults.standard.object(forKey: "notPersistedWhenNilRandomInt") // nil
-foo.notPersistedWhenNilRandomInt // 7
-UserDefaults.standard.object(forKey: "notPersistedWhenNilRandomInt") // nil
-foo.notPersistedWhenNilRandomInt // 7
+UserDefaults.standard.object(forKey: "notPersistedWhenNilInt") // nil
+foo.notPersistedWhenNilInt // 7
+UserDefaults.standard.object(forKey: "notPersistedWhenNilInt") // nil
+foo.notPersistedWhenNilInt // 7
 
 // ...restart app
 
 UserDefaults.standard.object(forKey: "persistedWhenNilInt") // 3
 foo.persistedWhenNilInt // 3
 
-UserDefaults.standard.object(forKey: "notPersistedWhenNilRandomInt") // nil
-foo.notPersistedWhenNilRandomInt // 4
+UserDefaults.standard.object(forKey: "notPersistedWhenNilInt") // nil
+foo.notPersistedWhenNilInt // 4
 ```
 
 ### Property Wrapper Initialisation
