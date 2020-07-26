@@ -67,7 +67,7 @@ internal final class NSUbiquitousKeyValueStoreStorage: Storage {
      - parameter updateListener: The closure to call when an update occurs.
      - returns: An object that represents the closure's subscription to changes. This object must be retained by the caller.
      */
-    internal func addUpdateListener(forKey key: String, updateListener: @escaping UpdateListener) -> Subscription {
+    internal func addUpdateListener(forKey key: String, updateListener: @escaping UpdateListener) -> AnyCancellable {
         return addUpdateListener(forKey: key, notificationCenter: .default, updateListener: updateListener)
     }
 
@@ -79,7 +79,7 @@ internal final class NSUbiquitousKeyValueStoreStorage: Storage {
      - parameter updateListener: The closure to call when an update occurs.
      - returns: An object that represents the closure's subscription to changes. This object must be retained by the caller.
     */
-    internal func addUpdateListener(forKey key: String, notificationCenter: NotificationCenter, updateListener: @escaping UpdateListener) -> Subscription {
+    internal func addUpdateListener(forKey key: String, notificationCenter: NotificationCenter, updateListener: @escaping UpdateListener) -> AnyCancellable {
         let notificationObserver = notificationCenter.addObserver(
             forName: NSUbiquitousKeyValueStore.didChangeExternallyNotification,
             object: nsUbiquitousKeyValueStore,
@@ -97,7 +97,7 @@ internal final class NSUbiquitousKeyValueStoreStorage: Storage {
 
         updateListeners[key, default: [:]][uuid] = updateListener
 
-        let subscription = Subscription { [weak self] in
+        return Subscription { [weak self] in
             self?.updateListeners[key]?.removeValue(forKey: uuid)
 
             notificationCenter.removeObserver(
@@ -105,8 +105,7 @@ internal final class NSUbiquitousKeyValueStoreStorage: Storage {
                 name: NSUbiquitousKeyValueStore.didChangeExternallyNotification,
                 object: self?.nsUbiquitousKeyValueStore
             )
-        }
-        return subscription
+        }.eraseToAnyCancellable()
     }
 
 }

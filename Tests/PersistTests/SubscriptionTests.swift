@@ -1,5 +1,5 @@
 #if !os(watchOS)
-import Persist
+@testable import Persist
 import XCTest
 
 final class SubscriptionTests: XCTestCase {

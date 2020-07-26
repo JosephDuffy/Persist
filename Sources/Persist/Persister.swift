@@ -78,7 +78,7 @@ public final class Persister<Value> {
     public typealias ValueRemover = () throws -> Void
 
     /// A closure that can add an update listener.
-    public typealias AddUpdateListener = (_ updateListener: @escaping UpdateListener, _ defaultValueGetter: @escaping () -> Value) -> Subscription
+    public typealias AddUpdateListener = (_ updateListener: @escaping UpdateListener, _ defaultValueGetter: @escaping () -> Value) -> AnyCancellable
 
     #if canImport(Combine)
     /// A publisher that will publish updates as they occur.
@@ -110,7 +110,7 @@ public final class Persister<Value> {
     private let valueRemover: ValueRemover
 
     /// The cancellable object that encapsulates updates from the storage.
-    private var storageUpdateListenerCancellable: Subscription?
+    private var storageUpdateListenerCancellable: AnyCancellable?
 
     /// A collection of the update listeners that will be notified when a value changes. The key (a `UUID`)
     /// is not exposed, but rather captured by the `Subscription` that the caller retains.
@@ -706,13 +706,13 @@ public final class Persister<Value> {
      - parameter updateListener: The closure to call when an update occurs.
      - returns: An object that represents the closure's subscription to changes. This object must be retained by the caller.
      */
-    public func addUpdateListener(_ updateListener: @escaping UpdateListener) -> Subscription {
+    public func addUpdateListener(_ updateListener: @escaping UpdateListener) -> AnyCancellable {
         let uuid = UUID()
         updateListeners[uuid] = updateListener
 
         return Subscription { [weak self] in
             self?.updateListeners.removeValue(forKey: uuid)
-        }
+        }.eraseToAnyCancellable()
     }
 
     private func notifyUpdateListenersOfResult(_ result: UpdatePayload) {

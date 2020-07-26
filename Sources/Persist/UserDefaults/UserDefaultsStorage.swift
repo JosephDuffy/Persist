@@ -86,13 +86,12 @@ internal final class UserDefaultsStorage: Storage {
      - parameter updateListener: The closure to call when an update occurs.
      - returns: An object that represents the closure's subscription to changes. This object must be retained by the caller.
      */
-    internal func addUpdateListener(forKey key: String, updateListener: @escaping UpdateListener) -> Subscription {
+    internal func addUpdateListener(forKey key: String, updateListener: @escaping UpdateListener) -> AnyCancellable {
         let observer = KeyPathObserver(updateListener: updateListener)
         userDefaults.addObserver(observer, forKeyPath: key, options: .new, context: nil)
-        let subscription = Subscription { [weak userDefaults] in
+        return Subscription { [weak userDefaults] in
             userDefaults?.removeObserver(observer, forKeyPath: key)
-        }
-        return subscription
+        }.eraseToAnyCancellable()
     }
 
 }
