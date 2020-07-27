@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>InMemoryStorage Class Reference</title>
+    <title>Subscription Class Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset='utf-8'>
@@ -10,8 +10,8 @@
     
   </head>
   <body>
-    <a name="//apple_ref/swift/Class/InMemoryStorage" class="dashAnchor"></a>
-    <a title="InMemoryStorage Class Reference"></a>
+    <a name="//apple_ref/swift/Class/Subscription" class="dashAnchor"></a>
+    <a title="Subscription Class Reference"></a>
     <header>
       <div class="content-wrapper">
         <p><a href="../index.html"> Docs</a> (100% documented)</p>
@@ -22,7 +22,7 @@
       <p id="breadcrumbs">
         <a href="../index.html"> Reference</a>
         <img id="carat" src="../img/carat.png" />
-        InMemoryStorage Class Reference
+        Subscription Class Reference
       </p>
     </div>
     <div class="content-wrapper">
@@ -145,14 +145,14 @@
       <article class="main-content">
         <section>
           <section class="section">
-            <h1>InMemoryStorage</h1>
+            <h1>Subscription</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">class</span> <span class="kt">InMemoryStorage</span><span class="o">&lt;</span><span class="kt">StoredValue</span><span class="o">&gt;</span> <span class="p">:</span> <span class="kt"><a href="../Protocols/Storage.html">Storage</a></span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">class</span> <span class="kt">Subscription</span> <span class="p">:</span> <span class="kt"><a href="../Protocols/Cancellable.html">Cancellable</a></span></code></pre>
 
                 </div>
               </div>
-            <p>Storage that stores values in memory; values will not be persisted between app launches or instances of <code>InMemoryStorage</code>.</p>
+            <p>An object that represents a subscription to a <code><a href="../Protocols/Storage.html">Storage</a></code> update.</p>
 
           </section>
           <section class="section task-group-section">
@@ -161,9 +161,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:7Persist15InMemoryStorageC5Valuea"></a>
-                    <a name="//apple_ref/swift/Alias/Value" class="dashAnchor"></a>
-                    <a class="token" href="#/s:7Persist15InMemoryStorageC5Valuea">Value</a>
+                    <a name="/s:SQ2eeoiySbx_xtFZ"></a>
+                    <a name="//apple_ref/swift/Method/==(_:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:SQ2eeoiySbx_xtFZ">==(_:<wbr>_:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -171,14 +171,13 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The type the <code>InMemoryStorage</code> can store.</p>
-
+                        
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">typealias</span> <span class="kt">Value</span> <span class="o">=</span> <span class="kt">StoredValue</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="o">==</span> <span class="p">(</span><span class="nv">lhs</span><span class="p">:</span> <span class="kt">Subscription</span><span class="p">,</span> <span class="nv">rhs</span><span class="p">:</span> <span class="kt">Subscription</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
 
                         </div>
                       </div>
@@ -188,9 +187,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:7Persist15InMemoryStorageCACyxGycfc"></a>
-                    <a name="//apple_ref/swift/Method/init()" class="dashAnchor"></a>
-                    <a class="token" href="#/s:7Persist15InMemoryStorageCACyxGycfc">init()</a>
+                    <a name="/s:7Persist12SubscriptionC13CancelClosurea"></a>
+                    <a name="//apple_ref/swift/Alias/CancelClosure" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7Persist12SubscriptionC13CancelClosurea">CancelClosure</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -198,14 +197,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Create a new empty instance of <code>InMemoryStorage</code>.</p>
+                        <p>A closure that will be called when the subscription is cancelled.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">()</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">typealias</span> <span class="kt">CancelClosure</span> <span class="o">=</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Void</span></code></pre>
 
                         </div>
                       </div>
@@ -215,9 +214,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:7Persist15InMemoryStorageC10storeValue_3keyyx_SStF"></a>
-                    <a name="//apple_ref/swift/Method/storeValue(_:key:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:7Persist15InMemoryStorageC10storeValue_3keyyx_SStF">storeValue(_:<wbr>key:<wbr>)</a>
+                    <a name="/s:7Persist12SubscriptionC6cancelACyyc_tcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(cancel:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7Persist12SubscriptionC6cancelACyyc_tcfc">init(cancel:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -225,14 +224,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Store the provided value against the specified key.</p>
+                        <p>Create a new subscription that will call the provided closure when cancelled.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">func</span> <span class="nf">storeValue</span><span class="p">(</span><span class="n">_</span> <span class="nv">value</span><span class="p">:</span> <span class="kt">StoredValue</span><span class="p">,</span> <span class="nv">key</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">required</span> <span class="nf">init</span><span class="p">(</span><span class="nv">cancel</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Classes/Subscription.html#/s:7Persist12SubscriptionC13CancelClosurea">CancelClosure</a></span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -243,24 +242,12 @@
                             <tr>
                               <td>
                                 <code>
-                                <em>value</em>
+                                <em>cancel</em>
                                 </code>
                               </td>
                               <td>
                                 <div>
-                                  <p>The value to store.</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>key</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The key to store the value against.</p>
+                                  <p>The closure to call when the subscription is cancelled.</p>
                                 </div>
                               </td>
                             </tr>
@@ -273,9 +260,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:7Persist15InMemoryStorageC11removeValue3forySS_tF"></a>
-                    <a name="//apple_ref/swift/Method/removeValue(for:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:7Persist15InMemoryStorageC11removeValue3forySS_tF">removeValue(for:<wbr>)</a>
+                    <a name="/s:7Persist12SubscriptionC6cancelyyF"></a>
+                    <a name="//apple_ref/swift/Method/cancel()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7Persist12SubscriptionC6cancelyyF">cancel()</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -283,35 +270,17 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Removes the value for the provide key.</p>
+                        <p>Cancel the update subscription, preventing further updates being sent to the update listener, freeing any
+resources held on to by the subscription.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">func</span> <span class="nf">removeValue</span><span class="p">(</span><span class="k">for</span> <span class="nv">key</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">func</span> <span class="nf">cancel</span><span class="p">()</span></code></pre>
 
                         </div>
-                      </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>key</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The key of the value to be removed.</p>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
                       </div>
                     </section>
                   </div>
@@ -319,9 +288,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:7Persist15InMemoryStorageC13retrieveValue3forxSgSS_tF"></a>
-                    <a name="//apple_ref/swift/Method/retrieveValue(for:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:7Persist15InMemoryStorageC13retrieveValue3forxSgSS_tF">retrieveValue(for:<wbr>)</a>
+                    <a name="/s:SH4hash4intoys6HasherVz_tF"></a>
+                    <a name="//apple_ref/swift/Method/hash(into:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:SH4hash4intoys6HasherVz_tF">hash(into:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -329,101 +298,15 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Returns the value for the provided key, or <code>nil</code> if the value does not exist.</p>
-
+                        
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">func</span> <span class="nf">retrieveValue</span><span class="p">(</span><span class="k">for</span> <span class="nv">key</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">StoredValue</span><span class="p">?</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">func</span> <span class="nf">hash</span><span class="p">(</span><span class="n">into</span> <span class="nv">hasher</span><span class="p">:</span> <span class="k">inout</span> <span class="kt">Hasher</span><span class="p">)</span></code></pre>
 
                         </div>
-                      </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>key</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The key of the value to retrieve.</p>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                      <div>
-                        <h4>Return Value</h4>
-                        <p>The stored value, or <code>nil</code> if the a value does not exist for the specified key.</p>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:7Persist15InMemoryStorageC17addUpdateListener6forKey06updateG0AA14AnyCancellableCSS_yxSgctF"></a>
-                    <a name="//apple_ref/swift/Method/addUpdateListener(forKey:updateListener:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:7Persist15InMemoryStorageC17addUpdateListener6forKey06updateG0AA14AnyCancellableCSS_yxSgctF">addUpdateListener(forKey:<wbr>updateListener:<wbr>)</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Add a closure that will be called when the specified key is updated.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">func</span> <span class="nf">addUpdateListener</span><span class="p">(</span><span class="n">forKey</span> <span class="nv">key</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">updateListener</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt">UpdateListener</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/AnyCancellable.html">AnyCancellable</a></span></code></pre>
-
-                        </div>
-                      </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>key</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The key to listen for changes to.</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>updateListener</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The closure to call when an update occurs.</p>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                      <div>
-                        <h4>Return Value</h4>
-                        <p>An object that represents the closure&rsquo;s subscription to changes. This object must be retained by the caller.</p>
                       </div>
                     </section>
                   </div>
