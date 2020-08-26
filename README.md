@@ -15,15 +15,24 @@ The `Persisted` property wrapper wraps a `Persister`, making it easy to have a p
 
 ```swift
 class Foo {
-    @Persisted(key: "foo-bar", userDefaults: .standard, defaultValue: "bar-default")
-    var bar: String
+    enum Bar: Int {
+        case firstBar = 1
+        case secondBar = 2
+    }
+
+    @Persisted(key: "foo-bar", userDefaults: .standard, transformer: RawRepresentableTransformer())
+    var bar: Bar = .firstBar
 
     @Persisted(key: "foo-baz", userDefaults: .standard)
     var baz: String?
 }
 
 let foo = Foo()
-foo.bar // "bar-default"
+
+foo.bar // "Bar.firstBar"
+foo.bar = .secondBar
+UserDefaults.standard.object(forKey: "foo-bar") // 2
+
 foo.baz // nil
 foo.baz = "new-value"
 UserDefaults.standard.object(forKey: "foo-baz") // "new-value"
