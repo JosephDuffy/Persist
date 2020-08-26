@@ -11,7 +11,7 @@
 
 Persist provides the `Persister` class, which can be used to persist and retrieve values from various forms of storage.
 
-The `Persisted` property wrapper wraps `Persister`, making it easy to have a property that automatically persists its value.
+The `Persisted` property wrapper wraps a `Persister`, making it easy to have a property that automatically persists its value.
 
 ```swift
 class Foo {
