@@ -30,7 +30,7 @@ final class PersistedFileManagerTests: XCTestCase {
     func testValue_storedByInitialiser() throws {
         let defaultValue = Data("default".utf8)
         let dataURL = testFilesDirectory.appendingPathComponent("\(UUID().uuidString).data", isDirectory: false)
-        var persisted = Persisted(key: dataURL, storedBy: FileManager.default, defaultValue: defaultValue)
+        let persisted = Persisted(key: dataURL, storedBy: FileManager.default, defaultValue: defaultValue)
         let storedValue = Data("stored-value".utf8)
         
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
@@ -58,7 +58,7 @@ final class PersistedFileManagerTests: XCTestCase {
     func testValue_fileManagerInitialiser() throws {
         let defaultValue = Data("default".utf8)
         let dataURL = testFilesDirectory.appendingPathComponent("\(UUID().uuidString).data", isDirectory: false)
-        var persisted = Persisted(key: dataURL, fileManager: FileManager.default, defaultValue: defaultValue)
+        let persisted = Persisted(key: dataURL, fileManager: FileManager.default, defaultValue: defaultValue)
         let storedValue = Data("stored-value".utf8)
         
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
@@ -86,7 +86,7 @@ final class PersistedFileManagerTests: XCTestCase {
     func testValueWithTransformer_storedByInitialiser() throws {
         let defaultValue = Data("default".utf8)
         let dataURL = testFilesDirectory.appendingPathComponent("\(UUID().uuidString).data", isDirectory: false)
-        var persisted = Persisted(key: dataURL, storedBy: FileManager.default, transformer: MockTransformer(), defaultValue: defaultValue)
+        let persisted = Persisted(key: dataURL, storedBy: FileManager.default, transformer: MockTransformer(), defaultValue: defaultValue)
         let storedValue = Data("stored-value".utf8)
         
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
@@ -114,7 +114,7 @@ final class PersistedFileManagerTests: XCTestCase {
     func testValueWithTransformer_fileManagerInitialiser() throws {
         let defaultValue = Data("default".utf8)
         let dataURL = testFilesDirectory.appendingPathComponent("\(UUID().uuidString).data", isDirectory: false)
-        var persisted = Persisted(key: dataURL, fileManager: FileManager.default, transformer: MockTransformer(), defaultValue: defaultValue)
+        let persisted = Persisted(key: dataURL, fileManager: FileManager.default, transformer: MockTransformer(), defaultValue: defaultValue)
         let storedValue = Data("stored-value".utf8)
         
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
@@ -141,7 +141,7 @@ final class PersistedFileManagerTests: XCTestCase {
     
     func testOptionalValue_storedByInitialiser() throws {
         let dataURL = testFilesDirectory.appendingPathComponent("\(UUID().uuidString).data", isDirectory: false)
-        var persisted = Persisted<Data?>(key: dataURL, storedBy: FileManager.default)
+        let persisted = Persisted<Data?>(key: dataURL, storedBy: FileManager.default)
         let storedValue = Data("stored-value".utf8)
         
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
@@ -168,7 +168,7 @@ final class PersistedFileManagerTests: XCTestCase {
     
     func testOptionalValue_fileManagerInitialiser() throws {
         let dataURL = testFilesDirectory.appendingPathComponent("\(UUID().uuidString).data", isDirectory: false)
-        var persisted = Persisted<Data?>(key: dataURL, fileManager: FileManager.default)
+        let persisted = Persisted<Data?>(key: dataURL, fileManager: FileManager.default)
         let storedValue = Data("stored-value".utf8)
         
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
@@ -196,7 +196,7 @@ final class PersistedFileManagerTests: XCTestCase {
     func testOptionalValueWithDefault_storedByInitialiser() throws {
         let defaultValue = Data("default".utf8)
         let dataURL = testFilesDirectory.appendingPathComponent("\(UUID().uuidString).data", isDirectory: false)
-        var persisted = Persisted<Data?>(key: dataURL, storedBy: FileManager.default, defaultValue: defaultValue)
+        let persisted = Persisted<Data?>(key: dataURL, storedBy: FileManager.default, defaultValue: defaultValue)
         let storedValue = Data("stored-value".utf8)
         
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
@@ -224,7 +224,7 @@ final class PersistedFileManagerTests: XCTestCase {
     func testOptionalValueWithDefault_fileManagerInitialiser() throws {
         let defaultValue = Data("default".utf8)
         let dataURL = testFilesDirectory.appendingPathComponent("\(UUID().uuidString).data", isDirectory: false)
-        var persisted = Persisted<Data?>(key: dataURL, fileManager: FileManager.default, defaultValue: defaultValue)
+        let persisted = Persisted<Data?>(key: dataURL, fileManager: FileManager.default, defaultValue: defaultValue)
         let storedValue = Data("stored-value".utf8)
         
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
@@ -251,7 +251,7 @@ final class PersistedFileManagerTests: XCTestCase {
     
     func testOptionalValueWithTransformer_storedByInitialiser() throws {
         let dataURL = testFilesDirectory.appendingPathComponent("\(UUID().uuidString).data", isDirectory: false)
-        var persisted = Persisted<Data?>(key: dataURL, storedBy: FileManager.default, transformer: MockTransformer())
+        let persisted = Persisted<Data?>(key: dataURL, storedBy: FileManager.default, transformer: MockTransformer())
         let storedValue = Data("stored-value".utf8)
         
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
@@ -278,7 +278,7 @@ final class PersistedFileManagerTests: XCTestCase {
     
     func testOptionalValueWithTransformer_fileManagerInitialiser() throws {
         let dataURL = testFilesDirectory.appendingPathComponent("\(UUID().uuidString).data", isDirectory: false)
-        var persisted = Persisted<Data?>(key: dataURL, fileManager: FileManager.default, transformer: MockTransformer())
+        let persisted = Persisted<Data?>(key: dataURL, fileManager: FileManager.default, transformer: MockTransformer())
         let storedValue = Data("stored-value".utf8)
         
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")

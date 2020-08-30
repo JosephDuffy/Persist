@@ -40,7 +40,7 @@ final class PropertyListTransformerTests: XCTestCase {
         }
 
         let storage = InMemoryStorage<Data>()
-        var persisted = Persisted<StoredValue?>(key: "test-key", storedBy: storage, transformer: PropertyListTransformer())
+        let persisted = Persisted<StoredValue?>(key: "test-key", storedBy: storage, transformer: PropertyListTransformer())
         let storedValue = StoredValue(property: "value")
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
