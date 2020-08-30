@@ -1,6 +1,12 @@
 {
   "warnings": [
-
+    {
+      "file": "/Users/runner/work/Persist/Persist/Sources/Persist/Transformer/RawRepresentableTransformer.swift",
+      "line": 20,
+      "symbol": "RawRepresentableTransformer.init()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    }
   ],
   "source_directory": "/Users/runner/work/Persist/Persist"
 }
