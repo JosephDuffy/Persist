@@ -11,7 +11,7 @@ public struct Persisted<Value> {
         get {
             return projectedValue.retrieveValue()
         }
-        set {
+        nonmutating set {
             try? projectedValue.persist(newValue)
         }
     }
