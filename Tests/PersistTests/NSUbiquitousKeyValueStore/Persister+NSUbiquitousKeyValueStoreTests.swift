@@ -12,7 +12,7 @@ final class PersistedNSUbiquitousKeyValueStoreTests: XCTestCase {
 
     func testValue_storedByInitialiser() throws {
         let defaultValue = "default"
-        var persisted = Persisted<String>(key: "test", storedBy: nsUbiquitousKeyValueStore, defaultValue: defaultValue)
+        let persisted = Persisted<String>(key: "test", storedBy: nsUbiquitousKeyValueStore, defaultValue: defaultValue)
         let storedValue = "stored-value"
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
@@ -39,7 +39,7 @@ final class PersistedNSUbiquitousKeyValueStoreTests: XCTestCase {
 
     func testValue_userDefaultsInitialiser() throws {
         let defaultValue = "default"
-        var persisted = Persisted<String>(key: "test", nsUbiquitousKeyValueStore: nsUbiquitousKeyValueStore, defaultValue: defaultValue)
+        let persisted = Persisted<String>(key: "test", nsUbiquitousKeyValueStore: nsUbiquitousKeyValueStore, defaultValue: defaultValue)
         let storedValue = "stored-value"
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
@@ -66,7 +66,7 @@ final class PersistedNSUbiquitousKeyValueStoreTests: XCTestCase {
 
     func testValueWithTransformer_storedByInitialiser() throws {
         let defaultValue = "default"
-        var persisted = Persisted<String>(key: "test", storedBy: nsUbiquitousKeyValueStore, transformer: MockTransformer(), defaultValue: defaultValue)
+        let persisted = Persisted<String>(key: "test", storedBy: nsUbiquitousKeyValueStore, transformer: MockTransformer(), defaultValue: defaultValue)
         let storedValue = "stored-value"
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
@@ -93,7 +93,7 @@ final class PersistedNSUbiquitousKeyValueStoreTests: XCTestCase {
 
     func testValueWithTransformer_userDefaultsInitialiser() throws {
         let defaultValue = "default"
-        var persisted = Persisted<String>(key: "test", nsUbiquitousKeyValueStore: nsUbiquitousKeyValueStore, transformer: MockTransformer(), defaultValue: defaultValue)
+        let persisted = Persisted<String>(key: "test", nsUbiquitousKeyValueStore: nsUbiquitousKeyValueStore, transformer: MockTransformer(), defaultValue: defaultValue)
         let storedValue = "stored-value"
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
@@ -119,7 +119,7 @@ final class PersistedNSUbiquitousKeyValueStoreTests: XCTestCase {
     }
 
     func testOptionalValue_storedByInitialiser() throws {
-        var persisted = Persisted<String?>(key: "test", storedBy: nsUbiquitousKeyValueStore)
+        let persisted = Persisted<String?>(key: "test", storedBy: nsUbiquitousKeyValueStore)
         let storedValue = "stored-value"
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
@@ -145,7 +145,7 @@ final class PersistedNSUbiquitousKeyValueStoreTests: XCTestCase {
     }
 
     func testOptionalValue_userDefaultsInitialiser() throws {
-        var persisted = Persisted<String?>(key: "test", nsUbiquitousKeyValueStore: nsUbiquitousKeyValueStore)
+        let persisted = Persisted<String?>(key: "test", nsUbiquitousKeyValueStore: nsUbiquitousKeyValueStore)
         let storedValue = "stored-value"
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
@@ -172,7 +172,7 @@ final class PersistedNSUbiquitousKeyValueStoreTests: XCTestCase {
 
     func testOptionalValueWithDefault_storedByInitialiser() throws {
         let defaultValue = "default"
-        var persisted = Persisted<String?>(key: "test", storedBy: nsUbiquitousKeyValueStore, defaultValue: defaultValue)
+        let persisted = Persisted<String?>(key: "test", storedBy: nsUbiquitousKeyValueStore, defaultValue: defaultValue)
         let storedValue = "stored-value"
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
@@ -199,7 +199,7 @@ final class PersistedNSUbiquitousKeyValueStoreTests: XCTestCase {
 
     func testOptionalValueWithDefault_userDefaultsInitialiser() throws {
         let defaultValue = "default"
-        var persisted = Persisted<String?>(key: "test", nsUbiquitousKeyValueStore: nsUbiquitousKeyValueStore, defaultValue: defaultValue)
+        let persisted = Persisted<String?>(key: "test", nsUbiquitousKeyValueStore: nsUbiquitousKeyValueStore, defaultValue: defaultValue)
         let storedValue = "stored-value"
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
@@ -225,7 +225,7 @@ final class PersistedNSUbiquitousKeyValueStoreTests: XCTestCase {
     }
 
     func testOptionalValueWithTransformer_storedByInitialiser() throws {
-        var persisted = Persisted<String?>(key: "test", storedBy: nsUbiquitousKeyValueStore, transformer: MockTransformer())
+        let persisted = Persisted<String?>(key: "test", storedBy: nsUbiquitousKeyValueStore, transformer: MockTransformer())
         let storedValue = "stored-value"
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")

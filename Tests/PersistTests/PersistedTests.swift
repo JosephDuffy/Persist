@@ -21,7 +21,7 @@ final class PersistedTests: XCTestCase {
     func testStoredValueSameAsStorage() throws {
         let defaultValue = "default-value"
         let storage = InMemoryStorage<String>()
-        var persisted = Persisted(key: "test-key", storedBy: storage, defaultValue: defaultValue)
+        let persisted = Persisted(key: "test-key", storedBy: storage, defaultValue: defaultValue)
         XCTAssertEqual(persisted.wrappedValue, defaultValue, "`wrappedValue` should return the default value when a value has not been set")
 
         let newValue = "new-value"
@@ -77,7 +77,7 @@ final class PersistedTests: XCTestCase {
     func testStoredOptionalValueSameAsStorage() throws {
         let key = "test-key"
         let storage = InMemoryStorage<String>()
-        var persisted = Persisted<String?>(key: key, storedBy: storage)
+        let persisted = Persisted<String?>(key: key, storedBy: storage)
         XCTAssertNil(persisted.wrappedValue, "`wrappedValue` should return `nil` when a value has not been set")
 
         let newValue = "new-value"
@@ -197,7 +197,7 @@ final class PersistedTests: XCTestCase {
     func testOptionalValueWithAnyStorage() throws {
         let key = "test-key"
         let storage = InMemoryStorage<Any>()
-        var persisted = Persisted<String?>(key: key, storedBy: storage)
+        let persisted = Persisted<String?>(key: key, storedBy: storage)
         XCTAssertNil(persisted.wrappedValue, "`wrappedValue` should return `nil` when a value has not been set")
 
         let newValue = "new-value"
@@ -339,7 +339,7 @@ final class PersistedTests: XCTestCase {
         let defaultValue: CodableStruct = "default-value"
         let storage = InMemoryStorage<Any>()
         let transformer = JSONTransformer<CodableStruct>()
-        var persisted = Persisted(key: "test-key", storedBy: storage, transformer: transformer, defaultValue: defaultValue)
+        let persisted = Persisted(key: "test-key", storedBy: storage, transformer: transformer, defaultValue: defaultValue)
         XCTAssertEqual(persisted.wrappedValue, defaultValue, "`wrappedValue` should return the default value when a value has not been set")
 
         let newValue: CodableStruct = "new-value"
@@ -544,7 +544,7 @@ final class PersistedTests: XCTestCase {
     func testOptionalValueWithAnyStorageAndTransformer() throws {
         let storage = InMemoryStorage<Any>()
         let transformer = JSONTransformer<CodableStruct>()
-        var persisted = Persisted<CodableStruct?>(key: "test-key", storedBy: storage, transformer: transformer)
+        let persisted = Persisted<CodableStruct?>(key: "test-key", storedBy: storage, transformer: transformer)
         XCTAssertNil(persisted.wrappedValue, "`wrappedValue` should return `nil` when a value has not been set")
 
         let newValue: CodableStruct = "new-value"
@@ -611,7 +611,7 @@ final class PersistedTests: XCTestCase {
         let defaultValue = CodableType(property: "default-value")
         let storage = InMemoryStorage<Data>()
         let transformer = JSONTransformer<CodableType>()
-        var persisted = Persisted(key: "test-key", storedBy: storage, transformer: transformer, defaultValue: defaultValue)
+        let persisted = Persisted(key: "test-key", storedBy: storage, transformer: transformer, defaultValue: defaultValue)
         XCTAssertEqual(persisted.wrappedValue, defaultValue, "`wrappedValue` should return the default value when a value has not been set")
 
         let newValue = CodableType(property: "new-value")
@@ -702,7 +702,7 @@ final class PersistedTests: XCTestCase {
     func testOptionalValueWithTransformer() throws {
         let storage = InMemoryStorage<Data>()
         let transformer = JSONTransformer<CodableStruct>()
-        var persisted = Persisted<CodableStruct?>(key: "test-key", storedBy: storage, transformer: transformer)
+        let persisted = Persisted<CodableStruct?>(key: "test-key", storedBy: storage, transformer: transformer)
         XCTAssertNil(persisted.wrappedValue, "`wrappedValue` should return `nil` when a value has not been set")
 
         let newValue: CodableStruct = "new-value"
@@ -878,7 +878,7 @@ final class PersistedTests: XCTestCase {
         let defaultValue = "default"
         let storage = InMemoryStorage<String>()
         let transformer = MockTransformer<String>()
-        var persisted = Persisted<String?>(key: key, storedBy: storage, transformer: transformer, defaultValue: defaultValue, defaultValuePersistBehaviour: .persistWhenNil)
+        let persisted = Persisted<String?>(key: key, storedBy: storage, transformer: transformer, defaultValue: defaultValue, defaultValuePersistBehaviour: .persistWhenNil)
 
         transformer.errorToThrow = NSError(domain: "perist-tests", code: 1, userInfo: nil)
         XCTAssertEqual(persisted.wrappedValue, defaultValue)
@@ -901,7 +901,7 @@ final class PersistedTests: XCTestCase {
         let defaultValue = "default"
         let storage = InMemoryStorage<String>()
         let transformer = MockTransformer<String>()
-        var persisted = Persisted<String?>(key: key, storedBy: storage, transformer: transformer, defaultValue: defaultValue, defaultValuePersistBehaviour: .persistOnError)
+        let persisted = Persisted<String?>(key: key, storedBy: storage, transformer: transformer, defaultValue: defaultValue, defaultValuePersistBehaviour: .persistOnError)
 
         XCTAssertEqual(persisted.wrappedValue, defaultValue)
         XCTAssertNil(storage.retrieveValue(for: key), "Default value should not be persisted when nil is returned")
@@ -924,7 +924,7 @@ final class PersistedTests: XCTestCase {
         let key = "test-key"
         let defaultValue = "default"
         let storage = InMemoryStorage<String>()
-        var persisted = Persisted<String?>(key: key, storedBy: storage, defaultValue: defaultValue)
+        let persisted = Persisted<String?>(key: key, storedBy: storage, defaultValue: defaultValue)
 
         XCTAssertEqual(persisted.wrappedValue, defaultValue)
         XCTAssertNil(storage.retrieveValue(for: key), "Default value should not be persisted when retrieved")
