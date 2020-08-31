@@ -129,6 +129,28 @@ final class NSUbiquitousKeyValueStoreStorageTests: XCTestCase {
         waitForExpectations(timeout: 0.1)
     }
 
+    func testStoringDoubleWithoutFractionalDigit() {
+        let key = "key"
+        let value = 123 as Double
+
+        let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
+        let subscription = nsUbiquitousKeyValueStoreStorage.addUpdateListener(forKey: key) { newValue in
+            defer {
+                callsUpdateListenerExpectation.fulfill()
+            }
+
+            XCTAssertEqual(newValue, .double(value), "Value passed to update listener should be new value")
+        }
+        _ = subscription
+
+        nsUbiquitousKeyValueStoreStorage.storeValue(.double(value), key: key)
+
+        XCTAssertEqual(nsUbiquitousKeyValueStoreStorage.nsUbiquitousKeyValueStore.double(forKey: key), value, "Double should be stored as double")
+        XCTAssertEqual(nsUbiquitousKeyValueStoreStorage.retrieveValue(for: key), .double(value))
+
+        waitForExpectations(timeout: 0.1)
+    }
+
     func testStoringArray() {
         let key = "key"
         let ubiquitousKeyValueStoreValue = NSUbiquitousKeyValueStoreValue.array([

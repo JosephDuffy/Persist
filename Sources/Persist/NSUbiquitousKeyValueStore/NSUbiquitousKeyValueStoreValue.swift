@@ -4,21 +4,36 @@ import Foundation
 /**
  A value that can be stored in `NSUbiquitousKeyValueStore`.
  */
-public enum NSUbiquitousKeyValueStoreValue: Hashable {
+internal enum NSUbiquitousKeyValueStoreValue: Hashable {
+    /// A `Bool` value. Convenience to convert to `NSNumber`.
+    /// - Parameter bool: The boolean value.
+    /// - Returns: A `UserDefaultsValue.number`.
+    internal static func bool(_ bool: Bool) -> Self {
+        .number(bool as NSNumber)
+    }
+
+    /// An `Int64` value. Convenience to convert to `NSNumber`.
+    /// - Parameter int64: The 64-bit integer value.
+    /// - Returns: A `UserDefaultsValue.number`.
+    internal static func int64(_ int64: Int64) -> Self {
+        .number(int64 as NSNumber)
+    }
+
+    /// A `Double` value. Convenience to convert to `NSNumber`.
+    /// - Parameter double: The double value.
+    /// - Returns: A `UserDefaultsValue.number`.
+    internal static func double(_ double: Double) -> Self {
+        .number(double as NSNumber)
+    }
+
     /// A `String` value.
     case string(String)
 
     /// A `Data` value.
     case data(Data)
 
-    /// A `Bool` value.
-    case bool(Bool)
-
-    /// An `Int64` value.
-    case int64(Int64)
-
-    /// A `Double` value.
-    case double(Double)
+    /// An `NSNumber` value. This will only contain a `Bool`, `Int64`, or `Double``
+    case number(NSNumber)
 
     /// An array of `NSUbiquitousKeyValueStoreValue` values.
     indirect case array([NSUbiquitousKeyValueStoreValue])
@@ -32,16 +47,16 @@ public enum NSUbiquitousKeyValueStoreValue: Hashable {
      */
     internal func cast<Type>(to type: Type.Type) -> Type? {
         switch self {
-        case .int64(let int64):
+        case .number(let nsNumber):
             if type == Bool.self {
-                if int64 == 0 {
-                    return false as? Type
-                } else if int64 == 1 {
-                    return true as? Type
-                }
+                return nsNumber.boolValue as? Type
+            } else if type == Double.self {
+                return nsNumber.doubleValue as? Type
+            } else if type == Int64.self {
+                return nsNumber.int64Value as? Type
+            } else {
+                return nsNumber as? Type
             }
-
-            return int64 as? Type
         default:
             return value as? Type
         }
@@ -54,12 +69,8 @@ public enum NSUbiquitousKeyValueStoreValue: Hashable {
             return string
         case .data(let data):
             return data
-        case .bool(let bool):
-            return bool
-        case .int64(let int64):
-            return int64
-        case .double(let double):
-            return double
+        case .number(let nsNumber):
+            return nsNumber
         case .array(let array):
             return array.map(\.value)
         case .dictionary(let dictionary):
