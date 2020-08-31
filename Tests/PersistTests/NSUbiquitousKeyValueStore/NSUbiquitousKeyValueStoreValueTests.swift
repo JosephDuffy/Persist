@@ -54,5 +54,14 @@ final class NSUbiquitousKeyValueStoreValueTests: XCTestCase {
         XCTAssertNil(NSUbiquitousKeyValueStoreValue.string("0").cast(to: Bool.self))
     }
 
+    func testNumberCasting() {
+        XCTAssertEqual(NSUbiquitousKeyValueStoreValue.int64(123).cast(to: Int64.self), 123)
+        XCTAssertEqual(NSUbiquitousKeyValueStoreValue.int64(123).cast(to: Double.self), 123)
+        XCTAssertEqual(NSUbiquitousKeyValueStoreValue.double(123.45).cast(to: Double.self), 123.45)
+        XCTAssertEqual(NSUbiquitousKeyValueStoreValue.double(123.45).cast(to: Int64.self), 123)
+        XCTAssertEqual(NSUbiquitousKeyValueStoreValue.bool(true).cast(to: Bool.self), true)
+        XCTAssertEqual(NSUbiquitousKeyValueStoreValue.bool(false).cast(to: Bool.self), false)
+        XCTAssertNil(NSUbiquitousKeyValueStoreValue.string("0").cast(to: Bool.self))
+    }
 }
 #endif
