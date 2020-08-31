@@ -6,9 +6,9 @@ import Foundation
  */
 internal final class UserDefaultsStorage: Storage {
 
-    /// A property that – when set to `true` – will supress the message warning of the downsides of
+    /// A property that – when set to `true` – will suppress the message warning of the downsides of
     /// using `UserDefaults` keys with a dot (`.`) in them.
-    fileprivate static var supressDotInKeyWarning = false
+    fileprivate static var suppressDotInKeyWarning = false
 
     /// The value type the `UserDefaultsStorage` can store.
     internal typealias Value = UserDefaultsValue
@@ -98,8 +98,8 @@ internal final class UserDefaultsStorage: Storage {
      */
     internal func addUpdateListener(forKey key: String, updateListener: @escaping UpdateListener) -> AnyCancellable {
         if key.contains(".") {
-            if !UserDefaultsStorage.supressDotInKeyWarning {
-                print("WARNING: Attempting to observe the UserDefault key \"\(key)\", which contains a dot (`.`). This will cause update listeners to only be called when the value is set on this instance. If this is acceptable you may supress this message by setting `Persister.supressDotInUserDefaultsKeyWarning` to `true`. For more information see https://github.com/JosephDuffy/Persist/issues/24.")
+            if !UserDefaultsStorage.suppressDotInKeyWarning {
+                print("WARNING: Attempting to observe the UserDefault key \"\(key)\", which contains a dot (`.`). This will cause update listeners to only be called when the value is set on this instance. If this is acceptable you may suppress this message by setting `Persister.suppressDotInUserDefaultsKeyWarning` to `true`. For more information see https://github.com/JosephDuffy/Persist/issues/24.")
             }
 
             let uuid = UUID()
@@ -119,14 +119,14 @@ internal final class UserDefaultsStorage: Storage {
 }
 
 extension Persister {
-    /// A property that – when set to `true` – will supress the message warning of the downsides of
+    /// A property that – when set to `true` – will suppress the message warning of the downsides of
     /// using `UserDefaults` keys with a dot (`.`) in them.
-    public static var supressDotInUserDefaultsKeyWarning: Bool {
+    public static var suppressDotInUserDefaultsKeyWarning: Bool {
         get {
-            UserDefaultsStorage.supressDotInKeyWarning
+            UserDefaultsStorage.suppressDotInKeyWarning
         }
         set {
-            UserDefaultsStorage.supressDotInKeyWarning = newValue
+            UserDefaultsStorage.suppressDotInKeyWarning = newValue
         }
     }
 }
