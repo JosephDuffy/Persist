@@ -6,6 +6,10 @@ import Foundation
  */
 internal final class UserDefaultsStorage: Storage {
 
+    /// A property that – when set to `true` – will supress the message warning of the downsides of
+    /// using `UserDefaults` keys with a dot (`.`) in them.
+    fileprivate static var supressDotInKeyWarning = false
+
     /// The value type the `UserDefaultsStorage` can store.
     internal typealias Value = UserDefaultsValue
 
@@ -94,7 +98,10 @@ internal final class UserDefaultsStorage: Storage {
      */
     internal func addUpdateListener(forKey key: String, updateListener: @escaping UpdateListener) -> AnyCancellable {
         if key.contains(".") {
-            print("WARNING: Attempting to observe the UserDefault key \"\(key)\", which contains a dot (`.`). This will cause update listeners to only be called when the value is set on this instance. For more information see https://github.com/JosephDuffy/Persist/issues/24.")
+            if !UserDefaultsStorage.supressDotInKeyWarning {
+                print("WARNING: Attempting to observe the UserDefault key \"\(key)\", which contains a dot (`.`). This will cause update listeners to only be called when the value is set on this instance. If this is acceptable you may supress this message by setting `Persister.supressDotInUserDefaultsKeyWarning` to `true`. For more information see https://github.com/JosephDuffy/Persist/issues/24.")
+            }
+
             let uuid = UUID()
             updateListeners[key, default: [:]][uuid] = updateListener
             return Subscription { [weak self] in
@@ -109,6 +116,19 @@ internal final class UserDefaultsStorage: Storage {
         }
     }
 
+}
+
+extension Persister {
+    /// A property that – when set to `true` – will supress the message warning of the downsides of
+    /// using `UserDefaults` keys with a dot (`.`) in them.
+    public static var supressDotInUserDefaultsKeyWarning: Bool {
+        get {
+            UserDefaultsStorage.supressDotInKeyWarning
+        }
+        set {
+            UserDefaultsStorage.supressDotInKeyWarning = newValue
+        }
+    }
 }
 
 private final class KeyPathObserver: NSObject {
