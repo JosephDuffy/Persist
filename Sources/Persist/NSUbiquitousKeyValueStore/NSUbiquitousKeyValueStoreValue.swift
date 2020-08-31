@@ -4,25 +4,25 @@ import Foundation
 /**
  A value that can be stored in `NSUbiquitousKeyValueStore`.
  */
-public enum NSUbiquitousKeyValueStoreValue: Hashable {
+internal enum NSUbiquitousKeyValueStoreValue: Hashable {
     /// A `Bool` value. Convenience to convert to `NSNumber`.
     /// - Parameter bool: The boolean value.
     /// - Returns: A `UserDefaultsValue.number`.
-    static func bool(_ bool: Bool) -> Self {
+    internal static func bool(_ bool: Bool) -> Self {
         .number(bool as NSNumber)
     }
 
     /// An `Int64` value. Convenience to convert to `NSNumber`.
     /// - Parameter int64: The 64-bit integer value.
     /// - Returns: A `UserDefaultsValue.number`.
-    static func int64(_ int64: Int64) -> Self {
+    internal static func int64(_ int64: Int64) -> Self {
         .number(int64 as NSNumber)
     }
 
     /// A `Double` value. Convenience to convert to `NSNumber`.
     /// - Parameter double: The double value.
     /// - Returns: A `UserDefaultsValue.number`.
-    static func double(_ double: Double) -> Self {
+    internal static func double(_ double: Double) -> Self {
         .number(double as NSNumber)
     }
 
