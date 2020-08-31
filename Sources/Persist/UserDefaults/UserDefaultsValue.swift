@@ -4,32 +4,32 @@ import Foundation
 /**
  A value that can be stored in `UserDefaults`.
  */
-public enum UserDefaultsValue: Hashable {
+internal enum UserDefaultsValue: Hashable {
     /// A `Bool` value. Convenience to convert to `NSNumber`.
     /// - Parameter bool: The boolean value.
     /// - Returns: A `UserDefaultsValue.number`.
-    static func bool(_ bool: Bool) -> Self {
+    internal static func bool(_ bool: Bool) -> Self {
         .number(bool as NSNumber)
     }
 
     /// An `Int` value. Convenience to convert to `NSNumber`.
     /// - Parameter int: The integer value.
     /// - Returns: A `UserDefaultsValue.number`.
-    static func int(_ int: Int) -> Self {
+    internal static func int(_ int: Int) -> Self {
         .number(int as NSNumber)
     }
 
     /// A `Double` value. Convenience to convert to `NSNumber`.
     /// - Parameter double: The double value.
     /// - Returns: A `UserDefaultsValue.number`.
-    static func double(_ double: Double) -> Self {
+    internal static func double(_ double: Double) -> Self {
         .number(double as NSNumber)
     }
 
     /// A `Float` value. Convenience to convert to `NSNumber`.
     /// - Parameter float: The float value.
     /// - Returns: A `UserDefaultsValue.number`.
-    static func float(_ float: Float) -> Self {
+    internal static func float(_ float: Float) -> Self {
         .number(float as NSNumber)
     }
 
@@ -76,7 +76,7 @@ public enum UserDefaultsValue: Hashable {
     }
 
     /// The underlying value.
-    var value: Any {
+    internal var value: Any {
         switch self {
         case .string(let string):
             return string
