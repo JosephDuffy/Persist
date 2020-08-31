@@ -61,5 +61,10 @@ final class UserDefaultsValueTests: XCTestCase {
         XCTAssertEqual(UserDefaultsValue.bool(true).cast(to: Bool.self), true)
         XCTAssertEqual(UserDefaultsValue.bool(false).cast(to: Bool.self), false)
     }
+
+    func testURLCasting() {
+        let url = URL(string: "http://example.com/")!
+        XCTAssertEqual(UserDefaultsValue.url(url).cast(to: URL.self), url)
+    }
 }
 #endif
