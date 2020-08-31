@@ -153,6 +153,28 @@ final class UserDefaultsStorageTests: XCTestCase {
         waitForExpectations(timeout: 0.1)
     }
 
+    func testStoringDoubleWithoutFractionalDigit() {
+        let key = "key"
+        let value = 123 as Double
+
+        let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
+        let subscription = userDefaultsStorage.addUpdateListener(forKey: key) { newValue in
+            defer {
+                callsUpdateListenerExpectation.fulfill()
+            }
+
+            XCTAssertEqual(newValue, .double(value), "Value passed to update listener should be new value")
+        }
+        _ = subscription
+
+        userDefaultsStorage.storeValue(.double(value), key: key)
+
+        XCTAssertEqual(userDefaultsStorage.userDefaults.double(forKey: key), value, "Double should be stored as double")
+        XCTAssertEqual(userDefaultsStorage.retrieveValue(for: key), .double(value))
+
+        waitForExpectations(timeout: 0.1)
+    }
+
     func testStoringFloat() {
         let key = "key"
         let value = 123.45 as Float
@@ -171,6 +193,28 @@ final class UserDefaultsStorageTests: XCTestCase {
 
         XCTAssertEqual(userDefaultsStorage.userDefaults.float(forKey: key), value, "Float should be stored as float")
         XCTAssertEqual(userDefaultsStorage.retrieveValue(for: key), .float(value))
+
+        waitForExpectations(timeout: 0.1)
+    }
+
+    func testStoringFloatWithoutFractionalDigit() {
+        let key = "key"
+        let value = 22 as Float
+
+        let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
+        let subscription = userDefaultsStorage.addUpdateListener(forKey: key) { newValue in
+            defer {
+                callsUpdateListenerExpectation.fulfill()
+            }
+
+            XCTAssertEqual(newValue, .number(value as NSNumber), "Value passed to update listener should be new value")
+        }
+        _ = subscription
+
+        userDefaultsStorage.storeValue(.number(value as NSNumber), key: key)
+
+        XCTAssertEqual(userDefaultsStorage.userDefaults.float(forKey: key), value, "Float should be stored as float")
+        XCTAssertEqual(userDefaultsStorage.retrieveValue(for: key), .number(value as NSNumber))
 
         waitForExpectations(timeout: 0.1)
     }

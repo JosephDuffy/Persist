@@ -11,6 +11,9 @@ internal struct StorableInNSUbiquitousKeyValueStoreTransformer<Input: StorableIn
      - returns: The `NSUbiquitousKeyValueStoreValue` value.
      */
     internal func transformValue(_ value: Input) -> NSUbiquitousKeyValueStoreValue {
+        guard let value = value as? InternalStorableInNSUbiquitousKeyValueStore else {
+            preconditionFailure("\(Input.self) has been conformed to `StorableInNSUbiquitousKeyValueStore` outside of `Persist`. This is not supported.")
+        }
         return value.asNSUbiquitousKeyValueStoreValue
     }
 

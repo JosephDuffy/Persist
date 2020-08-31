@@ -5,70 +5,76 @@ import Foundation
  A protocol that indicates that a value can be stored in `UserDefaults`. This protocol is used to provide
  type safety and should not be conformed to outside of Persist.
  */
-public protocol StorableInUserDefaults {
+public protocol StorableInUserDefaults {}
+
+internal protocol InternalStorableInUserDefaults: StorableInUserDefaults {
     /// The value of `self` cast to `UserDefaultsValue`.
     var asUserDefaultsValue: UserDefaultsValue { get }
 }
 
-extension String: StorableInUserDefaults {
+extension String: InternalStorableInUserDefaults {
     /// An `UserDefaultsValue.string` wrapping `self`.
-    public var asUserDefaultsValue: UserDefaultsValue {
+    internal var asUserDefaultsValue: UserDefaultsValue {
         return .string(self)
     }
 }
 
-extension Data: StorableInUserDefaults {
+extension Data: InternalStorableInUserDefaults {
     /// An `UserDefaultsValue.data` wrapping `self`.
-    public var asUserDefaultsValue: UserDefaultsValue {
+    internal var asUserDefaultsValue: UserDefaultsValue {
         return .data(self)
     }
 }
 
-extension URL: StorableInUserDefaults {
+extension URL: InternalStorableInUserDefaults {
     /// An `UserDefaultsValue.url` wrapping `self`.
-    public var asUserDefaultsValue: UserDefaultsValue {
+    internal var asUserDefaultsValue: UserDefaultsValue {
         return .url(self)
     }
 }
 
-extension Bool: StorableInUserDefaults {
+extension Bool: InternalStorableInUserDefaults {
     /// An `UserDefaultsValue.bool` wrapping `self`.
-    public var asUserDefaultsValue: UserDefaultsValue {
+    internal var asUserDefaultsValue: UserDefaultsValue {
         return .bool(self)
     }
 }
 
-extension Int: StorableInUserDefaults {
+extension Int: InternalStorableInUserDefaults {
     /// An `UserDefaultsValue.int` wrapping `self`.
-    public var asUserDefaultsValue: UserDefaultsValue {
+    internal var asUserDefaultsValue: UserDefaultsValue {
         return .int(self)
     }
 }
 
-extension Double: StorableInUserDefaults {
+extension Double: InternalStorableInUserDefaults {
     /// An `UserDefaultsValue.double` wrapping `self`.
-    public var asUserDefaultsValue: UserDefaultsValue {
+    internal var asUserDefaultsValue: UserDefaultsValue {
         return .double(self)
     }
 }
 
-extension Float: StorableInUserDefaults {
+extension Float: InternalStorableInUserDefaults {
     /// An `UserDefaultsValue.float` wrapping `self`.
-    public var asUserDefaultsValue: UserDefaultsValue {
+    internal var asUserDefaultsValue: UserDefaultsValue {
         return .float(self)
     }
 }
 
-extension Array: StorableInUserDefaults where Element: StorableInUserDefaults {
+extension Array: StorableInUserDefaults where Element: StorableInUserDefaults {}
+
+extension Array: InternalStorableInUserDefaults where Element: InternalStorableInUserDefaults {
     /// An `UserDefaultsValue.array` wrapping `self`.
-    public var asUserDefaultsValue: UserDefaultsValue {
+    internal var asUserDefaultsValue: UserDefaultsValue {
         return .array(map(\.asUserDefaultsValue))
     }
 }
 
-extension Dictionary: StorableInUserDefaults where Key == String, Value: StorableInUserDefaults {
+extension Dictionary: StorableInUserDefaults where Key == String, Value: StorableInUserDefaults {}
+
+extension Dictionary: InternalStorableInUserDefaults where Key == String, Value: InternalStorableInUserDefaults {
     /// An `UserDefaultsValue.dictionary` wrapping `self`.
-    public var asUserDefaultsValue: UserDefaultsValue {
+    internal var asUserDefaultsValue: UserDefaultsValue {
         return .dictionary(mapValues(\.asUserDefaultsValue))
     }
 }

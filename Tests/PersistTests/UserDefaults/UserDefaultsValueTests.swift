@@ -47,21 +47,24 @@ final class UserDefaultsValueTests: XCTestCase {
         XCTAssertNil(UserDefaultsValue(value: ["unsupported-key": Int64(123)]))
     }
 
-    func testIntCasting() {
-        XCTAssert(UserDefaultsValue.int(0).cast(to: Bool.self) == false)
-        XCTAssert(UserDefaultsValue.int(1).cast(to: Bool.self) == true)
-        XCTAssertNil(UserDefaultsValue.int(2).cast(to: Bool.self))
-        XCTAssert(UserDefaultsValue.int(0).cast(to: Int.self) == 0)
-        XCTAssert(UserDefaultsValue.int(1).cast(to: Int.self) == 1)
-
-        let url = URL(string: "http://example.com/")!
-        XCTAssert(UserDefaultsValue.url(url).cast(to: URL.self) == url)
-    }
-
     func testStringCasting() {
         XCTAssert(UserDefaultsValue.string("test-string").cast(to: String.self) == "test-string")
         XCTAssertNil(UserDefaultsValue.string("0").cast(to: Bool.self))
     }
 
+    func testNumberCasting() {
+        XCTAssertEqual(UserDefaultsValue.int(123).cast(to: Int.self), 123)
+        XCTAssertEqual(UserDefaultsValue.int(123).cast(to: Double.self), 123)
+        XCTAssertEqual(UserDefaultsValue.int(123).cast(to: Float.self), 123)
+        XCTAssertEqual(UserDefaultsValue.double(123).cast(to: Double.self), 123)
+        XCTAssertEqual(UserDefaultsValue.double(123.45).cast(to: Double.self), 123.45)
+        XCTAssertEqual(UserDefaultsValue.bool(true).cast(to: Bool.self), true)
+        XCTAssertEqual(UserDefaultsValue.bool(false).cast(to: Bool.self), false)
+    }
+
+    func testURLCasting() {
+        let url = URL(string: "http://example.com/")!
+        XCTAssertEqual(UserDefaultsValue.url(url).cast(to: URL.self), url)
+    }
 }
 #endif
