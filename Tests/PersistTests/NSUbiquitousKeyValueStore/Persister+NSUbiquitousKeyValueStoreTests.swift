@@ -251,7 +251,7 @@ final class PersistedNSUbiquitousKeyValueStoreTests: XCTestCase {
     }
 
     func testOptionalValueWithTransformer_userDefaultsInitialiser() throws {
-        var persisted = Persisted<String?>(key: "test", nsUbiquitousKeyValueStore: nsUbiquitousKeyValueStore, transformer: MockTransformer())
+        let persisted = Persisted<String?>(key: "test", nsUbiquitousKeyValueStore: nsUbiquitousKeyValueStore, transformer: MockTransformer())
         let storedValue = "stored-value"
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")

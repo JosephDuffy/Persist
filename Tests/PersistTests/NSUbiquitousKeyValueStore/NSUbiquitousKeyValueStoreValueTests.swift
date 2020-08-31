@@ -49,18 +49,19 @@ final class NSUbiquitousKeyValueStoreValueTests: XCTestCase {
         XCTAssertNil(NSUbiquitousKeyValueStoreValue(value: ["unsupported-key": 123]))
     }
 
-    func testInt64Casting() {
-        XCTAssert(NSUbiquitousKeyValueStoreValue.int64(0).cast(to: Bool.self) == false)
-        XCTAssert(NSUbiquitousKeyValueStoreValue.int64(1).cast(to: Bool.self) == true)
-        XCTAssertNil(NSUbiquitousKeyValueStoreValue.int64(2).cast(to: Bool.self))
-        XCTAssert(NSUbiquitousKeyValueStoreValue.int64(0).cast(to: Int64.self) == 0)
-        XCTAssert(NSUbiquitousKeyValueStoreValue.int64(1).cast(to: Int64.self) == 1)
-    }
-
     func testStringCasting() {
         XCTAssert(NSUbiquitousKeyValueStoreValue.string("test-string").cast(to: String.self) == "test-string")
         XCTAssertNil(NSUbiquitousKeyValueStoreValue.string("0").cast(to: Bool.self))
     }
 
+    func testNumberCasting() {
+        XCTAssertEqual(NSUbiquitousKeyValueStoreValue.int64(123).cast(to: Int64.self), 123)
+        XCTAssertEqual(NSUbiquitousKeyValueStoreValue.int64(123).cast(to: Double.self), 123)
+        XCTAssertEqual(NSUbiquitousKeyValueStoreValue.double(123.45).cast(to: Double.self), 123.45)
+        XCTAssertEqual(NSUbiquitousKeyValueStoreValue.double(123.45).cast(to: Int64.self), 123)
+        XCTAssertEqual(NSUbiquitousKeyValueStoreValue.bool(true).cast(to: Bool.self), true)
+        XCTAssertEqual(NSUbiquitousKeyValueStoreValue.bool(false).cast(to: Bool.self), false)
+        XCTAssertNil(NSUbiquitousKeyValueStoreValue.string("0").cast(to: Bool.self))
+    }
 }
 #endif
