@@ -11,6 +11,9 @@ public struct StorableInUserDefaultsTransformer<Input: StorableInUserDefaults>: 
      - returns: The `UserDefaultsValue` value.
      */
     public func transformValue(_ value: Input) -> UserDefaultsValue {
+        guard let value = value as? InternalStorableInUserDefaults else {
+            preconditionFailure("\(Input.self) has been conformed to `StorableInUserDefaults` outside of `Persist`. This is not supported.")
+        }
         return value.asUserDefaultsValue
     }
 

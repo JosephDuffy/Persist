@@ -5,110 +5,77 @@ import Foundation
  A protocol that indicates that a value can be stored in `UserDefaults`. This protocol is used to provide
  type safety and should not be conformed to outside of Persist.
  */
-public protocol StorableInUserDefaults {
+public protocol StorableInUserDefaults {}
+
+internal protocol InternalStorableInUserDefaults: StorableInUserDefaults {
     /// The value of `self` cast to `UserDefaultsValue`.
     var asUserDefaultsValue: UserDefaultsValue { get }
-
-    /// Do not implement this protocol or retrieve this value (it will crash your program). It is for internal use only.
-    var doNotImplementOrRetrieve: Never { get }
 }
 
-extension String: StorableInUserDefaults {
+extension String: InternalStorableInUserDefaults {
     /// An `UserDefaultsValue.string` wrapping `self`.
-    public var asUserDefaultsValue: UserDefaultsValue {
+    internal var asUserDefaultsValue: UserDefaultsValue {
         return .string(self)
     }
-
-    public var doNotImplementOrRetrieve: Never {
-        fatalError(#function + " should not be called")
-    }
 }
 
-extension Data: StorableInUserDefaults {
+extension Data: InternalStorableInUserDefaults {
     /// An `UserDefaultsValue.data` wrapping `self`.
-    public var asUserDefaultsValue: UserDefaultsValue {
+    internal var asUserDefaultsValue: UserDefaultsValue {
         return .data(self)
     }
-
-    public var doNotImplementOrRetrieve: Never {
-        fatalError(#function + " should not be called")
-    }
 }
 
-extension URL: StorableInUserDefaults {
+extension URL: InternalStorableInUserDefaults {
     /// An `UserDefaultsValue.url` wrapping `self`.
-    public var asUserDefaultsValue: UserDefaultsValue {
+    internal var asUserDefaultsValue: UserDefaultsValue {
         return .url(self)
     }
-
-    public var doNotImplementOrRetrieve: Never {
-        fatalError(#function + " should not be called")
-    }
 }
 
-extension Bool: StorableInUserDefaults {
+extension Bool: InternalStorableInUserDefaults {
     /// An `UserDefaultsValue.bool` wrapping `self`.
-    public var asUserDefaultsValue: UserDefaultsValue {
+    internal var asUserDefaultsValue: UserDefaultsValue {
         return .bool(self)
     }
-
-    public var doNotImplementOrRetrieve: Never {
-        fatalError(#function + " should not be called")
-    }
 }
 
-extension Int: StorableInUserDefaults {
+extension Int: InternalStorableInUserDefaults {
     /// An `UserDefaultsValue.int` wrapping `self`.
-    public var asUserDefaultsValue: UserDefaultsValue {
+    internal var asUserDefaultsValue: UserDefaultsValue {
         return .int(self)
     }
-
-    public var doNotImplementOrRetrieve: Never {
-        fatalError(#function + " should not be called")
-    }
 }
 
-extension Double: StorableInUserDefaults {
+extension Double: InternalStorableInUserDefaults {
     /// An `UserDefaultsValue.double` wrapping `self`.
-    public var asUserDefaultsValue: UserDefaultsValue {
+    internal var asUserDefaultsValue: UserDefaultsValue {
         return .double(self)
     }
-
-    public var doNotImplementOrRetrieve: Never {
-        fatalError(#function + " should not be called")
-    }
 }
 
-extension Float: StorableInUserDefaults {
+extension Float: InternalStorableInUserDefaults {
     /// An `UserDefaultsValue.float` wrapping `self`.
-    public var asUserDefaultsValue: UserDefaultsValue {
+    internal var asUserDefaultsValue: UserDefaultsValue {
         return .float(self)
     }
-
-    public var doNotImplementOrRetrieve: Never {
-        fatalError(#function + " should not be called")
-    }
 }
 
-extension Array: StorableInUserDefaults where Element: StorableInUserDefaults {
+extension Array: StorableInUserDefaults where Element: StorableInUserDefaults {}
+
+extension Array: InternalStorableInUserDefaults where Element: InternalStorableInUserDefaults {
     /// An `UserDefaultsValue.array` wrapping `self`.
-    public var asUserDefaultsValue: UserDefaultsValue {
+    internal var asUserDefaultsValue: UserDefaultsValue {
         return .array(map(\.asUserDefaultsValue))
     }
-
-    public var doNotImplementOrRetrieve: Never {
-        fatalError(#function + " should not be called")
-    }
 }
 
-extension Dictionary: StorableInUserDefaults where Key == String, Value: StorableInUserDefaults {
-    /// An `UserDefaultsValue.dictionary` wrapping `self`.
-    public var asUserDefaultsValue: UserDefaultsValue {
-        return .dictionary(mapValues(\.asUserDefaultsValue))
-    }
+extension Dictionary: StorableInUserDefaults where Key == String, Value: StorableInUserDefaults {}
 
-    public var doNotImplementOrRetrieve: Never {
-        fatalError(#function + " should not be called")
+extension Dictionary: InternalStorableInUserDefaults where Key == String, Value: InternalStorableInUserDefaults {
+    /// An `UserDefaultsValue.dictionary` wrapping `self`.
+    internal var asUserDefaultsValue: UserDefaultsValue {
+        return .dictionary(mapValues(\.asUserDefaultsValue))
     }
 }
 #endif
