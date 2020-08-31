@@ -52,5 +52,14 @@ final class UserDefaultsValueTests: XCTestCase {
         XCTAssertNil(UserDefaultsValue.string("0").cast(to: Bool.self))
     }
 
+    func testNumberCasting() {
+        XCTAssertEqual(UserDefaultsValue.int(123).cast(to: Int.self), 123)
+        XCTAssertEqual(UserDefaultsValue.int(123).cast(to: Double.self), 123)
+        XCTAssertEqual(UserDefaultsValue.int(123).cast(to: Float.self), 123)
+        XCTAssertEqual(UserDefaultsValue.double(123).cast(to: Double.self), 123)
+        XCTAssertEqual(UserDefaultsValue.double(123.45).cast(to: Double.self), 123.45)
+        XCTAssertEqual(UserDefaultsValue.bool(true).cast(to: Bool.self), true)
+        XCTAssertEqual(UserDefaultsValue.bool(false).cast(to: Bool.self), false)
+    }
 }
 #endif
