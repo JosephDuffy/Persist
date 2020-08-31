@@ -12,7 +12,7 @@ final class PersistedUserDefaultsTests: XCTestCase {
 
     func testValue_storedByInitialiser() throws {
         let defaultValue = "default"
-        var persisted = Persisted<String>(key: "test", storedBy: userDefaults, defaultValue: defaultValue)
+        let persisted = Persisted<String>(key: "test", storedBy: userDefaults, defaultValue: defaultValue)
         let storedValue = "stored-value"
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
@@ -39,7 +39,7 @@ final class PersistedUserDefaultsTests: XCTestCase {
 
     func testValue_userDefaultsInitialiser() throws {
         let defaultValue = "default"
-        var persisted = Persisted<String>(key: "test", userDefaults: userDefaults, defaultValue: defaultValue)
+        let persisted = Persisted<String>(key: "test", userDefaults: userDefaults, defaultValue: defaultValue)
         let storedValue = "stored-value"
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
@@ -66,7 +66,7 @@ final class PersistedUserDefaultsTests: XCTestCase {
 
     func testValueWithTransformer_storedByInitialiser() throws {
         let defaultValue = "default"
-        var persisted = Persisted<String>(key: "test", storedBy: userDefaults, transformer: MockTransformer(), defaultValue: defaultValue)
+        let persisted = Persisted<String>(key: "test", storedBy: userDefaults, transformer: MockTransformer(), defaultValue: defaultValue)
         let storedValue = "stored-value"
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
@@ -93,7 +93,7 @@ final class PersistedUserDefaultsTests: XCTestCase {
 
     func testValueWithTransformer_userDefaultsInitialiser() throws {
         let defaultValue = "default"
-        var persisted = Persisted<String>(key: "test", userDefaults: userDefaults, transformer: MockTransformer(), defaultValue: defaultValue)
+        let persisted = Persisted<String>(key: "test", userDefaults: userDefaults, transformer: MockTransformer(), defaultValue: defaultValue)
         let storedValue = "stored-value"
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
@@ -119,7 +119,7 @@ final class PersistedUserDefaultsTests: XCTestCase {
     }
 
     func testOptionalValue_storedByInitialiser() throws {
-        var persisted = Persisted<String?>(key: "test", storedBy: userDefaults)
+        let persisted = Persisted<String?>(key: "test", storedBy: userDefaults)
         let storedValue = "stored-value"
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
@@ -145,7 +145,7 @@ final class PersistedUserDefaultsTests: XCTestCase {
     }
 
     func testOptionalValue_userDefaultsInitialiser() throws {
-        var persisted = Persisted<String?>(key: "test", userDefaults: userDefaults)
+        let persisted = Persisted<String?>(key: "test", userDefaults: userDefaults)
         let storedValue = "stored-value"
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
@@ -172,7 +172,7 @@ final class PersistedUserDefaultsTests: XCTestCase {
 
     func testOptionalValueWithDefault_storedByInitialiser() throws {
         let defaultValue = "default"
-        var persisted = Persisted<String?>(key: "test", storedBy: userDefaults, defaultValue: defaultValue)
+        let persisted = Persisted<String?>(key: "test", storedBy: userDefaults, defaultValue: defaultValue)
         let storedValue = "stored-value"
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
@@ -199,7 +199,7 @@ final class PersistedUserDefaultsTests: XCTestCase {
 
     func testOptionalValueWithDefault_userDefaultsInitialiser() throws {
         let defaultValue = "default"
-        var persisted = Persisted<String?>(key: "test", userDefaults: userDefaults, defaultValue: defaultValue)
+        let persisted = Persisted<String?>(key: "test", userDefaults: userDefaults, defaultValue: defaultValue)
         let storedValue = "stored-value"
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
@@ -225,7 +225,7 @@ final class PersistedUserDefaultsTests: XCTestCase {
     }
 
     func testOptionalValueWithTransformer_storedByInitialiser() throws {
-        var persisted = Persisted<String?>(key: "test", storedBy: userDefaults, transformer: MockTransformer())
+        let persisted = Persisted<String?>(key: "test", storedBy: userDefaults, transformer: MockTransformer())
         let storedValue = "stored-value"
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
@@ -251,7 +251,7 @@ final class PersistedUserDefaultsTests: XCTestCase {
     }
 
     func testOptionalValueWithTransformer_userDefaultsInitialiser() throws {
-        var persisted = Persisted<String?>(key: "test", userDefaults: userDefaults, transformer: MockTransformer())
+        let persisted = Persisted<String?>(key: "test", userDefaults: userDefaults, transformer: MockTransformer())
         let storedValue = "stored-value"
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
