@@ -52,13 +52,7 @@
             <a href="../Enums.html">Enumerations</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="../Enums/NSUbiquitousKeyValueStoreValue.html">NSUbiquitousKeyValueStoreValue</a>
-              </li>
-              <li class="nav-group-task">
                 <a href="../Enums/PersistenceError.html">PersistenceError</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Enums/UserDefaultsValue.html">UserDefaultsValue</a>
               </li>
             </ul>
           </li>
@@ -66,34 +60,10 @@
             <a href="../Extensions.html">Extensions</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="../Extensions/Array.html">Array</a>
+                <a href="../Extensions.html#/s:Sa">Array</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Extensions/Bool.html">Bool</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Extensions/Data.html">Data</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Extensions/Dictionary.html">Dictionary</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Extensions/Double.html">Double</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Extensions/Float.html">Float</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Extensions/Int.html">Int</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Extensions/Int64.html">Int64</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Extensions/String.html">String</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Extensions/URL.html">URL</a>
+                <a href="../Extensions.html#/s:SD">Dictionary</a>
               </li>
             </ul>
           </li>
@@ -104,10 +74,10 @@
                 <a href="../Protocols/Cancellable.html">Cancellable</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Protocols/StorableInNSUbiquitousKeyValueStore.html">StorableInNSUbiquitousKeyValueStore</a>
+                <a href="../Protocols.html#/s:7Persist35StorableInNSUbiquitousKeyValueStoreP">StorableInNSUbiquitousKeyValueStore</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Protocols/StorableInUserDefaults.html">StorableInUserDefaults</a>
+                <a href="../Protocols.html#/s:7Persist22StorableInUserDefaultsP">StorableInUserDefaults</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Protocols/Storage.html">Storage</a>
@@ -140,9 +110,6 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/RawRepresentableTransformer/UntransformError.html">– UntransformError</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Structs/StorableInUserDefaultsTransformer.html">StorableInUserDefaultsTransformer</a>
               </li>
             </ul>
           </li>
@@ -2690,7 +2657,7 @@ retrieved from the storage.</p>
     <span class="n">storedBy</span> <span class="nv">nsUbiquitousKeyValueStore</span><span class="p">:</span> <span class="kt">NSUbiquitousKeyValueStore</span><span class="p">,</span>
     <span class="n">defaultValue</span><span class="p">:</span> <span class="kd">@autoclosure</span> <span class="kd">@escaping</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Value</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
     <span class="n">defaultValuePersistBehaviour</span><span class="p">:</span> <span class="kt"><a href="../Structs/DefaultValuePersistOption.html">DefaultValuePersistOption</a></span> <span class="o">=</span> <span class="p">[]</span>
-<span class="p">)</span> <span class="k">where</span> <span class="kt">WrappedValue</span><span class="p">:</span> <span class="kt"><a href="../Protocols/StorableInNSUbiquitousKeyValueStore.html">StorableInNSUbiquitousKeyValueStore</a></span><span class="p">,</span> <span class="kt">Value</span> <span class="o">==</span> <span class="kt">WrappedValue</span><span class="p">?</span></code></pre>
+<span class="p">)</span> <span class="k">where</span> <span class="kt">WrappedValue</span><span class="p">:</span> <span class="kt"><a href="../Protocols.html#/s:7Persist35StorableInNSUbiquitousKeyValueStoreP">StorableInNSUbiquitousKeyValueStore</a></span><span class="p">,</span> <span class="kt">Value</span> <span class="o">==</span> <span class="kt">WrappedValue</span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -2778,7 +2745,7 @@ retrieved from the storage.</p>
     <span class="nv">key</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>
     <span class="n">storedBy</span> <span class="nv">nsUbiquitousKeyValueStore</span><span class="p">:</span> <span class="kt">NSUbiquitousKeyValueStore</span><span class="p">,</span>
     <span class="n">defaultValuePersistBehaviour</span><span class="p">:</span> <span class="kt"><a href="../Structs/DefaultValuePersistOption.html">DefaultValuePersistOption</a></span> <span class="o">=</span> <span class="p">[]</span>
-<span class="p">)</span> <span class="k">where</span> <span class="kt">WrappedValue</span><span class="p">:</span> <span class="kt"><a href="../Protocols/StorableInNSUbiquitousKeyValueStore.html">StorableInNSUbiquitousKeyValueStore</a></span><span class="p">,</span> <span class="kt">Value</span> <span class="o">==</span> <span class="kt">WrappedValue</span><span class="p">?</span></code></pre>
+<span class="p">)</span> <span class="k">where</span> <span class="kt">WrappedValue</span><span class="p">:</span> <span class="kt"><a href="../Protocols.html#/s:7Persist35StorableInNSUbiquitousKeyValueStoreP">StorableInNSUbiquitousKeyValueStore</a></span><span class="p">,</span> <span class="kt">Value</span> <span class="o">==</span> <span class="kt">WrappedValue</span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -2866,7 +2833,7 @@ retrieved from the storage.</p>
     <span class="nv">nsUbiquitousKeyValueStore</span><span class="p">:</span> <span class="kt">NSUbiquitousKeyValueStore</span><span class="p">,</span>
     <span class="n">defaultValue</span><span class="p">:</span> <span class="kd">@autoclosure</span> <span class="kd">@escaping</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Value</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
     <span class="n">defaultValuePersistBehaviour</span><span class="p">:</span> <span class="kt"><a href="../Structs/DefaultValuePersistOption.html">DefaultValuePersistOption</a></span> <span class="o">=</span> <span class="p">[]</span>
-<span class="p">)</span> <span class="k">where</span> <span class="kt">WrappedValue</span><span class="p">:</span> <span class="kt"><a href="../Protocols/StorableInNSUbiquitousKeyValueStore.html">StorableInNSUbiquitousKeyValueStore</a></span><span class="p">,</span> <span class="kt">Value</span> <span class="o">==</span> <span class="kt">WrappedValue</span><span class="p">?</span></code></pre>
+<span class="p">)</span> <span class="k">where</span> <span class="kt">WrappedValue</span><span class="p">:</span> <span class="kt"><a href="../Protocols.html#/s:7Persist35StorableInNSUbiquitousKeyValueStoreP">StorableInNSUbiquitousKeyValueStore</a></span><span class="p">,</span> <span class="kt">Value</span> <span class="o">==</span> <span class="kt">WrappedValue</span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -2954,7 +2921,7 @@ retrieved from the storage.</p>
     <span class="nv">key</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>
     <span class="nv">nsUbiquitousKeyValueStore</span><span class="p">:</span> <span class="kt">NSUbiquitousKeyValueStore</span><span class="p">,</span>
     <span class="n">defaultValuePersistBehaviour</span><span class="p">:</span> <span class="kt"><a href="../Structs/DefaultValuePersistOption.html">DefaultValuePersistOption</a></span> <span class="o">=</span> <span class="p">[]</span>
-<span class="p">)</span> <span class="k">where</span> <span class="kt">WrappedValue</span><span class="p">:</span> <span class="kt"><a href="../Protocols/StorableInNSUbiquitousKeyValueStore.html">StorableInNSUbiquitousKeyValueStore</a></span><span class="p">,</span> <span class="kt">Value</span> <span class="o">==</span> <span class="kt">WrappedValue</span><span class="p">?</span></code></pre>
+<span class="p">)</span> <span class="k">where</span> <span class="kt">WrappedValue</span><span class="p">:</span> <span class="kt"><a href="../Protocols.html#/s:7Persist35StorableInNSUbiquitousKeyValueStoreP">StorableInNSUbiquitousKeyValueStore</a></span><span class="p">,</span> <span class="kt">Value</span> <span class="o">==</span> <span class="kt">WrappedValue</span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -3059,7 +3026,7 @@ retrieved from the storage.</p>
     <span class="nv">transformer</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="p">,</span>
     <span class="n">defaultValue</span><span class="p">:</span> <span class="kd">@autoclosure</span> <span class="kd">@escaping</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Value</span><span class="p">,</span>
     <span class="n">defaultValuePersistBehaviour</span><span class="p">:</span> <span class="kt"><a href="../Structs/DefaultValuePersistOption.html">DefaultValuePersistOption</a></span> <span class="o">=</span> <span class="p">[]</span>
-<span class="p">)</span> <span class="k">where</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Input</span> <span class="o">==</span> <span class="kt">Value</span><span class="p">,</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Output</span><span class="p">:</span> <span class="kt"><a href="../Protocols/StorableInNSUbiquitousKeyValueStore.html">StorableInNSUbiquitousKeyValueStore</a></span></code></pre>
+<span class="p">)</span> <span class="k">where</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Input</span> <span class="o">==</span> <span class="kt">Value</span><span class="p">,</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Output</span><span class="p">:</span> <span class="kt"><a href="../Protocols.html#/s:7Persist35StorableInNSUbiquitousKeyValueStoreP">StorableInNSUbiquitousKeyValueStore</a></span></code></pre>
 
                         </div>
                       </div>
@@ -3163,7 +3130,7 @@ retrieved from the storage.</p>
     <span class="n">storedBy</span> <span class="nv">nsUbiquitousKeyValueStore</span><span class="p">:</span> <span class="kt">NSUbiquitousKeyValueStore</span><span class="p">,</span>
     <span class="nv">transformer</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="p">,</span>
     <span class="n">defaultValuePersistBehaviour</span><span class="p">:</span> <span class="kt"><a href="../Structs/DefaultValuePersistOption.html">DefaultValuePersistOption</a></span> <span class="o">=</span> <span class="p">[]</span>
-<span class="p">)</span> <span class="k">where</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Input</span> <span class="o">==</span> <span class="kt">Value</span><span class="p">,</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Output</span><span class="p">:</span> <span class="kt"><a href="../Protocols/StorableInNSUbiquitousKeyValueStore.html">StorableInNSUbiquitousKeyValueStore</a></span></code></pre>
+<span class="p">)</span> <span class="k">where</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Input</span> <span class="o">==</span> <span class="kt">Value</span><span class="p">,</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Output</span><span class="p">:</span> <span class="kt"><a href="../Protocols.html#/s:7Persist35StorableInNSUbiquitousKeyValueStoreP">StorableInNSUbiquitousKeyValueStore</a></span></code></pre>
 
                         </div>
                       </div>
@@ -3267,7 +3234,7 @@ retrieved from the storage.</p>
     <span class="nv">transformer</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="p">,</span>
     <span class="n">defaultValue</span><span class="p">:</span> <span class="kd">@autoclosure</span> <span class="kd">@escaping</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Value</span><span class="p">,</span>
     <span class="n">defaultValuePersistBehaviour</span><span class="p">:</span> <span class="kt"><a href="../Structs/DefaultValuePersistOption.html">DefaultValuePersistOption</a></span> <span class="o">=</span> <span class="p">[]</span>
-<span class="p">)</span> <span class="k">where</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Input</span> <span class="o">==</span> <span class="kt">Value</span><span class="p">,</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Output</span><span class="p">:</span> <span class="kt"><a href="../Protocols/StorableInNSUbiquitousKeyValueStore.html">StorableInNSUbiquitousKeyValueStore</a></span></code></pre>
+<span class="p">)</span> <span class="k">where</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Input</span> <span class="o">==</span> <span class="kt">Value</span><span class="p">,</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Output</span><span class="p">:</span> <span class="kt"><a href="../Protocols.html#/s:7Persist35StorableInNSUbiquitousKeyValueStoreP">StorableInNSUbiquitousKeyValueStore</a></span></code></pre>
 
                         </div>
                       </div>
@@ -3371,7 +3338,7 @@ retrieved from the storage.</p>
     <span class="nv">nsUbiquitousKeyValueStore</span><span class="p">:</span> <span class="kt">NSUbiquitousKeyValueStore</span><span class="p">,</span>
     <span class="nv">transformer</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="p">,</span>
     <span class="n">defaultValuePersistBehaviour</span><span class="p">:</span> <span class="kt"><a href="../Structs/DefaultValuePersistOption.html">DefaultValuePersistOption</a></span> <span class="o">=</span> <span class="p">[]</span>
-<span class="p">)</span> <span class="k">where</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Input</span> <span class="o">==</span> <span class="kt">Value</span><span class="p">,</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Output</span><span class="p">:</span> <span class="kt"><a href="../Protocols/StorableInNSUbiquitousKeyValueStore.html">StorableInNSUbiquitousKeyValueStore</a></span></code></pre>
+<span class="p">)</span> <span class="k">where</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Input</span> <span class="o">==</span> <span class="kt">Value</span><span class="p">,</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Output</span><span class="p">:</span> <span class="kt"><a href="../Protocols.html#/s:7Persist35StorableInNSUbiquitousKeyValueStoreP">StorableInNSUbiquitousKeyValueStore</a></span></code></pre>
 
                         </div>
                       </div>
@@ -3488,7 +3455,7 @@ retrieved from the storage.</p>
     <span class="nv">transformer</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="p">,</span>
     <span class="n">defaultValue</span><span class="p">:</span> <span class="kd">@autoclosure</span> <span class="kd">@escaping</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Value</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
     <span class="n">defaultValuePersistBehaviour</span><span class="p">:</span> <span class="kt"><a href="../Structs/DefaultValuePersistOption.html">DefaultValuePersistOption</a></span> <span class="o">=</span> <span class="p">[]</span>
-<span class="p">)</span> <span class="k">where</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Input</span> <span class="o">==</span> <span class="kt">WrappedValue</span><span class="p">,</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Output</span><span class="p">:</span> <span class="kt"><a href="../Protocols/StorableInNSUbiquitousKeyValueStore.html">StorableInNSUbiquitousKeyValueStore</a></span><span class="p">,</span> <span class="kt">Value</span> <span class="o">==</span> <span class="kt">WrappedValue</span><span class="p">?</span></code></pre>
+<span class="p">)</span> <span class="k">where</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Input</span> <span class="o">==</span> <span class="kt">WrappedValue</span><span class="p">,</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Output</span><span class="p">:</span> <span class="kt"><a href="../Protocols.html#/s:7Persist35StorableInNSUbiquitousKeyValueStoreP">StorableInNSUbiquitousKeyValueStore</a></span><span class="p">,</span> <span class="kt">Value</span> <span class="o">==</span> <span class="kt">WrappedValue</span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -3592,7 +3559,7 @@ retrieved from the storage.</p>
     <span class="n">storedBy</span> <span class="nv">nsUbiquitousKeyValueStore</span><span class="p">:</span> <span class="kt">NSUbiquitousKeyValueStore</span><span class="p">,</span>
     <span class="nv">transformer</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="p">,</span>
     <span class="n">defaultValuePersistBehaviour</span><span class="p">:</span> <span class="kt"><a href="../Structs/DefaultValuePersistOption.html">DefaultValuePersistOption</a></span> <span class="o">=</span> <span class="p">[]</span>
-<span class="p">)</span> <span class="k">where</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Input</span> <span class="o">==</span> <span class="kt">WrappedValue</span><span class="p">,</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Output</span><span class="p">:</span> <span class="kt"><a href="../Protocols/StorableInNSUbiquitousKeyValueStore.html">StorableInNSUbiquitousKeyValueStore</a></span><span class="p">,</span> <span class="kt">Value</span> <span class="o">==</span> <span class="kt">WrappedValue</span><span class="p">?</span></code></pre>
+<span class="p">)</span> <span class="k">where</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Input</span> <span class="o">==</span> <span class="kt">WrappedValue</span><span class="p">,</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Output</span><span class="p">:</span> <span class="kt"><a href="../Protocols.html#/s:7Persist35StorableInNSUbiquitousKeyValueStoreP">StorableInNSUbiquitousKeyValueStore</a></span><span class="p">,</span> <span class="kt">Value</span> <span class="o">==</span> <span class="kt">WrappedValue</span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -3696,7 +3663,7 @@ retrieved from the storage.</p>
     <span class="nv">transformer</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="p">,</span>
     <span class="n">defaultValue</span><span class="p">:</span> <span class="kd">@autoclosure</span> <span class="kd">@escaping</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Value</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
     <span class="n">defaultValuePersistBehaviour</span><span class="p">:</span> <span class="kt"><a href="../Structs/DefaultValuePersistOption.html">DefaultValuePersistOption</a></span> <span class="o">=</span> <span class="p">[]</span>
-<span class="p">)</span> <span class="k">where</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Input</span> <span class="o">==</span> <span class="kt">WrappedValue</span><span class="p">,</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Output</span><span class="p">:</span> <span class="kt"><a href="../Protocols/StorableInNSUbiquitousKeyValueStore.html">StorableInNSUbiquitousKeyValueStore</a></span><span class="p">,</span> <span class="kt">Value</span> <span class="o">==</span> <span class="kt">WrappedValue</span><span class="p">?</span></code></pre>
+<span class="p">)</span> <span class="k">where</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Input</span> <span class="o">==</span> <span class="kt">WrappedValue</span><span class="p">,</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Output</span><span class="p">:</span> <span class="kt"><a href="../Protocols.html#/s:7Persist35StorableInNSUbiquitousKeyValueStoreP">StorableInNSUbiquitousKeyValueStore</a></span><span class="p">,</span> <span class="kt">Value</span> <span class="o">==</span> <span class="kt">WrappedValue</span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -3800,7 +3767,7 @@ retrieved from the storage.</p>
     <span class="nv">nsUbiquitousKeyValueStore</span><span class="p">:</span> <span class="kt">NSUbiquitousKeyValueStore</span><span class="p">,</span>
     <span class="nv">transformer</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="p">,</span>
     <span class="n">defaultValuePersistBehaviour</span><span class="p">:</span> <span class="kt"><a href="../Structs/DefaultValuePersistOption.html">DefaultValuePersistOption</a></span> <span class="o">=</span> <span class="p">[]</span>
-<span class="p">)</span> <span class="k">where</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Input</span> <span class="o">==</span> <span class="kt">WrappedValue</span><span class="p">,</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Output</span><span class="p">:</span> <span class="kt"><a href="../Protocols/StorableInNSUbiquitousKeyValueStore.html">StorableInNSUbiquitousKeyValueStore</a></span><span class="p">,</span> <span class="kt">Value</span> <span class="o">==</span> <span class="kt">WrappedValue</span><span class="p">?</span></code></pre>
+<span class="p">)</span> <span class="k">where</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Input</span> <span class="o">==</span> <span class="kt">WrappedValue</span><span class="p">,</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Output</span><span class="p">:</span> <span class="kt"><a href="../Protocols.html#/s:7Persist35StorableInNSUbiquitousKeyValueStoreP">StorableInNSUbiquitousKeyValueStore</a></span><span class="p">,</span> <span class="kt">Value</span> <span class="o">==</span> <span class="kt">WrappedValue</span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -3913,7 +3880,7 @@ retrieved from the storage.</p>
     <span class="n">storedBy</span> <span class="nv">userDefaults</span><span class="p">:</span> <span class="kt">UserDefaults</span><span class="p">,</span>
     <span class="n">defaultValue</span><span class="p">:</span> <span class="kd">@autoclosure</span> <span class="kd">@escaping</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Value</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
     <span class="n">defaultValuePersistBehaviour</span><span class="p">:</span> <span class="kt"><a href="../Structs/DefaultValuePersistOption.html">DefaultValuePersistOption</a></span> <span class="o">=</span> <span class="p">[]</span>
-<span class="p">)</span> <span class="k">where</span> <span class="kt">WrappedValue</span><span class="p">:</span> <span class="kt"><a href="../Protocols/StorableInUserDefaults.html">StorableInUserDefaults</a></span><span class="p">,</span> <span class="kt">Value</span> <span class="o">==</span> <span class="kt">WrappedValue</span><span class="p">?</span></code></pre>
+<span class="p">)</span> <span class="k">where</span> <span class="kt">WrappedValue</span><span class="p">:</span> <span class="kt"><a href="../Protocols.html#/s:7Persist22StorableInUserDefaultsP">StorableInUserDefaults</a></span><span class="p">,</span> <span class="kt">Value</span> <span class="o">==</span> <span class="kt">WrappedValue</span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -4001,7 +3968,7 @@ retrieved from the storage.</p>
     <span class="nv">key</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>
     <span class="n">storedBy</span> <span class="nv">userDefaults</span><span class="p">:</span> <span class="kt">UserDefaults</span><span class="p">,</span>
     <span class="n">defaultValuePersistBehaviour</span><span class="p">:</span> <span class="kt"><a href="../Structs/DefaultValuePersistOption.html">DefaultValuePersistOption</a></span> <span class="o">=</span> <span class="p">[]</span>
-<span class="p">)</span> <span class="k">where</span> <span class="kt">WrappedValue</span><span class="p">:</span> <span class="kt"><a href="../Protocols/StorableInUserDefaults.html">StorableInUserDefaults</a></span><span class="p">,</span> <span class="kt">Value</span> <span class="o">==</span> <span class="kt">WrappedValue</span><span class="p">?</span></code></pre>
+<span class="p">)</span> <span class="k">where</span> <span class="kt">WrappedValue</span><span class="p">:</span> <span class="kt"><a href="../Protocols.html#/s:7Persist22StorableInUserDefaultsP">StorableInUserDefaults</a></span><span class="p">,</span> <span class="kt">Value</span> <span class="o">==</span> <span class="kt">WrappedValue</span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -4089,7 +4056,7 @@ retrieved from the storage.</p>
     <span class="nv">userDefaults</span><span class="p">:</span> <span class="kt">UserDefaults</span><span class="p">,</span>
     <span class="n">defaultValue</span><span class="p">:</span> <span class="kd">@autoclosure</span> <span class="kd">@escaping</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Value</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
     <span class="n">defaultValuePersistBehaviour</span><span class="p">:</span> <span class="kt"><a href="../Structs/DefaultValuePersistOption.html">DefaultValuePersistOption</a></span> <span class="o">=</span> <span class="p">[]</span>
-<span class="p">)</span> <span class="k">where</span> <span class="kt">WrappedValue</span><span class="p">:</span> <span class="kt"><a href="../Protocols/StorableInUserDefaults.html">StorableInUserDefaults</a></span><span class="p">,</span> <span class="kt">Value</span> <span class="o">==</span> <span class="kt">WrappedValue</span><span class="p">?</span></code></pre>
+<span class="p">)</span> <span class="k">where</span> <span class="kt">WrappedValue</span><span class="p">:</span> <span class="kt"><a href="../Protocols.html#/s:7Persist22StorableInUserDefaultsP">StorableInUserDefaults</a></span><span class="p">,</span> <span class="kt">Value</span> <span class="o">==</span> <span class="kt">WrappedValue</span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -4177,7 +4144,7 @@ retrieved from the storage.</p>
     <span class="nv">key</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>
     <span class="nv">userDefaults</span><span class="p">:</span> <span class="kt">UserDefaults</span><span class="p">,</span>
     <span class="n">defaultValuePersistBehaviour</span><span class="p">:</span> <span class="kt"><a href="../Structs/DefaultValuePersistOption.html">DefaultValuePersistOption</a></span> <span class="o">=</span> <span class="p">[]</span>
-<span class="p">)</span> <span class="k">where</span> <span class="kt">WrappedValue</span><span class="p">:</span> <span class="kt"><a href="../Protocols/StorableInUserDefaults.html">StorableInUserDefaults</a></span><span class="p">,</span> <span class="kt">Value</span> <span class="o">==</span> <span class="kt">WrappedValue</span><span class="p">?</span></code></pre>
+<span class="p">)</span> <span class="k">where</span> <span class="kt">WrappedValue</span><span class="p">:</span> <span class="kt"><a href="../Protocols.html#/s:7Persist22StorableInUserDefaultsP">StorableInUserDefaults</a></span><span class="p">,</span> <span class="kt">Value</span> <span class="o">==</span> <span class="kt">WrappedValue</span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -4282,7 +4249,7 @@ retrieved from the storage.</p>
     <span class="nv">transformer</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="p">,</span>
     <span class="n">defaultValue</span><span class="p">:</span> <span class="kd">@autoclosure</span> <span class="kd">@escaping</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Value</span><span class="p">,</span>
     <span class="n">defaultValuePersistBehaviour</span><span class="p">:</span> <span class="kt"><a href="../Structs/DefaultValuePersistOption.html">DefaultValuePersistOption</a></span> <span class="o">=</span> <span class="p">[]</span>
-<span class="p">)</span> <span class="k">where</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Input</span> <span class="o">==</span> <span class="kt">Value</span><span class="p">,</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Output</span><span class="p">:</span> <span class="kt"><a href="../Protocols/StorableInUserDefaults.html">StorableInUserDefaults</a></span></code></pre>
+<span class="p">)</span> <span class="k">where</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Input</span> <span class="o">==</span> <span class="kt">Value</span><span class="p">,</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Output</span><span class="p">:</span> <span class="kt"><a href="../Protocols.html#/s:7Persist22StorableInUserDefaultsP">StorableInUserDefaults</a></span></code></pre>
 
                         </div>
                       </div>
@@ -4386,7 +4353,7 @@ retrieved from the storage.</p>
     <span class="n">storedBy</span> <span class="nv">userDefaults</span><span class="p">:</span> <span class="kt">UserDefaults</span><span class="p">,</span>
     <span class="nv">transformer</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="p">,</span>
     <span class="n">defaultValuePersistBehaviour</span><span class="p">:</span> <span class="kt"><a href="../Structs/DefaultValuePersistOption.html">DefaultValuePersistOption</a></span> <span class="o">=</span> <span class="p">[]</span>
-<span class="p">)</span> <span class="k">where</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Input</span> <span class="o">==</span> <span class="kt">Value</span><span class="p">,</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Output</span><span class="p">:</span> <span class="kt"><a href="../Protocols/StorableInUserDefaults.html">StorableInUserDefaults</a></span></code></pre>
+<span class="p">)</span> <span class="k">where</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Input</span> <span class="o">==</span> <span class="kt">Value</span><span class="p">,</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Output</span><span class="p">:</span> <span class="kt"><a href="../Protocols.html#/s:7Persist22StorableInUserDefaultsP">StorableInUserDefaults</a></span></code></pre>
 
                         </div>
                       </div>
@@ -4490,7 +4457,7 @@ retrieved from the storage.</p>
     <span class="nv">transformer</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="p">,</span>
     <span class="n">defaultValue</span><span class="p">:</span> <span class="kd">@autoclosure</span> <span class="kd">@escaping</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Value</span><span class="p">,</span>
     <span class="n">defaultValuePersistBehaviour</span><span class="p">:</span> <span class="kt"><a href="../Structs/DefaultValuePersistOption.html">DefaultValuePersistOption</a></span> <span class="o">=</span> <span class="p">[]</span>
-<span class="p">)</span> <span class="k">where</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Input</span> <span class="o">==</span> <span class="kt">Value</span><span class="p">,</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Output</span><span class="p">:</span> <span class="kt"><a href="../Protocols/StorableInUserDefaults.html">StorableInUserDefaults</a></span></code></pre>
+<span class="p">)</span> <span class="k">where</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Input</span> <span class="o">==</span> <span class="kt">Value</span><span class="p">,</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Output</span><span class="p">:</span> <span class="kt"><a href="../Protocols.html#/s:7Persist22StorableInUserDefaultsP">StorableInUserDefaults</a></span></code></pre>
 
                         </div>
                       </div>
@@ -4594,7 +4561,7 @@ retrieved from the storage.</p>
     <span class="nv">userDefaults</span><span class="p">:</span> <span class="kt">UserDefaults</span><span class="p">,</span>
     <span class="nv">transformer</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="p">,</span>
     <span class="n">defaultValuePersistBehaviour</span><span class="p">:</span> <span class="kt"><a href="../Structs/DefaultValuePersistOption.html">DefaultValuePersistOption</a></span> <span class="o">=</span> <span class="p">[]</span>
-<span class="p">)</span> <span class="k">where</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Input</span> <span class="o">==</span> <span class="kt">Value</span><span class="p">,</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Output</span><span class="p">:</span> <span class="kt"><a href="../Protocols/StorableInUserDefaults.html">StorableInUserDefaults</a></span></code></pre>
+<span class="p">)</span> <span class="k">where</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Input</span> <span class="o">==</span> <span class="kt">Value</span><span class="p">,</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Output</span><span class="p">:</span> <span class="kt"><a href="../Protocols.html#/s:7Persist22StorableInUserDefaultsP">StorableInUserDefaults</a></span></code></pre>
 
                         </div>
                       </div>
@@ -4711,7 +4678,7 @@ retrieved from the storage.</p>
     <span class="nv">transformer</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="p">,</span>
     <span class="n">defaultValue</span><span class="p">:</span> <span class="kd">@autoclosure</span> <span class="kd">@escaping</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Value</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
     <span class="n">defaultValuePersistBehaviour</span><span class="p">:</span> <span class="kt"><a href="../Structs/DefaultValuePersistOption.html">DefaultValuePersistOption</a></span> <span class="o">=</span> <span class="p">[]</span>
-<span class="p">)</span> <span class="k">where</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Input</span> <span class="o">==</span> <span class="kt">WrappedValue</span><span class="p">,</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Output</span><span class="p">:</span> <span class="kt"><a href="../Protocols/StorableInUserDefaults.html">StorableInUserDefaults</a></span><span class="p">,</span> <span class="kt">Value</span> <span class="o">==</span> <span class="kt">WrappedValue</span><span class="p">?</span></code></pre>
+<span class="p">)</span> <span class="k">where</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Input</span> <span class="o">==</span> <span class="kt">WrappedValue</span><span class="p">,</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Output</span><span class="p">:</span> <span class="kt"><a href="../Protocols.html#/s:7Persist22StorableInUserDefaultsP">StorableInUserDefaults</a></span><span class="p">,</span> <span class="kt">Value</span> <span class="o">==</span> <span class="kt">WrappedValue</span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -4815,7 +4782,7 @@ retrieved from the storage.</p>
     <span class="n">storedBy</span> <span class="nv">userDefaults</span><span class="p">:</span> <span class="kt">UserDefaults</span><span class="p">,</span>
     <span class="nv">transformer</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="p">,</span>
     <span class="n">defaultValuePersistBehaviour</span><span class="p">:</span> <span class="kt"><a href="../Structs/DefaultValuePersistOption.html">DefaultValuePersistOption</a></span> <span class="o">=</span> <span class="p">[]</span>
-<span class="p">)</span> <span class="k">where</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Input</span> <span class="o">==</span> <span class="kt">WrappedValue</span><span class="p">,</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Output</span><span class="p">:</span> <span class="kt"><a href="../Protocols/StorableInUserDefaults.html">StorableInUserDefaults</a></span><span class="p">,</span> <span class="kt">Value</span> <span class="o">==</span> <span class="kt">WrappedValue</span><span class="p">?</span></code></pre>
+<span class="p">)</span> <span class="k">where</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Input</span> <span class="o">==</span> <span class="kt">WrappedValue</span><span class="p">,</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Output</span><span class="p">:</span> <span class="kt"><a href="../Protocols.html#/s:7Persist22StorableInUserDefaultsP">StorableInUserDefaults</a></span><span class="p">,</span> <span class="kt">Value</span> <span class="o">==</span> <span class="kt">WrappedValue</span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -4919,7 +4886,7 @@ retrieved from the storage.</p>
     <span class="nv">transformer</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="p">,</span>
     <span class="n">defaultValue</span><span class="p">:</span> <span class="kd">@autoclosure</span> <span class="kd">@escaping</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Value</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
     <span class="n">defaultValuePersistBehaviour</span><span class="p">:</span> <span class="kt"><a href="../Structs/DefaultValuePersistOption.html">DefaultValuePersistOption</a></span> <span class="o">=</span> <span class="p">[]</span>
-<span class="p">)</span> <span class="k">where</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Input</span> <span class="o">==</span> <span class="kt">WrappedValue</span><span class="p">,</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Output</span><span class="p">:</span> <span class="kt"><a href="../Protocols/StorableInUserDefaults.html">StorableInUserDefaults</a></span><span class="p">,</span> <span class="kt">Value</span> <span class="o">==</span> <span class="kt">WrappedValue</span><span class="p">?</span></code></pre>
+<span class="p">)</span> <span class="k">where</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Input</span> <span class="o">==</span> <span class="kt">WrappedValue</span><span class="p">,</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Output</span><span class="p">:</span> <span class="kt"><a href="../Protocols.html#/s:7Persist22StorableInUserDefaultsP">StorableInUserDefaults</a></span><span class="p">,</span> <span class="kt">Value</span> <span class="o">==</span> <span class="kt">WrappedValue</span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -5023,7 +4990,7 @@ retrieved from the storage.</p>
     <span class="nv">userDefaults</span><span class="p">:</span> <span class="kt">UserDefaults</span><span class="p">,</span>
     <span class="nv">transformer</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="p">,</span>
     <span class="n">defaultValuePersistBehaviour</span><span class="p">:</span> <span class="kt"><a href="../Structs/DefaultValuePersistOption.html">DefaultValuePersistOption</a></span> <span class="o">=</span> <span class="p">[]</span>
-<span class="p">)</span> <span class="k">where</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Input</span> <span class="o">==</span> <span class="kt">WrappedValue</span><span class="p">,</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Output</span><span class="p">:</span> <span class="kt"><a href="../Protocols/StorableInUserDefaults.html">StorableInUserDefaults</a></span><span class="p">,</span> <span class="kt">Value</span> <span class="o">==</span> <span class="kt">WrappedValue</span><span class="p">?</span></code></pre>
+<span class="p">)</span> <span class="k">where</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Input</span> <span class="o">==</span> <span class="kt">WrappedValue</span><span class="p">,</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Output</span><span class="p">:</span> <span class="kt"><a href="../Protocols.html#/s:7Persist22StorableInUserDefaultsP">StorableInUserDefaults</a></span><span class="p">,</span> <span class="kt">Value</span> <span class="o">==</span> <span class="kt">WrappedValue</span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -5835,7 +5802,7 @@ retrieved from the storage.</p>
                 <a name="//apple_ref/swift/Section/Available where `Value`: `StorableInNSUbiquitousKeyValueStore`" class="dashAnchor"></a>
                 <div class="section-name-container">
                   <a class="section-name-link" href="#/Available%20where%20%60Value%60:%20%60StorableInNSUbiquitousKeyValueStore%60"></a>
-                  <h3 class="section-name"><p>Available where <code>Value</code>: <code><a href="../Protocols/StorableInNSUbiquitousKeyValueStore.html">StorableInNSUbiquitousKeyValueStore</a></code></p>
+                  <h3 class="section-name"><p>Available where <code>Value</code>: <code><a href="../Protocols.html#/s:7Persist35StorableInNSUbiquitousKeyValueStoreP">StorableInNSUbiquitousKeyValueStore</a></code></p>
 </h3>
                 </div>
               </div>
@@ -6200,7 +6167,7 @@ retrieved from the storage.</p>
                 <a name="//apple_ref/swift/Section/Available where `Value`: `StorableInUserDefaults`" class="dashAnchor"></a>
                 <div class="section-name-container">
                   <a class="section-name-link" href="#/Available%20where%20%60Value%60:%20%60StorableInUserDefaults%60"></a>
-                  <h3 class="section-name"><p>Available where <code>Value</code>: <code><a href="../Protocols/StorableInUserDefaults.html">StorableInUserDefaults</a></code></p>
+                  <h3 class="section-name"><p>Available where <code>Value</code>: <code><a href="../Protocols.html#/s:7Persist22StorableInUserDefaultsP">StorableInUserDefaults</a></code></p>
 </h3>
                 </div>
               </div>
@@ -6562,7 +6529,7 @@ retrieved from the storage.</p>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2020 <a class="link" href="" target="_blank" rel="external">Joseph Duffy</a>. All rights reserved. (Last updated: 2020-08-30)</p>
+          <p>&copy; 2020 <a class="link" href="" target="_blank" rel="external">Joseph Duffy</a>. All rights reserved. (Last updated: 2020-09-01)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
