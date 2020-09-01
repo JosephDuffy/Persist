@@ -141,7 +141,7 @@ final class PersistedTests: XCTestCase {
     func testNonOptionalValueWithAnyStorage() throws {
         let defaultValue = "default-value"
         let storage = InMemoryStorage<Any>()
-        var persisted = Persisted(key: "test-key", storedBy: storage, defaultValue: defaultValue)
+        let persisted = Persisted(key: "test-key", storedBy: storage, defaultValue: defaultValue)
         XCTAssertEqual(persisted.wrappedValue, defaultValue, "`wrappedValue` should return the default value when a value has not been set")
 
         let newValue = "new-value"
