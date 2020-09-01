@@ -6,6 +6,10 @@ import Foundation
  */
 internal final class UserDefaultsStorage: Storage {
 
+    /// A property that – when set to `true` – will suppress the message warning of the downsides of
+    /// using `UserDefaults` keys with a dot (`.`) in them.
+    fileprivate static var suppressDotInKeyWarning = false
+
     /// The value type the `UserDefaultsStorage` can store.
     internal typealias Value = UserDefaultsValue
 
@@ -48,6 +52,12 @@ internal final class UserDefaultsStorage: Storage {
         default:
             userDefaults.set(value.value, forKey: key)
         }
+
+        if key.contains(".") {
+            updateListeners[key]?.values.forEach { updateListener in
+                updateListener(value)
+            }
+        }
     }
 
     /**
@@ -87,13 +97,38 @@ internal final class UserDefaultsStorage: Storage {
      - returns: An object that represents the closure's subscription to changes. This object must be retained by the caller.
      */
     internal func addUpdateListener(forKey key: String, updateListener: @escaping UpdateListener) -> AnyCancellable {
-        let observer = KeyPathObserver(updateListener: updateListener)
-        userDefaults.addObserver(observer, forKeyPath: key, options: .new, context: nil)
-        return Subscription { [weak userDefaults] in
-            userDefaults?.removeObserver(observer, forKeyPath: key)
-        }.eraseToAnyCancellable()
+        if key.contains(".") {
+            if !UserDefaultsStorage.suppressDotInKeyWarning {
+                print("WARNING: Attempting to observe the UserDefault key \"\(key)\", which contains a dot (`.`). This will cause update listeners to only be called when the value is set on this instance. If this is acceptable you may suppress this message by setting `Persister.suppressDotInUserDefaultsKeyWarning` to `true`. For more information see https://github.com/JosephDuffy/Persist/issues/24.")
+            }
+
+            let uuid = UUID()
+            updateListeners[key, default: [:]][uuid] = updateListener
+            return Subscription { [weak self] in
+                self?.updateListeners[key]?.removeValue(forKey: uuid)
+            }.eraseToAnyCancellable()
+        } else {
+            let observer = KeyPathObserver(updateListener: updateListener)
+            userDefaults.addObserver(observer, forKeyPath: key, options: .new, context: nil)
+            return Subscription { [weak userDefaults] in
+                userDefaults?.removeObserver(observer, forKeyPath: key)
+            }.eraseToAnyCancellable()
+        }
     }
 
+}
+
+extension Persister {
+    /// A property that – when set to `true` – will suppress the message warning of the downsides of
+    /// using `UserDefaults` keys with a dot (`.`) in them.
+    public static var suppressDotInUserDefaultsKeyWarning: Bool {
+        get {
+            UserDefaultsStorage.suppressDotInKeyWarning
+        }
+        set {
+            UserDefaultsStorage.suppressDotInKeyWarning = newValue
+        }
+    }
 }
 
 private final class KeyPathObserver: NSObject {

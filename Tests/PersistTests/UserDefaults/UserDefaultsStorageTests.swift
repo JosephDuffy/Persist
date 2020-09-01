@@ -275,6 +275,21 @@ final class UserDefaultsStorageTests: XCTestCase {
         waitForExpectations(timeout: 0.1)
     }
 
+    func testUpdateListenerWithKeyWithDot() {
+        let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
+        callsUpdateListenerExpectation.expectedFulfillmentCount = 1
+        callsUpdateListenerExpectation.assertForOverFulfill = true
+
+        let subscription = userDefaultsStorage.addUpdateListener(forKey: "test.test") { value in
+            callsUpdateListenerExpectation.fulfill()
+            XCTAssert(value == .some(.string("test")))
+        }
+        _ = subscription
+        userDefaultsStorage.storeValue(.string("test"), key: "test.test")
+
+        waitForExpectations(timeout: 1)
+    }
+
     func testUpdateListenerWithStorageFunction() {
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
         callsUpdateListenerExpectation.expectedFulfillmentCount = 1
