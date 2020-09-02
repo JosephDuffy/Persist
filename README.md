@@ -291,7 +291,7 @@ Persist can be installed via [SwiftPM](https://github.com/apple/swift-package-ma
 let package = Package(
     ...
     dependencies: [
-        .package(url: "https://github.com/JosephDuffy/Persist.git", from: "0.1.0"),
+        .package(url: "https://github.com/JosephDuffy/Persist.git", from: "1.0.0"),
     ],
     targets: [
         .target(name: "MyApp", dependencies: ["Persist"]),
