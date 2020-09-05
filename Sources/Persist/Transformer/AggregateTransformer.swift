@@ -1,3 +1,5 @@
+import PersistCore
+
 /**
  A transformer that aggregates multiple transformers. Multiple aggregate transformers can be chained.
  */

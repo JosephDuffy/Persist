@@ -1,6 +1,7 @@
 #if !os(watchOS)
 import XCTest
-@testable import Persist
+@testable import PersistCore
+import TestHelpers
 
 final class PersistedTests: XCTestCase {
 
@@ -14,8 +15,8 @@ final class PersistedTests: XCTestCase {
             let property: String
         }
 
-        _ = Persisted<StoredValue?>(key: "test-key", storedBy: InMemoryStorage<Any>(), transformer: JSONTransformer())
-        _ = Persisted<StoredValue>(key: "test-key", storedBy: InMemoryStorage<Any>(), transformer: JSONTransformer(), defaultValue: StoredValue(property: "default"))
+        _ = Persisted<StoredValue?>(key: "test-key", storedBy: InMemoryStorage<Any>(), transformer: MockTransformer())
+        _ = Persisted<StoredValue>(key: "test-key", storedBy: InMemoryStorage<Any>(), transformer: MockTransformer(), defaultValue: StoredValue(property: "default"))
     }
 
     func testStoredValueSameAsStorage() throws {
@@ -609,8 +610,8 @@ final class PersistedTests: XCTestCase {
             let property: String
         }
         let defaultValue = CodableType(property: "default-value")
-        let storage = InMemoryStorage<Data>()
-        let transformer = JSONTransformer<CodableType>()
+        let storage = InMemoryStorage<CodableType>()
+        let transformer = MockTransformer<CodableType>()
         let persisted = Persisted(key: "test-key", storedBy: storage, transformer: transformer, defaultValue: defaultValue)
         XCTAssertEqual(persisted.wrappedValue, defaultValue, "`wrappedValue` should return the default value when a value has not been set")
 
@@ -700,8 +701,8 @@ final class PersistedTests: XCTestCase {
     }
 
     func testOptionalValueWithTransformer() throws {
-        let storage = InMemoryStorage<Data>()
-        let transformer = JSONTransformer<CodableStruct>()
+        let storage = InMemoryStorage<CodableStruct>()
+        let transformer = MockTransformer<CodableStruct>()
         let persisted = Persisted<CodableStruct?>(key: "test-key", storedBy: storage, transformer: transformer)
         XCTAssertNil(persisted.wrappedValue, "`wrappedValue` should return `nil` when a value has not been set")
 

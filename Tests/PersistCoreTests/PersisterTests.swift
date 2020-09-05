@@ -1,6 +1,7 @@
 #if !os(watchOS)
 import XCTest
-@testable import Persist
+@testable import PersistCore
+import TestHelpers
 
 final class PersisterTests: XCTestCase {
 
@@ -69,9 +70,9 @@ final class PersisterTests: XCTestCase {
         struct StoredValue: Codable, Equatable {
             let property: String
         }
-        let storage = InMemoryStorage<Data>()
+        let storage = InMemoryStorage<StoredValue>()
         let defaultValue = StoredValue(property: "default")
-        let persister = Persister<StoredValue>(key: "test", storedBy: storage, transformer: JSONTransformer(), defaultValue: defaultValue)
+        let persister = Persister<StoredValue>(key: "test", storedBy: storage, transformer: MockTransformer(), defaultValue: defaultValue)
         let storedValue = StoredValue(property: "value")
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")

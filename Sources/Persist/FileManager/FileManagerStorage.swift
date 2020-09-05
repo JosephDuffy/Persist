@@ -1,4 +1,5 @@
 import Foundation
+import PersistCore
 
 /**
  A `Storage` wrapper around `FileManager`.

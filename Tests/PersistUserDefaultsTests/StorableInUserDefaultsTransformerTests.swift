@@ -1,6 +1,7 @@
 #if os(macOS) || os(iOS) || os(tvOS)
 import XCTest
-@testable import Persist
+@testable import PersistUserDefaults
+import PersistCore
 
 final class StorableInUserDefaultsTransformerTests: XCTestCase {
 

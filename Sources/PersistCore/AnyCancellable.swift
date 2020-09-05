@@ -18,7 +18,7 @@ public final class AnyCancellable: Cancellable {
     /// to be stored independently of the wrapper.
     ///
     /// - Parameter cancellable: The `Cancellable` to wrap.
-    public init<Cancellable: Persist.Cancellable>(_ cancellable: Cancellable) {
+    public init<Cancellable: PersistCore.Cancellable>(_ cancellable: Cancellable) {
         _isEqual = { rhs in
             guard let rhsCancellable = rhs.cancellable as? Cancellable else { return false }
             return cancellable == rhsCancellable

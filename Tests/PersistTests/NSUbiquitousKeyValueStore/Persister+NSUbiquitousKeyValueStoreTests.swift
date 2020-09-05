@@ -1,6 +1,7 @@
 #if os(macOS) || os(iOS) || os(tvOS)
 import XCTest
 @testable import Persist
+import TestHelpers
 
 final class PersistedNSUbiquitousKeyValueStoreTests: XCTestCase {
 

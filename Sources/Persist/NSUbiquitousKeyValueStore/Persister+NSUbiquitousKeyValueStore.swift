@@ -1,5 +1,6 @@
 #if os(macOS) || os(iOS) || os(tvOS)
 import Foundation
+import PersistCore
 
 // MARK: - Value: StorableInNSUbiquitousKeyValueStore
 

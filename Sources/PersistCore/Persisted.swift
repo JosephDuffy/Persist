@@ -37,7 +37,7 @@ public struct Persisted<Value> {
      - parameter defaultValue: The value to use when a value has not yet been stored, or an error occurs.
      - parameter defaultValuePersistBehaviour: An option set that describes when to persist the default value. Defaults to `[]`.
      */
-    public init<Storage: Persist.Storage>(
+    public init<Storage: PersistCore.Storage>(
         key: Storage.Key,
         storedBy storage: Storage,
         defaultValue: @autoclosure @escaping () -> Value,
@@ -60,7 +60,7 @@ public struct Persisted<Value> {
      - parameter storage: The storage to use to persist and retrieve the value.
      - parameter defaultValuePersistBehaviour: An option set that describes when to persist the default value. Defaults to `[]`.
      */
-    public init<Storage: Persist.Storage>(
+    public init<Storage: PersistCore.Storage>(
         wrappedValue: Value,
         key: Storage.Key,
         storedBy storage: Storage,
@@ -83,7 +83,7 @@ public struct Persisted<Value> {
      - parameter defaultValue: The value to use when a value has not yet been stored, or an error occurs. Defaults to `nil`.
      - parameter defaultValuePersistBehaviour: An option set that describes when to persist the default value. Defaults to `[]`.
      */
-    public init<Storage: Persist.Storage, WrappedValue>(
+    public init<Storage: PersistCore.Storage, WrappedValue>(
         key: Storage.Key,
         storedBy storage: Storage,
         defaultValue: @autoclosure @escaping () -> Value = nil,
@@ -106,7 +106,7 @@ public struct Persisted<Value> {
      - parameter storage: The storage to use to persist and retrieve the value.
      - parameter defaultValuePersistBehaviour: An option set that describes when to persist the default value. Defaults to `[]`.
      */
-    public init<Storage: Persist.Storage, WrappedValue>(
+    public init<Storage: PersistCore.Storage, WrappedValue>(
         wrappedValue: Value,
         key: Storage.Key,
         storedBy storage: Storage,
@@ -131,7 +131,7 @@ public struct Persisted<Value> {
      - parameter defaultValue: The value to use when a value has not yet been stored, or an error occurs.
      - parameter defaultValuePersistBehaviour: An option set that describes when to persist the default value. Defaults to `[]`.
      */
-    public init<Storage: Persist.Storage>(
+    public init<Storage: PersistCore.Storage>(
         key: Storage.Key,
         storedBy storage: Storage,
         defaultValue: @autoclosure @escaping () -> Value,
@@ -154,7 +154,7 @@ public struct Persisted<Value> {
      - parameter storage: The storage to use to persist and retrieve the value.
      - parameter defaultValuePersistBehaviour: An option set that describes when to persist the default value. Defaults to `[]`.
      */
-    public init<Storage: Persist.Storage>(
+    public init<Storage: PersistCore.Storage>(
         wrappedValue: Value,
         key: Storage.Key,
         storedBy storage: Storage,
@@ -178,7 +178,7 @@ public struct Persisted<Value> {
         occurs. Defaults to `nil`.
      - parameter defaultValuePersistBehaviour: An option set that describes when to persist the default value. Defaults to `[]`.
      */
-    public init<Storage: Persist.Storage, WrappedValue>(
+    public init<Storage: PersistCore.Storage, WrappedValue>(
         key: Storage.Key,
         storedBy storage: Storage,
         defaultValue: @autoclosure @escaping () -> Value = nil,
@@ -201,7 +201,7 @@ public struct Persisted<Value> {
      - parameter storage: The storage to use to persist and retrieve the value.
      - parameter defaultValuePersistBehaviour: An option set that describes when to persist the default value. Defaults to `[]`.
      */
-    public init<Storage: Persist.Storage, WrappedValue>(
+    public init<Storage: PersistCore.Storage, WrappedValue>(
         wrappedValue: Value,
         key: Storage.Key,
         storedBy storage: Storage,
@@ -228,7 +228,7 @@ public struct Persisted<Value> {
      - parameter defaultValue: The value to use when a value has not yet been stored, or an error occurs.
      - parameter defaultValuePersistBehaviour: An option set that describes when to persist the default value. Defaults to `[]`.
      */
-    public init<Storage: Persist.Storage, Transformer: Persist.Transformer>(
+    public init<Storage: PersistCore.Storage, Transformer: PersistCore.Transformer>(
         key: Storage.Key,
         storedBy storage: Storage,
         transformer: Transformer,
@@ -255,7 +255,7 @@ public struct Persisted<Value> {
      - parameter transformer: A transformer to transform the value before being persisted and after being retrieved from the storage
      - parameter defaultValuePersistBehaviour: An option set that describes when to persist the default value. Defaults to `[]`.
      */
-    public init<Storage: Persist.Storage, Transformer: Persist.Transformer>(
+    public init<Storage: PersistCore.Storage, Transformer: PersistCore.Transformer>(
         wrappedValue: Value,
         key: Storage.Key,
         storedBy storage: Storage,
@@ -282,7 +282,7 @@ public struct Persisted<Value> {
      - parameter defaultValue: The value to use when a value has not yet been stored, or an error occurs. Defaults to `nil`.
      - parameter defaultValuePersistBehaviour: An option set that describes when to persist the default value. Defaults to `[]`.
      */
-    public init<Storage: Persist.Storage, Transformer: Persist.Transformer, WrappedValue>(
+    public init<Storage: PersistCore.Storage, Transformer: PersistCore.Transformer, WrappedValue>(
         key: Storage.Key,
         storedBy storage: Storage,
         transformer: Transformer,
@@ -309,7 +309,7 @@ public struct Persisted<Value> {
      - parameter transformer: A transformer to transform the value before being persisted and after being retrieved from the storage.
      - parameter defaultValuePersistBehaviour: An option set that describes when to persist the default value. Defaults to `[]`.
      */
-    public init<Storage: Persist.Storage, Transformer: Persist.Transformer, WrappedValue>(
+    public init<Storage: PersistCore.Storage, Transformer: PersistCore.Transformer, WrappedValue>(
         wrappedValue: Value,
         key: Storage.Key,
         storedBy storage: Storage,
@@ -338,7 +338,7 @@ public struct Persisted<Value> {
      - parameter defaultValue: The value to use when a value has not yet been stored, or an error occurs.
      - parameter defaultValuePersistBehaviour: An option set that describes when to persist the default value. Defaults to `[]`.
      */
-    public init<Storage: Persist.Storage, Transformer: Persist.Transformer>(
+    public init<Storage: PersistCore.Storage, Transformer: PersistCore.Transformer>(
         key: Storage.Key,
         storedBy storage: Storage,
         transformer: Transformer,
@@ -365,7 +365,7 @@ public struct Persisted<Value> {
      - parameter transformer: A transformer to transform the value before being persisted and after being retrieved from the storage
      - parameter defaultValuePersistBehaviour: An option set that describes when to persist the default value. Defaults to `[]`.
      */
-    public init<Storage: Persist.Storage, Transformer: Persist.Transformer>(
+    public init<Storage: PersistCore.Storage, Transformer: PersistCore.Transformer>(
         wrappedValue: Value,
         key: Storage.Key,
         storedBy storage: Storage,
@@ -392,7 +392,7 @@ public struct Persisted<Value> {
      - parameter defaultValue: The value to use when a value has not yet been stored, or an error occurs. Defaults to `nil`.
      - parameter defaultValuePersistBehaviour: An option set that describes when to persist the default value. Defaults to `[]`.
      */
-    public init<Storage: Persist.Storage, Transformer: Persist.Transformer, WrappedValue>(
+    public init<Storage: PersistCore.Storage, Transformer: PersistCore.Transformer, WrappedValue>(
         key: Storage.Key,
         storedBy storage: Storage,
         transformer: Transformer,
@@ -419,7 +419,7 @@ public struct Persisted<Value> {
      - parameter transformer: A transformer to transform the value before being persisted and after being retrieved from the storage
      - parameter defaultValuePersistBehaviour: An option set that describes when to persist the default value. Defaults to `[]`.
      */
-    public init<Storage: Persist.Storage, Transformer: Persist.Transformer, WrappedValue>(
+    public init<Storage: PersistCore.Storage, Transformer: PersistCore.Transformer, WrappedValue>(
         wrappedValue: Value,
         key: Storage.Key,
         storedBy storage: Storage,

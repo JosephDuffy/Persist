@@ -1,6 +1,6 @@
 #if os(macOS) || os(iOS) || os(tvOS)
 import XCTest
-@testable import Persist
+@testable import PersistUserDefaults
 
 final class UserDefaultsStorageTests: XCTestCase {
 
@@ -395,6 +395,21 @@ final class UserDefaultsStorageTests: XCTestCase {
         _ = subscription
 
         userDefaultsStorage.removeValue(for: "test2")
+
+        waitForExpectations(timeout: 1)
+    }
+
+    func testUserDefaultsArrayDictionaryStorage() throws {
+        let storage = UserDefaultsArrayDictionaryStorage(arrayKey: "TestArray", arrayIndex: 0, userDefaults: userDefaultsStorage.userDefaults)
+
+        let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
+        callsUpdateListenerExpectation.isInverted = true
+        let subscription = storage.addUpdateListener(forKey: "foo") { update in
+            callsUpdateListenerExpectation.fulfill()
+        }
+        _ = subscription
+
+        try storage.storeValue(.string("123"), key: "foo")
 
         waitForExpectations(timeout: 1)
     }

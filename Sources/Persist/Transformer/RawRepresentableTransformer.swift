@@ -1,4 +1,5 @@
 import Foundation
+import PersistCore
 
 /// A Transformer that transforms `RawRepresentable` types.
 public struct RawRepresentableTransformer<Type: RawRepresentable>: Transformer {

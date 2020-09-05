@@ -1,5 +1,5 @@
 #if !os(watchOS)
-@testable import Persist
+@testable import PersistCore
 import XCTest
 
 final class AnyCancellableTests: XCTestCase {

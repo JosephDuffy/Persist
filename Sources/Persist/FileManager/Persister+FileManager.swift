@@ -1,4 +1,5 @@
 import Foundation
+import PersistCore
 
 extension Persister where Value == Data {
 

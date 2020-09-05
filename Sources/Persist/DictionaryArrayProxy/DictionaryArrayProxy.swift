@@ -1,3 +1,5 @@
+import PersistCore
+
 public final class DictionaryArrayProxy<Key: Hashable, Value>: Storage {
     public var index: Int
 

@@ -1,6 +1,7 @@
 #if !os(watchOS)
 import XCTest
 @testable import Persist
+import TestHelpers
 
 final class JSONTransformerTests: XCTestCase {
 
