@@ -300,6 +300,22 @@ let package = Package(
 )
 ```
 
-# License
+## Package Structure
+
+Most consumers will only need the `Persist` library, which includes the core types required to use `Persist`.
+
+### `PersistCore`
+
+The `PersistCore` library contains the core types of `Persist`, such as `Persisted`, `Storage`, `Transformer`, and `Cancellable`.
+
+These types are re-exported by `Persist` using `@_exported` so consumers should not need to `import PersistCore`.
+
+### `PersistUserDefaults`
+
+The `PersistUserDefaults` library contains the `UserDefaults`-specific types, such as `StorableInUserDefaults`, `UserDefaultsStorage`, and `UserDefaultsValue`.
+
+`Persist` re-exports `StorableInUserDefaults` to maintain backwards compatibility with version 1.x. To build on top of these types consumers can `import StorableInUserDefaults`.
+
+## License
 
 The project is released under the MIT license. View the [LICENSE](./LICENSE) file for the full license.
