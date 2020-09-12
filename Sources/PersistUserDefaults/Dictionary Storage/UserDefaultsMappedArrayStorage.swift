@@ -107,7 +107,12 @@ public final class UserDefaultsMappedArrayStorage<Model: StoredInUserDefaultsDic
         switch value {
         case .array(let array):
             let modelsAndStorage = array.indices.compactMap { index -> (model: Model, storage: UserDefaultsArrayDictionaryStorage)? in
-                let storage = UserDefaultsArrayDictionaryStorage(arrayKey: key, arrayIndex: index, userDefaults: userDefaultsStorage.userDefaults)
+                let storage = storages.values.first(where: { $0.arrayIndex == index })
+                    ?? UserDefaultsArrayDictionaryStorage(
+                        arrayKey: key,
+                        arrayIndex: index,
+                        userDefaults: userDefaultsStorage.userDefaults
+                    )
                 guard let model = try? modelBuilder(storage) else { return nil }
                 return (model, storage)
             }

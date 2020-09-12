@@ -29,7 +29,9 @@ final class UserDefaultsMappedArrayStorageTests: XCTestCase {
             try Model(storage: storage, id: "third-value")
         }
 
-        let setValue = "new-value"
+        XCTAssertEqual(try storage.retrieveValue(for: dictionaryKey), [firstValue, secondValue, thirdValue])
+
+        let setValue = "second-value-property"
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
         let subscription = secondValue.$property.addUpdateListener { result in
             defer {
@@ -40,12 +42,12 @@ final class UserDefaultsMappedArrayStorageTests: XCTestCase {
         }
         _ = subscription
 
-        try storage.storeValue([secondValue, firstValue, thirdValue], key: dictionaryKey)
+        try storage.storeValue([secondValue, firstValue], key: dictionaryKey)
 
-        firstValue.property = "different-value"
+        firstValue.property = "first-value-property"
         secondValue.property = setValue
 
-        XCTAssertEqual(try storage.retrieveValue(for: dictionaryKey), [secondValue, firstValue, thirdValue])
+        XCTAssertEqual(try storage.retrieveValue(for: dictionaryKey), [secondValue, firstValue])
         XCTAssertEqual(secondValue.property, setValue)
         waitForExpectations(timeout: 1)
     }
