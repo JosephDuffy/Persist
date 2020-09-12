@@ -1,3 +1,4 @@
+#if os(macOS) || os(iOS) || os(tvOS) || os(watchOS)
 import Foundation
 
 internal final class ArrayKeyPathObserver: NSObject {
@@ -34,3 +35,4 @@ internal final class ArrayKeyPathObserver: NSObject {
         }
     }
 }
+#endif
