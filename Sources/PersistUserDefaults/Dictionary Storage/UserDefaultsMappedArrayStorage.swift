@@ -6,7 +6,9 @@ import PersistCore
 ///
 /// Each dictionary is managed by an instance of `UserDefaultsArrayDictionaryStorage`
 public final class UserDefaultsMappedArrayStorage<Model: StoredInUserDefaultsDictionary>: Storage {
-    public enum Error: Swift.Error {
+    public enum StoreValueError: Error {
+        /// A value cannot be stored when one does not currently exist.
+        case valueDoesNotExist
         /// A value passed to `storeValue` was created outside of this storage instance.
         case valueCreatedIllegally(Model)
     }
@@ -34,19 +36,9 @@ public final class UserDefaultsMappedArrayStorage<Model: StoredInUserDefaultsDic
 
             switch value {
             case .none:
-                userDefaultsStorage.storeValue(
-                    .array([
-                        .dictionary(
-                            [:]
-                        )
-                    ]),
-                    key: key
-                )
                 return 0
-            case .some(.array(var array)):
-                array.append(.dictionary([:]))
-                userDefaultsStorage.storeValue(.array(array), key: key)
-                return array.endIndex - 1
+            case .some(.array(let array)):
+                return array.endIndex
             case .some(let value):
                 throw PersistenceError.unexpectedValueType(value: value, expected: [Any].self)
             }
@@ -59,12 +51,33 @@ public final class UserDefaultsMappedArrayStorage<Model: StoredInUserDefaultsDic
     }
 
     public func storeValue(_ models: [Model], key: String) throws {
-        try models.enumerated().forEach { (index, model) in
-            guard let storage = storages[model.id] else {
-                throw Error.valueCreatedIllegally(model)
+        guard let value = userDefaultsStorage.retrieveValue(for: key) else {
+            throw StoreValueError.valueDoesNotExist
+        }
+
+        switch value {
+        case .array(let array):
+            var newArray = [Int: UserDefaultsValue]()
+            let storages = try models.map { model -> UserDefaultsArrayDictionaryStorage in
+                guard let storage = self.storages[model.id] else {
+                    throw StoreValueError.valueCreatedIllegally(model)
+                }
+                return storage
             }
 
-            storage.arrayIndex = index
+            storages.enumerated().forEach { (newIndex, storage) in
+                let oldIndex = storage.arrayIndex
+                newArray[newIndex] = array[oldIndex]
+                storage.arrayIndex = newIndex
+            }
+
+            let sortedArray = newArray.sorted { lhs, rhs in
+                lhs.key < rhs.key
+            }.map(\.value)
+
+            userDefaultsStorage.storeValue(.array(sortedArray), key: key)
+        default:
+            throw PersistenceError.unexpectedValueType(value: value.value, expected: [Any].self)
         }
     }
 
@@ -74,7 +87,6 @@ public final class UserDefaultsMappedArrayStorage<Model: StoredInUserDefaultsDic
 
     public func retrieveValue(for key: String) throws -> [Model]? {
         guard let value = userDefaultsStorage.retrieveValue(for: key) else { return nil }
-
         return try mapValue(value, forKey: key)
     }
 
@@ -94,9 +106,10 @@ public final class UserDefaultsMappedArrayStorage<Model: StoredInUserDefaultsDic
     private func mapValue(_ value: UserDefaultsValue, forKey key: String) throws -> [Model] {
         switch value {
         case .array(let array):
-            let modelsAndStorage = try array.indices.map { index -> (model: Model, storage: UserDefaultsArrayDictionaryStorage) in
-                let storage = UserDefaultsArrayDictionaryStorage(arrayKey: key, arrayIndex: index)
-                return (try modelBuilder(storage), storage)
+            let modelsAndStorage = array.indices.compactMap { index -> (model: Model, storage: UserDefaultsArrayDictionaryStorage)? in
+                let storage = UserDefaultsArrayDictionaryStorage(arrayKey: key, arrayIndex: index, userDefaults: userDefaultsStorage.userDefaults)
+                guard let model = try? modelBuilder(storage) else { return nil }
+                return (model, storage)
             }
 
             storages = modelsAndStorage.reduce(into: [String: UserDefaultsArrayDictionaryStorage](), { (storages, element) in

@@ -16,11 +16,7 @@ public final class UserDefaultsArrayDictionaryStorage: Storage {
 
     public let arrayKey: String
 
-    public internal(set) var arrayIndex: Int {
-        didSet {
-            // TODO: Update update listeners
-        }
-    }
+    public internal(set) var arrayIndex: Int
 
     private let userDefaults: UserDefaults
 

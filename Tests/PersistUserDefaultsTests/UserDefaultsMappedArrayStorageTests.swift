@@ -11,28 +11,6 @@ final class UserDefaultsMappedArrayStorageTests: XCTestCase {
     }
 
     func testUpdatingMovedModel() throws {
-        struct Model: StoredInUserDefaultsDictionary {
-            let id: String
-
-            @Persisted
-            var property: String?
-
-            let storage: UserDefaultsArrayDictionaryStorage
-
-            init(storage: UserDefaultsArrayDictionaryStorage, id: String? = nil) throws {
-                self.storage = storage
-
-                _property = Persisted(key: "foo", storedBy: storage, transformer: StorableInUserDefaultsTransformer())
-
-                if let id = id {
-                    try storage.storeValue(.string(id), key: "id")
-                    self.id = id
-                } else {
-                    self.id = try storage.retrieveValue(for: "id", ofType: String.self)
-                }
-            }
-        }
-
         let storage = UserDefaultsMappedArrayStorage(userDefaults: userDefaults) { storage in
             try Model(storage: storage)
         }
@@ -40,15 +18,15 @@ final class UserDefaultsMappedArrayStorageTests: XCTestCase {
         let dictionaryKey = "TestKey"
 
         let firstValue = try storage.createNewValue(forKey: dictionaryKey) { storage in
-            try Model(storage: storage, id: UUID().uuidString)
+            try Model(storage: storage, id: "first-value")
         }
 
         let secondValue = try storage.createNewValue(forKey: dictionaryKey) { storage in
-            try Model(storage: storage, id: UUID().uuidString)
+            try Model(storage: storage, id: "second-value")
         }
 
         let thirdValue = try storage.createNewValue(forKey: dictionaryKey) { storage in
-            try Model(storage: storage, id: UUID().uuidString)
+            try Model(storage: storage, id: "third-value")
         }
 
         let setValue = "new-value"
@@ -67,33 +45,12 @@ final class UserDefaultsMappedArrayStorageTests: XCTestCase {
         firstValue.property = "different-value"
         secondValue.property = setValue
 
+        XCTAssertEqual(try storage.retrieveValue(for: dictionaryKey), [secondValue, firstValue, thirdValue])
         XCTAssertEqual(secondValue.property, setValue)
         waitForExpectations(timeout: 1)
     }
 
     func testArrayPropertyUpdates() throws {
-        struct Model: StoredInUserDefaultsDictionary {
-            let id: String
-
-            @Persisted
-            var property: String?
-
-            let storage: UserDefaultsArrayDictionaryStorage
-
-            init(storage: UserDefaultsArrayDictionaryStorage, id: String? = nil) throws {
-                self.storage = storage
-
-                _property = Persisted(key: "foo", storedBy: storage, transformer: StorableInUserDefaultsTransformer())
-
-                if let id = id {
-                    try storage.storeValue(.string(id), key: "id")
-                    self.id = id
-                } else {
-                    self.id = try storage.retrieveValue(for: "id", ofType: String.self)
-                }
-            }
-        }
-
         struct Wrapper {
             @Persisted
             var properties: [Model]
@@ -118,25 +75,56 @@ final class UserDefaultsMappedArrayStorageTests: XCTestCase {
 
         let wrapper = Wrapper(storage: storage)
 
-        let firstValue = try wrapper.addProperty()
-        let secondValue = try wrapper.addProperty()
-        let thirdValue = try wrapper.addProperty()
-
-        let setValue = "new-value"
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
-        callsUpdateListenerExpectation.expectedFulfillmentCount = 1
+        /// Once for the creation of each value (3), once for setting the properties array (1), once
+        /// for each property being set (2)
+        callsUpdateListenerExpectation.expectedFulfillmentCount = 6
         let subscription = wrapper.$properties.addUpdateListener { result in
             callsUpdateListenerExpectation.fulfill()
         }
         _ = subscription
 
+        let firstValue = try wrapper.addProperty()
+        let secondValue = try wrapper.addProperty()
+        let thirdValue = try wrapper.addProperty()
+
         wrapper.properties = [secondValue, firstValue, thirdValue]
 
         firstValue.property = "different-value"
-        secondValue.property = setValue
+        secondValue.property = "new-value"
 
-        XCTAssertEqual(secondValue.property, setValue)
         waitForExpectations(timeout: 1)
     }
 }
+
+private struct Model: StoredInUserDefaultsDictionary, Equatable, CustomStringConvertible {
+    static func == (lhs: Model, rhs: Model) -> Bool {
+        lhs.id == rhs.id && lhs.property == rhs.property
+    }
+
+    let id: String
+
+    @Persisted
+    var property: String?
+
+    let storage: UserDefaultsArrayDictionaryStorage
+
+    var description: String {
+        "<Model id=\(id); property=\(property ?? "nil")>"
+    }
+
+    init(storage: UserDefaultsArrayDictionaryStorage, id: String? = nil) throws {
+        self.storage = storage
+
+        _property = Persisted(key: "foo", storedBy: storage, transformer: StorableInUserDefaultsTransformer())
+
+        if let id = id {
+            try storage.storeValue(.string(id), key: "id")
+            self.id = id
+        } else {
+            self.id = try storage.retrieveValue(for: "id", ofType: String.self)
+        }
+    }
+}
+
 #endif
