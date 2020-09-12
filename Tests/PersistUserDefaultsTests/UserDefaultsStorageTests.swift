@@ -3,7 +3,6 @@ import XCTest
 @testable import PersistUserDefaults
 
 final class UserDefaultsStorageTests: XCTestCase {
-
     private let userDefaultsStorage = UserDefaultsStorage(suiteName: "test-suite")!
 
     override func tearDown() {
@@ -398,21 +397,5 @@ final class UserDefaultsStorageTests: XCTestCase {
 
         waitForExpectations(timeout: 1)
     }
-
-    func testUserDefaultsArrayDictionaryStorage() throws {
-        let storage = UserDefaultsArrayDictionaryStorage(arrayKey: "TestArray", arrayIndex: 0, userDefaults: userDefaultsStorage.userDefaults)
-
-        let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
-        callsUpdateListenerExpectation.isInverted = true
-        let subscription = storage.addUpdateListener(forKey: "foo") { update in
-            callsUpdateListenerExpectation.fulfill()
-        }
-        _ = subscription
-
-        try storage.storeValue(.string("123"), key: "foo")
-
-        waitForExpectations(timeout: 1)
-    }
-
 }
 #endif
