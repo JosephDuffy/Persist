@@ -1,5 +1,3 @@
-import PersistCore
-
 /**
  A transformer that aggregates multiple transformers. Multiple aggregate transformers can be chained.
  */
@@ -63,7 +61,7 @@ extension Transformer {
      - parameter transformer: The transformer to aggregate with this transformer.
      - returns: The aggregate transformer.
      */
-    public func append<Transformer: Persist.Transformer>(
+    public func append<Transformer: PersistCore.Transformer>(
         transformer: Transformer
     ) -> AggregateTransformer<Input, Transformer.Output> where Transformer.Input == Output {
         return AggregateTransformer(firstTransformer: self, secondTransformer: transformer)
