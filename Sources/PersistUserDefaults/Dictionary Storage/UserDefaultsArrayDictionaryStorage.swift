@@ -84,6 +84,88 @@ public final class UserDefaultsArrayDictionaryStorage: Storage {
         return castValue
     }
 
+    public func persister<Type: StorableInUserDefaults>(for key: String, ofType type: Type?.Type) throws -> Persister<Type?> {
+        do {
+            let currentValue = try retrieveValue(for: key, ofType: Type.self)
+            return Persister(
+                key: key,
+                storedBy: self,
+                transformer: StorableInUserDefaultsTransformer(),
+                defaultValue: currentValue
+            )
+        } catch RetrieveValueError.valueMissing {
+            return Persister(
+                key: key,
+                storedBy: self,
+                transformer: StorableInUserDefaultsTransformer(),
+                defaultValue: nil
+            )
+        } catch {
+            throw error
+        }
+    }
+
+    public func persister<Type: StorableInUserDefaults>(for key: String, ofType type: Type.Type) throws -> Persister<Type> {
+        let currentValue = try retrieveValue(for: key, ofType: Type.self)
+        return Persister(
+            key: key,
+            storedBy: self,
+            transformer: StorableInUserDefaultsTransformer(),
+            defaultValue: currentValue
+        )
+    }
+
+    public func persister<Type, Transformer: PersistCore.Transformer>(
+        for key: String,
+        ofType type: Type?.Type,
+        transformer: Transformer
+    ) throws -> Persister<Type?> where Transformer.Input == Type, Transformer.Output: StorableInUserDefaults {
+        guard let value = try retrieveValue(for: key) else {
+            return Persister(
+                key: key,
+                storedBy: self,
+                transformer: transformer.append(transformer: StorableInUserDefaultsTransformer()),
+                defaultValue: nil
+            )
+        }
+
+        guard let castValue = value.cast(to: Transformer.Output.self) else {
+            throw RetrieveValueError.invalidValueType(value: value, expected: Type.self)
+        }
+
+        let currentValue = try transformer.untransformValue(castValue)
+
+        return Persister(
+            key: key,
+            storedBy: self,
+            transformer: transformer.append(transformer: StorableInUserDefaultsTransformer()),
+            defaultValue: currentValue
+        )
+    }
+
+    public func persister<Type, Transformer: PersistCore.Transformer>(
+        for key: String,
+        ofType type: Type.Type,
+        transformer: Transformer
+    ) throws -> Persister<Type> where Transformer.Input == Type, Transformer.Output: StorableInUserDefaults {
+        guard let value = try retrieveValue(for: key) else {
+            throw RetrieveValueError.valueMissing(key: key)
+        }
+
+        guard let castValue = value.cast(to: Transformer.Output.self) else {
+            throw RetrieveValueError.invalidValueType(value: value, expected: Type.self)
+        }
+
+        let currentValue = try transformer.untransformValue(castValue)
+
+        return Persister(
+            key: key,
+            storedBy: self,
+            transformer: transformer.append(transformer: StorableInUserDefaultsTransformer()),
+            defaultValue: currentValue
+        )
+    }
+
     public func addUpdateListener(forKey key: String, updateListener: @escaping UpdateListener) -> AnyCancellable {
         let observer = ArrayKeyPathObserver { [weak self] oldValue, newValue in
             guard let self = self else { return }
