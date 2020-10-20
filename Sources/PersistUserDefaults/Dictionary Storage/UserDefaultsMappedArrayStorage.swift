@@ -5,6 +5,7 @@ import PersistCore
 /// Stores an array of `Model`s in `UserDefaults` by creating a dictionary for each model.
 ///
 /// Each dictionary is managed by an instance of `UserDefaultsArrayDictionaryStorage`
+@available(macOS 10.12, iOS 10.0, tvOS 10.0, watchOS 3.0, *)
 public final class UserDefaultsMappedArrayStorage<Model: StoredInUserDefaultsDictionary>: Storage {
     public enum StoreValueError: Error {
         /// A value cannot be stored when one does not currently exist.
@@ -25,13 +26,23 @@ public final class UserDefaultsMappedArrayStorage<Model: StoredInUserDefaultsDic
 
     private let userDefaultsStorage: UserDefaultsStorage
 
+    private lazy var lock = NSLock()
+
     public init(userDefaults: UserDefaults, modelBuilder: @escaping ModelBuilder<Model>) {
         userDefaultsStorage = UserDefaultsStorage(userDefaults: userDefaults)
         self.modelBuilder = modelBuilder
     }
 
     public func createNewValue(forKey key: String, modelBuilder: @escaping ModelBuilder<Model>) throws -> Model {
-        let newIndex: Int = try {
+        let didLock = lockForAccess()
+
+        defer {
+            if didLock {
+                unlockForAccess()
+            }
+        }
+
+        let newIndex: Int = try { () -> Int in
             let value = userDefaultsStorage.retrieveValue(for: key)
 
             switch value {
@@ -57,6 +68,14 @@ public final class UserDefaultsMappedArrayStorage<Model: StoredInUserDefaultsDic
 
         switch value {
         case .array(let array):
+            let didLock = lockForAccess()
+
+            defer {
+                if didLock {
+                    unlockForAccess()
+                }
+            }
+
             var newArray = [Int: UserDefaultsValue]()
             let storages = try models.map { model -> UserDefaultsArrayDictionaryStorage in
                 guard let storage = self.storages[model.id] else {
@@ -70,6 +89,8 @@ public final class UserDefaultsMappedArrayStorage<Model: StoredInUserDefaultsDic
                 newArray[newIndex] = array[oldIndex]
                 storage.arrayIndex = newIndex
             }
+
+            unlockForAccess()
 
             let sortedArray = newArray.sorted { lhs, rhs in
                 lhs.key < rhs.key
@@ -104,6 +125,14 @@ public final class UserDefaultsMappedArrayStorage<Model: StoredInUserDefaultsDic
     }
 
     private func mapValue(_ value: UserDefaultsValue, forKey key: String) throws -> [Model] {
+        let didLock = lockForAccess()
+
+        defer {
+            if didLock {
+                unlockForAccess()
+            }
+        }
+
         switch value {
         case .array(let array):
             let modelsAndStorage = array.indices.compactMap { index -> (model: Model, storage: UserDefaultsArrayDictionaryStorage)? in
@@ -126,6 +155,14 @@ public final class UserDefaultsMappedArrayStorage<Model: StoredInUserDefaultsDic
         default:
             throw PersistenceError.unexpectedValueType(value: value, expected: [Any].self)
         }
+    }
+
+    private func lockForAccess() -> Bool {
+        lock.try()
+    }
+
+    private func unlockForAccess() {
+        lock.unlock()
     }
 }
 #endif
