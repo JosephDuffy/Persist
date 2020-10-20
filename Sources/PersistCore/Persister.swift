@@ -83,7 +83,7 @@ public final class Persister<Value> {
     #if canImport(Combine)
     /// A publisher that will publish updates as they occur.
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    public var updatesPublisher: AnyPublisher<UpdatePayload, Never> {
+    public var updatesPublisher: AnyPublisher<Value, Never> {
         return updatesSubject.eraseToAnyPublisher()
     }
     #endif
@@ -119,7 +119,7 @@ public final class Persister<Value> {
     #if canImport(Combine)
     /// The upates subject that publishes updates.
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    private var updatesSubject: PassthroughSubject<UpdatePayload, Never> {
+    private var updatesSubject: CurrentValueSubject<Value, Never> {
         getUpdatesSubject()
     }
 
@@ -128,12 +128,12 @@ public final class Persister<Value> {
     private var _updatesSubject: Any?
 
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    private func getUpdatesSubject() -> PassthroughSubject<UpdatePayload, Never> {
-        if let updatesSubject = _updatesSubject as? PassthroughSubject<UpdatePayload, Never> {
+    private func getUpdatesSubject() -> CurrentValueSubject<Value, Never> {
+        if let updatesSubject = _updatesSubject as? CurrentValueSubject<Value, Never> {
             return updatesSubject
         }
 
-        let updatesSubject = PassthroughSubject<UpdatePayload, Never>()
+        let updatesSubject = CurrentValueSubject<Value, Never>(retrieveValue())
         _updatesSubject = updatesSubject
         return updatesSubject
     }
@@ -720,7 +720,9 @@ public final class Persister<Value> {
 
         #if canImport(Combine)
         if #available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *) {
-            updatesSubject.send(result)
+            if let newValue = (try? result.get())?.event.value {
+                updatesSubject.send(newValue)
+            }
         }
         #endif
     }
