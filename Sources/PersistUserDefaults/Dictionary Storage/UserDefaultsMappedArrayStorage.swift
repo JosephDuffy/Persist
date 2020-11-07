@@ -22,11 +22,24 @@ public final class UserDefaultsMappedArrayStorage<Model: StoredInUserDefaultsDic
 
     private let modelBuilder: ModelBuilder<Model>
 
-    private var storages: [String: UserDefaultsArrayDictionaryStorage] = [:]
+    private lazy var storagesQueue = DispatchQueue(label: "UserDefaultsMappedArrayStorage.storages", attributes: .concurrent)
+
+    private var _storages: [String: UserDefaultsArrayDictionaryStorage] = [:]
+
+    private var storages: [String: UserDefaultsArrayDictionaryStorage] {
+        get {
+            storagesQueue.sync {
+                _storages
+            }
+        }
+        set {
+            storagesQueue.sync(flags: .barrier) {
+                _storages = newValue
+            }
+        }
+    }
 
     private let userDefaultsStorage: UserDefaultsStorage
-
-    private lazy var lock = NSLock()
 
     public init(userDefaults: UserDefaults, modelBuilder: @escaping ModelBuilder<Model>) {
         userDefaultsStorage = UserDefaultsStorage(userDefaults: userDefaults)
@@ -34,14 +47,6 @@ public final class UserDefaultsMappedArrayStorage<Model: StoredInUserDefaultsDic
     }
 
     public func createNewValue(forKey key: String, modelBuilder: @escaping ModelBuilder<Model>) throws -> Model {
-        let didLock = lockForAccess()
-
-        defer {
-            if didLock {
-                unlockForAccess()
-            }
-        }
-
         let newIndex: Int = try { () -> Int in
             let value = userDefaultsStorage.retrieveValue(for: key)
 
@@ -68,14 +73,6 @@ public final class UserDefaultsMappedArrayStorage<Model: StoredInUserDefaultsDic
 
         switch value {
         case .array(let array):
-            let didLock = lockForAccess()
-
-            defer {
-                if didLock {
-                    unlockForAccess()
-                }
-            }
-
             var newArray = [Int: UserDefaultsValue]()
             let storages = try models.map { model -> UserDefaultsArrayDictionaryStorage in
                 guard let storage = self.storages[model.id] else {
@@ -89,8 +86,6 @@ public final class UserDefaultsMappedArrayStorage<Model: StoredInUserDefaultsDic
                 newArray[newIndex] = array[oldIndex]
                 storage.arrayIndex = newIndex
             }
-
-            unlockForAccess()
 
             let sortedArray = newArray.sorted { lhs, rhs in
                 lhs.key < rhs.key
@@ -125,14 +120,6 @@ public final class UserDefaultsMappedArrayStorage<Model: StoredInUserDefaultsDic
     }
 
     private func mapValue(_ value: UserDefaultsValue, forKey key: String) throws -> [Model] {
-        let didLock = lockForAccess()
-
-        defer {
-            if didLock {
-                unlockForAccess()
-            }
-        }
-
         switch value {
         case .array(let array):
             let modelsAndStorage = array.indices.compactMap { index -> (model: Model, storage: UserDefaultsArrayDictionaryStorage)? in
@@ -155,14 +142,6 @@ public final class UserDefaultsMappedArrayStorage<Model: StoredInUserDefaultsDic
         default:
             throw PersistenceError.unexpectedValueType(value: value, expected: [Any].self)
         }
-    }
-
-    private func lockForAccess() -> Bool {
-        lock.try()
-    }
-
-    private func unlockForAccess() {
-        lock.unlock()
     }
 }
 #endif
