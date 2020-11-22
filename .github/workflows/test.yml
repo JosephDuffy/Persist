@@ -123,8 +123,11 @@ jobs:
       - name: Install swiftenv
         run: |
           eval "$(curl -sL https://swiftenv.fuller.li/install.sh)"
-          echo "::set-env name=SWIFTENV_ROOT::$HOME/.swiftenv"
-          echo "::add-path::$SWIFTENV_ROOT/bin:$PATH"
+          echo "SWIFTENV_ROOT=$HOME/.swiftenv" >> $GITHUB_ENV
+          echo "$SWIFTENV_ROOT/bin" >> $GITHUB_PATH
+
+      - name: Install Swift ${{ matrix.swift }}
+        run: swiftenv install ${{ matrix.swift }}
 
       - name: swift test
         run: swift test --enable-test-discovery
