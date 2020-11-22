@@ -1,0 +1,31 @@
+workflows:
+  workflows/release.yml:
+    jobs:
+      build_docs:
+        strategy:
+          matrix:
+            xcode: latest
+
+  workflows/test.yml:
+    jobs:
+      macos_tests:
+        strategy:
+          matrix:
+            xcode:
+              - last-major
+              - latest
+              - latest-beta
+      xcode_tests:
+        strategy:
+          matrix:
+            xcode:
+              - last-major
+              - latest
+              - latest-beta
+      watchos_build:
+        strategy:
+          matrix:
+            xcode:
+              - last-major
+              - latest
+              - latest-beta
