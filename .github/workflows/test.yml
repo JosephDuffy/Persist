@@ -126,5 +126,8 @@ jobs:
           echo "SWIFTENV_ROOT=$HOME/.swiftenv" >> $GITHUB_ENV
           echo "$SWIFTENV_ROOT/bin" >> $GITHUB_PATH
 
+      - name: Install Swift ${{ matrix.swift }}
+        run: swiftenv install ${{ matrix.swift }}
+
       - name: swift test
         run: swift test --enable-test-discovery
