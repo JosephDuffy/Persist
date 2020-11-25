@@ -40,14 +40,13 @@ jobs:
         with:
           fail_ci_if_error: true
 
-  xcode_tests:
-    name: ${{ matrix.platform }} Tests (Xcode ${{ matrix.xcode }})
+  ios_tests:
+    name: iOS Tests (Xcode ${{ matrix.xcode }})
     runs-on: macos-latest
     strategy:
       fail-fast: false
       matrix:
         xcode: ["11.5"]
-        platform: ["iOS", "tvOS", "macCatalyst"]
 
     steps:
       - uses: actions/checkout@v2
@@ -67,12 +66,88 @@ jobs:
         uses: actions/cache@v1
         with:
           path: ~/Library/Developer/Xcode/DerivedData
-          key: ${{ runner.os }}-${{ matrix.platform }}_derived_data-xcode_${{ matrix.xcode }}
+          key: ${{ runner.os }}-iOS_derived_data-xcode_${{ matrix.xcode }}
           restore-keys: |
-            ${{ runner.os }}-${{ matrix.platform }}_derived_data
+            ${{ runner.os }}-iOS_derived_data
 
       - name: Run Tests
-        run: swift run --configuration release --skip-update --package-path ./CIDependencies/ xcutils test ${{ matrix.platform }} --scheme Persist --enable-code-coverage
+        run: swift run --configuration release --skip-update --package-path ./CIDependencies/ xcutils test iOS --scheme Persist --enable-code-coverage
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          fail_ci_if_error: true
+
+  tvos_tests:
+    name: tvOS Tests (Xcode ${{ matrix.xcode }})
+    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        xcode: ["11.5"]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Select Xcode ${{ matrix.xcode }}
+        run: sudo xcode-select --switch /Applications/Xcode_${{ matrix.xcode }}.app
+
+      - name: Cache SwiftPM
+        uses: actions/cache@v1
+        with:
+          path: CIDependencies/.build
+          key: ${{ runner.os }}-xcode_${{ matrix.xcode }}-swiftpm-ci-deps-${{ github.workspace }}-${{ hashFiles('CIDependencies/Package.resolved') }}
+          restore-keys: |
+            ${{ runner.os }}-xcode_${{ matrix.xcode }}-swiftpm-ci-deps-${{ github.workspace }}
+
+      - name: Cache DerivedData
+        uses: actions/cache@v1
+        with:
+          path: ~/Library/Developer/Xcode/DerivedData
+          key: ${{ runner.os }}-tvOS_derived_data-xcode_${{ matrix.xcode }}
+          restore-keys: |
+            ${{ runner.os }}-tvOS_derived_data
+
+      - name: Run Tests
+        run: swift run --configuration release --skip-update --package-path ./CIDependencies/ xcutils test tvOS --scheme Persist --enable-code-coverage
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          fail_ci_if_error: true
+
+  mac_catalyst_tests:
+    name: macCatalyst Tests (Xcode ${{ matrix.xcode }})
+    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        xcode: ["11.5"]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Select Xcode ${{ matrix.xcode }}
+        run: sudo xcode-select --switch /Applications/Xcode_${{ matrix.xcode }}.app
+
+      - name: Cache SwiftPM
+        uses: actions/cache@v1
+        with:
+          path: CIDependencies/.build
+          key: ${{ runner.os }}-xcode_${{ matrix.xcode }}-swiftpm-ci-deps-${{ github.workspace }}-${{ hashFiles('CIDependencies/Package.resolved') }}
+          restore-keys: |
+            ${{ runner.os }}-xcode_${{ matrix.xcode }}-swiftpm-ci-deps-${{ github.workspace }}
+
+      - name: Cache DerivedData
+        uses: actions/cache@v1
+        with:
+          path: ~/Library/Developer/Xcode/DerivedData
+          key: ${{ runner.os }}-macCatalyst_derived_data-xcode_${{ matrix.xcode }}
+          restore-keys: |
+            ${{ runner.os }}-macCatalyst_derived_data
+
+      - name: Run Tests
+        run: swift run --configuration release --skip-update --package-path ./CIDependencies/ xcutils test macCatalyst --scheme Persist --enable-code-coverage
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1
