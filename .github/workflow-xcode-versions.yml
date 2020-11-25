@@ -6,7 +6,7 @@ workflows:
           matrix:
             xcode: latest
 
-  workflows/test.yml:
+  workflows/tests.yml:
     jobs:
       macos_tests:
         strategy:

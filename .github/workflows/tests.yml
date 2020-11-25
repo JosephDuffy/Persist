@@ -2,8 +2,9 @@ name: Tests
 
 on:
   push:
-    branches: [$default-branch]
   pull_request:
+    branches:
+      - "**:**" # PRs from forks have a prefix with `owner:`
 
 jobs:
   macos_tests:
@@ -13,9 +14,9 @@ jobs:
       fail-fast: false
       matrix:
         xcode:
-          - '11.7'
-          - '12.2'
-          - '12.3'
+          - "11.7"
+          - "12.2"
+          - "12.3"
 
     steps:
       - uses: actions/checkout@v2
@@ -49,9 +50,9 @@ jobs:
       fail-fast: false
       matrix:
         xcode:
-          - '11.7'
-          - '12.2'
-          - '12.3'
+          - "11.7"
+          - "12.2"
+          - "12.3"
 
     steps:
       - uses: actions/checkout@v2
@@ -90,8 +91,8 @@ jobs:
       fail-fast: false
       matrix:
         xcode:
-          - '11.7'
-          - '12.3'
+          - "11.7"
+          - "12.3"
 
     steps:
       - uses: actions/checkout@v2
@@ -130,9 +131,9 @@ jobs:
       fail-fast: false
       matrix:
         xcode:
-          - '11.7'
-          - '12.2'
-          - '12.3'
+          - "11.7"
+          - "12.2"
+          - "12.3"
 
     steps:
       - uses: actions/checkout@v2
@@ -171,9 +172,9 @@ jobs:
       fail-fast: false
       matrix:
         xcode:
-          - '11.7'
-          - '12.2'
-          - '12.3'
+          - "11.7"
+          - "12.2"
+          - "12.3"
 
     steps:
       - uses: actions/checkout@v2
