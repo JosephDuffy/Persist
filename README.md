@@ -1,6 +1,7 @@
 # Persist
 
 [![Tests](https://github.com/JosephDuffy/Persist/workflows/Tests/badge.svg)](https://github.com/JosephDuffy/Persist/actions?query=workflow%3ATests)
+![Supported Xcode Versions](.github/xcode-versions-badge.svg)
 [![codecov](https://codecov.io/gh/JosephDuffy/Persist/branch/master/graph/badge.svg)](https://codecov.io/gh/JosephDuffy/Persist)
 [![Documentation](https://josephduffy.github.io/Persist/badge.svg)](https://josephduffy.github.io/Persist/)
 [![SwiftPM Compatible](https://img.shields.io/badge/SwiftPM-compatible-4BC51D.svg?style=flat)](https://github.com/apple/swift-package-manager)
