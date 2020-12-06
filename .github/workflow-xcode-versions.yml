@@ -1,0 +1,45 @@
+workflows:
+  workflows/release.yml:
+    jobs:
+      build_docs:
+        strategy:
+          matrix:
+            xcode: latest
+
+  workflows/tests.yml:
+    jobs:
+      macos_tests:
+        strategy:
+          matrix:
+            xcode:
+              - last-major
+              - latest
+              - latest-beta
+      ios_tests:
+        strategy:
+          matrix:
+            xcode:
+              - last-major
+              - latest
+              - latest-beta
+      tvos_tests:
+        strategy:
+          matrix:
+            xcode:
+              # Avoids current (12.2) because NSUbiquitousKeyValueStore is broken
+              - last-major
+              - latest-beta
+      mac_catalyst_tests:
+        strategy:
+          matrix:
+            xcode:
+              - last-major
+              - latest
+              - latest-beta
+      watchos_build:
+        strategy:
+          matrix:
+            xcode:
+              - last-major
+              - latest
+              - latest-beta

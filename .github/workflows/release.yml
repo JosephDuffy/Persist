@@ -48,7 +48,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        xcode: ["11.5"]
+        xcode: '12.2'
 
     steps:
       - uses: actions/checkout@v2
