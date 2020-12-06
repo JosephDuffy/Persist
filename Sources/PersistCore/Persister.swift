@@ -720,8 +720,11 @@ public final class Persister<Value> {
 
         #if canImport(Combine)
         if #available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *) {
-            if let newValue = (try? result.get())?.event.value {
-                updatesSubject.send(newValue)
+            switch result {
+            case .success(let update):
+                updatesSubject.send(update.newValue)
+            case .failure:
+                break
             }
         }
         #endif

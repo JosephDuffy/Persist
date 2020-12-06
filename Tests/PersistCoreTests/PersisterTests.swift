@@ -299,18 +299,9 @@ final class PersisterTests: XCTestCase {
         let storedValue = "stored-value"
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
-        let subscription = persister.updatesPublisher.sink { result in
-            defer {
-                callsUpdateListenerExpectation.fulfill()
-            }
-
-            switch result {
-            case .success(let update):
-                XCTAssertEqual(update.newValue, storedValue, "Value passed to update listener should be the stored value")
-                XCTAssert(update.event.value == storedValue, "Event value passed to update listener should be stored value")
-            case .failure(let error):
-                XCTFail("Update listener should be notified of a success. Got error: \(error)")
-            }
+        let subscription = persister.updatesPublisher.dropFirst().sink { newValue in
+            XCTAssertEqual(newValue, storedValue, "Value passed to update listener should be the stored value")
+            callsUpdateListenerExpectation.fulfill()
         }
         _ = subscription
 
@@ -327,18 +318,9 @@ final class PersisterTests: XCTestCase {
         try persister.persist("stored-value")
 
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
-        let subscription = persister.updatesPublisher.sink { result in
-            defer {
-                callsUpdateListenerExpectation.fulfill()
-            }
-
-            switch result {
-            case .success(let update):
-                XCTAssertEqual(update.newValue, defaultValue, "Value passed to update listener should be the default value")
-                XCTAssertNil(update.event.value, "Event value passed to update listener should be `nil``")
-            case .failure(let error):
-                XCTFail("Update listener should be notified of a success. Got error: \(error)")
-            }
+        let subscription = persister.updatesPublisher.dropFirst().sink { newValue in
+            XCTAssertEqual(newValue, defaultValue, "Value passed to update listener should be the default value")
+            callsUpdateListenerExpectation.fulfill()
         }
         _ = subscription
 
