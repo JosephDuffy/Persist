@@ -16,17 +16,24 @@ public final class UserDefaultsMappedArrayStorage<Model: StoredInUserDefaultsDic
 
     public typealias ModelBuilder<Model> = (_ storage: UserDefaultsArrayDictionaryStorage) throws -> Model
 
+    /// The key used to access the array of models.
     public typealias Key = String
 
     public typealias Value = [Model]
+
+    /// A dictionary of the cached `UserDefaultsArrayDictionaryStorage` used for each value.
+    ///
+    /// The first dictionary is keyed by the `UserDefaults` key used to access the array
+    /// of dictionaries. The second dictionary is keyed by the identifier of the stored model.
+    private typealias Storages = [Key: [String: UserDefaultsArrayDictionaryStorage]]
 
     private let modelBuilder: ModelBuilder<Model>
 
     private lazy var storagesQueue = DispatchQueue(label: "UserDefaultsMappedArrayStorage.storages", attributes: .concurrent)
 
-    private var _storages: [String: UserDefaultsArrayDictionaryStorage] = [:]
+    private var _storages: Storages = [:]
 
-    private var storages: [String: UserDefaultsArrayDictionaryStorage] {
+    private var storages: Storages {
         get {
             storagesQueue.sync {
                 _storages
@@ -62,7 +69,7 @@ public final class UserDefaultsMappedArrayStorage<Model: StoredInUserDefaultsDic
 
         let storage = UserDefaultsArrayDictionaryStorage(arrayKey: key, arrayIndex: newIndex, userDefaults: userDefaultsStorage.userDefaults)
         let model = try modelBuilder(storage)
-        storages[model.id] = storage
+        storages[key, default: [:]][model.id] = storage
         return model
     }
 
@@ -75,7 +82,7 @@ public final class UserDefaultsMappedArrayStorage<Model: StoredInUserDefaultsDic
         case .array(let array):
             var newArray = [Int: UserDefaultsValue]()
             let storages = try models.map { model -> UserDefaultsArrayDictionaryStorage in
-                guard let storage = self.storages[model.id] else {
+                guard let storage = self.storages[key]?[model.id] else {
                     throw StoreValueError.valueCreatedIllegally(model)
                 }
                 return storage
@@ -122,18 +129,31 @@ public final class UserDefaultsMappedArrayStorage<Model: StoredInUserDefaultsDic
     private func mapValue(_ value: UserDefaultsValue, forKey key: String) throws -> [Model] {
         switch value {
         case .array(let array):
+            let existingStorages = storages[key, default: [:]]
             let modelsAndStorage = array.indices.compactMap { index -> (model: Model, storage: UserDefaultsArrayDictionaryStorage)? in
-                let storage = storages.values.first(where: { $0.arrayIndex == index })
-                    ?? UserDefaultsArrayDictionaryStorage(
-                        arrayKey: key,
-                        arrayIndex: index,
-                        userDefaults: userDefaultsStorage.userDefaults
-                    )
-                guard let model = try? modelBuilder(storage) else { return nil }
-                return (model, storage)
+                let userDefaultsValue = array[index]
+                switch userDefaultsValue {
+                case .dictionary(let dictionary):
+                    guard let modelId = dictionary[Model.idUserDefaultsKey]?.cast(to: String.self) else { return nil }
+
+                    if let existingStorage = existingStorages.first(where: { $0.key == modelId })?.value {
+                        guard let model = try? modelBuilder(existingStorage) else { return nil }
+                        return (model, existingStorage)
+                    } else {
+                        let newStorage = UserDefaultsArrayDictionaryStorage(
+                            arrayKey: key,
+                            arrayIndex: index,
+                            userDefaults: userDefaultsStorage.userDefaults
+                        )
+                        guard let model = try? modelBuilder(newStorage) else { return nil }
+                        return (model, newStorage)
+                    }
+                default:
+                    return nil
+                }
             }
 
-            storages = modelsAndStorage.reduce(into: [String: UserDefaultsArrayDictionaryStorage](), { (storages, element) in
+            storages[key] = modelsAndStorage.reduce(into: [String: UserDefaultsArrayDictionaryStorage](), { (storages, element) in
                 let (model, storage) = element
                 storages[model.id] = storage
             })

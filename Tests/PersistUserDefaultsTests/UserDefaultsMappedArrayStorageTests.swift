@@ -145,6 +145,8 @@ final class UserDefaultsMappedArrayStorageTests: XCTestCase {
 }
 
 private struct Model: StoredInUserDefaultsDictionary, Equatable, CustomStringConvertible {
+    static let idUserDefaultsKey = "id"
+
     static func == (lhs: Model, rhs: Model) -> Bool {
         lhs.id == rhs.id && lhs.property == rhs.property
     }
