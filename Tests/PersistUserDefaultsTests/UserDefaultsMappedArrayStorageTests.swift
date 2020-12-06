@@ -97,6 +97,51 @@ final class UserDefaultsMappedArrayStorageTests: XCTestCase {
 
         waitForExpectations(timeout: 1)
     }
+
+    /// This usage is not recommended (`UserDefaultsMappedArrayStorage` should on really
+    /// be used to handle a single key) but the API allows it so it should work.
+    func testStoringValuesWithSameIdAcrossMultipleKeys() throws {
+        let storage = UserDefaultsMappedArrayStorage(userDefaults: userDefaults) { storage in
+            try Model(storage: storage)
+        }
+
+        let keyA = "KeyA"
+        let keyB = "KeyB"
+        let identifier = "identifier"
+
+        _ = try storage.createNewValue(forKey: keyA) { storage in
+            try Model(storage: storage, id: identifier)
+        }
+
+        let firstKeyBValue = try storage.createNewValue(forKey: keyB) { storage in
+            try Model(storage: storage, id: identifier)
+        }
+
+        let retrievedFirstKeyAValue = try storage.retrieveValue(for: keyA)?.first!
+
+        let doesNotCallKeyAUpdateListenerExpectation = expectation(description: "Calls update listener")
+        doesNotCallKeyAUpdateListenerExpectation.isInverted = true
+        let keyASubscription = retrievedFirstKeyAValue!.$property.addUpdateListener { result in
+            doesNotCallKeyAUpdateListenerExpectation.fulfill()
+        }
+        _ = keyASubscription
+
+        let doesCallKeyBUpdateListenerExpectation = expectation(description: "Calls update listener")
+        let keyBSubscription = firstKeyBValue.$property.addUpdateListener { result in
+            doesCallKeyBUpdateListenerExpectation.fulfill()
+            switch result {
+            case .success(let update):
+                XCTAssertEqual(update.newValue, "new value")
+            case .failure:
+                XCTFail("Should not fail")
+            }
+        }
+        _ = keyBSubscription
+
+        firstKeyBValue.property = "new value"
+
+        waitForExpectations(timeout: 0.1)
+    }
 }
 
 private struct Model: StoredInUserDefaultsDictionary, Equatable, CustomStringConvertible {
