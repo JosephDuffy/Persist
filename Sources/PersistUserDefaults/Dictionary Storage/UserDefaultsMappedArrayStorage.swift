@@ -5,7 +5,6 @@ import PersistCore
 /// Stores an array of `Model`s in `UserDefaults` by creating a dictionary for each model.
 ///
 /// Each dictionary is managed by an instance of `UserDefaultsArrayDictionaryStorage`
-@available(macOS 10.12, iOS 10.0, tvOS 10.0, watchOS 3.0, *)
 public final class UserDefaultsMappedArrayStorage<Model: StoredInUserDefaultsDictionary>: Storage {
     public enum StoreValueError: Error {
         /// A value cannot be stored when one does not currently exist.
