@@ -98,6 +98,50 @@ final class UserDefaultsMappedArrayStorageTests: XCTestCase {
         waitForExpectations(timeout: 1)
     }
 
+    func testArrayPropertyInitialCreation() throws {
+        struct Wrapper {
+            @Persisted
+            var properties: [Model]
+
+            private let storage: UserDefaultsMappedArrayStorage<Model>
+
+            init(storage: UserDefaultsMappedArrayStorage<Model>) {
+                _properties = Persisted(key: "TestKey", storedBy: storage, defaultValue: [])
+                self.storage = storage
+            }
+
+            public func addProperty(withId id: String) throws -> Model {
+                return try storage.createNewValue(forKey: "TestKey") { storage in
+                    try Model(storage: storage, id: id)
+                }
+            }
+        }
+
+        let storage = UserDefaultsMappedArrayStorage(userDefaults: userDefaults) { storage in
+            try Model(storage: storage)
+        }
+
+        let wrapper = Wrapper(storage: storage)
+        let createdModelId = "created-id"
+
+        let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
+        let subscription = wrapper.$properties.addUpdateListener { result in
+            switch result {
+            case .success(let update):
+                XCTAssertEqual(update.newValue.first?.id, createdModelId)
+            case .failure:
+                XCTFail("Should not fail")
+            }
+
+            callsUpdateListenerExpectation.fulfill()
+        }
+        _ = subscription
+
+        _ = try wrapper.addProperty(withId: createdModelId)
+
+        waitForExpectations(timeout: 0.1)
+    }
+
     /// This usage is not recommended (`UserDefaultsMappedArrayStorage` should on really
     /// be used to handle a single key) but the API allows it so it should work.
     func testStoringValuesWithSameIdAcrossMultipleKeys() throws {
@@ -141,6 +185,36 @@ final class UserDefaultsMappedArrayStorageTests: XCTestCase {
         firstKeyBValue.property = "new value"
 
         waitForExpectations(timeout: 0.1)
+    }
+
+    func testAccessFromMultipleQueues() throws {
+        let storage = UserDefaultsMappedArrayStorage(userDefaults: userDefaults) { storage in
+            try Model(storage: storage)
+        }
+
+        let arrayKey = "ArrayKey"
+        let iterations = 100
+
+        let createsModelExpectation = expectation(description: "Creates model")
+        createsModelExpectation.expectedFulfillmentCount = iterations
+        DispatchQueue.concurrentPerform(iterations: 100) { index in
+            do {
+                _ = try storage.createNewValue(forKey: arrayKey) { storage in
+                    try Model(storage: storage, id: String(describing: index))
+                }
+                createsModelExpectation.fulfill()
+            } catch {
+                XCTFail(String(describing: error))
+            }
+        }
+
+        waitForExpectations(timeout: 1)
+
+        let createdValues = try storage.retrieveValue(for: arrayKey)
+        let createdValueIds = Set(createdValues?.map(\.id) ?? [])
+        let expectedValueIds = Set((0..<iterations).map(String.init(describing:)))
+        XCTAssertEqual(createdValues?.count, iterations, "Should store a model for every iteration")
+        XCTAssertEqual(createdValueIds, expectedValueIds, "Should store models with the provided ids")
     }
 }
 

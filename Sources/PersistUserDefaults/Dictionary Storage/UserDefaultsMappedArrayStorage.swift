@@ -29,22 +29,11 @@ public final class UserDefaultsMappedArrayStorage<Model: StoredInUserDefaultsDic
 
     private let modelBuilder: ModelBuilder<Model>
 
-    private lazy var storagesQueue = DispatchQueue(label: "UserDefaultsMappedArrayStorage.storages", attributes: .concurrent)
+    private lazy var storagesQueue = DispatchQueue(label: "UserDefaultsMappedArrayStorage.storages")
 
-    private var _storages: Storages = [:]
+    private let storagesLock = NSLock()
 
-    private var storages: Storages {
-        get {
-            storagesQueue.sync {
-                _storages
-            }
-        }
-        set {
-            storagesQueue.sync(flags: .barrier) {
-                _storages = newValue
-            }
-        }
-    }
+    private var storages: Storages = [:]
 
     private let userDefaultsStorage: UserDefaultsStorage
 
@@ -54,6 +43,8 @@ public final class UserDefaultsMappedArrayStorage<Model: StoredInUserDefaultsDic
     }
 
     public func createNewValue(forKey key: String, modelBuilder: @escaping ModelBuilder<Model>) throws -> Model {
+        storagesLock.lock()
+
         let newIndex: Int = try { () -> Int in
             let value = userDefaultsStorage.retrieveValue(for: key)
 
@@ -68,8 +59,12 @@ public final class UserDefaultsMappedArrayStorage<Model: StoredInUserDefaultsDic
         }()
 
         let storage = UserDefaultsArrayDictionaryStorage(arrayKey: key, arrayIndex: newIndex, userDefaults: userDefaultsStorage.userDefaults)
+        storage.creatingValue = true
         let model = try modelBuilder(storage)
+        assert(storages[key, default: [:]][model.id] == nil, "Storage should not be created as a side effect of creating the model")
         storages[key, default: [:]][model.id] = storage
+        try storage.persistCreatedValues()
+        storagesLock.unlock()
         return model
     }
 
@@ -81,6 +76,9 @@ public final class UserDefaultsMappedArrayStorage<Model: StoredInUserDefaultsDic
         switch value {
         case .array(let array):
             var newArray = [Int: UserDefaultsValue]()
+
+            storagesLock.lock()
+
             let storages = try models.map { model -> UserDefaultsArrayDictionaryStorage in
                 guard let storage = self.storages[key]?[model.id] else {
                     throw StoreValueError.valueCreatedIllegally(model)
@@ -93,6 +91,8 @@ public final class UserDefaultsMappedArrayStorage<Model: StoredInUserDefaultsDic
                 newArray[newIndex] = array[oldIndex]
                 storage.arrayIndex = newIndex
             }
+
+            storagesLock.unlock()
 
             let sortedArray = newArray.sorted { lhs, rhs in
                 lhs.key < rhs.key
@@ -129,6 +129,10 @@ public final class UserDefaultsMappedArrayStorage<Model: StoredInUserDefaultsDic
     private func mapValue(_ value: UserDefaultsValue, forKey key: String) throws -> [Model] {
         switch value {
         case .array(let array):
+            // This may not get a lock if this is called via `retrieveValue(for:)`, which was called by
+            // an outer storage during initial creation, i.e. via `createNewValue(forKey:modelBuilder:)`
+            let didLock = storagesLock.try()
+
             let existingStorages = storages[key, default: [:]]
             let modelsAndStorage = array.indices.compactMap { index -> (model: Model, storage: UserDefaultsArrayDictionaryStorage)? in
                 let userDefaultsValue = array[index]
@@ -157,6 +161,10 @@ public final class UserDefaultsMappedArrayStorage<Model: StoredInUserDefaultsDic
                 let (model, storage) = element
                 storages[model.id] = storage
             })
+
+            if didLock {
+                storagesLock.unlock()
+            }
 
             return modelsAndStorage.map(\.model)
         default:

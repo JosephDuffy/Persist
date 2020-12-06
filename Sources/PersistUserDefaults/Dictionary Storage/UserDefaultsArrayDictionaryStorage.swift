@@ -18,6 +18,13 @@ public final class UserDefaultsArrayDictionaryStorage: Storage {
 
     public internal(set) var arrayIndex: Int
 
+    /// A flag used to indicate that the storage is being used to create a new value.
+    ///
+    /// When this flag is set no values will be persisted to `UserDefaults`.
+    internal var creatingValue = false
+
+    private lazy var createdValues: [String: UserDefaultsValue] = [:]
+
     private let userDefaults: UserDefaults
 
     private let backingStorage: UserDefaultsStorage
@@ -30,6 +37,11 @@ public final class UserDefaultsArrayDictionaryStorage: Storage {
     }
 
     public func storeValue(_ value: UserDefaultsValue, key: String) throws {
+        guard !creatingValue else {
+            createdValues[key] = value
+            return
+        }
+
         var array = try getArray()
 
         if array.indices.contains(arrayIndex) {
@@ -46,6 +58,11 @@ public final class UserDefaultsArrayDictionaryStorage: Storage {
     }
 
     public func removeValue(for key: String) throws {
+        guard !creatingValue else {
+            createdValues.removeValue(forKey: key)
+            return
+        }
+
         var array = try getArray()
 
         guard array.indices.contains(arrayIndex) else {
@@ -58,6 +75,10 @@ public final class UserDefaultsArrayDictionaryStorage: Storage {
     }
 
     public func retrieveValue(for key: String) throws -> UserDefaultsValue? {
+        guard !creatingValue else {
+            return createdValues[key]
+        }
+
         let array = try getArray()
 
         guard array.indices.contains(arrayIndex) else {
@@ -181,6 +202,19 @@ public final class UserDefaultsArrayDictionaryStorage: Storage {
         return Subscription { [weak userDefaults, arrayKey] in
             userDefaults?.removeObserver(observer, forKeyPath: arrayKey)
         }.eraseToAnyCancellable()
+    }
+
+    internal func persistCreatedValues() throws {
+        assert(creatingValue)
+
+        creatingValue = false
+
+        try createdValues.forEach { element in
+            let (key, value) = element
+            try storeValue(value, key: key)
+        }
+
+        createdValues = [:]
     }
 
     private func getArray() throws -> [[String: UserDefaultsValue]] {
