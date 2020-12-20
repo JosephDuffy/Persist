@@ -17,7 +17,7 @@ public final class PersistObservableObject<Value>: ObservableObject {
     public init(persister: Persister<Value>) {
         self.persister = persister
         value = persister.retrieveValue()
-        valueCancellables = persister.updatesPublisher.dropFirst().sink { [weak self] result in
+        valueCancellables = persister.updatesPublisher.sink { [weak self] result in
             switch result {
             case .success(let update):
                 self?.value = update.newValue
