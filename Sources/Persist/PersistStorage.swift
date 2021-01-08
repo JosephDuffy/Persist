@@ -18,6 +18,10 @@ public struct PersistStorage<Value>: DynamicProperty {
         )
     }
 
+    public var persister: Persister<Value> {
+        observableObject.persister
+    }
+
     @ObservedObject
     private var observableObject: PersistObservableObject<Value>
 
