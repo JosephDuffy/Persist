@@ -86,6 +86,12 @@ public final class Persister<Value> {
     public var updatesPublisher: AnyPublisher<UpdatePayload, Never> {
         return updatesSubject.eraseToAnyPublisher()
     }
+
+    /// A publisher that will publish updates as they occur.
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    public var publisher: AnyPublisher<Value, Never> {
+        return subject.eraseToAnyPublisher()
+    }
     #endif
 
     /// The default value that will be returned when a value has been be persisted or an error occurs.
@@ -117,18 +123,9 @@ public final class Persister<Value> {
     private var updateListeners: [UUID: UpdateListener] = [:]
 
     #if canImport(Combine)
-    /// The upates subject that publishes updates.
+    /// The updates subject that publishes updates.
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
     private var updatesSubject: PassthroughSubject<UpdatePayload, Never> {
-        getUpdatesSubject()
-    }
-
-    /// An `Any` value that will always be a `PassthroughSubject<UpdatePayload, Never>`.
-    /// This is required because Swift does not support marking stored properties as `available`.
-    private var _updatesSubject: Any?
-
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    private func getUpdatesSubject() -> PassthroughSubject<UpdatePayload, Never> {
         if let updatesSubject = _updatesSubject as? PassthroughSubject<UpdatePayload, Never> {
             return updatesSubject
         }
@@ -137,6 +134,26 @@ public final class Persister<Value> {
         _updatesSubject = updatesSubject
         return updatesSubject
     }
+
+    /// An `Any` value that will always be a `PassthroughSubject<UpdatePayload, Never>`.
+    /// This is required because Swift does not support marking stored properties as `available`.
+    private var _updatesSubject: Any?
+
+    /// The updates subject that publishes updates.
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    private var subject: CurrentValueSubject<Value, Never> {
+        if let subject = _subject as? CurrentValueSubject<Value, Never> {
+            return subject
+        }
+
+        let subject = CurrentValueSubject<Value, Never>(retrieveValue())
+        _subject = subject
+        return subject
+    }
+
+    /// An `Any` value that will always be a `CurrentValueSubject<Value, Never>`.
+    /// This is required because Swift does not support marking stored properties as `available`.
+    private var _subject: Any?
     #endif
 
     /**
@@ -721,6 +738,13 @@ public final class Persister<Value> {
         #if canImport(Combine)
         if #available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *) {
             updatesSubject.send(result)
+
+            switch result {
+            case .success(let update):
+                subject.send(update.newValue)
+            case .failure:
+                break
+            }
         }
         #endif
     }
