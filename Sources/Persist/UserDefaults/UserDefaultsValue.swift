@@ -44,6 +44,8 @@ internal enum UserDefaultsValue: Hashable {
 
     case number(NSNumber)
 
+    case date(Date)
+
     /// An `Array` value.
     indirect case array([UserDefaultsValue])
 
@@ -86,6 +88,8 @@ internal enum UserDefaultsValue: Hashable {
             return url
         case .number(let nsNumber):
             return nsNumber
+        case .date(let date):
+            return date
         case .array(let array):
             return array.map(\.value)
         case .dictionary(let dictionary):
@@ -115,6 +119,8 @@ internal enum UserDefaultsValue: Hashable {
             self = .float(float)
         } else if let double = value as? Double {
             self = .double(double)
+        } else if let date = value as? Date {
+            self = .date(date)
         } else if let anyArray = value as? [Any] {
             var array: [UserDefaultsValue] = []
 
