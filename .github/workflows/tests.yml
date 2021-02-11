@@ -192,25 +192,18 @@ jobs:
         run: swift run --configuration release --skip-update --package-path ./CIDependencies/ xcutils build watchOS --scheme Persist
 
   linux_tests:
-    name: SwiftPM on ${{ matrix.os }}
+    name: Swift ${{ matrix.swift }} on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
+    container:
+      image: swift:${{ matrix.swift }}
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-16.04, ubuntu-latest]
-        swift: ["5.2.3"]
+        os: [ubuntu-latest]
+        swift: ['5.2', '5.3']
 
     steps:
-      - uses: actions/checkout@v2
-
-      - name: Install swiftenv
-        run: |
-          eval "$(curl -sL https://swiftenv.fuller.li/install.sh)"
-          echo "SWIFTENV_ROOT=$HOME/.swiftenv" >> $GITHUB_ENV
-          echo "$SWIFTENV_ROOT/bin" >> $GITHUB_PATH
-
-      - name: Install Swift ${{ matrix.swift }}
-        run: swiftenv install ${{ matrix.swift }}
+      - uses: actions/checkout@v1
 
       - name: swift test
-        run: swift test --enable-test-discovery
+        run: swift test
