@@ -1,9 +1,8 @@
 #if os(macOS) || os(iOS) || os(tvOS)
 import XCTest
-@testable import Persist
+@testable import PersistUserDefaults
 
 final class UserDefaultsStorageTests: XCTestCase {
-
     private let userDefaultsStorage = UserDefaultsStorage(suiteName: "test-suite")!
 
     override func tearDown() {
@@ -398,6 +397,5 @@ final class UserDefaultsStorageTests: XCTestCase {
 
         waitForExpectations(timeout: 1)
     }
-
 }
 #endif

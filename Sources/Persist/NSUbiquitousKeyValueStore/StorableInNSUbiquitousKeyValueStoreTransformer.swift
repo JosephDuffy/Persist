@@ -1,4 +1,6 @@
 #if os(macOS) || os(iOS) || os(tvOS)
+import PersistCore
+
 /**
  A transformer that transforms between a `StorableInNSUbiquitousKeyValueStore` value and `NSUbiquitousKeyValueStoreValue`.
  */

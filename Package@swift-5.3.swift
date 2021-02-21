@@ -8,9 +8,19 @@ let package = Package(
     ],
     products: [
         .library(name: "Persist", targets: ["Persist"]),
+        .library(name: "PersistUserDefaults", targets: ["PersistUserDefaults"]),
+        .library(name: "PersistCore", targets: ["PersistCore"]),
     ],
     targets: [
-        .target(name: "Persist"),
-        .testTarget(name: "PersistTests", dependencies: ["Persist"]),
+        .target(name: "Persist", dependencies: ["PersistUserDefaults", "PersistCore"]),
+        .testTarget(name: "PersistTests", dependencies: ["Persist", "TestHelpers"]),
+
+        .target(name: "PersistUserDefaults", dependencies: ["PersistCore"]),
+        .testTarget(name: "PersistUserDefaultsTests", dependencies: ["PersistUserDefaults", "TestHelpers"]),
+
+        .target(name: "PersistCore"),
+        .testTarget(name: "PersistCoreTests", dependencies: ["PersistCore", "TestHelpers"]),
+
+        .target(name: "TestHelpers", dependencies: ["PersistCore"]),
     ]
 )

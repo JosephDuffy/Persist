@@ -1,4 +1,5 @@
 import Foundation
+import PersistCore
 
 /**
  A transformer that transformers values to property list data.

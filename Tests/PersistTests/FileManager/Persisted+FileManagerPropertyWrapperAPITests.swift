@@ -1,6 +1,7 @@
 #if !os(watchOS)
 import XCTest
 import Persist
+import TestHelpers
 
 final class PersistedFileManagerPropertyWrapperAPITests: XCTestCase {
 

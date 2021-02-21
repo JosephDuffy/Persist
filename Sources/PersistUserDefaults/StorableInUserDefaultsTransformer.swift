@@ -1,8 +1,11 @@
 #if os(macOS) || os(iOS) || os(tvOS) || os(watchOS)
+import PersistCore
+
 /**
  A transformer that transforms between a `StorableInUserDefaults` value and `UserDefaultsValue`.
  */
-internal struct StorableInUserDefaultsTransformer<Input: StorableInUserDefaults>: Transformer {
+public struct StorableInUserDefaultsTransformer<Input: StorableInUserDefaults>: Transformer {
+    public init() {}
 
     /**
      Transform the provided `StorableInUserDefaults` value to a `UserDefaultsValue`.
@@ -10,7 +13,7 @@ internal struct StorableInUserDefaultsTransformer<Input: StorableInUserDefaults>
      - parameter value: The `StorableInUserDefaults` value to transform.
      - returns: The `UserDefaultsValue` value.
      */
-    internal func transformValue(_ value: Input) -> UserDefaultsValue {
+    public func transformValue(_ value: Input) -> UserDefaultsValue {
         guard let value = value as? InternalStorableInUserDefaults else {
             preconditionFailure("\(Input.self) has been conformed to `StorableInUserDefaults` outside of `Persist`. This is not supported.")
         }
@@ -25,7 +28,7 @@ internal struct StorableInUserDefaultsTransformer<Input: StorableInUserDefaults>
         converted to `StorableInUserDefaults`.
      - returns: The `StorableInUserDefaults` value.
     */
-    internal func untransformValue(_ output: UserDefaultsValue) throws -> Input {
+    public func untransformValue(_ output: UserDefaultsValue) throws -> Input {
         guard let value = output.cast(to: Input.self) else {
             throw PersistenceError.unexpectedValueType(value: output.value, expected: Input.self)
         }
