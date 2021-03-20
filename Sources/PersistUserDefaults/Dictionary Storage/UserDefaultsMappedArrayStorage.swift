@@ -128,9 +128,7 @@ public final class UserDefaultsMappedArrayStorage<Model: StoredInUserDefaultsDic
     private func mapValue(_ value: UserDefaultsValue, forKey key: String) throws -> [Model] {
         switch value {
         case .array(let array):
-            // This may not get a lock if this is called via `retrieveValue(for:)`, which was called by
-            // an outer storage during initial creation, i.e. via `createNewValue(forKey:modelBuilder:)`
-            let didLock = storagesLock.try()
+            storagesLock.lock()
 
             let existingStorages = storages[key, default: [:]]
             let modelsAndStorage = array.indices.compactMap { index -> (model: Model, storage: UserDefaultsArrayDictionaryStorage)? in
@@ -163,9 +161,7 @@ public final class UserDefaultsMappedArrayStorage<Model: StoredInUserDefaultsDic
                 storages[model.id] = storage
             })
 
-            if didLock {
-                storagesLock.unlock()
-            }
+            storagesLock.unlock()
 
             return modelsAndStorage.map(\.model)
         default:
