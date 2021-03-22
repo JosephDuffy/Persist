@@ -62,8 +62,8 @@ public final class UserDefaultsMappedArrayStorage<Model: StoredInUserDefaultsDic
         let model = try modelBuilder(storage)
         assert(storages[key, default: [:]][model.id] == nil, "Storage should not be created as a side effect of creating the model")
         storages[key, default: [:]][model.id] = storage
-        try storage.persistCreatedValues()
         storagesLock.unlock()
+        try storage.persistCreatedValues()
         return model
     }
 
