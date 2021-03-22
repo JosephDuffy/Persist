@@ -153,9 +153,6 @@ public final class UserDefaultsMappedArrayStorage<Model: StoredInUserDefaultsDic
                     return nil
                 }
             }
-
-            // TODO: Fix a data race here when being accessed across multiple threads. This can occur when `retrieveValue` is called
-            // from different threads, meaning the lock is already locked and `try()` will return `false`
             storages[key] = modelsAndStorage.reduce(into: [String: UserDefaultsArrayDictionaryStorage](), { (storages, element) in
                 let (model, storage) = element
                 storages[model.id] = storage
