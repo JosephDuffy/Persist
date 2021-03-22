@@ -41,7 +41,7 @@ public final class UserDefaultsMappedArrayStorage<Model: StoredInUserDefaultsDic
         self.modelBuilder = modelBuilder
     }
 
-    public func createNewValue(forKey key: String, modelBuilder: @escaping ModelBuilder<Model>) throws -> Model {
+    public func createNewValue(forKey key: String, modelBuilder: ModelBuilder<Model>) throws -> Model {
         storagesLock.lock()
 
         let newIndex: Int = try { () -> Int in
