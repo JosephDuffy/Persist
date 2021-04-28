@@ -3,7 +3,7 @@
 
  Implementations of this protocol must call the `cancel` function on `deinit`.
  */
-public protocol Cancellable: class, Hashable {
+public protocol Cancellable: AnyObject, Hashable {
     /**
      Stop further updates being sent to the update listener, freeing any resources held on to by the
      subscription.
