@@ -61,6 +61,13 @@ extension Float: InternalStorableInUserDefaults {
     }
 }
 
+extension NSNumber: InternalStorableInUserDefaults {
+    /// An `UserDefaultsValue.number` wrapping `self`.
+    internal var asUserDefaultsValue: UserDefaultsValue {
+        return .number(self)
+    }
+}
+
 extension Date: InternalStorableInUserDefaults {
     /// A `UserDefaultsValue.date` wrapping `self`.
     internal var asUserDefaultsValue: UserDefaultsValue {
