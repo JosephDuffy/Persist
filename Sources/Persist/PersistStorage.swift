@@ -23,10 +23,10 @@ public struct PersistStorage<Value>: DynamicProperty {
     }
 
     @ObservedObject
-    private var observableObject: PersistObservableObject<Value>
+    private var observableObject: ObservablePersister<Value>
 
     public init(persister: Persister<Value>) {
-        observableObject = PersistObservableObject(persister: persister)
+        observableObject = ObservablePersister(persister: persister)
     }
 }
 #endif

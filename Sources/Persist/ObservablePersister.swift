@@ -2,8 +2,9 @@
 import Combine
 import SwiftUI
 
+/// A wrapper around `Persister` that inherits from `ObservableObject`.
 @available(iOS 13, tvOS 13, watchOS 6, macOS 10.15, *)
-public final class PersistObservableObject<Value>: ObservableObject {
+public final class ObservablePersister<Value>: ObservableObject {
     @Published
     public private(set) var value: Value
 
