@@ -61,6 +61,13 @@ extension Float: InternalStorableInUserDefaults {
     }
 }
 
+extension Date: InternalStorableInUserDefaults {
+    /// An `UserDefaultsValue.date` wrapping `self`.
+    internal var asUserDefaultsValue: UserDefaultsValue {
+        return .date(self)
+    }
+}
+
 extension Array: StorableInUserDefaults where Element: StorableInUserDefaults {}
 
 extension Array: InternalStorableInUserDefaults where Element: InternalStorableInUserDefaults {
