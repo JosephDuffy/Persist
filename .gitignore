@@ -3,3 +3,5 @@
 /*.xcodeproj
 xcuserdata/
 docs/
+default.profraw
+.swiftcov
