@@ -10,7 +10,7 @@ public final class ObservablePersister<Value>: ObservableObject {
 
     internal let persister: Persister<Value>
 
-    private var valueCancellables: Combine.AnyCancellable?
+    private var valueCancellable: Combine.AnyCancellable?
 
     /**
      Create a new instance that uses the provided `Persister` to persist and retrieve the value.
@@ -18,7 +18,7 @@ public final class ObservablePersister<Value>: ObservableObject {
     public init(persister: Persister<Value>) {
         self.persister = persister
         value = persister.retrieveValue()
-        valueCancellables = persister.updatesPublisher.sink { [weak self] result in
+        valueCancellable = persister.updatesPublisher.sink { [weak self] result in
             switch result {
             case .success(let update):
                 self?.value = update.newValue
