@@ -79,13 +79,12 @@ jobs:
       - name: Convert coverage for Codecov
         if: matrix.os != 'watchOS' || matrix.xcode != '11.7' && matrix.os != 'macCatalyst'
         uses: sersoft-gmbh/swift-coverage-action@v2
-        id: convert-coverage
 
       - name: Upload coverage to Codecov
         if: matrix.os != 'watchOS' || matrix.xcode != '11.7' && matrix.os != 'macCatalyst'
         uses: codecov/codecov-action@v2
         with:
-          files: ${{ steps.convert-coverage.outputs.files }}
+          files: .swiftcov/PersistTests.xctest.coverage.txt
           fail_ci_if_error: true
 
       - name: Build for watchOS
