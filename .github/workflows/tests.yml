@@ -84,6 +84,7 @@ jobs:
         if: matrix.os != 'watchOS' || matrix.xcode != '11.7'
         uses: codecov/codecov-action@v2
         with:
+          files: .swiftcov/PersistTests.xctest.coverage.txt
           fail_ci_if_error: true
 
       - name: Build for watchOS
