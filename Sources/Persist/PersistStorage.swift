@@ -1,6 +1,8 @@
 #if canImport(SwiftUI) && canImport(Combine)
 import SwiftUI
 
+/// A type that conforms to ``DynamicProperty`` to facilitate
+/// automatically updating SwiftUI ``View``s.
 @available(iOS 13, tvOS 13, watchOS 6, macOS 10.15, *)
 @propertyWrapper
 public struct PersistStorage<Value>: DynamicProperty {
@@ -18,6 +20,7 @@ public struct PersistStorage<Value>: DynamicProperty {
         )
     }
 
+    /// The ``Persister`` used to persist and retrieve the stored value.
     public var persister: Persister<Value> {
         observableObject.persister
     }
@@ -25,6 +28,10 @@ public struct PersistStorage<Value>: DynamicProperty {
     @ObservedObject
     private var observableObject: ObservablePersister<Value>
 
+    /// Create a new ``PersistStorage`` using the provided persister to
+    /// persist and retrieve values.
+    ///
+    /// - parameter persister: The ``Persister`` used to persist and retrieve the stored value.
     public init(persister: Persister<Value>) {
         observableObject = ObservablePersister(persister: persister)
     }
