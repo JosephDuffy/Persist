@@ -24,7 +24,7 @@ jobs:
         run: sudo xcode-select --switch /Applications/Xcode_${{ matrix.xcode }}.app
 
       - name: Cache SwiftPM
-        uses: actions/cache@v1
+        uses: actions/cache@v2
         with:
           path: .build
           key: ${{ runner.os }}-xcode_${{ matrix.xcode }}-swiftpm-deps-${{ github.workspace }}-${{ hashFiles('Package.resolved') }}
@@ -64,7 +64,7 @@ jobs:
         run: sudo xcode-select --switch /Applications/Xcode_${{ matrix.xcode }}.app
 
       - name: Cache SwiftPM
-        uses: actions/cache@v1
+        uses: actions/cache@v2
         with:
           path: CIDependencies/.build
           key: ${{ runner.os }}-xcode_${{ matrix.xcode }}-swiftpm-ci-deps-${{ github.workspace }}-${{ hashFiles('CIDependencies/Package.resolved') }}
@@ -72,7 +72,7 @@ jobs:
             ${{ runner.os }}-xcode_${{ matrix.xcode }}-swiftpm-ci-deps-${{ github.workspace }}
 
       - name: Cache DerivedData
-        uses: actions/cache@v1
+        uses: actions/cache@v2
         with:
           path: ~/Library/Developer/Xcode/DerivedData
           key: ${{ runner.os }}-${{ matrix.os }}_derived_data-xcode_${{ matrix.xcode }}
