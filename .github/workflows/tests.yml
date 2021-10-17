@@ -84,11 +84,14 @@ jobs:
         if: matrix.os != 'watchOS' || matrix.xcode != '11.7'
         run: swift run --configuration release --skip-update --package-path ./CIDependencies/ xcutils test ${{ matrix.os }} --scheme Persist --enable-code-coverage
 
+      - name: Convert coverage for Codecov
+        if: matrix.os != 'watchOS' || matrix.xcode != '11.7'
+        uses: sersoft-gmbh/swift-coverage-action@v2
+
       - name: Upload coverage to Codecov
         if: matrix.os != 'watchOS' || matrix.xcode != '11.7'
         uses: codecov/codecov-action@v2
         with:
-          files: default.profraw
           fail_ci_if_error: true
 
       - name: Build for watchOS
