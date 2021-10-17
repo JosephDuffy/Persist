@@ -77,11 +77,11 @@ jobs:
         run: swift run --configuration release --skip-update --package-path ./CIDependencies/ xcutils test ${{ matrix.os }} --scheme Persist --enable-code-coverage
 
       - name: Convert coverage for Codecov
-        if: matrix.os != 'watchOS' || matrix.xcode != '11.7' && matrix.os != 'macCatalyst'
+        if: (matrix.os != 'watchOS' || matrix.xcode != '11.7') && matrix.os != 'macCatalyst'
         uses: sersoft-gmbh/swift-coverage-action@v2
 
       - name: Upload coverage to Codecov
-        if: matrix.os != 'watchOS' || matrix.xcode != '11.7' && matrix.os != 'macCatalyst'
+        if: (matrix.os != 'watchOS' || matrix.xcode != '11.7') && matrix.os != 'macCatalyst'
         uses: codecov/codecov-action@v2
         with:
           files: .swiftcov/PersistTests.xctest.coverage.txt
