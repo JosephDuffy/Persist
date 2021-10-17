@@ -9,13 +9,19 @@ on:
 jobs:
   macos_tests:
     name: macOS Tests (SwiftPM, Xcode ${{ matrix.xcode }})
-    runs-on: macos-latest
+    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
         xcode:
-          - '11.7'
-          - '12.4'
+          - "11.7"
+          - "12.4"
+        os:
+          - "macos-latest"
+        include:
+          - xcode: "13.0"
+            os: "macos-11"
+
     steps:
       - uses: actions/checkout@v2
 
@@ -43,13 +49,19 @@ jobs:
 
   ios_tests:
     name: iOS Tests (Xcode ${{ matrix.xcode }})
-    runs-on: macos-latest
+    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
         xcode:
-          - '11.7'
-          - '12.4'
+          - "11.7"
+          - "12.4"
+        os:
+          - "macos-latest"
+        include:
+          - xcode: "13.0"
+            os: "macos-11"
+
     steps:
       - uses: actions/checkout@v2
 
@@ -82,12 +94,19 @@ jobs:
 
   tvos_tests:
     name: tvOS Tests (Xcode ${{ matrix.xcode }})
-    runs-on: macos-latest
+    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
         xcode:
-          - '11.7'
+          - "11.7"
+          - "12.4"
+        os:
+          - "macos-latest"
+        include:
+          - xcode: "13.0"
+            os: "macos-11"
+
     steps:
       - uses: actions/checkout@v2
 
@@ -120,13 +139,19 @@ jobs:
 
   mac_catalyst_tests:
     name: macCatalyst Tests (Xcode ${{ matrix.xcode }})
-    runs-on: macos-latest
+    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
         xcode:
-          - '11.7'
-          - '12.4'
+          - "11.7"
+          - "12.4"
+        os:
+          - "macos-latest"
+        include:
+          - xcode: "13.0"
+            os: "macos-11"
+
     steps:
       - uses: actions/checkout@v2
 
@@ -159,13 +184,19 @@ jobs:
 
   watchos_build:
     name: watchOS Build (Xcode ${{ matrix.xcode }})
-    runs-on: macos-latest
+    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
         xcode:
-          - '11.7'
-          - '12.4'
+          - "11.7"
+          - "12.4"
+        os:
+          - "macos-latest"
+        include:
+          - xcode: "13.0"
+            os: "macos-11"
+
     steps:
       - uses: actions/checkout@v2
 
