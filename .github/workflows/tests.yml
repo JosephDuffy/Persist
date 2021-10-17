@@ -49,6 +49,7 @@ jobs:
       fail-fast: false
       matrix:
         xcode:
+          - "11.7"
           - "12.5.1"
           - "13.0"
         os:
@@ -80,13 +81,19 @@ jobs:
             ${{ runner.os }}-${{ matrix.os }}_derived_data
 
       - name: Run Tests
+        if: matrix.os != "watchOS" || matrix.xcode != "11.7"
         run: swift run --configuration release --skip-update --package-path ./CIDependencies/ xcutils test ${{ matrix.os }} --scheme Persist --enable-code-coverage
 
       - name: Upload coverage to Codecov
+        if: matrix.os != "watchOS" || matrix.xcode != "11.7"
         uses: codecov/codecov-action@v2
         with:
           files: default.profraw
           fail_ci_if_error: true
+
+      - name: Build for watchOS
+        if: matrix.os == "watchOS" && matrix.xcode == "11.7"
+        run: swift run --configuration release --skip-update --package-path ./CIDependencies/ xcutils build watchOS --scheme Persist
 
   linux_tests:
     name: Swift ${{ matrix.swift }} on ${{ matrix.os }}
