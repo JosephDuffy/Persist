@@ -9,18 +9,13 @@ on:
 jobs:
   macos_tests:
     name: macOS Tests (SwiftPM, Xcode ${{ matrix.xcode }})
-    runs-on: ${{ matrix.os }}
+    runs-on: "macos-11"
     strategy:
       fail-fast: false
       matrix:
         xcode:
-          - "11.7"
-          - "12.4"
-        os:
-          - "macos-latest"
-        include:
-          - xcode: "13.0"
-            os: "macos-11"
+          - "12.5.1"
+          - "13.0"
 
     steps:
       - uses: actions/checkout@v2
@@ -49,23 +44,18 @@ jobs:
 
   ios_tvos_watchos_maccatalyst_tests:
     name: ${{ matrix.os }} Tests (Xcode ${{ matrix.xcode }})
-    runs-on: ${{ matrix.runner-os }}
+    runs-on: "macos-11"
     strategy:
       fail-fast: false
       matrix:
         xcode:
-          - "12.5"
+          - "12.5.1"
+          - "13.0"
         os:
           - "iOS"
           - "tvOS"
           - "watchOS"
           - "macCatalyst"
-        runner-os:
-          - "macos-latest"
-
-        include:
-          - xcode: "13.0"
-            runner-os: "macos-11"
 
     steps:
       - uses: actions/checkout@v2
