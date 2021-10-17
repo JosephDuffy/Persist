@@ -219,6 +219,28 @@ final class UserDefaultsStorageTests: XCTestCase {
         waitForExpectations(timeout: 0.1)
     }
 
+    func testStoringDate() {
+        let key = "key"
+        let date = Date()
+
+        let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
+        let subscription = userDefaultsStorage.addUpdateListener(forKey: key) { newValue in
+            defer {
+                callsUpdateListenerExpectation.fulfill()
+            }
+
+            XCTAssertEqual(newValue, .date(date), "Value passed to update listener should be new value")
+        }
+        _ = subscription
+
+        userDefaultsStorage.storeValue(.date(date), key: key)
+
+        XCTAssertEqual(userDefaultsStorage.userDefaults.object(forKey: key) as? Date, date, "Date should be stored as Date")
+        XCTAssertEqual(userDefaultsStorage.retrieveValue(for: key), .date(date))
+
+        waitForExpectations(timeout: 0.1)
+    }
+
     func testStoringArray() {
         let key = "key"
         let ubiquitousKeyValueStoreValue = UserDefaultsValue.array([

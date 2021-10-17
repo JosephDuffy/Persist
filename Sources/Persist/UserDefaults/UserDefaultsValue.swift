@@ -42,9 +42,10 @@ internal enum UserDefaultsValue: Hashable {
     /// A `URL` value.
     case url(URL)
 
-    case number(NSNumber)
-
+    /// A `Date` value.
     case date(Date)
+
+    case number(NSNumber)
 
     /// An `Array` value.
     indirect case array([UserDefaultsValue])

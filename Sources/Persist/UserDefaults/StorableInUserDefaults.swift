@@ -62,7 +62,7 @@ extension Float: InternalStorableInUserDefaults {
 }
 
 extension NSNumber: InternalStorableInUserDefaults {
-    /// An `UserDefaultsValue.number` wrapping `self`.
+    /// A `UserDefaultsValue.number` wrapping `self`.
     internal var asUserDefaultsValue: UserDefaultsValue {
         return .number(self)
     }
