@@ -45,6 +45,7 @@ internal enum UserDefaultsValue: Hashable {
     /// A `Date` value.
     case date(Date)
 
+    /// An `NSNumber` value.
     case number(NSNumber)
 
     /// An `Array` value.
