@@ -19,6 +19,6 @@ jobs:
 
       - uses: josephduffy/update-xcode-version-action@master
         with:
-          xcode-version-badge-versions: "11.7, last-major, latest, beta"
+          xcode-version-badge-versions: "11.7, last-major, latest"
           xcode-version-badge-path: ./.github/xcode-versions-badge.svg
           github-token: ${{ secrets.GITHUB_TOKEN }}
