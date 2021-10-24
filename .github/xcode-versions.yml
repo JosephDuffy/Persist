@@ -12,9 +12,9 @@ workflows:
         strategy:
           matrix:
             xcode:
+              - "11.7"
               - last-major
               - latest
-              - latest-beta
       ios_tvos_watchos_maccatalyst_tests:
         strategy:
           matrix:
@@ -22,4 +22,3 @@ workflows:
               - "11.7"
               - last-major
               - latest
-              - latest-beta
