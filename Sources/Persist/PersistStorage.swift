@@ -1,4 +1,5 @@
-#if canImport(SwiftUI) && (!os(iOS) || arch(arm64)) && canImport(Combine)
+#if canImport(SwiftUI) && canImport(Combine)
+import Combine
 import SwiftUI
 
 /// A type that conforms to ``DynamicProperty`` to facilitate
