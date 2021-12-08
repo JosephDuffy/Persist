@@ -397,7 +397,7 @@ final class PersisterTests: XCTestCase {
 
     #if canImport(Combine)
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    func testSettingValueUpdatesPublisher() throws {
+    func testSettingValueNotifiesUpdatesPublisher() throws {
         let storage = InMemoryStorage<String>()
         let defaultValue = "default"
         let persister = Persister(key: "test", storedBy: storage, defaultValue: defaultValue)
@@ -425,7 +425,7 @@ final class PersisterTests: XCTestCase {
     }
 
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    func testRemovingValueUpdatesPublisher() throws {
+    func testRemovingValueNotifiesUpdatesPublisher() throws {
         let storage = InMemoryStorage<String>()
         let defaultValue = "default"
         let persister = Persister(key: "test", storedBy: storage, defaultValue: defaultValue)
@@ -444,6 +444,44 @@ final class PersisterTests: XCTestCase {
             case .failure(let error):
                 XCTFail("Update listener should be notified of a success. Got error: \(error)")
             }
+        }
+        _ = subscription
+
+        try persister.removeValue()
+
+        waitForExpectations(timeout: 1, handler: nil)
+    }
+
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    func testSettingValueNotifiesPublisher() throws {
+        let storage = InMemoryStorage<String>()
+        let defaultValue = "default"
+        let persister = Persister(key: "test", storedBy: storage, defaultValue: defaultValue)
+        let storedValue = "stored-value"
+
+        let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
+        let subscription = persister.publisher.dropFirst().sink { newValue in
+            XCTAssertEqual(newValue, storedValue, "Value passed to update listener should be the stored value")
+            callsUpdateListenerExpectation.fulfill()
+        }
+        _ = subscription
+
+        try persister.persist(storedValue)
+
+        waitForExpectations(timeout: 1, handler: nil)
+    }
+
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    func testRemovingValueNotifiesPublisher() throws {
+        let storage = InMemoryStorage<String>()
+        let defaultValue = "default"
+        let persister = Persister(key: "test", storedBy: storage, defaultValue: defaultValue)
+        try persister.persist("stored-value")
+
+        let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
+        let subscription = persister.publisher.dropFirst().sink { newValue in
+            XCTAssertEqual(newValue, defaultValue, "Value passed to update listener should be the default value")
+            callsUpdateListenerExpectation.fulfill()
         }
         _ = subscription
 

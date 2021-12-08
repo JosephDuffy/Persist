@@ -34,6 +34,10 @@ final class StorableInUserDefaultsTests: XCTestCase {
         XCTAssertEqual(date.asUserDefaultsValue, .date(date))
     }
 
+    func testNSNumber() {
+        XCTAssertEqual(NSNumber(123).asUserDefaultsValue, .number(NSNumber(123)))
+    }
+
     func testArray() {
         XCTAssertEqual([123].asUserDefaultsValue, .array([.int(123)]))
     }

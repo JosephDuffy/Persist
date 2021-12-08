@@ -12,34 +12,13 @@ workflows:
         strategy:
           matrix:
             xcode:
+              - "11.7"
               - last-major
               - latest
-              - latest-beta
-      ios_tests:
+      ios_tvos_watchos_maccatalyst_tests:
         strategy:
           matrix:
             xcode:
+              - "11.7"
               - last-major
               - latest
-              - latest-beta
-      tvos_tests:
-        strategy:
-          matrix:
-            xcode:
-              # Avoids current (12.2) because NSUbiquitousKeyValueStore is broken
-              - last-major
-              - latest-beta
-      mac_catalyst_tests:
-        strategy:
-          matrix:
-            xcode:
-              - last-major
-              - latest
-              - latest-beta
-      watchos_build:
-        strategy:
-          matrix:
-            xcode:
-              - last-major
-              - latest
-              - latest-beta

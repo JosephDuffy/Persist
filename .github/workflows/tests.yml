@@ -9,13 +9,14 @@ on:
 jobs:
   macos_tests:
     name: macOS Tests (SwiftPM, Xcode ${{ matrix.xcode }})
-    runs-on: macos-latest
+    runs-on: "macos-11"
     strategy:
       fail-fast: false
       matrix:
         xcode:
-          - '11.7'
-          - '12.4'
+          - "11.7"
+          - "12.5.1"
+          - "13.1"
     steps:
       - uses: actions/checkout@v2
 
@@ -23,7 +24,7 @@ jobs:
         run: sudo xcode-select --switch /Applications/Xcode_${{ matrix.xcode }}.app
 
       - name: Cache SwiftPM
-        uses: actions/cache@v1
+        uses: actions/cache@v2
         with:
           path: .build
           key: ${{ runner.os }}-xcode_${{ matrix.xcode }}-swiftpm-deps-${{ github.workspace }}-${{ hashFiles('Package.resolved') }}
@@ -37,19 +38,26 @@ jobs:
         run: xcrun llvm-cov export -format="lcov" .build/debug/PersistPackageTests.xctest/Contents/MacOS/PersistPackageTests -instr-profile .build/debug/codecov/default.profdata > coverage.lcov
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v1
+        uses: codecov/codecov-action@v2
         with:
           fail_ci_if_error: true
 
-  ios_tests:
-    name: iOS Tests (Xcode ${{ matrix.xcode }})
-    runs-on: macos-latest
+  ios_tvos_watchos_maccatalyst_tests:
+    name: ${{ matrix.os }} Tests (Xcode ${{ matrix.xcode }})
+    runs-on: "macos-11"
     strategy:
       fail-fast: false
       matrix:
         xcode:
-          - '11.7'
-          - '12.4'
+          - "11.7"
+          - "12.5.1"
+          - "13.1"
+        os:
+          - "iOS"
+          - "tvOS"
+          - "watchOS"
+          - "macCatalyst"
+
     steps:
       - uses: actions/checkout@v2
 
@@ -57,138 +65,31 @@ jobs:
         run: sudo xcode-select --switch /Applications/Xcode_${{ matrix.xcode }}.app
 
       - name: Cache SwiftPM
-        uses: actions/cache@v1
+        uses: actions/cache@v2
         with:
           path: CIDependencies/.build
           key: ${{ runner.os }}-xcode_${{ matrix.xcode }}-swiftpm-ci-deps-${{ github.workspace }}-${{ hashFiles('CIDependencies/Package.resolved') }}
           restore-keys: |
             ${{ runner.os }}-xcode_${{ matrix.xcode }}-swiftpm-ci-deps-${{ github.workspace }}
-
-      - name: Cache DerivedData
-        uses: actions/cache@v1
-        with:
-          path: ~/Library/Developer/Xcode/DerivedData
-          key: ${{ runner.os }}-iOS_derived_data-xcode_${{ matrix.xcode }}
-          restore-keys: |
-            ${{ runner.os }}-iOS_derived_data
 
       - name: Run Tests
-        run: swift run --configuration release --skip-update --package-path ./CIDependencies/ xcutils test iOS --scheme Persist --enable-code-coverage
+        if: matrix.os != 'watchOS' || matrix.xcode != '11.7'
+        run: swift run --configuration release --skip-update --package-path ./CIDependencies/ xcutils test ${{ matrix.os }} --scheme Persist --enable-code-coverage
+
+      - name: Convert coverage for Codecov
+        id: convert-coverage
+        if: (matrix.os != 'watchOS' || matrix.xcode != '11.7') && matrix.os != 'macCatalyst'
+        uses: sersoft-gmbh/swift-coverage-action@v2
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v1
+        if: (matrix.os != 'watchOS' || matrix.xcode != '11.7') && matrix.os != 'macCatalyst'
+        uses: codecov/codecov-action@v2
         with:
+          files: ${{ join(fromJSON(steps.convert-coverage.outputs.files), ',') }}
           fail_ci_if_error: true
-
-  tvos_tests:
-    name: tvOS Tests (Xcode ${{ matrix.xcode }})
-    runs-on: macos-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        xcode:
-          - '11.7'
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Select Xcode ${{ matrix.xcode }}
-        run: sudo xcode-select --switch /Applications/Xcode_${{ matrix.xcode }}.app
-
-      - name: Cache SwiftPM
-        uses: actions/cache@v1
-        with:
-          path: CIDependencies/.build
-          key: ${{ runner.os }}-xcode_${{ matrix.xcode }}-swiftpm-ci-deps-${{ github.workspace }}-${{ hashFiles('CIDependencies/Package.resolved') }}
-          restore-keys: |
-            ${{ runner.os }}-xcode_${{ matrix.xcode }}-swiftpm-ci-deps-${{ github.workspace }}
-
-      - name: Cache DerivedData
-        uses: actions/cache@v1
-        with:
-          path: ~/Library/Developer/Xcode/DerivedData
-          key: ${{ runner.os }}-tvOS_derived_data-xcode_${{ matrix.xcode }}
-          restore-keys: |
-            ${{ runner.os }}-tvOS_derived_data
-
-      - name: Run Tests
-        run: swift run --configuration release --skip-update --package-path ./CIDependencies/ xcutils test tvOS --scheme Persist --enable-code-coverage
-
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v1
-        with:
-          fail_ci_if_error: true
-
-  mac_catalyst_tests:
-    name: macCatalyst Tests (Xcode ${{ matrix.xcode }})
-    runs-on: macos-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        xcode:
-          - '11.7'
-          - '12.4'
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Select Xcode ${{ matrix.xcode }}
-        run: sudo xcode-select --switch /Applications/Xcode_${{ matrix.xcode }}.app
-
-      - name: Cache SwiftPM
-        uses: actions/cache@v1
-        with:
-          path: CIDependencies/.build
-          key: ${{ runner.os }}-xcode_${{ matrix.xcode }}-swiftpm-ci-deps-${{ github.workspace }}-${{ hashFiles('CIDependencies/Package.resolved') }}
-          restore-keys: |
-            ${{ runner.os }}-xcode_${{ matrix.xcode }}-swiftpm-ci-deps-${{ github.workspace }}
-
-      - name: Cache DerivedData
-        uses: actions/cache@v1
-        with:
-          path: ~/Library/Developer/Xcode/DerivedData
-          key: ${{ runner.os }}-macCatalyst_derived_data-xcode_${{ matrix.xcode }}
-          restore-keys: |
-            ${{ runner.os }}-macCatalyst_derived_data
-
-      - name: Run Tests
-        run: swift run --configuration release --skip-update --package-path ./CIDependencies/ xcutils test macCatalyst --scheme Persist --enable-code-coverage
-
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v1
-        with:
-          fail_ci_if_error: true
-
-  watchos_build:
-    name: watchOS Build (Xcode ${{ matrix.xcode }})
-    runs-on: macos-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        xcode:
-          - '11.7'
-          - '12.4'
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Select Xcode ${{ matrix.xcode }}
-        run: sudo xcode-select --switch /Applications/Xcode_${{ matrix.xcode }}.app
-
-      - name: Cache SwiftPM
-        uses: actions/cache@v1
-        with:
-          path: CIDependencies/.build
-          key: ${{ runner.os }}-xcode_${{ matrix.xcode }}-swiftpm-ci-deps-${{ github.workspace }}-${{ hashFiles('CIDependencies/Package.resolved') }}
-          restore-keys: |
-            ${{ runner.os }}-xcode_${{ matrix.xcode }}-swiftpm-ci-deps-${{ github.workspace }}
-
-      - name: Cache DerivedData
-        uses: actions/cache@v1
-        with:
-          path: ~/Library/Developer/Xcode/DerivedData
-          key: ${{ runner.os }}-watchOS_derived_data-xcode_${{ matrix.xcode }}
-          restore-keys: |
-            ${{ runner.os }}-watchOS_derived_data
 
       - name: Build for watchOS
+        if: matrix.os == 'watchOS' && matrix.xcode == '11.7'
         run: swift run --configuration release --skip-update --package-path ./CIDependencies/ xcutils build watchOS --scheme Persist
 
   linux_tests:
@@ -200,7 +101,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest]
-        swift: ['5.2', '5.3']
+        swift: ["5.2", "5.3", "5.4", "5.5"]
 
     steps:
       - uses: actions/checkout@v1

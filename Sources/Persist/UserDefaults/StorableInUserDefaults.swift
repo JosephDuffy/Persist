@@ -61,8 +61,15 @@ extension Float: InternalStorableInUserDefaults {
     }
 }
 
+extension NSNumber: InternalStorableInUserDefaults {
+    /// A `UserDefaultsValue.number` wrapping `self`.
+    internal var asUserDefaultsValue: UserDefaultsValue {
+        return .number(self)
+    }
+}
+
 extension Date: InternalStorableInUserDefaults {
-    /// An `UserDefaultsValue.date` wrapping `self`.
+    /// A `UserDefaultsValue.date` wrapping `self`.
     internal var asUserDefaultsValue: UserDefaultsValue {
         return .date(self)
     }
@@ -77,12 +84,12 @@ extension Array: InternalStorableInUserDefaults where Element: InternalStorableI
     }
 }
 
-extension Dictionary: StorableInUserDefaults where Key == String, Value: StorableInUserDefaults {}
+extension Dictionary: StorableInUserDefaults where Key == String {}
 
-extension Dictionary: InternalStorableInUserDefaults where Key == String, Value: InternalStorableInUserDefaults {
+extension Dictionary: InternalStorableInUserDefaults where Key == String {
     /// An `UserDefaultsValue.dictionary` wrapping `self`.
     internal var asUserDefaultsValue: UserDefaultsValue {
-        return .dictionary(mapValues(\.asUserDefaultsValue))
+        return .dictionary(compactMapValues { $0 as? InternalStorableInUserDefaults }.mapValues(\.asUserDefaultsValue))
     }
 }
 #endif
