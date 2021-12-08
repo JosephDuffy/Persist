@@ -3,12 +3,12 @@ import XCTest
 @testable import Persist
 
 final class UserDefaultsStorageTests: XCTestCase {
-
     private let userDefaultsStorage = UserDefaultsStorage(suiteName: "test-suite")!
 
     override func tearDown() {
         let userDefaults = userDefaultsStorage.userDefaults
         userDefaults.dictionaryRepresentation().keys.forEach(userDefaults.removeObject(forKey:))
+        Persister<Any>.suppressDotInUserDefaultsKeyWarning = false
     }
 
     func testUserDefaultsStorageGlobalSuiteNameInitialiser() {
@@ -298,18 +298,54 @@ final class UserDefaultsStorageTests: XCTestCase {
     }
 
     func testUpdateListenerWithKeyWithDot() {
+        var subscription: AnyCancellable?
+        let userDefaultsStorage = UserDefaultsStorage(userDefaults: self.userDefaultsStorage.userDefaults)
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
         callsUpdateListenerExpectation.expectedFulfillmentCount = 1
         callsUpdateListenerExpectation.assertForOverFulfill = true
 
-        let subscription = userDefaultsStorage.addUpdateListener(forKey: "test.test") { value in
+        subscription = userDefaultsStorage.addUpdateListener(forKey: "test.test") { value in
             callsUpdateListenerExpectation.fulfill()
             XCTAssert(value == .some(.string("test")))
         }
         _ = subscription
         userDefaultsStorage.storeValue(.string("test"), key: "test.test")
 
+        // Should only notifying update listeners once
+        subscription = nil
+        userDefaultsStorage.storeValue(.string("test"), key: "test.test")
+
         waitForExpectations(timeout: 1)
+    }
+
+    func testUpdateListenerWithKeyWithDotAfterStorageDeallocated() {
+        autoreleasepool {
+            var subscription: AnyCancellable?
+            // Test deallocating storage before subscription
+            autoreleasepool {
+                let userDefaultsStorage = UserDefaultsStorage(userDefaults: self.userDefaultsStorage.userDefaults)
+                let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
+                callsUpdateListenerExpectation.expectedFulfillmentCount = 1
+                callsUpdateListenerExpectation.assertForOverFulfill = true
+
+                subscription = userDefaultsStorage.addUpdateListener(forKey: "test.test") { value in
+                    callsUpdateListenerExpectation.fulfill()
+                    XCTAssert(value == .some(.string("test")))
+                }
+                _ = subscription
+                userDefaultsStorage.storeValue(.string("test"), key: "test.test")
+            }
+            subscription = nil
+            userDefaultsStorage.storeValue(.string("test"), key: "test.test")
+        }
+
+        waitForExpectations(timeout: 1)
+    }
+
+    func testSuppressDotInUserDefaultsKeyWarning() {
+        XCTAssertFalse(Persister<Any>.suppressDotInUserDefaultsKeyWarning)
+        Persister<Any>.suppressDotInUserDefaultsKeyWarning.toggle()
+        XCTAssertTrue(Persister<Any>.suppressDotInUserDefaultsKeyWarning)
     }
 
     func testUpdateListenerWithStorageFunction() {
@@ -420,6 +456,5 @@ final class UserDefaultsStorageTests: XCTestCase {
 
         waitForExpectations(timeout: 1)
     }
-
 }
 #endif
