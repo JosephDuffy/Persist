@@ -18,10 +18,10 @@ internal struct StorableInUserDefaultsTransformer<Input: StorableInUserDefaults>
      - returns: The `UserDefaultsValue` value.
      */
     internal func transformValue(_ value: Input) throws -> UserDefaultsValue {
-        guard let value = value as? InternalStorableInUserDefaults else {
+        guard let internalStorableInUserDefaultsValue = value as? InternalStorableInUserDefaults else {
             throw InternalStorableInUserDefaultsConformanceError(conformedValue: value)
         }
-        return value.asUserDefaultsValue
+        return internalStorableInUserDefaultsValue.asUserDefaultsValue
     }
 
     /**
