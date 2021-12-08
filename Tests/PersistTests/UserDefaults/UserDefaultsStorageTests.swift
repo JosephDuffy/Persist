@@ -299,7 +299,7 @@ final class UserDefaultsStorageTests: XCTestCase {
 
     func testUpdateListenerWithKeyWithDot() {
         var subscription: AnyCancellable?
-        let userDefaultsStorage = UserDefaultsStorage(userDefaults: userDefaultsStorage.userDefaults)
+        let userDefaultsStorage = UserDefaultsStorage(userDefaults: self.userDefaultsStorage.userDefaults)
         let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
         callsUpdateListenerExpectation.expectedFulfillmentCount = 1
         callsUpdateListenerExpectation.assertForOverFulfill = true
@@ -323,7 +323,7 @@ final class UserDefaultsStorageTests: XCTestCase {
             var subscription: AnyCancellable?
             // Test deallocating storage before subscription
             autoreleasepool {
-                let userDefaultsStorage = UserDefaultsStorage(userDefaults: userDefaultsStorage.userDefaults)
+                let userDefaultsStorage = UserDefaultsStorage(userDefaults: self.userDefaultsStorage.userDefaults)
                 let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
                 callsUpdateListenerExpectation.expectedFulfillmentCount = 1
                 callsUpdateListenerExpectation.assertForOverFulfill = true
