@@ -44,12 +44,11 @@ jobs:
 
   build_docs:
     name: Build Docs
-    runs-on: macos-latest
+    runs-on: "macos-11"
     strategy:
       fail-fast: false
       matrix:
         xcode:
-
           - "13.1"
     steps:
       - uses: actions/checkout@v2
