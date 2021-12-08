@@ -3,55 +3,54 @@ import XCTest
 @testable import Persist
 
 final class StorableInUserDefaultsTransformerTests: XCTestCase {
-
-    func testTransformBool() {
+    func testTransformBool() throws {
         let transformer = StorableInUserDefaultsTransformer<Bool>()
 
-        XCTAssertEqual(transformer.transformValue(true), .bool(true))
+        XCTAssertEqual(try transformer.transformValue(true), .bool(true))
     }
 
-    func testTransformString() {
+    func testTransformString() throws {
         let transformer = StorableInUserDefaultsTransformer<String>()
 
-        XCTAssertEqual(transformer.transformValue("test-value"), .string("test-value"))
+        XCTAssertEqual(try transformer.transformValue("test-value"), .string("test-value"))
     }
 
-    func testTransformURL() {
+    func testTransformURL() throws {
         let transformer = StorableInUserDefaultsTransformer<URL>()
 
         let url = URL(string: "http://example.com/")!
-        XCTAssertEqual(transformer.transformValue(url), .url(url))
+        XCTAssertEqual(try transformer.transformValue(url), .url(url))
     }
 
-    func testTransformData() {
+    func testTransformData() throws {
         let transformer = StorableInUserDefaultsTransformer<Data>()
 
-        XCTAssertEqual(transformer.transformValue(Data()), .data(Data()))
+        XCTAssertEqual(try transformer.transformValue(Data()), .data(Data()))
     }
 
-    func testTransformInt() {
+    func testTransformInt() throws {
         let transformer = StorableInUserDefaultsTransformer<Int>()
 
-        XCTAssertEqual(transformer.transformValue(123), .int(123))
+        XCTAssertEqual(try transformer.transformValue(123), .int(123))
     }
 
-    func testTransformDouble() {
+    func testTransformDouble() throws {
         let transformer = StorableInUserDefaultsTransformer<Double>()
 
-        XCTAssertEqual(transformer.transformValue(Double(123.45)), .double(123.45))
+        XCTAssertEqual(try transformer.transformValue(Double(123.45)), .double(123.45))
     }
 
-    func testTransformFloat() {
+    func testTransformFloat() throws {
         let transformer = StorableInUserDefaultsTransformer<Float>()
 
-        XCTAssertEqual(transformer.transformValue(Float(123.45)), .float(123.45))
+        XCTAssertEqual(try transformer.transformValue(Float(123.45)), .float(123.45))
     }
 
-    func testUntransformValue() {
+    func testUntransformValue() throws {
         let valueToUntransform = "test-value"
         let transformer = StorableInUserDefaultsTransformer<String>()
 
-        XCTAssertEqual(try? transformer.untransformValue(.string(valueToUntransform)), valueToUntransform)
+        XCTAssertEqual(try transformer.untransformValue(.string(valueToUntransform)), valueToUntransform)
     }
 
     func testUntransformValueToDifferentValue() {
@@ -74,5 +73,12 @@ final class StorableInUserDefaultsTransformerTests: XCTestCase {
         )
     }
 
+    func testUnsupportedType() {
+        struct UnsupportedType: StorableInUserDefaults {}
+        let unsupportedValue = UnsupportedType()
+        let transformer = StorableInUserDefaultsTransformer<UnsupportedType>()
+
+        XCTAssertThrowsError(try transformer.transformValue(unsupportedValue))
+    }
 }
 #endif

@@ -3,42 +3,41 @@ import XCTest
 @testable import Persist
 
 final class StorableInNSUbiquitousKeyValueStoreTransformerTests: XCTestCase {
-
-    func testTransformBool() {
+    func testTransformBool() throws {
         let transformer = StorableInNSUbiquitousKeyValueStoreTransformer<Bool>()
 
-        XCTAssertEqual(transformer.transformValue(true), .bool(true))
+        XCTAssertEqual(try transformer.transformValue(true), .bool(true))
     }
 
-    func testTransformString() {
+    func testTransformString() throws {
         let transformer = StorableInNSUbiquitousKeyValueStoreTransformer<String>()
 
-        XCTAssertEqual(transformer.transformValue("test-value"), .string("test-value"))
+        XCTAssertEqual(try transformer.transformValue("test-value"), .string("test-value"))
     }
 
-    func testTransformData() {
+    func testTransformData() throws {
         let transformer = StorableInNSUbiquitousKeyValueStoreTransformer<Data>()
 
-        XCTAssertEqual(transformer.transformValue(Data()), .data(Data()))
+        XCTAssertEqual(try transformer.transformValue(Data()), .data(Data()))
     }
 
-    func testTransformInt64() {
+    func testTransformInt64() throws {
         let transformer = StorableInNSUbiquitousKeyValueStoreTransformer<Int64>()
 
-        XCTAssertEqual(transformer.transformValue(Int64(123)), .int64(123))
+        XCTAssertEqual(try transformer.transformValue(Int64(123)), .int64(123))
     }
 
-    func testTransformDouble() {
+    func testTransformDouble() throws {
         let transformer = StorableInNSUbiquitousKeyValueStoreTransformer<Double>()
 
-        XCTAssertEqual(transformer.transformValue(Double(123.45)), .double(123.45))
+        XCTAssertEqual(try transformer.transformValue(Double(123.45)), .double(123.45))
     }
 
-    func testUntransformValue() {
+    func testUntransformValue() throws {
         let valueToUntransform = "test-value"
         let transformer = StorableInNSUbiquitousKeyValueStoreTransformer<String>()
 
-        XCTAssertEqual(try? transformer.untransformValue(.string(valueToUntransform)), valueToUntransform)
+        XCTAssertEqual(try transformer.untransformValue(.string(valueToUntransform)), valueToUntransform)
     }
 
     func testUntransformValueToDifferentValue() {
@@ -61,5 +60,12 @@ final class StorableInNSUbiquitousKeyValueStoreTransformerTests: XCTestCase {
         )
     }
 
+    func testUnsupportedType() {
+        struct UnsupportedType: StorableInNSUbiquitousKeyValueStore {}
+        let unsupportedValue = UnsupportedType()
+        let transformer = StorableInNSUbiquitousKeyValueStoreTransformer<UnsupportedType>()
+
+        XCTAssertThrowsError(try transformer.transformValue(unsupportedValue))
+    }
 }
 #endif

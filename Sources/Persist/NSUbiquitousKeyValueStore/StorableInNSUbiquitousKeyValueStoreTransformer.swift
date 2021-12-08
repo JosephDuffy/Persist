@@ -3,6 +3,13 @@
  A transformer that transforms between a `StorableInNSUbiquitousKeyValueStore` value and `NSUbiquitousKeyValueStoreValue`.
  */
 internal struct StorableInNSUbiquitousKeyValueStoreTransformer<Input: StorableInNSUbiquitousKeyValueStore>: Transformer {
+    struct InternalStorableInNSUbiquitousKeyValueStoreConformanceError: Error, CustomStringConvertible {
+        let conformedValue: Input
+
+        var description: String {
+            return "\(Input.self) has been conformed to `StorableInNSUbiquitousKeyValueStore` outside of `Persist`. This is not supported."
+        }
+    }
 
     /**
      Transform the provided `StorableInNSUbiquitousKeyValueStore` value to a `NSUbiquitousKeyValueStoreValue`.
@@ -10,11 +17,11 @@ internal struct StorableInNSUbiquitousKeyValueStoreTransformer<Input: StorableIn
      - parameter value: The `StorableInNSUbiquitousKeyValueStore` value to transform.
      - returns: The `NSUbiquitousKeyValueStoreValue` value.
      */
-    internal func transformValue(_ value: Input) -> NSUbiquitousKeyValueStoreValue {
-        guard let value = value as? InternalStorableInNSUbiquitousKeyValueStore else {
-            preconditionFailure("\(Input.self) has been conformed to `StorableInNSUbiquitousKeyValueStore` outside of `Persist`. This is not supported.")
+    internal func transformValue(_ value: Input) throws -> NSUbiquitousKeyValueStoreValue {
+        guard let internalStorableInNSUbiquitousKeyValueStoreValue = value as? InternalStorableInNSUbiquitousKeyValueStore else {
+            throw InternalStorableInNSUbiquitousKeyValueStoreConformanceError(conformedValue: value)
         }
-        return value.asNSUbiquitousKeyValueStoreValue
+        return internalStorableInNSUbiquitousKeyValueStoreValue.asNSUbiquitousKeyValueStoreValue
     }
 
     /**
@@ -32,6 +39,5 @@ internal struct StorableInNSUbiquitousKeyValueStoreTransformer<Input: StorableIn
 
         return value
     }
-
 }
 #endif
