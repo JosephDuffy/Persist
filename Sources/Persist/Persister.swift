@@ -93,6 +93,8 @@ public final class Persister<Value> {
         return _defaultValue()
     }()
 
+    private var defaultValueLock = NSLock()
+
     /// An option set that describes when to persist the default value.
     public var defaultValuePersistBehaviour: DefaultValuePersistOption
 
@@ -120,7 +122,7 @@ public final class Persister<Value> {
     private let updateListenersLock = NSLock()
 
     #if canImport(Combine)
-    /// The upates subject that publishes updates.
+    /// The updates subject that publishes updates.
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
     private var updatesSubject: PassthroughSubject<UpdatePayload, Never> {
         getUpdatesSubject()
@@ -662,9 +664,12 @@ public final class Persister<Value> {
         do {
             return try retrieveValueOrThrow()
         } catch {
+            defaultValueLock.lock()
+            let defaultValue = self.defaultValue
             if defaultValuePersistBehaviour.contains(.persistOnError) {
                 try? persist(defaultValue)
             }
+            defaultValueLock.unlock()
 
             return defaultValue
         }
@@ -686,10 +691,13 @@ public final class Persister<Value> {
         if let retrieveValue = try valueGetter() {
             return retrieveValue
         }
-        
+
+        defaultValueLock.lock()
+        let defaultValue = self.defaultValue
         if defaultValuePersistBehaviour.contains(.persistWhenNil) {
             try? persist(defaultValue)
         }
+        defaultValueLock.unlock()
 
         return defaultValue
     }
@@ -740,7 +748,12 @@ public final class Persister<Value> {
             { [weak self] result in
                 self?.notifyUpdateListenersOfResult(result)
             },
-            { [unowned self] in self.defaultValue }
+            { [unowned self] in
+                self.defaultValueLock.lock()
+                let defaultValue = self.defaultValue
+                self.defaultValueLock.unlock()
+                return defaultValue
+            }
         )
     }
 

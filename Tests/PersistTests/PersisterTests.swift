@@ -373,6 +373,28 @@ final class PersisterTests: XCTestCase {
         waitForExpectations(timeout: 1)
     }
 
+    func testAccessingDefaultValueAcrossThreads() throws {
+        let storage = InMemoryStorage<Any>()
+        let requestsDefaultValue = expectation(description: "Requests default value")
+        let persister = Persister<String>(
+            key: "test",
+            storedBy: storage,
+            defaultValue: { () -> String in
+                requestsDefaultValue.fulfill()
+                return "default-value"
+            }()
+        )
+
+        let updateListenersNotified = expectation(description: "Requests value")
+        updateListenersNotified.expectedFulfillmentCount = 10
+        DispatchQueue.concurrentPerform(iterations: 10) { _ in
+            _ = persister.retrieveValue()
+            updateListenersNotified.fulfill()
+        }
+
+        waitForExpectations(timeout: 1)
+    }
+
     #if canImport(Combine)
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
     func testSettingValueUpdatesPublisher() throws {
