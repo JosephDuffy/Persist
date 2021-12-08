@@ -99,6 +99,8 @@ public final class Persister<Value> {
         return _defaultValue()
     }()
 
+    private var defaultValueLock = NSLock()
+
     /// An option set that describes when to persist the default value.
     public var defaultValuePersistBehaviour: DefaultValuePersistOption
 
@@ -121,6 +123,9 @@ public final class Persister<Value> {
     /// A collection of the update listeners that will be notified when a value changes. The key (a `UUID`)
     /// is not exposed, but rather captured by the `Subscription` that the caller retains.
     private var updateListeners: [UUID: UpdateListener] = [:]
+
+    /// A lock used to protect access to ``updateListeners``.
+    private let updateListenersLock = NSLock()
 
     #if canImport(Combine)
     /// The updates subject that publishes updates.
@@ -676,9 +681,12 @@ public final class Persister<Value> {
         do {
             return try retrieveValueOrThrow()
         } catch {
+            defaultValueLock.lock()
+            let defaultValue = self.defaultValue
             if defaultValuePersistBehaviour.contains(.persistOnError) {
                 try? persist(defaultValue)
             }
+            defaultValueLock.unlock()
 
             return defaultValue
         }
@@ -700,10 +708,13 @@ public final class Persister<Value> {
         if let retrieveValue = try valueGetter() {
             return retrieveValue
         }
-        
+
+        defaultValueLock.lock()
+        let defaultValue = self.defaultValue
         if defaultValuePersistBehaviour.contains(.persistWhenNil) {
             try? persist(defaultValue)
         }
+        defaultValueLock.unlock()
 
         return defaultValue
     }
@@ -725,15 +736,22 @@ public final class Persister<Value> {
      */
     public func addUpdateListener(_ updateListener: @escaping UpdateListener) -> AnyCancellable {
         let uuid = UUID()
+        updateListenersLock.lock()
         updateListeners[uuid] = updateListener
+        updateListenersLock.unlock()
 
         return Subscription { [weak self] in
-            self?.updateListeners.removeValue(forKey: uuid)
+            guard let self = self else { return }
+            self.updateListenersLock.lock()
+            self.updateListeners.removeValue(forKey: uuid)
+            self.updateListenersLock.unlock()
         }.eraseToAnyCancellable()
     }
 
     private func notifyUpdateListenersOfResult(_ result: UpdatePayload) {
+        updateListenersLock.lock()
         updateListeners.values.forEach { $0(result) }
+        updateListenersLock.unlock()
 
         #if canImport(Combine)
         if #available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *) {
@@ -754,7 +772,12 @@ public final class Persister<Value> {
             { [weak self] result in
                 self?.notifyUpdateListenersOfResult(result)
             },
-            { [unowned self] in self.defaultValue }
+            { [unowned self] in
+                self.defaultValueLock.lock()
+                let defaultValue = self.defaultValue
+                self.defaultValueLock.unlock()
+                return defaultValue
+            }
         )
     }
 

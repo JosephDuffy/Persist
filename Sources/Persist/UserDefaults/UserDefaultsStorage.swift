@@ -18,6 +18,8 @@ internal final class UserDefaultsStorage: Storage {
 
     private var updateListeners: [String: [UUID: UpdateListener]] = [:]
 
+    private var updateListenersLock = NSLock()
+
     /**
      Create a new instance that wraps the specified `UserDefaults`.
 
@@ -54,9 +56,11 @@ internal final class UserDefaultsStorage: Storage {
         }
 
         if key.contains(".") {
+            updateListenersLock.lock()
             updateListeners[key]?.values.forEach { updateListener in
                 updateListener(value)
             }
+            updateListenersLock.unlock()
         }
     }
 
@@ -103,9 +107,14 @@ internal final class UserDefaultsStorage: Storage {
             }
 
             let uuid = UUID()
+            updateListenersLock.lock()
             updateListeners[key, default: [:]][uuid] = updateListener
+            updateListenersLock.unlock()
             return Subscription { [weak self] in
-                self?.updateListeners[key]?.removeValue(forKey: uuid)
+                guard let self = self else { return }
+                self.updateListenersLock.lock()
+                self.updateListeners[key]?.removeValue(forKey: uuid)
+                self.updateListenersLock.unlock()
             }.eraseToAnyCancellable()
         } else {
             let observer = KeyPathObserver(updateListener: updateListener)

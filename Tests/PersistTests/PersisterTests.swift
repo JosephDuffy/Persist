@@ -289,6 +289,112 @@ final class PersisterTests: XCTestCase {
         waitForExpectations(timeout: 1, handler: nil)
     }
 
+    func testUpdateListenersAcrossThreads() throws {
+        let storage = InMemoryStorage<Any>()
+        var persister: Persister? = Persister<String?>(key: "test", storedBy: storage)
+        var cancellables: Set<AnyCancellable> = []
+        let cancellablesLock = NSLock()
+        func modifyCancellables(_ modify: (_ cancellables: inout Set<AnyCancellable>) -> Void) {
+            cancellablesLock.lock()
+            modify(&cancellables)
+            cancellablesLock.unlock()
+        }
+
+        let updateListenersAddedExpectation = expectation(description: "Adds all update listeners")
+        updateListenersAddedExpectation.expectedFulfillmentCount = 10
+        let updateListenersNotified = expectation(description: "Notifies all update listeners")
+        updateListenersNotified.expectedFulfillmentCount = 10
+        DispatchQueue.concurrentPerform(iterations: 10) { _ in
+            let cancellable = persister?.addUpdateListener({ _ in
+                updateListenersNotified.fulfill()
+            })
+            updateListenersAddedExpectation.fulfill()
+
+            if let cancellable = cancellable {
+                modifyCancellables { cancellables in
+                    cancellables.insert(cancellable)
+                }
+            }
+        }
+        try persister?.persist("new-value")
+
+        let deallocAllUpdateListenersExpectation = expectation(description: "Deallocs all update listeners")
+        deallocAllUpdateListenersExpectation.expectedFulfillmentCount = 10
+        DispatchQueue.concurrentPerform(iterations: 5) { index in
+            modifyCancellables { cancellables in
+                cancellables.removeFirst()
+            }
+
+            deallocAllUpdateListenersExpectation.fulfill()
+        }
+
+        persister = nil
+        DispatchQueue.concurrentPerform(iterations: 5) { index in
+            modifyCancellables { cancellables in
+                cancellables.removeFirst()
+            }
+
+            deallocAllUpdateListenersExpectation.fulfill()
+        }
+
+        waitForExpectations(timeout: 1)
+    }
+
+    func testPersistingValuesAcrossThreads() throws {
+        let storage = InMemoryStorage<Any>()
+        let persister = Persister<String?>(key: "test", storedBy: storage)
+        var cancellables: Set<AnyCancellable> = []
+        let cancellablesLock = NSLock()
+        func modifyCancellables(_ modify: (_ cancellables: inout Set<AnyCancellable>) -> Void) {
+            cancellablesLock.lock()
+            modify(&cancellables)
+            cancellablesLock.unlock()
+        }
+
+        let updateListenersAddedExpectation = expectation(description: "Adds all update listeners")
+        updateListenersAddedExpectation.expectedFulfillmentCount = 10
+        let updateListenersNotified = expectation(description: "Notifies all update listeners")
+        updateListenersNotified.expectedFulfillmentCount = 100
+        DispatchQueue.concurrentPerform(iterations: 10) { _ in
+            let cancellable = persister.addUpdateListener({ _ in
+                updateListenersNotified.fulfill()
+            })
+            updateListenersAddedExpectation.fulfill()
+
+            modifyCancellables { cancellables in
+                cancellables.insert(cancellable)
+            }
+        }
+
+        DispatchQueue.concurrentPerform(iterations: 10) { index in
+            try? persister.persist("new-value-\(index)")
+        }
+
+        waitForExpectations(timeout: 1)
+    }
+
+    func testAccessingDefaultValueAcrossThreads() throws {
+        let storage = InMemoryStorage<Any>()
+        let requestsDefaultValue = expectation(description: "Requests default value")
+        let persister = Persister<String>(
+            key: "test",
+            storedBy: storage,
+            defaultValue: { () -> String in
+                requestsDefaultValue.fulfill()
+                return "default-value"
+            }()
+        )
+
+        let updateListenersNotified = expectation(description: "Requests value")
+        updateListenersNotified.expectedFulfillmentCount = 10
+        DispatchQueue.concurrentPerform(iterations: 10) { _ in
+            _ = persister.retrieveValue()
+            updateListenersNotified.fulfill()
+        }
+
+        waitForExpectations(timeout: 1)
+    }
+
     #if canImport(Combine)
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
     func testSettingValueNotifiesUpdatesPublisher() throws {

@@ -9,7 +9,11 @@ open class InMemoryStorage<StoredValue>: Storage {
 
     private var dictionary: [String: StoredValue] = [:]
 
+    private var dictionaryLock = NSLock()
+
     private var updateListeners: [String: [UUID: UpdateListener]] = [:]
+
+    private var updateListenersLock = NSLock()
 
     /**
      Create a new empty instance of `InMemoryStorage`.
@@ -23,9 +27,13 @@ open class InMemoryStorage<StoredValue>: Storage {
      - parameter key: The key to store the value against.
      */
     open func storeValue(_ value: StoredValue, key: String) {
+        dictionaryLock.lock()
         dictionary[key] = value
+        dictionaryLock.unlock()
 
+        updateListenersLock.lock()
         updateListeners[key]?.values.forEach { $0(value) }
+        updateListenersLock.unlock()
     }
 
     /**
@@ -34,9 +42,13 @@ open class InMemoryStorage<StoredValue>: Storage {
      - parameter key: The key of the value to be removed.
      */
     open func removeValue(for key: String) {
+        dictionaryLock.lock()
         dictionary.removeValue(forKey: key)
+        dictionaryLock.unlock()
 
+        updateListenersLock.lock()
         updateListeners[key]?.values.forEach { $0(nil) }
+        updateListenersLock.unlock()
     }
 
     /**
@@ -46,7 +58,10 @@ open class InMemoryStorage<StoredValue>: Storage {
      - returns: The stored value, or `nil` if the a value does not exist for the specified key.
      */
     open func retrieveValue(for key: String) -> StoredValue? {
-        return dictionary[key]
+        dictionaryLock.lock()
+        let value = dictionary[key]
+        dictionaryLock.unlock()
+        return value
     }
 
     /**
@@ -59,11 +74,15 @@ open class InMemoryStorage<StoredValue>: Storage {
     open func addUpdateListener(forKey key: String, updateListener: @escaping UpdateListener) -> AnyCancellable {
         let uuid = UUID()
 
+        updateListenersLock.lock()
         updateListeners[key, default: [:]][uuid] = updateListener
+        updateListenersLock.unlock()
 
         return Subscription { [weak self] in
-            self?.updateListeners[key]?.removeValue(forKey: uuid)
+            guard let self = self else { return }
+            self.updateListenersLock.lock()
+            self.updateListeners[key]?.removeValue(forKey: uuid)
+            self.updateListenersLock.unlock()
         }.eraseToAnyCancellable()
     }
-
 }
