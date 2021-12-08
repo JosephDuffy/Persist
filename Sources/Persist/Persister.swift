@@ -116,6 +116,9 @@ public final class Persister<Value> {
     /// is not exposed, but rather captured by the `Subscription` that the caller retains.
     private var updateListeners: [UUID: UpdateListener] = [:]
 
+    /// A lock used to protect access to ``updateListeners``.
+    private let updateListenersLock = NSLock()
+
     #if canImport(Combine)
     /// The upates subject that publishes updates.
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
@@ -708,15 +711,22 @@ public final class Persister<Value> {
      */
     public func addUpdateListener(_ updateListener: @escaping UpdateListener) -> AnyCancellable {
         let uuid = UUID()
+        updateListenersLock.lock()
         updateListeners[uuid] = updateListener
+        updateListenersLock.unlock()
 
         return Subscription { [weak self] in
-            self?.updateListeners.removeValue(forKey: uuid)
+            guard let self = self else { return }
+            self.updateListenersLock.lock()
+            self.updateListeners.removeValue(forKey: uuid)
+            self.updateListenersLock.unlock()
         }.eraseToAnyCancellable()
     }
 
     private func notifyUpdateListenersOfResult(_ result: UpdatePayload) {
+        updateListenersLock.lock()
         updateListeners.values.forEach { $0(result) }
+        updateListenersLock.unlock()
 
         #if canImport(Combine)
         if #available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *) {
