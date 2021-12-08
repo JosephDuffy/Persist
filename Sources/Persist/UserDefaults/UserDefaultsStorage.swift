@@ -101,7 +101,7 @@ internal final class UserDefaultsStorage: Storage {
      - returns: An object that represents the closure's subscription to changes. This object must be retained by the caller.
      */
     internal func addUpdateListener(forKey key: String, updateListener: @escaping UpdateListener) -> AnyCancellable {
-        if key.contains(".") {
+        guard !key.contains(".") else {
             if !UserDefaultsStorage.suppressDotInKeyWarning {
                 print("WARNING: Attempting to observe the UserDefault key \"\(key)\", which contains a dot (`.`). This will cause update listeners to only be called when the value is set on this instance. If this is acceptable you may suppress this message by setting `Persister.suppressDotInUserDefaultsKeyWarning` to `true`. For more information see https://github.com/JosephDuffy/Persist/issues/24.")
             }
@@ -116,13 +116,13 @@ internal final class UserDefaultsStorage: Storage {
                 self.updateListeners[key]?.removeValue(forKey: uuid)
                 self.updateListenersLock.unlock()
             }.eraseToAnyCancellable()
-        } else {
-            let observer = KeyPathObserver(updateListener: updateListener)
-            userDefaults.addObserver(observer, forKeyPath: key, options: .new, context: nil)
-            return Subscription { [weak userDefaults] in
-                userDefaults?.removeObserver(observer, forKeyPath: key)
-            }.eraseToAnyCancellable()
         }
+
+        let observer = KeyPathObserver(updateListener: updateListener)
+        userDefaults.addObserver(observer, forKeyPath: key, options: .new, context: nil)
+        return Subscription { [weak userDefaults] in
+            userDefaults?.removeObserver(observer, forKeyPath: key)
+        }.eraseToAnyCancellable()
     }
 
 }
