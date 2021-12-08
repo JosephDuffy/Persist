@@ -340,6 +340,39 @@ final class PersisterTests: XCTestCase {
         waitForExpectations(timeout: 1)
     }
 
+    func testPersistingValuesAcrossThreads() throws {
+        let storage = InMemoryStorage<Any>()
+        let persister = Persister<String?>(key: "test", storedBy: storage)
+        var cancellables: Set<AnyCancellable> = []
+        let cancellablesLock = NSLock()
+        func modifyCancellables(_ modify: (_ cancellables: inout Set<AnyCancellable>) -> Void) {
+            cancellablesLock.lock()
+            modify(&cancellables)
+            cancellablesLock.unlock()
+        }
+
+        let updateListenersAddedExpectation = expectation(description: "Adds all update listeners")
+        updateListenersAddedExpectation.expectedFulfillmentCount = 10
+        let updateListenersNotified = expectation(description: "Notifies all update listeners")
+        updateListenersNotified.expectedFulfillmentCount = 100
+        DispatchQueue.concurrentPerform(iterations: 10) { _ in
+            let cancellable = persister.addUpdateListener({ _ in
+                updateListenersNotified.fulfill()
+            })
+            updateListenersAddedExpectation.fulfill()
+
+            modifyCancellables { cancellables in
+                cancellables.insert(cancellable)
+            }
+        }
+
+        DispatchQueue.concurrentPerform(iterations: 10) { index in
+            try? persister.persist("new-value-\(index)")
+        }
+
+        waitForExpectations(timeout: 1)
+    }
+
     #if canImport(Combine)
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
     func testSettingValueUpdatesPublisher() throws {
