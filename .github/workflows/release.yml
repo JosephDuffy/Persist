@@ -49,7 +49,7 @@ jobs:
       fail-fast: false
       matrix:
         xcode:
-          - "13.1"
+          - "13.2"
     steps:
       - uses: actions/checkout@v2
 
