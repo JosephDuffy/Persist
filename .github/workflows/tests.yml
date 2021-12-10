@@ -16,7 +16,7 @@ jobs:
         xcode:
           - "11.7"
           - "12.5.1"
-          - "13.1"
+          - "13.2"
     steps:
       - uses: actions/checkout@v2
 
@@ -51,7 +51,7 @@ jobs:
         xcode:
           - "11.7"
           - "12.5.1"
-          - "13.1"
+          - "13.2"
         os:
           - "iOS"
           - "tvOS"
