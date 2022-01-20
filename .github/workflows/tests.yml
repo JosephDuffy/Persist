@@ -18,7 +18,7 @@ jobs:
           - "12.5.1"
           - "13.2.1"
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v2.4.0
 
       - name: Select Xcode ${{ matrix.xcode }}
         run: sudo xcode-select --switch /Applications/Xcode_${{ matrix.xcode }}.app
@@ -59,7 +59,7 @@ jobs:
           - "macCatalyst"
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v2.4.0
 
       - name: Select Xcode ${{ matrix.xcode }}
         run: sudo xcode-select --switch /Applications/Xcode_${{ matrix.xcode }}.app
@@ -104,7 +104,7 @@ jobs:
         swift: ["5.2", "5.3", "5.4", "5.5"]
 
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2.4.0
 
       - name: swift test
         run: swift test --enable-test-discovery
