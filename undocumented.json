@@ -1,6 +1,27 @@
 {
   "warnings": [
     {
+      "file": "/Users/runner/work/Persist/Persist/Sources/Persist/ObservablePersister.swift",
+      "line": 9,
+      "symbol": "ObservablePersister.value",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/Persist/Persist/Sources/Persist/PersistStorage.swift",
+      "line": 10,
+      "symbol": "PersistStorage.wrappedValue",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/Persist/Persist/Sources/Persist/PersistStorage.swift",
+      "line": 17,
+      "symbol": "PersistStorage.projectedValue",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
       "file": "/Users/runner/work/Persist/Persist/Sources/Persist/Transformer/RawRepresentableTransformer.swift",
       "line": 20,
       "symbol": "RawRepresentableTransformer.init()",

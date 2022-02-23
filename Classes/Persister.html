@@ -8,20 +8,28 @@
     <script src="../js/jquery.min.js" defer></script>
     <script src="../js/jazzy.js" defer></script>
     
+    <script src="../js/lunr.min.js" defer></script>
+    <script src="../js/typeahead.jquery.js" defer></script>
+    <script src="../js/jazzy.search.js" defer></script>
   </head>
   <body>
     <a name="//apple_ref/swift/Class/Persister" class="dashAnchor"></a>
     <a title="Persister Class Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html"> Docs</a> (99% documented)</p>
-        <p class="header-right"><a href="https://github.com/JosephDuffy/Persist"><img src="../img/gh.png"/>View on GitHub</a></p>
+        <p><a href="../index.html"> Docs</a> (98% documented)</p>
+        <p class="header-right"><a href="https://github.com/JosephDuffy/Persist"><img src="../img/gh.png" alt="GitHub"/>View on GitHub</a></p>
+        <div class="header-right">
+          <form role="search" action="../search.json">
+            <input type="text" placeholder="Search documentation" data-typeahead>
+          </form>
+        </div>
       </div>
     </header>
     <div class="content-wrapper">
       <p id="breadcrumbs">
         <a href="../index.html"> Reference</a>
-        <img id="carat" src="../img/carat.png" />
+        <img id="carat" src="../img/carat.png" alt=""/>
         Persister Class Reference
       </p>
     </div>
@@ -36,6 +44,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/InMemoryStorage.html">InMemoryStorage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/ObservablePersister.html">ObservablePersister</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/Persister.html">Persister</a>
@@ -100,6 +111,9 @@
                 <a href="../Structs/JSONTransformer.html">JSONTransformer</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Structs/PersistStorage.html">PersistStorage</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Structs/Persisted.html">Persisted</a>
               </li>
               <li class="nav-group-task">
@@ -121,6 +135,7 @@
             <h1>Persister</h1>
               <div class="declaration">
                 <div class="language">
+                  
                   <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="kt">Persister</span><span class="o">&lt;</span><span class="kt">Value</span><span class="o">&gt;</span></code></pre>
 
                 </div>
@@ -355,6 +370,34 @@ transformer.</p>
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:7Persist9PersisterC9publisher7Combine12AnyPublisherVyxs5NeverOGvp"></a>
+                    <a name="//apple_ref/swift/Property/publisher" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7Persist9PersisterC9publisher7Combine12AnyPublisherVyxs5NeverOGvp">publisher</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A publisher that will publish updates as they occur.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@available</span><span class="p">(</span><span class="n">macOS</span> <span class="mf">10.15</span><span class="p">,</span> <span class="n">iOS</span> <span class="mf">13.0</span><span class="p">,</span> <span class="n">tvOS</span> <span class="mf">13.0</span><span class="p">,</span> <span class="n">watchOS</span> <span class="mf">6.0</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span>
+<span class="kd">public</span> <span class="k">var</span> <span class="nv">publisher</span><span class="p">:</span> <span class="kt">AnyPublisher</span><span class="o">&lt;</span><span class="kt">Value</span><span class="p">,</span> <span class="kt">Never</span><span class="o">&gt;</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:7Persist9PersisterC12defaultValuexvp"></a>
                     <a name="//apple_ref/swift/Property/defaultValue" class="dashAnchor"></a>
                     <a class="token" href="#/s:7Persist9PersisterC12defaultValuexvp">defaultValue</a>
@@ -523,11 +566,11 @@ transformer.</p>
             </div>
             <div class="task-group">
               <div class="task-name-container">
-                <a name="/Storage.Value%20==%20Value"></a>
+                <a name="/Storage.Value%20%3D%3D%20Value"></a>
                 <a name="//apple_ref/swift/Section/Storage.Value == Value" class="dashAnchor"></a>
                 <div class="section-name-container">
-                  <a class="section-name-link" href="#/Storage.Value%20==%20Value"></a>
-                  <h3 class="section-name"><p>Storage.Value == Value</p>
+                  <a class="section-name-link" href="#/Storage.Value%20%3D%3D%20Value"></a>
+                  <h3 class="section-name"><span>Storage.Value == Value</span>
 </h3>
                 </div>
               </div>
@@ -688,11 +731,11 @@ against the provided key.</p>
             </div>
             <div class="task-group">
               <div class="task-name-container">
-                <a name="/Storage.Value%20==%20Any"></a>
+                <a name="/Storage.Value%20%3D%3D%20Any"></a>
                 <a name="//apple_ref/swift/Section/Storage.Value == Any" class="dashAnchor"></a>
                 <div class="section-name-container">
-                  <a class="section-name-link" href="#/Storage.Value%20==%20Any"></a>
-                  <h3 class="section-name"><p>Storage.Value == Any</p>
+                  <a class="section-name-link" href="#/Storage.Value%20%3D%3D%20Any"></a>
+                  <h3 class="section-name"><span>Storage.Value == Any</span>
 </h3>
                 </div>
               </div>
@@ -829,11 +872,11 @@ against the provided key.</p>
             </div>
             <div class="task-group">
               <div class="task-name-container">
-                <a name="/Storage.Value%20==%20Any,%20Transformer.Input%20==%20Value"></a>
+                <a name="/Storage.Value%20%3D%3D%20Any%2C%20Transformer.Input%20%3D%3D%20Value"></a>
                 <a name="//apple_ref/swift/Section/Storage.Value == Any, Transformer.Input == Value" class="dashAnchor"></a>
                 <div class="section-name-container">
-                  <a class="section-name-link" href="#/Storage.Value%20==%20Any,%20Transformer.Input%20==%20Value"></a>
-                  <h3 class="section-name"><p>Storage.Value == Any, Transformer.Input == Value</p>
+                  <a class="section-name-link" href="#/Storage.Value%20%3D%3D%20Any%2C%20Transformer.Input%20%3D%3D%20Value"></a>
+                  <h3 class="section-name"><span>Storage.Value == Any, Transformer.Input == Value</span>
 </h3>
                 </div>
               </div>
@@ -1000,11 +1043,11 @@ and being retrieved from the storage.</p>
             </div>
             <div class="task-group">
               <div class="task-name-container">
-                <a name="/Transformer.Input%20==%20Value,%20Transformer.Output%20==%20Storage.Value"></a>
+                <a name="/Transformer.Input%20%3D%3D%20Value%2C%20Transformer.Output%20%3D%3D%20Storage.Value"></a>
                 <a name="//apple_ref/swift/Section/Transformer.Input == Value, Transformer.Output == Storage.Value" class="dashAnchor"></a>
                 <div class="section-name-container">
-                  <a class="section-name-link" href="#/Transformer.Input%20==%20Value,%20Transformer.Output%20==%20Storage.Value"></a>
-                  <h3 class="section-name"><p>Transformer.Input == Value, Transformer.Output == Storage.Value</p>
+                  <a class="section-name-link" href="#/Transformer.Input%20%3D%3D%20Value%2C%20Transformer.Output%20%3D%3D%20Storage.Value"></a>
+                  <h3 class="section-name"><span>Transformer.Input == Value, Transformer.Output == Storage.Value</span>
 </h3>
                 </div>
               </div>
@@ -1221,7 +1264,7 @@ and after being retrieved from the storage.</p>
                 <a name="//apple_ref/swift/Section/Functions" class="dashAnchor"></a>
                 <div class="section-name-container">
                   <a class="section-name-link" href="#/Functions"></a>
-                  <h3 class="section-name"><p>Functions</p>
+                  <h3 class="section-name"><span>Functions</span>
 </h3>
                 </div>
               </div>
@@ -1840,11 +1883,11 @@ retrieved from the storage.</p>
             </div>
             <div class="task-group">
               <div class="task-name-container">
-                <a name="/Value:%20StorableInNSUbiquitousKeyValueStore?"></a>
+                <a name="/Value%3A%20StorableInNSUbiquitousKeyValueStore%3F"></a>
                 <a name="//apple_ref/swift/Section/Value: StorableInNSUbiquitousKeyValueStore?" class="dashAnchor"></a>
                 <div class="section-name-container">
-                  <a class="section-name-link" href="#/Value:%20StorableInNSUbiquitousKeyValueStore?"></a>
-                  <h3 class="section-name"><p>Value: StorableInNSUbiquitousKeyValueStore?</p>
+                  <a class="section-name-link" href="#/Value%3A%20StorableInNSUbiquitousKeyValueStore%3F"></a>
+                  <h3 class="section-name"><span>Value: StorableInNSUbiquitousKeyValueStore?</span>
 </h3>
                 </div>
               </div>
@@ -2029,11 +2072,11 @@ retrieved from the storage.</p>
             </div>
             <div class="task-group">
               <div class="task-name-container">
-                <a name="/Transformer.Input%20==%20Value,%20Transformer.Output:%20StorableInNSUbiquitousKeyValueStore"></a>
+                <a name="/Transformer.Input%20%3D%3D%20Value%2C%20Transformer.Output%3A%20StorableInNSUbiquitousKeyValueStore"></a>
                 <a name="//apple_ref/swift/Section/Transformer.Input == Value, Transformer.Output: StorableInNSUbiquitousKeyValueStore" class="dashAnchor"></a>
                 <div class="section-name-container">
-                  <a class="section-name-link" href="#/Transformer.Input%20==%20Value,%20Transformer.Output:%20StorableInNSUbiquitousKeyValueStore"></a>
-                  <h3 class="section-name"><p>Transformer.Input == Value, Transformer.Output: StorableInNSUbiquitousKeyValueStore</p>
+                  <a class="section-name-link" href="#/Transformer.Input%20%3D%3D%20Value%2C%20Transformer.Output%3A%20StorableInNSUbiquitousKeyValueStore"></a>
+                  <h3 class="section-name"><span>Transformer.Input == Value, Transformer.Output: StorableInNSUbiquitousKeyValueStore</span>
 </h3>
                 </div>
               </div>
@@ -2250,11 +2293,11 @@ retrieved from the storage.</p>
             </div>
             <div class="task-group">
               <div class="task-name-container">
-                <a name="/Transformer.Input%20==%20WrappedValue,%20Transformer.Output:%20StorableInNSUbiquitousKeyValueStore"></a>
+                <a name="/Transformer.Input%20%3D%3D%20WrappedValue%2C%20Transformer.Output%3A%20StorableInNSUbiquitousKeyValueStore"></a>
                 <a name="//apple_ref/swift/Section/Transformer.Input == WrappedValue, Transformer.Output: StorableInNSUbiquitousKeyValueStore" class="dashAnchor"></a>
                 <div class="section-name-container">
-                  <a class="section-name-link" href="#/Transformer.Input%20==%20WrappedValue,%20Transformer.Output:%20StorableInNSUbiquitousKeyValueStore"></a>
-                  <h3 class="section-name"><p>Transformer.Input == WrappedValue, Transformer.Output: StorableInNSUbiquitousKeyValueStore</p>
+                  <a class="section-name-link" href="#/Transformer.Input%20%3D%3D%20WrappedValue%2C%20Transformer.Output%3A%20StorableInNSUbiquitousKeyValueStore"></a>
+                  <h3 class="section-name"><span>Transformer.Input == WrappedValue, Transformer.Output: StorableInNSUbiquitousKeyValueStore</span>
 </h3>
                 </div>
               </div>
@@ -2471,11 +2514,11 @@ retrieved from the storage.</p>
             </div>
             <div class="task-group">
               <div class="task-name-container">
-                <a name="/Value:%20StorableInUserDefaults?"></a>
+                <a name="/Value%3A%20StorableInUserDefaults%3F"></a>
                 <a name="//apple_ref/swift/Section/Value: StorableInUserDefaults?" class="dashAnchor"></a>
                 <div class="section-name-container">
-                  <a class="section-name-link" href="#/Value:%20StorableInUserDefaults?"></a>
-                  <h3 class="section-name"><p>Value: StorableInUserDefaults?</p>
+                  <a class="section-name-link" href="#/Value%3A%20StorableInUserDefaults%3F"></a>
+                  <h3 class="section-name"><span>Value: StorableInUserDefaults?</span>
 </h3>
                 </div>
               </div>
@@ -2660,11 +2703,11 @@ retrieved from the storage.</p>
             </div>
             <div class="task-group">
               <div class="task-name-container">
-                <a name="/Transformer.Input%20==%20Value,%20Transformer.Output:%20StorableInUserDefaults"></a>
+                <a name="/Transformer.Input%20%3D%3D%20Value%2C%20Transformer.Output%3A%20StorableInUserDefaults"></a>
                 <a name="//apple_ref/swift/Section/Transformer.Input == Value, Transformer.Output: StorableInUserDefaults" class="dashAnchor"></a>
                 <div class="section-name-container">
-                  <a class="section-name-link" href="#/Transformer.Input%20==%20Value,%20Transformer.Output:%20StorableInUserDefaults"></a>
-                  <h3 class="section-name"><p>Transformer.Input == Value, Transformer.Output: StorableInUserDefaults</p>
+                  <a class="section-name-link" href="#/Transformer.Input%20%3D%3D%20Value%2C%20Transformer.Output%3A%20StorableInUserDefaults"></a>
+                  <h3 class="section-name"><span>Transformer.Input == Value, Transformer.Output: StorableInUserDefaults</span>
 </h3>
                 </div>
               </div>
@@ -2881,11 +2924,11 @@ retrieved from the storage.</p>
             </div>
             <div class="task-group">
               <div class="task-name-container">
-                <a name="/Transformer.Input%20==%20WrappedValue,%20Transformer.Output:%20StorableInUserDefaults"></a>
+                <a name="/Transformer.Input%20%3D%3D%20WrappedValue%2C%20Transformer.Output%3A%20StorableInUserDefaults"></a>
                 <a name="//apple_ref/swift/Section/Transformer.Input == WrappedValue, Transformer.Output: StorableInUserDefaults" class="dashAnchor"></a>
                 <div class="section-name-container">
-                  <a class="section-name-link" href="#/Transformer.Input%20==%20WrappedValue,%20Transformer.Output:%20StorableInUserDefaults"></a>
-                  <h3 class="section-name"><p>Transformer.Input == WrappedValue, Transformer.Output: StorableInUserDefaults</p>
+                  <a class="section-name-link" href="#/Transformer.Input%20%3D%3D%20WrappedValue%2C%20Transformer.Output%3A%20StorableInUserDefaults"></a>
+                  <h3 class="section-name"><span>Transformer.Input == WrappedValue, Transformer.Output: StorableInUserDefaults</span>
 </h3>
                 </div>
               </div>
@@ -3130,11 +3173,11 @@ using <code>UserDefaults</code> keys with a dot (<code>.</code>) in them.</p>
             </div>
             <div class="task-group">
               <div class="task-name-container">
-                <a name="/Available%20where%20%60Value%60%20==%20%60Data%60"></a>
+                <a name="/Available%20where%20%60Value%60%20%3D%3D%20%60Data%60"></a>
                 <a name="//apple_ref/swift/Section/Available where `Value` == `Data`" class="dashAnchor"></a>
                 <div class="section-name-container">
-                  <a class="section-name-link" href="#/Available%20where%20%60Value%60%20==%20%60Data%60"></a>
-                  <h3 class="section-name"><p>Available where <code>Value</code> == <code>Data</code></p>
+                  <a class="section-name-link" href="#/Available%20where%20%60Value%60%20%3D%3D%20%60Data%60"></a>
+                  <h3 class="section-name"><span>Available where <code>Value</code> == <code>Data</code></span>
 </h3>
                 </div>
               </div>
@@ -3319,11 +3362,11 @@ using <code>UserDefaults</code> keys with a dot (<code>.</code>) in them.</p>
             </div>
             <div class="task-group">
               <div class="task-name-container">
-                <a name="/Available%20where%20%60Value%60%20==%20%60Data%60?"></a>
+                <a name="/Available%20where%20%60Value%60%20%3D%3D%20%60Data%60%3F"></a>
                 <a name="//apple_ref/swift/Section/Available where `Value` == `Data`?" class="dashAnchor"></a>
                 <div class="section-name-container">
-                  <a class="section-name-link" href="#/Available%20where%20%60Value%60%20==%20%60Data%60?"></a>
-                  <h3 class="section-name"><p>Available where <code>Value</code> == <code>Data</code>?</p>
+                  <a class="section-name-link" href="#/Available%20where%20%60Value%60%20%3D%3D%20%60Data%60%3F"></a>
+                  <h3 class="section-name"><span>Available where <code>Value</code> == <code>Data</code>?</span>
 </h3>
                 </div>
               </div>
@@ -3508,11 +3551,11 @@ using <code>UserDefaults</code> keys with a dot (<code>.</code>) in them.</p>
             </div>
             <div class="task-group">
               <div class="task-name-container">
-                <a name="/Available%20where%20%60Value%60:%20%60StorableInNSUbiquitousKeyValueStore%60"></a>
+                <a name="/Available%20where%20%60Value%60%3A%20%60StorableInNSUbiquitousKeyValueStore%60"></a>
                 <a name="//apple_ref/swift/Section/Available where `Value`: `StorableInNSUbiquitousKeyValueStore`" class="dashAnchor"></a>
                 <div class="section-name-container">
-                  <a class="section-name-link" href="#/Available%20where%20%60Value%60:%20%60StorableInNSUbiquitousKeyValueStore%60"></a>
-                  <h3 class="section-name"><p>Available where <code>Value</code>: <code><a href="../Protocols.html#/s:7Persist35StorableInNSUbiquitousKeyValueStoreP">StorableInNSUbiquitousKeyValueStore</a></code></p>
+                  <a class="section-name-link" href="#/Available%20where%20%60Value%60%3A%20%60StorableInNSUbiquitousKeyValueStore%60"></a>
+                  <h3 class="section-name"><span>Available where <code>Value</code>: <code><a href="../Protocols.html#/s:7Persist35StorableInNSUbiquitousKeyValueStoreP">StorableInNSUbiquitousKeyValueStore</a></code></span>
 </h3>
                 </div>
               </div>
@@ -3697,11 +3740,11 @@ using <code>UserDefaults</code> keys with a dot (<code>.</code>) in them.</p>
             </div>
             <div class="task-group">
               <div class="task-name-container">
-                <a name="/Available%20where%20%60Value%60:%20%60StorableInUserDefaults%60"></a>
+                <a name="/Available%20where%20%60Value%60%3A%20%60StorableInUserDefaults%60"></a>
                 <a name="//apple_ref/swift/Section/Available where `Value`: `StorableInUserDefaults`" class="dashAnchor"></a>
                 <div class="section-name-container">
-                  <a class="section-name-link" href="#/Available%20where%20%60Value%60:%20%60StorableInUserDefaults%60"></a>
-                  <h3 class="section-name"><p>Available where <code>Value</code>: <code><a href="../Protocols.html#/s:7Persist22StorableInUserDefaultsP">StorableInUserDefaults</a></code></p>
+                  <a class="section-name-link" href="#/Available%20where%20%60Value%60%3A%20%60StorableInUserDefaults%60"></a>
+                  <h3 class="section-name"><span>Available where <code>Value</code>: <code><a href="../Protocols.html#/s:7Persist22StorableInUserDefaultsP">StorableInUserDefaults</a></code></span>
 </h3>
                 </div>
               </div>
@@ -3887,11 +3930,10 @@ using <code>UserDefaults</code> keys with a dot (<code>.</code>) in them.</p>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2021 <a class="link" href="" target="_blank" rel="external">Joseph Duffy</a>. All rights reserved. (Last updated: 2021-08-30)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2022 <a class="link" href="" target="_blank" rel="external noopener">Joseph Duffy</a>. All rights reserved. (Last updated: 2022-02-23)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.1</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
         </section>
       </article>
     </div>
   </body>
-</div>
 </html>
