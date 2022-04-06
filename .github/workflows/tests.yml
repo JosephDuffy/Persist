@@ -38,7 +38,7 @@ jobs:
         run: xcrun llvm-cov export -format="lcov" .build/debug/PersistPackageTests.xctest/Contents/MacOS/PersistPackageTests -instr-profile .build/debug/codecov/default.profdata > coverage.lcov
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v2
+        uses: codecov/codecov-action@v3
         with:
           fail_ci_if_error: true
 
@@ -83,7 +83,7 @@ jobs:
 
       - name: Upload coverage to Codecov
         if: (matrix.os != 'watchOS' || matrix.xcode != '11.7') && matrix.os != 'macCatalyst'
-        uses: codecov/codecov-action@v2
+        uses: codecov/codecov-action@v3
         with:
           files: ${{ join(fromJSON(steps.convert-coverage.outputs.files), ',') }}
           fail_ci_if_error: true
