@@ -15,13 +15,6 @@
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/work/Persist/Persist/Sources/Persist/PersistStorage.swift",
-      "line": 17,
-      "symbol": "PersistStorage.projectedValue",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
       "file": "/Users/runner/work/Persist/Persist/Sources/Persist/Transformer/RawRepresentableTransformer.swift",
       "line": 20,
       "symbol": "RawRepresentableTransformer.init()",
