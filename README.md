@@ -48,7 +48,7 @@ UserDefaults.standard.object(forKey: "foo-baz") // "new-value"
 
 ### Catching Errors
 
-`Persister`'s `persist(_:)` and `retrieveValueOrThrow()` functions will throw if the storage or transformer throws are error.
+`Persister`'s `persist(_:)` and `retrieveValueOrThrow()` functions will throw if the storage or transformer throws an error.
 
 `Persisted` wraps a `Persister` and exposes it as the `projectedValue`, which allows you to catch errors:
 
