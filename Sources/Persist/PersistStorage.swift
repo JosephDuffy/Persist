@@ -17,10 +17,10 @@ public struct PersistStorage<Value>: DynamicProperty {
     /// A `Binding` to the ``wrappedValue``. Supports animations.
     public var projectedValue: Binding<Value> {
         Binding(
-            get: { wrappedValue },
+            get: { self.wrappedValue },
             set: { value, transaction in
                 withTransaction(transaction) {
-                    wrappedValue = value
+                    self.wrappedValue = value
                 }
             }
         )
