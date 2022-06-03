@@ -17,7 +17,7 @@ jobs:
         with:
           token: ${{ secrets.UPDATE_XCODE_VERSIONS_GITHUB_TOKEN }}
 
-      - uses: josephduffy/update-xcode-version-action@0.4.0
+      - uses: josephduffy/update-xcode-version-action@v0.4.0
         with:
           xcode-version-badge-versions: "11.7, last-major, latest"
           xcode-version-badge-markdown-file: ./README.md
