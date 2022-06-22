@@ -79,7 +79,7 @@ jobs:
       - name: Convert coverage for Codecov
         id: convert-coverage
         if: (matrix.os != 'watchOS' || matrix.xcode != '11.7') && matrix.os != 'macCatalyst'
-        uses: sersoft-gmbh/swift-coverage-action@v2
+        uses: sersoft-gmbh/swift-coverage-action@v3
 
       - name: Upload coverage to Codecov
         if: (matrix.os != 'watchOS' || matrix.xcode != '11.7') && matrix.os != 'macCatalyst'
