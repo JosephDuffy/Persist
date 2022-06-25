@@ -34,12 +34,17 @@ jobs:
       - name: SwiftPM tests
         run: swift test --enable-code-coverage
 
-      - name: Convert coverage to lcov
-        run: xcrun llvm-cov export -format="lcov" .build/debug/PersistPackageTests.xctest/Contents/MacOS/PersistPackageTests -instr-profile .build/debug/codecov/default.profdata > coverage.lcov
+      - name: Convert coverage for Codecov
+        id: convert-coverage
+        uses: sersoft-gmbh/swift-coverage-action@v3.0.0
+        with:
+          ignore-conversion-failures: true
+          fail-on-empty-output: true
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
         with:
+          files: ${{ join(fromJSON(steps.convert-coverage.outputs.files), ',') }}
           fail_ci_if_error: true
 
   ios_tvos_watchos_maccatalyst_tests:
