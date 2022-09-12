@@ -32,8 +32,13 @@ open class InMemoryStorage<StoredValue>: Storage {
         dictionaryLock.unlock()
 
         updateListenersLock.lock()
-        updateListeners[key]?.values.forEach { $0(value) }
+        // Take a copy of the update listeners so the lock can be unlocked when
+        // the closures are called, preventing a deadlock if a subscriber adds
+        // a new subscription is response to an update.
+        let updateListenersForKey = updateListeners[key]?.values
         updateListenersLock.unlock()
+
+        updateListenersForKey?.forEach { $0(value) }
     }
 
     /**
@@ -47,8 +52,13 @@ open class InMemoryStorage<StoredValue>: Storage {
         dictionaryLock.unlock()
 
         updateListenersLock.lock()
-        updateListeners[key]?.values.forEach { $0(nil) }
+        // Take a copy of the update listeners so the lock can be unlocked when
+        // the closures are called, preventing a deadlock if a subscriber adds
+        // a new subscription is response to an update.
+        let updateListenersForKey = updateListeners[key]?.values
         updateListenersLock.unlock()
+
+        updateListenersForKey?.forEach { $0(nil) }
     }
 
     /**

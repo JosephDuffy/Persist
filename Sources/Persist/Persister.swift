@@ -750,8 +750,13 @@ public final class Persister<Value> {
 
     private func notifyUpdateListenersOfResult(_ result: UpdatePayload) {
         updateListenersLock.lock()
-        updateListeners.values.forEach { $0(result) }
+        // Take a copy of the update listeners so the lock can be unlocked when
+        // the closures are called, preventing a deadlock if a subscriber adds
+        // a new subscription is response to an update.
+        let updateListeners = self.updateListeners.values
         updateListenersLock.unlock()
+
+        updateListeners.forEach { $0(result) }
 
         #if canImport(Combine)
         if #available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *) {

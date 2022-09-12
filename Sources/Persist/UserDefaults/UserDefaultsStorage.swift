@@ -57,10 +57,13 @@ internal final class UserDefaultsStorage: Storage {
 
         if key.contains(".") {
             updateListenersLock.lock()
-            updateListeners[key]?.values.forEach { updateListener in
-                updateListener(value)
-            }
+            // Take a copy of the update listeners so the lock can be unlocked
+            // when the closures are called, preventing a deadlock if a
+            // subscriber adds a new subscription is response to an update.
+            let updateListenersForKey = updateListeners[key]?.values
             updateListenersLock.unlock()
+
+            updateListenersForKey?.forEach { $0(value) }
         }
     }
 

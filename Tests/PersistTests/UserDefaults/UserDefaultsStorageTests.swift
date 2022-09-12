@@ -456,5 +456,27 @@ final class UserDefaultsStorageTests: XCTestCase {
 
         waitForExpectations(timeout: 1)
     }
+
+    /// Tests that new subscribers can be added in response to a value being
+    /// updated.
+    ///
+    /// This test aims to validate that the locks used to ensure thread-safety
+    /// don't cause a deadlock in this situation.
+    func testAddingSubscriberInsideUpdateClosure() throws {
+        let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
+        let newSubscriptionIsCreatedExpectation = expectation(description: "New subscription is created")
+        let subscription = userDefaultsStorage.addUpdateListener(forKey: "key.with.period") { _ in
+            callsUpdateListenerExpectation.fulfill()
+
+            let newSubscription = self.userDefaultsStorage.addUpdateListener(forKey: "key.with.period") { _ in }
+            newSubscriptionIsCreatedExpectation.fulfill()
+            _ = newSubscription
+        }
+        _ = subscription
+
+        userDefaultsStorage.storeValue(.string("value"), key: "key.with.period")
+
+        waitForExpectations(timeout: 1)
+    }
 }
 #endif

@@ -395,6 +395,35 @@ final class PersisterTests: XCTestCase {
         waitForExpectations(timeout: 1)
     }
 
+    /// Tests that new subscribers can be added in response to a value being
+    /// updated.
+    ///
+    /// This test aims to validate that the locks used to ensure thread-safety
+    /// don't cause a deadlock in this situation.
+    func testAddingSubscriberInsideUpdateClosure() throws {
+        let storage = InMemoryStorage<String>()
+        let persister = Persister(key: "test", storedBy: storage, defaultValue: "default")
+
+        let callsUpdateListenerExpectation = expectation(description: "Calls update listener")
+        let newSubscriptionIsCreatedExpectation = expectation(description: "New subscription is created")
+        let subscription = persister.addUpdateListener { [weak persister] _ in
+            callsUpdateListenerExpectation.fulfill()
+
+            guard let persister = persister else {
+                XCTFail("Persister should be non-nil")
+                return
+            }
+            let newSubscription = persister.addUpdateListener { _ in }
+            newSubscriptionIsCreatedExpectation.fulfill()
+            _ = newSubscription
+        }
+        _ = subscription
+
+        try persister.persist("new-value")
+
+        waitForExpectations(timeout: 1)
+    }
+
     #if canImport(Combine)
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
     func testSettingValueNotifiesUpdatesPublisher() throws {
