@@ -778,6 +778,7 @@ public final class Persister<Value> {
                 self?.notifyUpdateListenersOfResult(result)
             },
             { [unowned self] in
+                // TODO: Honour `defaultValuePersistBehaviour`
                 self.defaultValueLock.lock()
                 let defaultValue = self.defaultValue
                 self.defaultValueLock.unlock()
