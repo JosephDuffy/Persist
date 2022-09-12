@@ -33,7 +33,7 @@ final class UserDefaultsStorageTests: XCTestCase {
 
         userDefaultsStorage.storeValue(.bool(value), key: key)
 
-        XCTAssertEqual(userDefaultsStorage.userDefaults.bool(forKey: key), value, "Bools should be retreivable from NSUbiquitousKeyValueStore as bools")
+        XCTAssertEqual(userDefaultsStorage.userDefaults.bool(forKey: key), value, "Bools should be retrievable from NSUbiquitousKeyValueStore as bools")
         // Bools are stored within `NSUbiquitousKeyValueStore` as Int.
         // `StorableInUserDefaultsTransformer` converts this to a `Bool` as required.
         XCTAssertEqual(userDefaultsStorage.retrieveValue(for: key), .int(0))
