@@ -1,4 +1,5 @@
 import Foundation
+import PersistLogger
 #if canImport(Combine)
 import Combine
 #endif
@@ -177,6 +178,7 @@ public final class Persister<Value> {
         valueRemover: @escaping ValueRemover,
         defaultValue: @autoclosure @escaping () -> Value,
         defaultValuePersistBehaviour: DefaultValuePersistOption = [],
+        logger: PersistLogger? = nil,
         addUpdateListener: AddUpdateListener
     ) {
         self.valueGetter = valueGetter

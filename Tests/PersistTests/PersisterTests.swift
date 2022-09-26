@@ -5,6 +5,20 @@ import XCTest
 final class PersisterTests: XCTestCase {
 
     func testStoringValueWithAnyStorageType() throws {
+        #if canImport(os)
+        if #available(macOS 10.12, iOS 10.0, watchOS 3.0, tvOS 10.0, *) {
+            _ = Persister<String>(
+                valueGetter: { "foo" },
+                valueSetter: { _ in },
+                valueRemover: { },
+                defaultValue: "",
+                defaultValuePersistBehaviour: .all,
+                osLog: .disabled,
+                addUpdateListener: { _, _ in return Subscription(cancel: {}).eraseToAnyCancellable() }
+            )
+        }
+        #endif
+
         struct StoredValue: Codable, Equatable {
             let property: String
         }

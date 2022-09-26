@@ -8,9 +8,11 @@ let package = Package(
     ],
     products: [
         .library(name: "Persist", targets: ["Persist"]),
+        .library(name: "PersistLogger", targets: ["PersistLogger"]),
     ],
     targets: [
-        .target(name: "Persist"),
+        .target(name: "Persist", dependencies: ["PersistLogger"]),
         .testTarget(name: "PersistTests", dependencies: ["Persist"]),
+        .target(name: "PersistLogger"),
     ]
 )
