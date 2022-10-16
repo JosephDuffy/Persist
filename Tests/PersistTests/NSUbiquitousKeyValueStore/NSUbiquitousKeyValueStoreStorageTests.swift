@@ -8,11 +8,9 @@ final class NSUbiquitousKeyValueStoreStorageTests: XCTestCase {
     private let nsUbiquitousKeyValueStoreStorage = NSUbiquitousKeyValueStoreStorage(nsUbiquitousKeyValueStore: .default)
 
     override func setUpWithError() throws {
-        #if os(iOS) || os (tvOS)
-        if #available(iOS 15, tvOS 15, *) {
-            try XCTSkipIf(true, "NSUbiquitousKeyValueStore doesn't work in tests on iOS 15 or tvOS 15")
+        if #available(iOS 15, tvOS 15, macOS 12, *) {
+            try XCTSkipIf(true, "NSUbiquitousKeyValueStore doesn't work in tests on iOS 15, tvOS 15, or macOS 12 and later")
         }
-        #endif
     }
 
     override func tearDown() {

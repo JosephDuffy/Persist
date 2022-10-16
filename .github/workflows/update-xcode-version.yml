@@ -10,7 +10,7 @@ on:
 jobs:
   update-xcode-version:
     name: Update Xcode Version
-    runs-on: macos-11
+    runs-on: macos-12
 
     steps:
       - uses: actions/checkout@v3
@@ -19,6 +19,6 @@ jobs:
 
       - uses: josephduffy/update-xcode-version-action@v0.4.0
         with:
-          xcode-version-badge-versions: "11.7, last-major, latest"
+          xcode-version-badge-versions: "last-major, latest, beta"
           xcode-version-badge-markdown-file: ./README.md
           github-token: ${{ secrets.GITHUB_TOKEN }}
