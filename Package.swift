@@ -1,10 +1,10 @@
-// swift-tools-version:5.2
+// swift-tools-version:5.5
 import PackageDescription
 
 let package = Package(
     name: "Persist",
     platforms: [
-        .iOS(.v8), .macOS(.v10_10), .tvOS(.v9), .watchOS(.v2),
+        .iOS(.v12), .macOS(.v10_14), .tvOS(.v12), .watchOS(.v5),
     ],
     products: [
         .library(name: "Persist", targets: ["Persist"]),
