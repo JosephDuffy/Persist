@@ -227,5 +227,24 @@ extension Persister {
         )
     }
 
+    /**
+     Create a new instance that stores the value against the `key`, storing values in the specified
+     `UserDefaults`, defaulting to `defaultValue`.
+
+     - parameter key: The key to store the value against
+     - parameter userDefaults: The user defaults to use to persist and retrieve the value.
+     - parameter defaultValue: The value to use when a value has not yet been stored, or an error occurs.
+     - parameter defaultValuePersistBehaviour: An option set that describes when to persist the default value. Defaults to `[]`.
+     */
+    @available(*, unavailable, message: "Use init(key:userDefaults:transformer:defaultValue:defaultValuePersistBehaviour:) with a JSONTransformer to store Codable values")
+    public convenience init(
+        key: String,
+        userDefaults: UserDefaults,
+        defaultValue: @autoclosure @escaping () -> Value,
+        defaultValuePersistBehaviour: DefaultValuePersistOption = []
+    ) where Value: Codable {
+        fatalError()
+    }
+
 }
 #endif
