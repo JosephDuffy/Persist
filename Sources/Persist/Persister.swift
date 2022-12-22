@@ -161,9 +161,18 @@ public final class Persister<Value> {
     private var _subject: Any?
     #endif
 
+    /// When `true` the current value will be cached in memory whenever it is
+    /// set, retrieved, or the storage provides a new value.
+    public let cacheValue: Bool
+
+    private var cachedValue: Value?
+
+    private let cachedValueLock = NSLock()
+
     /**
      Create a new `Persister` instance.
 
+     - parameter cacheValue: When `true` the persister will cache the latest value in-memory for faster retrieval.
      - parameter valueGetter: The closure that will be called when the `retrieveValue()` function is called.
      - parameter valueSetter: The closure that will be called when the `persist(_:)` function is called.
      - parameter valueRemover: The closure that will be called when the `removeValue()` function is called.
@@ -172,6 +181,7 @@ public final class Persister<Value> {
      - parameter addUpdateListener: A closure that will be called immediately to add an update listener.
      */
     public init(
+        cacheValue: Bool,
         valueGetter: @escaping ValueGetter,
         valueSetter: @escaping ValueSetter,
         valueRemover: @escaping ValueRemover,
@@ -665,6 +675,10 @@ public final class Persister<Value> {
         try valueSetter(newValue)
     }
 
+    public func retrieveValue() -> Value {
+        return retrieveValue(revalidateCache: false)
+    }
+
     /**
      Attempts to retrieve the value from the storage. If the value is `nil` or an error occurs when retrieving
      the value the default value will be returned.
@@ -675,9 +689,20 @@ public final class Persister<Value> {
      If the `persistOnError` option has been provided and there is an error retrieving the value the default
      value will be persisted.
 
+     - parameter revalidateCache: When `true` the cache – if present – will be discarded and the latest value will be retrieved. If `cacheValue` is `true` this value will be cached.
      - returns: The persisted value, or the default value if no value has been persisted or an error occurs.
      */
-    public func retrieveValue() -> Value {
+    public func retrieveValue(revalidateCache: Bool) -> Value {
+        if cacheValue, !revalidateCache {
+            cachedValueLock.lock()
+            defer {
+                cachedValueLock.unlock()
+            }
+
+            if let cachedValue = cachedValue {
+                return cachedValue
+            }
+        }
         do {
             return try retrieveValueOrThrow()
         } catch {
@@ -698,14 +723,20 @@ public final class Persister<Value> {
      If the `persistWhenNil` option has been provided and the storage returns `nil` the default value
      will be persisted.
 
-     If the `persistOnError` option has been provided and there is an error retrieving the value the default
-    value will **not** be persisted and the error will be thrown.
+     If the `persistOnError` option has been provided and there is an error
+     retrieving the value the default value will **not** be persisted and the
+     error will be thrown.
 
      - throws: Any error thrown while retrieving the value.
      - returns: The persisted value, or the default value if no value has been persisted.
      */
     public func retrieveValueOrThrow() throws -> Value {
         if let retrieveValue = try valueGetter() {
+            if cacheValue {
+                cachedValueLock.lock()
+                cachedValue = retrieveValue
+                cachedValueLock.unlock()
+            }
             return retrieveValue
         }
 
@@ -715,6 +746,12 @@ public final class Persister<Value> {
             try? persist(defaultValue)
         }
         defaultValueLock.unlock()
+
+        if cacheValue {
+            cachedValueLock.lock()
+            cachedValue = defaultValue
+            cachedValueLock.unlock()
+        }
 
         return defaultValue
     }
@@ -749,6 +786,17 @@ public final class Persister<Value> {
     }
 
     private func notifyUpdateListenersOfResult(_ result: UpdatePayload) {
+        if cacheValue {
+            cachedValueLock.lock()
+            switch result {
+            case .success(let update):
+                cachedValue = update.newValue
+            case .failure:
+                cachedValue = nil
+            }
+            cachedValueLock.unlock()
+        }
+
         updateListenersLock.lock()
         // Take a copy of the update listeners so the lock can be unlocked when
         // the closures are called, preventing a deadlock if a subscriber adds
@@ -778,7 +826,9 @@ public final class Persister<Value> {
                 self?.notifyUpdateListenersOfResult(result)
             },
             { [unowned self] in
-                // TODO: Honour `defaultValuePersistBehaviour`
+                // We don't honour `defaultValuePersistBehaviour` here because
+                // this is only called when the value is removed from the
+                // storage.
                 self.defaultValueLock.lock()
                 let defaultValue = self.defaultValue
                 self.defaultValueLock.unlock()
