@@ -1,7 +1,7 @@
 #if canImport(Darwin)
 import Darwin
 #else
-import GlibC
+import Glibc
 #endif
 
 /// An `OSUnfairLock` is a wrapper around an unfair lock that locks around
@@ -256,7 +256,6 @@ private final class SystemLock<State> {
     init(uncheckedState initialState: State) {
         var mutexAttributes = pthread_mutexattr_t()
         pthread_mutexattr_init(&mutexAttributes)
-        pthread_mutexattr_settype(&mutexAttributes, PTHREAD_MUTEX_NORMAL)
 
         let mutexPointer = UnsafeMutablePointer<pthread_mutex_t>.allocate(capacity: 1)
 
