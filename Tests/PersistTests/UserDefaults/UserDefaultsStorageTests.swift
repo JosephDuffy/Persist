@@ -478,5 +478,20 @@ final class UserDefaultsStorageTests: XCTestCase {
 
         waitForExpectations(timeout: 1)
     }
+
+    func testAddingSubscribersAcrossMultiThreadsPerformance() {
+        measure {
+            let iterations = 10_000
+            let subscriptionsCreated = expectation(description: "Creates subscriptions")
+            subscriptionsCreated.expectedFulfillmentCount = iterations
+
+            DispatchQueue.concurrentPerform(iterations: iterations) { _ in
+                let subscription = userDefaultsStorage.addUpdateListener(forKey: "test-key", updateListener: { _ in })
+                subscriptionsCreated.fulfill()
+                _ = subscription
+            }
+            wait(for: [subscriptionsCreated], timeout: 3)
+        }
+    }
 }
 #endif
