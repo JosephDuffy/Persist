@@ -1,34 +1,35 @@
-import os
+#if canImport(Darwin)
+import Darwin
+#else
+import GlibC
+#endif
 
-/// An `OSUnfairLock` is a wrapper around an `os_unfair_lock` that locks around
+/// An `OSUnfairLock` is a wrapper around an unfair lock that locks around
 /// accesses to a stored object. It has the same API as `OSAllocatedUnfairLock`.
 ///
-/// In Swift, `os_unfair_lock` is unsafe to use directly with `&` because, as
-/// a value type, its instances do not have stable addresses. This wrapper avoids
-/// that pitfall - despite being a `struct`, it isn't a value type, as copied
-/// instances control the same underlying lock allocation.
+/// Despite being a `struct`, it isn't a value type, as copied instances control
+/// the same underlying lock allocation.
 ///
-/// Prefer storing state protected by the lock in `State`. Containing locked state
-/// inside the lock helps track what is protected state and provides a scope
-/// where it is safe to access that state.
+/// Prefer storing state protected by the lock in `State`. Containing locked
+/// state inside the lock helps track what is protected state and provides a
+/// scope where it is safe to access that state.
 ///
-/// When using OSAllocatedUnfairLock with external state, nonscoped locking
-/// allows more flexible locking patterns by using `lock()` / `unlock()`, but
-/// offers no assistance in tracking what state is protected by the lock.
+/// When using `OSUnfairLock` with external state, nonscoped locking allows more
+/// flexible locking patterns by using `lock()` / `unlock()`, but offers no
+/// assistance in tracking what state is protected by the lock.
 ///
-/// This lock must be unlocked from the same thread that locked it.  As such, it
-/// is unsafe to use `lock()` / `unlock()` across an `await` suspension point.
-/// Instead, use `withLock` to enforce that the lock is only held within
-/// a synchronous scope.
+/// This lock must be unlocked from the same thread that locked it. As such, it
+/// is unsafe to use ``lock()`` / ``unlock()`` across an `await` suspension
+/// point. Instead, use ``withLock`` to enforce that the lock is only held
+/// within a synchronous scope.
 ///
-/// If you are using a lock from asynchronous contexts only,
-/// prefer using an actor instead.
+/// If you are using a lock from asynchronous contexts only, prefer using an
+/// actor instead.
 ///
-/// This lock is not a recursive lock.  Attempting to lock it again from the same
+/// This lock is not a recursive lock. Attempting to lock it again from the same
 /// thread while the lock is already locked will crash.
-@available(iOS, deprecated: 16.0, message: "Use `OSAllocatedUnfairLock` directly", renamed: "OSAllocatedUnfairLock")
 public struct OSUnfairLock<State>: @unchecked Sendable {
-    fileprivate let lockWrapper: OSUnfairLockStorage<State>
+    fileprivate let lockWrapper: SystemLock<State>
 
     /// Initialize an OSAllocatedUnfairLock with a non-sendable lock-protected
     /// `initialState`.
@@ -42,7 +43,7 @@ public struct OSUnfairLock<State>: @unchecked Sendable {
     ///  protected under the lock.
     ///
     public init(uncheckedState initialState: State) {
-        lockWrapper = OSUnfairLockStorage(uncheckedState: initialState)
+        lockWrapper = SystemLock(uncheckedState: initialState)
     }
 
     ///  Perform a closure while holding this lock.
@@ -56,9 +57,9 @@ public struct OSUnfairLock<State>: @unchecked Sendable {
     /// - Throws: Anything thrown by `body`.
     ///
     public func withLockUnchecked<R>(_ body: (inout State) throws -> R) rethrows -> R {
-        os_unfair_lock_lock(lockWrapper.lockPointer)
+        lockWrapper.lock()
         defer {
-            os_unfair_lock_unlock(lockWrapper.lockPointer)
+            lockWrapper.unlock()
         }
         return try body(&lockWrapper.state)
     }
@@ -72,9 +73,9 @@ public struct OSUnfairLock<State>: @unchecked Sendable {
         // swiftformat:disable:next spaceAroundParens
         _ body: @Sendable (inout State) throws -> R
     ) rethrows -> R where R: Sendable {
-        os_unfair_lock_lock(lockWrapper.lockPointer)
+        lockWrapper.lock()
         defer {
-            os_unfair_lock_unlock(lockWrapper.lockPointer)
+            lockWrapper.unlock()
         }
         return try body(&lockWrapper.state)
     }
@@ -92,11 +93,11 @@ public struct OSUnfairLock<State>: @unchecked Sendable {
     /// - Throws: Anything thrown by `body`.
     ///
     public func withLockIfAvailableUnchecked<R>(_ body: (inout State) throws -> R) rethrows -> R? {
-        let didLock = os_unfair_lock_trylock(lockWrapper.lockPointer)
+        let didLock = lockWrapper.lockIfAvailable()
         guard didLock else { return nil }
 
         defer {
-            os_unfair_lock_unlock(lockWrapper.lockPointer)
+            lockWrapper.unlock()
         }
         return try body(&lockWrapper.state)
     }
@@ -110,15 +111,16 @@ public struct OSUnfairLock<State>: @unchecked Sendable {
     /// - Throws: Anything thrown by `body`.
     ///
     public func withLockIfAvailable<R>(_ body: @Sendable (inout State) throws -> R) rethrows -> R? where R : Sendable {
-        let didLock = os_unfair_lock_trylock(lockWrapper.lockPointer)
+        let didLock = lockWrapper.lockIfAvailable()
         guard didLock else { return nil }
 
         defer {
-            os_unfair_lock_unlock(lockWrapper.lockPointer)
+            lockWrapper.unlock()
         }
         return try body(&lockWrapper.state)
     }
 
+    #if canImport(Darwin)
     /// Check a precondition about whether the calling thread is the lock owner.
     ///
     /// - Parameter condition: An `Ownership` statement to check for the
@@ -133,13 +135,15 @@ public struct OSUnfairLock<State>: @unchecked Sendable {
     public func precondition(_ condition: Ownership) {
         switch condition {
         case .owner:
-            os_unfair_lock_assert_owner(lockWrapper.lockPointer)
+            lockWrapper.assertOwner()
         case .notOwner:
-            os_unfair_lock_assert_not_owner(lockWrapper.lockPointer)
+            lockWrapper.assertNotOwner()
         }
     }
+    #endif
 }
 
+#if canImport(Darwin)
 extension OSUnfairLock {
     /// Represent ownership status for `precondition` checking.
     public enum Ownership: Hashable, Sendable {
@@ -150,6 +154,7 @@ extension OSUnfairLock {
         case notOwner
     }
 }
+#endif
 
 extension OSUnfairLock where State == Sendable {
     /// Initialize an OSAllocatedUnfairLock with a lock-protected sendable
@@ -171,21 +176,21 @@ extension OSUnfairLock where State == Void {
         // swiftformat:disable:next spaceAroundParens
         _ body: @Sendable () throws -> R
     ) rethrows -> R where R: Sendable {
-        os_unfair_lock_lock(lockWrapper.lockPointer)
+        lockWrapper.lock()
         defer {
-            os_unfair_lock_unlock(lockWrapper.lockPointer)
+            lockWrapper.unlock()
         }
         return try body()
     }
 
     /// Acquire this lock.
     public func lock() {
-        os_unfair_lock_lock(lockWrapper.lockPointer)
+        lockWrapper.lock()
     }
 
     /// Unlock this lock.
     public func unlock() {
-        os_unfair_lock_unlock(lockWrapper.lockPointer)
+        lockWrapper.unlock()
     }
 
     /// Attempt to acquire the lock if it is not already locked.
@@ -193,11 +198,13 @@ extension OSUnfairLock where State == Void {
     /// - Returns: `true` if the lock was succesfully locked, and
     ///  `false` if the lock attempt failed.
     public func lockIfAvailable() -> Bool {
-        os_unfair_lock_trylock(lockWrapper.lockPointer)
+        lockWrapper.lockIfAvailable()
     }
 }
 
-private final class OSUnfairLockStorage<State> {
+#if canImport(Darwin)
+/// A lock backed by `os_unfair_lock`. This will be used on Apple platforms.
+private final class SystemLock<State> {
     fileprivate let lockPointer: UnsafeMutablePointer<os_unfair_lock>
 
     fileprivate var state: State
@@ -212,4 +219,79 @@ private final class OSUnfairLockStorage<State> {
         lockPointer.deinitialize(count: 1)
         lockPointer.deallocate()
     }
+
+    /// Acquire this lock.
+    func lock() {
+        os_unfair_lock_lock(lockPointer)
+    }
+
+    /// Unlock this lock.
+    func unlock() {
+        os_unfair_lock_unlock(lockPointer)
+    }
+
+    /// Attempt to acquire the lock if it is not already locked.
+    ///
+    /// - Returns: `true` if the lock was succesfully locked, and
+    ///  `false` if the lock attempt failed.
+    func lockIfAvailable() -> Bool {
+        os_unfair_lock_trylock(lockPointer)
+    }
+
+    func assertOwner() {
+        os_unfair_lock_assert_owner(lockPointer)
+    }
+
+    func assertNotOwner() {
+        os_unfair_lock_assert_not_owner(lockPointer)
+    }
 }
+#else
+/// A lock backed by `pthread_mutex_t`. This will be used on Linux.
+private final class SystemLock<State> {
+    private let mutexPointer: UnsafeMutablePointer<pthread_mutex_t>
+
+    fileprivate var state: State
+
+    init(uncheckedState initialState: State) {
+        var mutexAttributes = pthread_mutexattr_t()
+        pthread_mutexattr_init(&mutexAttributes)
+        pthread_mutexattr_settype(&mutexAttributes, PTHREAD_MUTEX_NORMAL)
+
+        let mutexPointer = UnsafeMutablePointer<pthread_mutex_t>.allocate(capacity: 1)
+
+        let initResult = pthread_mutex_init(mutexPointer, &mutexAttributes)
+        precondition(initResult == 0, "Failed to initialise mutex with error \(initResult)")
+        pthread_mutexattr_destroy(&mutexAttributes)
+
+        self.mutexPointer = mutexPointer
+        state = initialState
+    }
+
+    deinit {
+        let destroyResult = pthread_mutex_destroy(self.mutexPointer)
+        precondition(destroyResult == 0, "Failed to destroy mutex with error \(destroyResult)")
+        mutexPointer.deallocate()
+    }
+
+    /// Acquire this lock.
+    func lock() {
+        let lockResult = pthread_mutex_lock(mutexPointer)
+        precondition(lockResult == 0, "Failed to lock lock with error \(lockResult)")
+    }
+
+    /// Unlock this lock.
+    func unlock() {
+        let unlockResult = pthread_mutex_unlock(mutexPointer)
+        precondition(unlockResult == 0, "Failed to unlock lock with error \(unlockResult)")
+    }
+
+    /// Attempt to acquire the lock if it is not already locked.
+    ///
+    /// - Returns: `true` if the lock was succesfully locked, and
+    ///  `false` if the lock attempt failed.
+    func lockIfAvailable() -> Bool {
+        pthread_mutex_trylock(mutexPointer) == 0
+    }
+}
+#endif
