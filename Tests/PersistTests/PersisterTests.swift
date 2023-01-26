@@ -395,6 +395,137 @@ final class PersisterTests: XCTestCase {
         waitForExpectations(timeout: 1)
     }
 
+    func testCachingValueAfterPersisting() throws {
+        let storage = SpyStorage(backingStorage: InMemoryStorage<String>())
+        let persister = Persister<String?>(
+            key: "test",
+            storedBy: storage,
+            cacheValue: true
+        )
+        let storedValue = "new-value"
+        try persister.persist(storedValue)
+
+        XCTAssertEqual(persister.retrieveValue(), storedValue, "Stored value should be returned when cached")
+        XCTAssertEqual(storage.retrieveValueCallCount, 0, "Persister should not retrieve value from storage when value is cached")
+    }
+
+    func testCachingValueAfterPersistingThrowingAPI() throws {
+        let storage = SpyStorage(backingStorage: InMemoryStorage<String>())
+        let persister = Persister<String?>(
+            key: "test",
+            storedBy: storage,
+            cacheValue: true
+        )
+        let storedValue = "new-value"
+        try persister.persist(storedValue)
+
+        XCTAssertEqual(try persister.retrieveValueOrThrow(), storedValue, "Stored value should be returned when cached")
+        XCTAssertEqual(storage.retrieveValueCallCount, 0, "Persister should not retrieve value from storage when value is cached")
+    }
+
+    func testCachingValueAfterDefaultValueIsUsed() throws {
+        let storage = SpyStorage(backingStorage: InMemoryStorage<String?>())
+        let defaultValue = "default-value"
+        let persister = Persister<String?>(
+            key: "test",
+            storedBy: storage,
+            cacheValue: true,
+            defaultValue: defaultValue
+        )
+
+        // Populate the stored value with the default value
+        _ = persister.retrieveValue()
+
+        XCTAssertEqual(persister.retrieveValue(), defaultValue, "Default value should be returned when cache is empty")
+        XCTAssertEqual(storage.retrieveValueCallCount, 1, "Persister should retrieve value once from storage when default value is cached")
+    }
+
+    func testCachingValueAfterDefaultValueIsUsedThrowingAPI() throws {
+        let storage = SpyStorage(backingStorage: InMemoryStorage<String?>())
+        let defaultValue = "default-value"
+        let persister = Persister<String?>(
+            key: "test",
+            storedBy: storage,
+            cacheValue: true,
+            defaultValue: defaultValue
+        )
+
+        // Populate the stored value with the default value
+        _ = persister.retrieveValue()
+
+        XCTAssertEqual(try persister.retrieveValueOrThrow(), defaultValue, "Default value should be returned when cache is empty")
+        XCTAssertEqual(storage.retrieveValueCallCount, 1, "Persister should retrieve value once from storage when default value is cached")
+    }
+
+    func testCachingValueAfterStorageUpdates() throws {
+        let storage = SpyStorage(backingStorage: InMemoryStorage<String>())
+        let persister = Persister<String?>(
+            key: "test",
+            storedBy: storage,
+            cacheValue: true
+        )
+        let storedValue = "new-value"
+        // Storage will notify the persister, which should then cache the value.
+        try storage.storeValue(storedValue, key: "test")
+
+        XCTAssertEqual(persister.retrieveValue(), storedValue, "Stored value should be returned when cached")
+        XCTAssertEqual(try persister.retrieveValueOrThrow(), storedValue, "Stored value should be returned when cached")
+        XCTAssertEqual(storage.retrieveValueCallCount, 0, "Persister should not retrieve value from storage when value is cached")
+    }
+
+    func testForcingCacheInvalidation() throws {
+        let storage = SpyStorage(backingStorage: InMemoryStorage<String>())
+        let persister = Persister<String?>(
+            key: "test",
+            storedBy: storage,
+            cacheValue: true
+        )
+        let storedValue = "new-value"
+        try persister.persist(storedValue)
+
+        XCTAssertEqual(persister.retrieveValue(revalidateCache: true), storedValue, "Stored value should be returned when cache is invalidated")
+        XCTAssertEqual(try persister.retrieveValueOrThrow(revalidateCache: true), storedValue, "Stored value should be returned when cache is invalidated")
+        XCTAssertEqual(storage.retrieveValueCallCount, 2, "Persister should retrieve value from storage once for every call invalidating the cache")
+    }
+
+    func testCacheAfterValueIsRemoved() throws {
+        let storage = SpyStorage(backingStorage: InMemoryStorage<String>())
+        let persister = Persister<String?>(
+            key: "test",
+            storedBy: storage,
+            cacheValue: true
+        )
+        let storedValue = "new-value"
+        try persister.persist(storedValue)
+        try persister.removeValue()
+
+        XCTAssertNil(persister.retrieveValue(), "Cached value should be removed when stored value is removed")
+        XCTAssertNil(try persister.retrieveValueOrThrow(), "Cached value should be removed when stored value is removed")
+        XCTAssertEqual(storage.retrieveValueCallCount, 0, "Persister should not retrieve value from storage after value has been removed")
+        XCTAssertEqual(storage.removeValueCallCount, 1, "Persister should remove value from storage when cache is used")
+    }
+
+    func testCacheAfterValueIsRemovedWithDefaultValue() throws {
+        let storage = SpyStorage(backingStorage: InMemoryStorage<String>())
+        let storedValue = "new-value"
+        try storage.storeValue(storedValue, key: "test")
+
+        let defaultValue = "default-value"
+        let persister = Persister<String?>(
+            key: "test",
+            storedBy: storage,
+            cacheValue: true,
+            defaultValue: defaultValue
+        )
+
+        try persister.removeValue()
+
+        XCTAssertEqual(persister.retrieveValue(), defaultValue, "Default value should be return when stored value is removed and cache is used")
+        XCTAssertEqual(try persister.retrieveValueOrThrow(), defaultValue, "Default value should be return when stored value is removed and cache is used")
+        XCTAssertEqual(storage.retrieveValueCallCount, 0, "Persister should not retrieve value from storage after value has been removed and default value is provided")
+        XCTAssertEqual(storage.removeValueCallCount, 1, "Persister should remove value from storage when cache is used")
+    }
+
     /// Tests that new subscribers can be added in response to a value being
     /// updated.
     ///
