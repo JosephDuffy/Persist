@@ -162,6 +162,11 @@ extension OSUnfairLock where State == Sendable {
 }
 
 extension OSUnfairLock where State == Void {
+    /// Initialize an OSAllocatedUnfairLock with no protected state.
+    public init() {
+        self.init(uncheckedState: ())
+    }
+
     public func withLock<R>(
         // swiftformat:disable:next spaceAroundParens
         _ body: @Sendable () throws -> R
