@@ -161,9 +161,16 @@ public final class Persister<Value> {
     private var _subject: Any?
     #endif
 
+    /// When `true` the current value will be cached in memory whenever it is
+    /// set, retrieved, or the storage provides a new value.
+    public let cacheValue: Bool
+
+    private var cachedValue: OSUnfairLock<Value?>
+
     /**
      Create a new `Persister` instance.
 
+     - parameter cacheValue: When `true` the persister will cache the latest value in-memory for faster retrieval.
      - parameter valueGetter: The closure that will be called when the `retrieveValue()` function is called.
      - parameter valueSetter: The closure that will be called when the `persist(_:)` function is called.
      - parameter valueRemover: The closure that will be called when the `removeValue()` function is called.
@@ -172,6 +179,7 @@ public final class Persister<Value> {
      - parameter addUpdateListener: A closure that will be called immediately to add an update listener.
      */
     public init(
+        cacheValue: Bool,
         valueGetter: @escaping ValueGetter,
         valueSetter: @escaping ValueSetter,
         valueRemover: @escaping ValueRemover,
@@ -179,11 +187,13 @@ public final class Persister<Value> {
         defaultValuePersistBehaviour: DefaultValuePersistOption = [],
         addUpdateListener: AddUpdateListener
     ) {
+        self.cacheValue = cacheValue
         self.valueGetter = valueGetter
         self.valueSetter = valueSetter
         self.valueRemover = valueRemover
         _defaultValue = defaultValue
         self.defaultValuePersistBehaviour = defaultValuePersistBehaviour
+        cachedValue = OSUnfairLock(uncheckedState: nil)
 
         subscribeToStorageUpdates(addUpdateListener: addUpdateListener)
     }
@@ -196,12 +206,16 @@ public final class Persister<Value> {
 
      - parameter key: The key to store the value against
      - parameter storage: The storage to use to persist and retrieve the value.
+     - parameter cacheValue: When `true` the latest value will be cached in
+       memory to improve performance when retrieving values, at the cost of
+       increased memory usage.
      - parameter defaultValue: The value to use when a value has not yet been stored, or an error occurs.
      - parameter defaultValuePersistBehaviour: An option set that describes when to persist the default value. Defaults to `[]`.
      */
     public convenience init<Storage: Persist.Storage>(
         key: Storage.Key,
         storedBy storage: Storage,
+        cacheValue: Bool = false,
         defaultValue: @autoclosure @escaping () -> Value,
         defaultValuePersistBehaviour: DefaultValuePersistOption = []
     ) where Storage.Value == Value {
@@ -219,6 +233,7 @@ public final class Persister<Value> {
         }
 
         self.init(
+            cacheValue: cacheValue,
             valueGetter: valueGetter,
             valueSetter: valueSetter,
             valueRemover: valueRemover,
@@ -243,10 +258,14 @@ public final class Persister<Value> {
 
      - parameter key: The key to retrieve and store values against.
      - parameter storage: The storage to use to retrieve and store vales.
+     - parameter cacheValue: When `true` the latest value will be cached in
+       memory to improve performance when retrieving values, at the cost of
+       increased memory usage.
      */
     public convenience init<Storage: Persist.Storage, WrappedValue>(
         key: Storage.Key,
         storedBy storage: Storage,
+        cacheValue: Bool = false,
         defaultValue: @autoclosure @escaping () -> Value = nil,
         defaultValuePersistBehaviour: DefaultValuePersistOption = []
     ) where Storage.Value == WrappedValue, Value == Optional<WrappedValue> {
@@ -269,6 +288,7 @@ public final class Persister<Value> {
         }
 
         self.init(
+            cacheValue: cacheValue,
             valueGetter: valueGetter,
             valueSetter: valueSetter,
             valueRemover: valueRemover,
@@ -295,10 +315,14 @@ public final class Persister<Value> {
 
      - parameter key: The key to retrieve and store values against.
      - parameter storage: The storage to use to retrieve and store vales.
+     - parameter cacheValue: When `true` the latest value will be cached in
+       memory to improve performance when retrieving values, at the cost of
+       increased memory usage.
      */
     public convenience init<Storage: Persist.Storage>(
         key: Storage.Key,
         storedBy storage: Storage,
+        cacheValue: Bool = false,
         defaultValue: @autoclosure @escaping () -> Value,
         defaultValuePersistBehaviour: DefaultValuePersistOption = []
     ) where Storage.Value == Any {
@@ -319,6 +343,7 @@ public final class Persister<Value> {
         }
 
         self.init(
+            cacheValue: cacheValue,
             valueGetter: valueGetter,
             valueSetter: valueSetter,
             valueRemover: valueRemover,
@@ -348,10 +373,14 @@ public final class Persister<Value> {
 
      - parameter key: The key to retrieve and store values against.
      - parameter storage: The storage to use to retrieve and store vales.
+     - parameter cacheValue: When `true` the latest value will be cached in
+       memory to improve performance when retrieving values, at the cost of
+       increased memory usage.
      */
     public convenience init<Storage: Persist.Storage, WrappedValue>(
         key: Storage.Key,
         storedBy storage: Storage,
+        cacheValue: Bool = false,
         defaultValue: @autoclosure @escaping () -> Value = nil,
         defaultValuePersistBehaviour: DefaultValuePersistOption = []
     ) where Storage.Value == Any, Value == Optional<WrappedValue> {
@@ -377,6 +406,7 @@ public final class Persister<Value> {
         }
 
         self.init(
+            cacheValue: cacheValue,
             valueGetter: valueGetter,
             valueSetter: valueSetter,
             valueRemover: valueRemover,
@@ -411,11 +441,15 @@ public final class Persister<Value> {
      - parameter storage: The storage to use to retrieve and store vales.
      - parameter transformer: The transformer to use to transform the value when retrieving and
                               storing values.
+     - parameter cacheValue: When `true` the latest value will be cached in
+       memory to improve performance when retrieving values, at the cost of
+       increased memory usage.
      */
     public convenience init<Storage: Persist.Storage, Transformer: Persist.Transformer>(
         key: Storage.Key,
         storedBy storage: Storage,
         transformer: Transformer,
+        cacheValue: Bool = false,
         defaultValue: @autoclosure @escaping () -> Value,
         defaultValuePersistBehaviour: DefaultValuePersistOption = []
     ) where Storage.Value == Any, Transformer.Input == Value {
@@ -437,6 +471,7 @@ public final class Persister<Value> {
         }
 
         self.init(
+            cacheValue: cacheValue,
             valueGetter: valueGetter,
             valueSetter: valueSetter,
             valueRemover: valueRemover,
@@ -474,11 +509,15 @@ public final class Persister<Value> {
      - parameter storage: The storage to use to retrieve and store vales.
      - parameter transformer: The transformer to use to transform the value when retrieving and
                               storing values.
+     - parameter cacheValue: When `true` the latest value will be cached in
+       memory to improve performance when retrieving values, at the cost of
+       increased memory usage.
      */
     public convenience init<Storage: Persist.Storage, Transformer: Persist.Transformer, WrappedValue>(
         key: Storage.Key,
         storedBy storage: Storage,
         transformer: Transformer,
+        cacheValue: Bool = false,
         defaultValue: @autoclosure @escaping () -> Value = nil,
         defaultValuePersistBehaviour: DefaultValuePersistOption = []
     ) where Storage.Value == Any, Transformer.Input == WrappedValue, Value == WrappedValue? {
@@ -505,6 +544,7 @@ public final class Persister<Value> {
         }
 
         self.init(
+            cacheValue: cacheValue,
             valueGetter: valueGetter,
             valueSetter: valueSetter,
             valueRemover: valueRemover,
@@ -543,6 +583,9 @@ public final class Persister<Value> {
      - parameter key: The key to store the value against
      - parameter storage: The storage to use to persist and retrieve the value.
      - parameter transformer: A transformer to transform the value before being persisted and after being retrieved from the storage
+     - parameter cacheValue: When `true` the latest value will be cached in
+       memory to improve performance when retrieving values, at the cost of
+       increased memory usage.
      - parameter defaultValue: The value to use when a value has not yet been stored, or an error occurs.
      - parameter defaultValuePersistBehaviour: An option set that describes when to persist the default value. Defaults to `[]`.
      */
@@ -550,6 +593,7 @@ public final class Persister<Value> {
         key: Storage.Key,
         storedBy storage: Storage,
         transformer: Transformer,
+        cacheValue: Bool = false,
         defaultValue: @autoclosure @escaping () -> Value,
         defaultValuePersistBehaviour: DefaultValuePersistOption = []
     ) where Transformer.Input == Value, Transformer.Output == Storage.Value {
@@ -569,6 +613,7 @@ public final class Persister<Value> {
         }
 
         self.init(
+            cacheValue: cacheValue,
             valueGetter: valueGetter,
             valueSetter: valueSetter,
             valueRemover: valueRemover,
@@ -600,6 +645,9 @@ public final class Persister<Value> {
      - parameter key: The key to store the value against
      - parameter storage: The storage to use to persist and retrieve the value.
      - parameter transformer: A transformer to transform the value before being persisted and after being retrieved from the storage
+     - parameter cacheValue: When `true` the latest value will be cached in
+       memory to improve performance when retrieving values, at the cost of
+       increased memory usage.
      - parameter defaultValue: The value to use when a value has not yet been stored, or an error occurs. Defaults to `nil`.
      - parameter defaultValuePersistBehaviour: An option set that describes when to persist the default value. Defaults to `[]`.
      */
@@ -607,6 +655,7 @@ public final class Persister<Value> {
         key: Storage.Key,
         storedBy storage: Storage,
         transformer: Transformer,
+        cacheValue: Bool = false,
         defaultValue: @autoclosure @escaping () -> Value = nil,
         defaultValuePersistBehaviour: DefaultValuePersistOption = []
     ) where Transformer.Input == WrappedValue, Transformer.Output == Storage.Value, Value == WrappedValue? {
@@ -631,6 +680,7 @@ public final class Persister<Value> {
         }
 
         self.init(
+            cacheValue: cacheValue,
             valueGetter: valueGetter,
             valueSetter: valueSetter,
             valueRemover: valueRemover,
@@ -665,6 +715,10 @@ public final class Persister<Value> {
         try valueSetter(newValue)
     }
 
+    public func retrieveValue() -> Value {
+        return retrieveValue(revalidateCache: false)
+    }
+
     /**
      Attempts to retrieve the value from the storage. If the value is `nil` or an error occurs when retrieving
      the value the default value will be returned.
@@ -675,21 +729,29 @@ public final class Persister<Value> {
      If the `persistOnError` option has been provided and there is an error retrieving the value the default
      value will be persisted.
 
+     - parameter revalidateCache: When `true` the cache – if present – will be discarded and the latest value will be retrieved. If `cacheValue` is `true` this value will be cached.
      - returns: The persisted value, or the default value if no value has been persisted or an error occurs.
      */
-    public func retrieveValue() -> Value {
-        do {
-            return try retrieveValueOrThrow()
-        } catch {
-            defaultValueLock.lock()
-            let defaultValue = self.defaultValue
-            if defaultValuePersistBehaviour.contains(.persistOnError) {
-                try? persist(defaultValue)
+    public func retrieveValue(revalidateCache: Bool) -> Value {
+        if cacheValue, !revalidateCache {
+            if let cachedValue = cachedValue.withLockUnchecked({ $0 }) {
+                return cachedValue
             }
-            defaultValueLock.unlock()
-
-            return defaultValue
         }
+
+        let returnValue: Value
+
+        do {
+            returnValue = try valueGetter() ?? getDefaultValueHonoringPersistBehavior()
+        } catch {
+            returnValue = getDefaultValueHonoringPersistBehavior()
+        }
+
+        if cacheValue {
+            updateCachedValue(returnValue)
+        }
+
+        return returnValue
     }
 
     /**
@@ -698,23 +760,49 @@ public final class Persister<Value> {
      If the `persistWhenNil` option has been provided and the storage returns `nil` the default value
      will be persisted.
 
-     If the `persistOnError` option has been provided and there is an error retrieving the value the default
-    value will **not** be persisted and the error will be thrown.
+     If the `persistOnError` option has been provided and there is an error
+     retrieving the value the default value will **not** be persisted and the
+     error will be thrown.
 
      - throws: Any error thrown while retrieving the value.
      - returns: The persisted value, or the default value if no value has been persisted.
      */
     public func retrieveValueOrThrow() throws -> Value {
-        if let retrieveValue = try valueGetter() {
-            return retrieveValue
+        return try retrieveValueOrThrow(revalidateCache: false)
+    }
+
+    /**
+     Attempts to retrieve the value from the storage. If the value is `nil` the default value will be returned.
+
+     If the `persistWhenNil` option has been provided and the storage returns `nil` the default value
+     will be persisted.
+
+     If the `persistOnError` option has been provided and there is an error
+     retrieving the value the default value will **not** be persisted and the
+     error will be thrown.
+
+     - throws: Any error thrown while retrieving the value.
+     - returns: The persisted value, or the default value if no value has been persisted.
+     */
+    public func retrieveValueOrThrow(revalidateCache: Bool) throws -> Value {
+        if cacheValue, !revalidateCache {
+            if let cachedValue = cachedValue.withLockUnchecked({ $0 }) {
+                return cachedValue
+            }
         }
 
-        defaultValueLock.lock()
-        let defaultValue = self.defaultValue
-        if defaultValuePersistBehaviour.contains(.persistWhenNil) {
-            try? persist(defaultValue)
+        if let retrievedValue = try valueGetter() {
+            if cacheValue {
+                updateCachedValue(retrievedValue)
+            }
+            return retrievedValue
         }
-        defaultValueLock.unlock()
+
+        let defaultValue = getDefaultValueHonoringPersistBehavior()
+
+        if cacheValue {
+            updateCachedValue(defaultValue)
+        }
 
         return defaultValue
     }
@@ -749,6 +837,15 @@ public final class Persister<Value> {
     }
 
     private func notifyUpdateListenersOfResult(_ result: UpdatePayload) {
+        if cacheValue {
+            switch result {
+            case .success(let update):
+                updateCachedValue(update.newValue)
+            case .failure:
+                updateCachedValue(nil)
+            }
+        }
+
         updateListenersLock.lock()
         // Take a copy of the update listeners so the lock can be unlocked when
         // the closures are called, preventing a deadlock if a subscriber adds
@@ -778,7 +875,9 @@ public final class Persister<Value> {
                 self?.notifyUpdateListenersOfResult(result)
             },
             { [unowned self] in
-                // TODO: Honour `defaultValuePersistBehaviour`
+                // We don't honour `defaultValuePersistBehaviour` here because
+                // this is only called when the value is removed from the
+                // storage.
                 self.defaultValueLock.lock()
                 let defaultValue = self.defaultValue
                 self.defaultValueLock.unlock()
@@ -787,4 +886,18 @@ public final class Persister<Value> {
         )
     }
 
+    private func getDefaultValueHonoringPersistBehavior() -> Value {
+        defaultValueLock.lock()
+        let defaultValue = self.defaultValue
+        if defaultValuePersistBehaviour.contains(.persistWhenNil) {
+            try? persist(defaultValue)
+        }
+        defaultValueLock.unlock()
+        return defaultValue
+    }
+
+    @inline(__always)
+    private func updateCachedValue(_ value: Value?) {
+        cachedValue.withLockUnchecked { $0 = value }
+    }
 }
