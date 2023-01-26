@@ -1,6 +1,13 @@
 {
   "warnings": [
     {
+      "file": "/Users/runner/work/Persist/Persist/Sources/Persist/Locks/OSUnfairLock.swift",
+      "line": 175,
+      "symbol": "OSUnfairLock.withLock(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
       "file": "/Users/runner/work/Persist/Persist/Sources/Persist/ObservablePersister.swift",
       "line": 9,
       "symbol": "ObservablePersister.value",
@@ -12,6 +19,13 @@
       "line": 10,
       "symbol": "PersistStorage.wrappedValue",
       "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/Persist/Persist/Sources/Persist/Persister.swift",
+      "line": 718,
+      "symbol": "Persister.retrieveValue()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>UntransformError Enumeration Reference</title>
+    <title>Ownership Enumeration Reference</title>
     <link rel="stylesheet" type="text/css" href="../../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../../css/highlight.css" />
     <meta charset='utf-8'>
@@ -13,8 +13,8 @@
     <script src="../../js/jazzy.search.js" defer></script>
   </head>
   <body>
-    <a name="//apple_ref/swift/Enum/UntransformError" class="dashAnchor"></a>
-    <a title="UntransformError Enumeration Reference"></a>
+    <a name="//apple_ref/swift/Enum/Ownership" class="dashAnchor"></a>
+    <a title="Ownership Enumeration Reference"></a>
     <header>
       <div class="content-wrapper">
         <p><a href="../../index.html"> Docs</a> (98% documented)</p>
@@ -30,7 +30,7 @@
       <p id="breadcrumbs">
         <a href="../../index.html"> Reference</a>
         <img id="carat" src="../../img/carat.png" alt=""/>
-        UntransformError Enumeration Reference
+        Ownership Enumeration Reference
       </p>
     </div>
     <div class="content-wrapper">
@@ -138,15 +138,15 @@
       <article class="main-content">
         <section>
           <section class="section">
-            <h1>UntransformError</h1>
+            <h1>Ownership</h1>
               <div class="declaration">
                 <div class="language">
                   
-                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">UntransformError</span> <span class="p">:</span> <span class="kt">LocalizedError</span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">Ownership</span> <span class="p">:</span> <span class="kt">Hashable</span><span class="p">,</span> <span class="kt">Sendable</span></code></pre>
 
                 </div>
               </div>
-            <p>An error thown when untransforming a value.</p>
+            <p>Represent ownership status for <code>precondition</code> checking.</p>
 
           </section>
           <section class="section task-group-section">
@@ -155,9 +155,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:7Persist27RawRepresentableTransformerV16UntransformErrorO07invalidB5ValueyAEyx_G0bH0QzcAGmSYRzlF"></a>
-                    <a name="//apple_ref/swift/Element/invalidRawValue(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:7Persist27RawRepresentableTransformerV16UntransformErrorO07invalidB5ValueyAEyx_G0bH0QzcAGmSYRzlF">invalidRawValue(_:<wbr>)</a>
+                    <a name="/s:7Persist12OSUnfairLockV9OwnershipO5owneryAEyx_GAGmlF"></a>
+                    <a name="//apple_ref/swift/Element/owner" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7Persist12OSUnfairLockV9OwnershipO5owneryAEyx_GAGmlF">owner</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -165,14 +165,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The raw value could not be used to construct a value of <code>Type</code>.</p>
+                        <p>Lock is currently owned by the calling thread.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="k">case</span> <span class="nf">invalidRawValue</span><span class="p">(</span><span class="k">Type</span><span class="o">.</span><span class="kt">RawValue</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="k">case</span> <span class="n">owner</span></code></pre>
 
                         </div>
                       </div>
@@ -182,9 +182,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:10Foundation14LocalizedErrorP16errorDescriptionSSSgvp"></a>
-                    <a name="//apple_ref/swift/Property/errorDescription" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10Foundation14LocalizedErrorP16errorDescriptionSSSgvp">errorDescription</a>
+                    <a name="/s:7Persist12OSUnfairLockV9OwnershipO8notOwneryAEyx_GAGmlF"></a>
+                    <a name="//apple_ref/swift/Element/notOwner" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7Persist12OSUnfairLockV9OwnershipO8notOwneryAEyx_GAGmlF">notOwner</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -192,13 +192,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        
+                        <p>Lock is unlocked or owned by a different thread.</p>
+
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">errorDescription</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+                          <pre class="highlight swift"><code><span class="k">case</span> <span class="n">notOwner</span></code></pre>
 
                         </div>
                       </div>
