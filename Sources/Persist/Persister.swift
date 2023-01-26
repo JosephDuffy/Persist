@@ -734,7 +734,7 @@ public final class Persister<Value> {
      */
     public func retrieveValue(revalidateCache: Bool) -> Value {
         if cacheValue, !revalidateCache {
-            if let cachedValue = cachedValue.withLock({ $0 }) {
+            if let cachedValue = cachedValue.withLockUnchecked({ $0 }) {
                 return cachedValue
             }
         }
@@ -786,7 +786,7 @@ public final class Persister<Value> {
      */
     public func retrieveValueOrThrow(revalidateCache: Bool) throws -> Value {
         if cacheValue, !revalidateCache {
-            if let cachedValue = cachedValue.withLock({ $0 }) {
+            if let cachedValue = cachedValue.withLockUnchecked({ $0 }) {
                 return cachedValue
             }
         }
