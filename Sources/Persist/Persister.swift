@@ -131,6 +131,10 @@ public final class Persister<Value> {
     /// The updates subject that publishes updates.
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
     private var updatesSubject: PassthroughSubject<UpdatePayload, Never> {
+        updatesSubjectLock.lock()
+        defer {
+            updatesSubjectLock.unlock()
+        }
         if let updatesSubject = _updatesSubject as? PassthroughSubject<UpdatePayload, Never> {
             return updatesSubject
         }
@@ -140,6 +144,17 @@ public final class Persister<Value> {
         return updatesSubject
     }
 
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    private var updatesSubjectIfCreated: PassthroughSubject<UpdatePayload, Never>? {
+        updatesSubjectLock.lock()
+        defer {
+            updatesSubjectLock.unlock()
+        }
+        return _updatesSubject.flatMap { $0 as? PassthroughSubject<UpdatePayload, Never> }
+    }
+
+    private let updatesSubjectLock = NSLock()
+
     /// An `Any` value that will always be a `PassthroughSubject<UpdatePayload, Never>`.
     /// This is required because Swift does not support marking stored properties as `available`.
     private var _updatesSubject: Any?
@@ -147,6 +162,10 @@ public final class Persister<Value> {
     /// The updates subject that publishes updates.
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
     private var subject: CurrentValueSubject<Value, Never> {
+        subjectLock.lock()
+        defer {
+            subjectLock.unlock()
+        }
         if let subject = _subject as? CurrentValueSubject<Value, Never> {
             return subject
         }
@@ -155,6 +174,17 @@ public final class Persister<Value> {
         _subject = subject
         return subject
     }
+
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    private var subjectIfCreated: CurrentValueSubject<Value, Never>? {
+        subjectLock.lock()
+        defer {
+            subjectLock.unlock()
+        }
+        return _subject.flatMap { $0 as? CurrentValueSubject<Value, Never> }
+    }
+
+    private let subjectLock = NSLock()
 
     /// An `Any` value that will always be a `CurrentValueSubject<Value, Never>`.
     /// This is required because Swift does not support marking stored properties as `available`.
@@ -857,13 +887,23 @@ public final class Persister<Value> {
 
         #if canImport(Combine)
         if #available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *) {
-            updatesSubject.send(result)
+            // Send the update to the Combine subjects. If they're not yet
+            // created this will do nothing. Subjects are created when accessed
+            // via the public API.
+            //
+            // We do not need to worry about thread safety when calling `send`
+            // here because the computed properties used are protected with a
+            // lock and the `send(_:)` function is thread-safe:
+            // https://forums.swift.org/t/thread-safety-for-combine-publishers/29491/13
+            updatesSubjectIfCreated?.send(result)
 
-            switch result {
-            case .success(let update):
-                subject.send(update.newValue)
-            case .failure:
-                break
+            if let subject = subjectIfCreated {
+                switch result {
+                case .success(let update):
+                    subject.send(update.newValue)
+                case .failure:
+                    break
+                }
             }
         }
         #endif

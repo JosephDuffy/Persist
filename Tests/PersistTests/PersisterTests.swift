@@ -649,6 +649,65 @@ final class PersisterTests: XCTestCase {
 
         waitForExpectations(timeout: 1, handler: nil)
     }
+
+    /// Prior to 1.3.0 subjects (which are exposed as publishers) were created
+    /// lazily when the first update occurred _or_ one of the publisher
+    /// properties was accessed.
+    ///
+    /// This could crash if multiple updates were sent across multiple queues
+    /// and the properties had not yet been created.
+    ///
+    /// This would crash quite consistently when it's the only test being run.
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    func testPersistingValueAcrossQueuesWithoutPublishers() throws {
+        let storage = InMemoryStorage<Int>()
+        let persister = Persister(key: "test", storedBy: storage, defaultValue: nil)
+
+        let updatesCount = 10_000
+
+        let persistsValueExpectation = expectation(description: "Persists value")
+        persistsValueExpectation.expectedFulfillmentCount = updatesCount
+        DispatchQueue.concurrentPerform(iterations: updatesCount) { index in
+            try? persister.persist(index)
+            persistsValueExpectation.fulfill()
+        }
+
+        waitForExpectations(timeout: 1, handler: nil)
+    }
+
+    /// This is the same as ``testPersistingValueAcrossQueuesWithoutPublishers``
+    /// but with both publishers created prior to sending an update. This is
+    /// more of a test that the publishers support access across threads, which
+    /// is explicitly supported according to
+    /// https://forums.swift.org/t/thread-safety-for-combine-publishers/29491/13
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    func testPersistingValueAcrossQueuesWithPublishers() throws {
+        let storage = InMemoryStorage<Int>()
+        let persister = Persister(key: "test", storedBy: storage, defaultValue: nil)
+
+        let updatesCount = 10_000
+
+        let notifiesPublisherExpectation = expectation(description: "Calls update listener")
+        notifiesPublisherExpectation.expectedFulfillmentCount = updatesCount
+        let publisherSubscription = persister.publisher.dropFirst().sink { _ in
+            notifiesPublisherExpectation.fulfill()
+        }
+
+        let notifiesUpdatesPublisherExpectation = expectation(description: "Calls update listener")
+        notifiesUpdatesPublisherExpectation.expectedFulfillmentCount = updatesCount
+        let updatesPublisherSubscription = persister.updatesPublisher.sink { _ in
+            notifiesUpdatesPublisherExpectation.fulfill()
+        }
+
+        DispatchQueue.concurrentPerform(iterations: updatesCount) { index in
+            try? persister.persist(index)
+        }
+
+        waitForExpectations(timeout: 3, handler: nil)
+
+        _ = publisherSubscription
+        _ = updatesPublisherSubscription
+    }
     #endif
 
 }
