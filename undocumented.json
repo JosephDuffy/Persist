@@ -23,7 +23,7 @@
     },
     {
       "file": "/Users/runner/work/Persist/Persist/Sources/Persist/Persister.swift",
-      "line": 718,
+      "line": 748,
       "symbol": "Persister.retrieveValue()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
