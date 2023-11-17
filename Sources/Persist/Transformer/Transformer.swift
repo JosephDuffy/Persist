@@ -1,8 +1,7 @@
 /**
  A protocol that indicates a type that can perform transformations of values.
  */
-public protocol Transformer {
-
+public protocol Transformer<Input, Output> {
     /// The value that the transformer accepts as an input.
     associatedtype Input
 

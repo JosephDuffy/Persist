@@ -1,7 +1,7 @@
 /**
  A protocol that defines the interface to store, remove, and retrieve values by a string key.
  */
-public protocol Storage: AnyObject {
+public protocol Storage<Key, Value>: AnyObject {
 
     /// The type of the keys used to reference values in the storage.
     associatedtype Key
