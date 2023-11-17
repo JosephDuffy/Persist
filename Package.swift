@@ -1,16 +1,45 @@
-// swift-tools-version:5.5
+// swift-tools-version: 5.9
 import PackageDescription
+import CompilerPluginSupport
 
 let package = Package(
     name: "Persist",
     platforms: [
-        .iOS(.v12), .macOS(.v10_14), .tvOS(.v12), .watchOS(.v5),
+        .macOS(.v10_15),
+        .iOS(.v13),
+        .tvOS(.v13),
+        .watchOS(.v6),
+        .macCatalyst(.v13)
     ],
     products: [
-        .library(name: "Persist", targets: ["Persist"]),
+        .library(
+            name: "Persist",
+            targets: ["Persist"]
+        ),
+    ],
+    dependencies: [
+        .package(url: "https://github.com/apple/swift-syntax.git", from: "509.0.0"),
     ],
     targets: [
-        .target(name: "Persist"),
-        .testTarget(name: "PersistTests", dependencies: ["Persist"]),
+        .target(name: "Persist", dependencies: ["PersistMacros"]),
+
+        .macro(
+            name: "PersistMacros",
+            dependencies: [
+                .product(name: "SwiftSyntax", package: "swift-syntax"),
+                .product(name: "SwiftSyntaxBuilder", package: "swift-syntax"),
+                .product(name: "SwiftSyntaxMacros", package: "swift-syntax"),
+                .product(name: "SwiftCompilerPlugin", package: "swift-syntax")
+            ]
+        ),
+
+        .testTarget(
+            name: "PersistTests",
+            dependencies: [
+                "Persist",
+                "PersistMacros",
+                .product(name: "SwiftSyntaxMacrosTestSupport", package: "swift-syntax"),
+            ]
+        ),
     ]
 )
