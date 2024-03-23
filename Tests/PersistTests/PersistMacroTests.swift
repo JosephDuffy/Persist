@@ -7,7 +7,7 @@ import XCTest
 import PersistMacros
 
 let testMacros: [String: Macro.Type] = [
-    "Persist": Persist.self,
+    "Persist": Persist_Storage_NoTransformer.self,
 ]
 #endif
 
@@ -17,17 +17,17 @@ final class PersistMacroTests: XCTestCase {
         assertMacroExpansion(
             """
             struct Setting {
-                @Persist(storage: UserDefaultsStorage(.standard))
+                @Persist(key: "foo", storage: UserDefaultsStorage(.standard))
                 var testProperty: Int = 0
             }
             """,
             expandedSource: """
             struct Setting {
-                var testProperty: Int {
+                var testProperty: Int = 0 {
                     get {
                         testProperty_storage.getValue(forKey: "foo") ?? 0
                     }
-                    set {
+                    nonmutating set {
                         testProperty_storage.setValue(newValue, forKey: "foo")
                     }
                 }

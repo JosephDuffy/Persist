@@ -1,18 +1,59 @@
 @attached(peer, names: suffixed(_storage), suffixed(_cache))
 @attached(accessor)
-public macro Persist<Key>(key: Key, storage: any Storage<Key>, cacheValue: Bool = false) = #externalMacro(module: "PersistMacros", type: "Persist")
+public macro Persist<Key>(
+    key: Key,
+    storage: any Storage<Key>,
+    cacheValue: Bool = false
+) = #externalMacro(module: "PersistMacros", type: "Persist_Storage_NoTransformer")
+
+@attached(peer, names: suffixed(_cache))
+@attached(accessor)
+public macro Persist<Key, Root, Storage: Persist.Storage<Key>>(
+    key: Key,
+    storage: KeyPath<Root, Storage>,
+    cacheValue: Bool = false
+) = #externalMacro(module: "PersistMacros", type: "Persist_Storage_NoTransformer")
 
 @attached(peer, names: suffixed(_storage), suffixed(_cache))
 @attached(accessor)
-public macro Persist<Key, Root, Storage: Persist.Storage<Key>>(key: Key, storage: KeyPath<Root, Storage>, cacheValue: Bool = false) = #externalMacro(module: "PersistMacros", type: "Persist")
+public macro Persist<Key>(
+    key: Key,
+    storage: any MutatingStorage<Key>,
+    cacheValue: Bool = false
+) = #externalMacro(module: "PersistMacros", type: "Persist_MutatingStorage_NoTransformer")
+
+@attached(peer, names: suffixed(_cache))
+@attached(accessor)
+public macro Persist<Key, Root, MutatingStorage: Persist.MutatingStorage<Key>>(
+    key: Key,
+    storage: KeyPath<Root, MutatingStorage>,
+    cacheValue: Bool = false
+) = #externalMacro(module: "PersistMacros", type: "Persist_MutatingStorage_NoTransformer")
 
 @attached(peer, names: suffixed(_storage), suffixed(_cache))
 @attached(accessor)
-public macro Persist<Key>(key: Key, storage: any MutatingStorage<Key>, cacheValue: Bool = false) = #externalMacro(module: "PersistMacros", type: "Persist_Mutating")
+public macro Persist<Key>(
+    key: Key,
+    storage: any ThrowingStorage<Key>,
+    cacheValue: Bool = false
+) = #externalMacro(module: "PersistMacros", type: "Persist_ThrowingStorage_NoTransformer")
 
-@attached(peer, names: suffixed(_storage), suffixed(_cache))
+@attached(peer, names: suffixed(_cache))
 @attached(accessor)
-public macro Persist<Key, Root, MutatingStorage: Persist.MutatingStorage<Key>>(key: Key, storage: KeyPath<Root, MutatingStorage>, cacheValue: Bool = false) = #externalMacro(module: "PersistMacros", type: "Persist_Mutating")
+public macro Persist<Key, Root, ThrowingStorage: Persist.ThrowingStorage<Key>>(
+    key: Key,
+    storage: KeyPath<Root, ThrowingStorage>,
+    cacheValue: Bool = false
+) = #externalMacro(module: "PersistMacros", type: "Persist_ThrowingStorage_NoTransformer")
+
+@attached(peer, names: suffixed(_storage), suffixed(_cache), suffixed(_transformer))
+@attached(accessor)
+public macro Persist<Key, Input, Output>(
+    key: Key,
+    storage: any Storage<Key>,
+    transformer: any ThrowingTransformer<Input, Output>,
+    cacheValue: Bool = false
+) = #externalMacro(module: "PersistMacros", type: "Persist_Storage_ThrowingTransformer")
 
 import Foundation
 
@@ -137,4 +178,61 @@ public protocol ThrowingStorage<Key> {
     func setValue<Value>(_ value: Value, forKey key: Key) throws
 
     func removeValue(forKey key: Key) throws
+}
+
+public protocol MutatingThrowingStorage<Key> {
+    /// The type of the key used to store values.
+    associatedtype Key
+
+    func getValue<Value>(forKey key: Key) throws -> Value?
+
+    mutating func setValue<Value>(_ value: Value, forKey key: Key) throws
+
+    mutating func removeValue(forKey key: Key) throws
+}
+
+public protocol Transformer<Input, Output> {
+    associatedtype Input
+    associatedtype Output
+
+    func transformInput<Input>(_ input: Input) -> Output
+
+    func transformOutput<Output>(_ output: Output) -> Input
+}
+
+public protocol ThrowingTransformer<Input, Output> {
+    associatedtype Input
+    associatedtype Output
+
+    func transformInput(_ input: Input) throws -> Output
+
+    func transformOutput(_ output: Output) throws -> Input
+}
+
+public struct JSONTransformer<Input: Codable>: ThrowingTransformer, Sendable {
+    public typealias ConfigureEncoder = @Sendable (_ encoder: JSONEncoder) -> Void
+    public typealias ConfigureDecoder = @Sendable (_ encoder: JSONDecoder) -> Void
+
+    private let configureEncoder: ConfigureEncoder?
+    private let configureDecoder: ConfigureDecoder?
+
+    public init(
+        configureEncoder: ConfigureEncoder? = nil,
+        configureDecoder: ConfigureDecoder? = nil
+    ) {
+        self.configureEncoder = configureEncoder
+        self.configureDecoder = configureDecoder
+    }
+
+    public func transformInput(_ input: Input) throws -> Data {
+        let encoder = JSONEncoder()
+        configureEncoder?(encoder)
+        return try encoder.encode(input)
+    }
+
+    public func transformOutput(_ data: Data) throws -> Input {
+        let decoder = JSONDecoder()
+        configureDecoder?(decoder)
+        return try decoder.decode(Input.self, from: data)
+    }
 }
