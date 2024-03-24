@@ -4,32 +4,32 @@ import Foundation
 /**
  A value that can be stored in `UserDefaults`.
  */
-internal enum UserDefaultsValue: Hashable {
+public enum UserDefaultsValue: Hashable {
     /// A `Bool` value. Convenience to convert to `NSNumber`.
     /// - Parameter bool: The boolean value.
     /// - Returns: A `UserDefaultsValue.number`.
-    internal static func bool(_ bool: Bool) -> Self {
+    public static func bool(_ bool: Bool) -> Self {
         .number(bool as NSNumber)
     }
 
     /// An `Int` value. Convenience to convert to `NSNumber`.
     /// - Parameter int: The integer value.
     /// - Returns: A `UserDefaultsValue.number`.
-    internal static func int(_ int: Int) -> Self {
+    public static func int(_ int: Int) -> Self {
         .number(int as NSNumber)
     }
 
     /// A `Double` value. Convenience to convert to `NSNumber`.
     /// - Parameter double: The double value.
     /// - Returns: A `UserDefaultsValue.number`.
-    internal static func double(_ double: Double) -> Self {
+    public static func double(_ double: Double) -> Self {
         .number(double as NSNumber)
     }
 
     /// A `Float` value. Convenience to convert to `NSNumber`.
     /// - Parameter float: The float value.
     /// - Returns: A `UserDefaultsValue.number`.
-    internal static func float(_ float: Float) -> Self {
+    public static func float(_ float: Float) -> Self {
         .number(float as NSNumber)
     }
 
@@ -60,7 +60,7 @@ internal enum UserDefaultsValue: Hashable {
      `object(forKey:`). For example, storing the `Double` value `123` and calling `object(forKey:)`
      will return an `Int`.
      */
-    internal func cast<Type>(to type: Type.Type) -> Type? {
+    public func cast<Type>(to type: Type.Type) -> Type? {
         switch self {
         case .number(let nsNumber):
             if type == Bool.self {
@@ -80,7 +80,7 @@ internal enum UserDefaultsValue: Hashable {
     }
 
     /// The underlying value.
-    internal var value: Any {
+    public var value: Any {
         switch self {
         case .string(let string):
             return string
@@ -106,7 +106,7 @@ internal enum UserDefaultsValue: Hashable {
      - returns: An instance of `UserDefaultsValue`, or `nil` if the provided `value` can not be
      stored in `UserDefaults`.
      */
-    internal init?(value: Any) {
+    public init?(value: Any) {
         if let string = value as? String {
             self = .string(string)
         } else if let data = value as? Data {
