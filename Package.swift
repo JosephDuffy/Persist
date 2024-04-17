@@ -10,7 +10,12 @@ let package = Package(
         .library(name: "Persist", targets: ["Persist"]),
     ],
     targets: [
-        .target(name: "Persist"),
+        .target(
+            name: "Persist",
+            resources: [
+                .copy("PrivacyInfo.xcprivacy"),
+            ]
+        ),
         .testTarget(name: "PersistTests", dependencies: ["Persist"]),
     ]
 )
