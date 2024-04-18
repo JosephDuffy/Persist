@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>OSUnfairLock Structure Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+    <script src="../js/lunr.min.js" defer></script>
+    <script src="../js/typeahead.jquery.js" defer></script>
+    <script src="../js/jazzy.search.js" defer></script>
+  </head>
+  <body>
+    <a name="//apple_ref/swift/Struct/OSUnfairLock" class="dashAnchor"></a>
+    <a title="OSUnfairLock Structure Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html"> Docs</a> (98% documented)</p>
+        <p class="header-right"><a href="https://github.com/JosephDuffy/Persist"><img src="../img/gh.png" alt="GitHub"/>View on GitHub</a></p>
+        <div class="header-right">
+          <form role="search" action="../search.json">
+            <input type="text" placeholder="Search documentation" data-typeahead>
+          </form>
+        </div>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html"> Reference</a>
+        <img id="carat" src="../img/carat.png" alt=""/>
+        OSUnfairLock Structure Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/AnyCancellable.html">AnyCancellable</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/InMemoryStorage.html">InMemoryStorage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/ObservablePersister.html">ObservablePersister</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Persister.html">Persister</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Persister/Update.html">– Update</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Subscription.html">Subscription</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Enums.html">Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Enums/PersistenceError.html">PersistenceError</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Extensions.html">Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Extensions.html#/s:Sa">Array</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Extensions.html#/s:SD">Dictionary</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Protocols/Cancellable.html">Cancellable</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols.html#/s:7Persist35StorableInNSUbiquitousKeyValueStoreP">StorableInNSUbiquitousKeyValueStore</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols.html#/s:7Persist22StorableInUserDefaultsP">StorableInUserDefaults</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/Storage.html">Storage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/Transformer.html">Transformer</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Structs.html">Structures</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Structs/AggregateTransformer.html">AggregateTransformer</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/DefaultValuePersistOption.html">DefaultValuePersistOption</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/JSONTransformer.html">JSONTransformer</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/OSUnfairLock.html">OSUnfairLock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/OSUnfairLock/Ownership.html">– Ownership</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/PersistStorage.html">PersistStorage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Persisted.html">Persisted</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/PropertyListTransformer.html">PropertyListTransformer</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/RawRepresentableTransformer.html">RawRepresentableTransformer</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/RawRepresentableTransformer/UntransformError.html">– UntransformError</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>OSUnfairLock</h1>
+              <div class="declaration">
+                <div class="language">
+                  
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">OSUnfairLock</span><span class="o">&lt;</span><span class="kt">State</span><span class="o">&gt;</span> <span class="p">:</span> <span class="kd">@unchecked</span> <span class="kt">Sendable</span></code></pre>
+
+                </div>
+              </div>
+            <p>An <code>OSUnfairLock</code> is a wrapper around an unfair lock that locks around
+accesses to a stored object. It has the same API as <code>OSAllocatedUnfairLock</code>.</p>
+
+<p>Despite being a <code>struct</code>, it isn&rsquo;t a value type, as copied instances control
+the same underlying lock allocation.</p>
+
+<p>Prefer storing state protected by the lock in <code>State</code>. Containing locked
+state inside the lock helps track what is protected state and provides a
+scope where it is safe to access that state.</p>
+
+<p>When using <code>OSUnfairLock</code> with external state, nonscoped locking allows more
+flexible locking patterns by using <code>lock()</code> / <code>unlock()</code>, but offers no
+assistance in tracking what state is protected by the lock.</p>
+
+<p>This lock must be unlocked from the same thread that locked it. As such, it
+is unsafe to use <code>lock()</code> / <code>unlock()</code> across an <code>await</code> suspension
+point. Instead, use <code>withLock</code> to enforce that the lock is only held
+within a synchronous scope.</p>
+
+<p>If you are using a lock from asynchronous contexts only, prefer using an
+actor instead.</p>
+
+<p>This lock is not a recursive lock. Attempting to lock it again from the same
+thread while the lock is already locked will crash.</p>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:7Persist12OSUnfairLockV14uncheckedStateACyxGx_tcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(uncheckedState:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7Persist12OSUnfairLockV14uncheckedStateACyxGx_tcfc">init(uncheckedState:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Initialize an OSAllocatedUnfairLock with a non-sendable lock-protected
+<code>initialState</code>.</p>
+
+<p>By initializing with a non-sendable type, the owner of this structure
+must ensure the Sendable contract is upheld manually.
+Non-sendable content from <code>State</code> should not be allowed
+to escape from the lock.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="n">uncheckedState</span> <span class="nv">initialState</span><span class="p">:</span> <span class="kt">State</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>initialState</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An initial value to store that will be
+protected under the lock.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:7Persist12OSUnfairLockV04withC9Uncheckedyqd__qd__xzKXEKlF"></a>
+                    <a name="//apple_ref/swift/Method/withLockUnchecked(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7Persist12OSUnfairLockV04withC9Uncheckedyqd__qd__xzKXEKlF">withLockUnchecked(_:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Perform a closure while holding this lock.
+ This method does not enforce sendability requirement
+ on closure body and its return type.
+ The caller of this method is responsible for ensuring references
+  to non-sendables from closure uphold the Sendability contract.</p>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    Anything thrown by <code>body</code>.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">withLockUnchecked</span><span class="o">&lt;</span><span class="kt">R</span><span class="o">&gt;</span><span class="p">(</span><span class="n">_</span> <span class="nv">body</span><span class="p">:</span> <span class="p">(</span><span class="k">inout</span> <span class="kt">State</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">R</span><span class="p">)</span> <span class="k">rethrows</span> <span class="o">-&gt;</span> <span class="kt">R</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>body</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A closure to invoke while holding this lock.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The return value of <code>body</code>.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:7Persist12OSUnfairLockV04withC0yqd__qd__xzYbKXEKs8SendableRd__lF"></a>
+                    <a name="//apple_ref/swift/Method/withLock(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7Persist12OSUnfairLockV04withC0yqd__qd__xzYbKXEKs8SendableRd__lF">withLock(_:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Perform a sendable closure while holding this lock.</p>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    Anything thrown by <code>body</code>.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">withLock</span><span class="o">&lt;</span><span class="kt">R</span><span class="o">&gt;</span><span class="p">(</span>
+    <span class="c1">// swiftformat:disable:next spaceAroundParens</span>
+    <span class="n">_</span> <span class="nv">body</span><span class="p">:</span> <span class="kd">@Sendable</span> <span class="p">(</span><span class="k">inout</span> <span class="kt">State</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">R</span>
+<span class="p">)</span> <span class="k">rethrows</span> <span class="o">-&gt;</span> <span class="kt">R</span> <span class="k">where</span> <span class="kt">R</span><span class="p">:</span> <span class="kt">Sendable</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>body</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A sendable closure to invoke while holding this lock.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The sendable return value of <code>body</code>.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:7Persist12OSUnfairLockV04withC20IfAvailableUncheckedyqd__Sgqd__xzKXEKlF"></a>
+                    <a name="//apple_ref/swift/Method/withLockIfAvailableUnchecked(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7Persist12OSUnfairLockV04withC20IfAvailableUncheckedyqd__Sgqd__xzKXEKlF">withLockIfAvailableUnchecked(_:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Attempt to acquire the lock, if successful, perform a closure while
+ holding the lock.
+ This method does not enforce sendability requirement
+ on closure body and its return type.
+ The caller of this method is responsible for ensuring references
+  to non-sendables from closure uphold the Sendability contract.</p>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    Anything thrown by <code>body</code>.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">withLockIfAvailableUnchecked</span><span class="o">&lt;</span><span class="kt">R</span><span class="o">&gt;</span><span class="p">(</span><span class="n">_</span> <span class="nv">body</span><span class="p">:</span> <span class="p">(</span><span class="k">inout</span> <span class="kt">State</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">R</span><span class="p">)</span> <span class="k">rethrows</span> <span class="o">-&gt;</span> <span class="kt">R</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>body</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A closure to invoke while holding this lock.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>If the lock is acquired, the result of <code>body</code>.
+       If the lock is not acquired, nil.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:7Persist12OSUnfairLockV04withC11IfAvailableyqd__Sgqd__xzYbKXEKs8SendableRd__lF"></a>
+                    <a name="//apple_ref/swift/Method/withLockIfAvailable(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7Persist12OSUnfairLockV04withC11IfAvailableyqd__Sgqd__xzYbKXEKs8SendableRd__lF">withLockIfAvailable(_:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Attempt to acquire the lock, if successful, perform a sendable closure while
+ holding the lock.</p>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    Anything thrown by <code>body</code>.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">withLockIfAvailable</span><span class="o">&lt;</span><span class="kt">R</span><span class="o">&gt;</span><span class="p">(</span><span class="n">_</span> <span class="nv">body</span><span class="p">:</span> <span class="p">(</span><span class="k">inout</span> <span class="kt">State</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">R</span><span class="p">)</span> <span class="k">rethrows</span> <span class="o">-&gt;</span> <span class="kt">R</span><span class="p">?</span> <span class="k">where</span> <span class="kt">R</span> <span class="p">:</span> <span class="kt">Sendable</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>body</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A closure to invoke while holding this lock.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>If the lock is acquired, the result of <code>body</code>.
+       If the lock is not acquired, nil.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:7Persist12OSUnfairLockV12preconditionyyAC9OwnershipOyx_GF"></a>
+                    <a name="//apple_ref/swift/Method/precondition(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7Persist12OSUnfairLockV12preconditionyyAC9OwnershipOyx_GF">precondition(_:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Check a precondition about whether the calling thread is the lock owner.</p>
+
+<ul>
+<li>If the lock is currently owned by the calling thread:
+
+<ul>
+<li><code>.owner</code> - returns</li>
+<li><code>.notOwner</code> - asserts and terminates the process</li>
+</ul></li>
+<li>If the lock is unlocked or owned by a different thread:
+
+<ul>
+<li><code>.owner</code> - asserts and terminates the process</li>
+<li><code>.notOwner</code> - returns</li>
+</ul></li>
+</ul>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">precondition</span><span class="p">(</span><span class="n">_</span> <span class="nv">condition</span><span class="p">:</span> <span class="kt"><a href="../Structs/OSUnfairLock/Ownership.html">Ownership</a></span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>condition</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An <code><a href="../Structs/OSUnfairLock/Ownership.html">Ownership</a></code> statement to check for the
+current context.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:7Persist12OSUnfairLockV9OwnershipO"></a>
+                    <a name="//apple_ref/swift/Enum/Ownership" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7Persist12OSUnfairLockV9OwnershipO">Ownership</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Represent ownership status for <code>precondition</code> checking.</p>
+
+                        <a href="../Structs/OSUnfairLock/Ownership.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">Ownership</span> <span class="p">:</span> <span class="kt">Hashable</span><span class="p">,</span> <span class="kt">Sendable</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Available%20where%20%60State%60%20%3D%3D%20%60Sendable%60"></a>
+                <a name="//apple_ref/swift/Section/Available where `State` == `Sendable`" class="dashAnchor"></a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Available%20where%20%60State%60%20%3D%3D%20%60Sendable%60"></a>
+                  <h3 class="section-name"><span>Available where <code>State</code> == <code>Sendable</code></span>
+</h3>
+                </div>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:7Persist12OSUnfairLockVAAs8Sendable_pRszlE12initialStateACysAD_pGsAD_p_tcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(initialState:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7Persist12OSUnfairLockVAAs8Sendable_pRszlE12initialStateACysAD_pGsAD_p_tcfc">init(initialState:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Initialize an OSAllocatedUnfairLock with a lock-protected sendable
+<code>initialState</code>.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">initialState</span><span class="p">:</span> <span class="kt">State</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>initialState</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>An initial value to store that will be
+protected under the lock.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Available%20where%20%60State%60%20%3D%3D%20%60Void%60"></a>
+                <a name="//apple_ref/swift/Section/Available where `State` == `Void`" class="dashAnchor"></a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Available%20where%20%60State%60%20%3D%3D%20%60Void%60"></a>
+                  <h3 class="section-name"><span>Available where <code>State</code> == <code>Void</code></span>
+</h3>
+                </div>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:7Persist12OSUnfairLockVAAytRszlEACyytGycfc"></a>
+                    <a name="//apple_ref/swift/Method/init()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7Persist12OSUnfairLockVAAytRszlEACyytGycfc">init()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Initialize an OSAllocatedUnfairLock with no protected state.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">()</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:7Persist12OSUnfairLockVAAytRszlE04withC0yqd__qd__yYbKXEKs8SendableRd__lF"></a>
+                    <a name="//apple_ref/swift/Method/withLock(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7Persist12OSUnfairLockVAAytRszlE04withC0yqd__qd__yYbKXEKs8SendableRd__lF">withLock(_:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">withLock</span><span class="o">&lt;</span><span class="kt">R</span><span class="o">&gt;</span><span class="p">(</span>
+    <span class="c1">// swiftformat:disable:next spaceAroundParens</span>
+    <span class="n">_</span> <span class="nv">body</span><span class="p">:</span> <span class="kd">@Sendable</span> <span class="p">()</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">R</span>
+<span class="p">)</span> <span class="k">rethrows</span> <span class="o">-&gt;</span> <span class="kt">R</span> <span class="k">where</span> <span class="kt">R</span><span class="p">:</span> <span class="kt">Sendable</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:7Persist12OSUnfairLockVAAytRszlE4lockyyF"></a>
+                    <a name="//apple_ref/swift/Method/lock()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7Persist12OSUnfairLockVAAytRszlE4lockyyF">lock()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Acquire this lock.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">lock</span><span class="p">()</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:7Persist12OSUnfairLockVAAytRszlE6unlockyyF"></a>
+                    <a name="//apple_ref/swift/Method/unlock()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7Persist12OSUnfairLockVAAytRszlE6unlockyyF">unlock()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Unlock this lock.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">unlock</span><span class="p">()</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:7Persist12OSUnfairLockVAAytRszlE15lockIfAvailableSbyF"></a>
+                    <a name="//apple_ref/swift/Method/lockIfAvailable()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7Persist12OSUnfairLockVAAytRszlE15lockIfAvailableSbyF">lockIfAvailable()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Attempt to acquire the lock if it is not already locked.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">lockIfAvailable</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p><code>true</code> if the lock was succesfully locked, and
+<code>false</code> if the lock attempt failed.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2024 <a class="link" href="" target="_blank" rel="external noopener">Joseph Duffy</a>. All rights reserved. (Last updated: 2024-04-18)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</html>

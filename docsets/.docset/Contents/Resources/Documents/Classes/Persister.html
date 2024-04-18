@@ -111,6 +111,12 @@
                 <a href="../Structs/JSONTransformer.html">JSONTransformer</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Structs/OSUnfairLock.html">OSUnfairLock</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/OSUnfairLock/Ownership.html">– Ownership</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Structs/PersistStorage.html">PersistStorage</a>
               </li>
               <li class="nav-group-task">
@@ -452,9 +458,37 @@ transformer.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:7Persist9PersisterC11valueGetter0C6Setter0C7Remover12defaultValue0ghA9Behaviour17addUpdateListenerACyxGxSgyKc_yxKcyyKcxyXAAA07DefaulthA6OptionVAA14AnyCancellableCys6ResultOyAC0K0Vyx_Gs5Error_pGc_xyctXEtcfc"></a>
-                    <a name="//apple_ref/swift/Method/init(valueGetter:valueSetter:valueRemover:defaultValue:defaultValuePersistBehaviour:addUpdateListener:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:7Persist9PersisterC11valueGetter0C6Setter0C7Remover12defaultValue0ghA9Behaviour17addUpdateListenerACyxGxSgyKc_yxKcyyKcxyXAAA07DefaulthA6OptionVAA14AnyCancellableCys6ResultOyAC0K0Vyx_Gs5Error_pGc_xyctXEtcfc">init(valueGetter:<wbr>valueSetter:<wbr>valueRemover:<wbr>defaultValue:<wbr>defaultValuePersistBehaviour:<wbr>addUpdateListener:<wbr>)</a>
+                    <a name="/s:7Persist9PersisterC10cacheValueSbvp"></a>
+                    <a name="//apple_ref/swift/Property/cacheValue" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7Persist9PersisterC10cacheValueSbvp">cacheValue</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>When <code>true</code> the current value will be cached in memory whenever it is
+set, retrieved, or the storage provides a new value.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">cacheValue</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:7Persist9PersisterC10cacheValue11valueGetter0E6Setter0E7Remover07defaultD00idA9Behaviour17addUpdateListenerACyxGSb_xSgyKcyxKcyyKcxyXAAA07DefaultdA6OptionVAA14AnyCancellableCys6ResultOyAC0L0Vyx_Gs5Error_pGc_xyctXEtcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(cacheValue:valueGetter:valueSetter:valueRemover:defaultValue:defaultValuePersistBehaviour:addUpdateListener:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7Persist9PersisterC10cacheValue11valueGetter0E6Setter0E7Remover07defaultD00idA9Behaviour17addUpdateListenerACyxGSb_xSgyKcyxKcyyKcxyXAAA07DefaultdA6OptionVAA14AnyCancellableCys6ResultOyAC0L0Vyx_Gs5Error_pGc_xyctXEtcfc">init(cacheValue:<wbr>valueGetter:<wbr>valueSetter:<wbr>valueRemover:<wbr>defaultValue:<wbr>defaultValuePersistBehaviour:<wbr>addUpdateListener:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -470,6 +504,7 @@ transformer.</p>
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span>
+    <span class="nv">cacheValue</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">,</span>
     <span class="nv">valueGetter</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Classes/Persister.html#/s:7Persist9PersisterC11ValueGettera">ValueGetter</a></span><span class="p">,</span>
     <span class="nv">valueSetter</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Classes/Persister.html#/s:7Persist9PersisterC11ValueSettera">ValueSetter</a></span><span class="p">,</span>
     <span class="nv">valueRemover</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Classes/Persister.html#/s:7Persist9PersisterC12ValueRemovera">ValueRemover</a></span><span class="p">,</span>
@@ -484,6 +519,18 @@ transformer.</p>
                         <h4>Parameters</h4>
                         <table class="graybox">
                           <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>cacheValue</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>When <code>true</code> the persister will cache the latest value in-memory for faster retrieval.</p>
+                                </div>
+                              </td>
+                            </tr>
                             <tr>
                               <td>
                                 <code>
@@ -578,9 +625,9 @@ transformer.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:7Persist9PersisterC3key8storedBy12defaultValue0fgA9BehaviourACyxG3KeyQyd___qd__xyXAAA07DefaultgA6OptionVtc0G0Qyd__RszAA7StorageRd__lufc"></a>
-                    <a name="//apple_ref/swift/Method/init(key:storedBy:defaultValue:defaultValuePersistBehaviour:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:7Persist9PersisterC3key8storedBy12defaultValue0fgA9BehaviourACyxG3KeyQyd___qd__xyXAAA07DefaultgA6OptionVtc0G0Qyd__RszAA7StorageRd__lufc">init(key:<wbr>storedBy:<wbr>defaultValue:<wbr>defaultValuePersistBehaviour:<wbr>)</a>
+                    <a name="/s:7Persist9PersisterC3key8storedBy10cacheValue07defaultG00hgA9BehaviourACyxG3KeyQyd___qd__SbxyXAAA07DefaultgA6OptionVtc0G0Qyd__RszAA7StorageRd__lufc"></a>
+                    <a name="//apple_ref/swift/Method/init(key:storedBy:cacheValue:defaultValue:defaultValuePersistBehaviour:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7Persist9PersisterC3key8storedBy10cacheValue07defaultG00hgA9BehaviourACyxG3KeyQyd___qd__SbxyXAAA07DefaultgA6OptionVtc0G0Qyd__RszAA7StorageRd__lufc">init(key:<wbr>storedBy:<wbr>cacheValue:<wbr>defaultValue:<wbr>defaultValuePersistBehaviour:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -599,6 +646,7 @@ transformer.</p>
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">convenience</span> <span class="kd">init</span><span class="o">&lt;</span><span class="kt"><a href="../Protocols/Storage.html">Storage</a></span><span class="p">:</span> <span class="kt">Persist</span><span class="o">.</span><span class="kt"><a href="../Protocols/Storage.html">Storage</a></span><span class="o">&gt;</span><span class="p">(</span>
     <span class="nv">key</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Storage.html">Storage</a></span><span class="o">.</span><span class="kt">Key</span><span class="p">,</span>
     <span class="n">storedBy</span> <span class="nv">storage</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Storage.html">Storage</a></span><span class="p">,</span>
+    <span class="nv">cacheValue</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span>
     <span class="n"><a href="../Classes/Persister.html#/s:7Persist9PersisterC12defaultValuexvp">defaultValue</a></span><span class="p">:</span> <span class="kd">@autoclosure</span> <span class="kd">@escaping</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Value</span><span class="p">,</span>
     <span class="n"><a href="../Classes/Persister.html#/s:7Persist9PersisterC012defaultValueA9BehaviourAA07DefaultdA6OptionVvp">defaultValuePersistBehaviour</a></span><span class="p">:</span> <span class="kt"><a href="../Structs/DefaultValuePersistOption.html">DefaultValuePersistOption</a></span> <span class="o">=</span> <span class="p">[]</span>
 <span class="p">)</span> <span class="k">where</span> <span class="kt"><a href="../Protocols/Storage.html">Storage</a></span><span class="o">.</span><span class="kt">Value</span> <span class="o">==</span> <span class="kt">Value</span></code></pre>
@@ -636,6 +684,20 @@ transformer.</p>
                             <tr>
                               <td>
                                 <code>
+                                <em>cacheValue</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>When <code>true</code> the latest value will be cached in
+memory to improve performance when retrieving values, at the cost of
+increased memory usage.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
                                 <em>defaultValue</em>
                                 </code>
                               </td>
@@ -666,9 +728,9 @@ transformer.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:7Persist9PersisterC3key8storedBy12defaultValue0fgA9BehaviourACyqd_0_SgG3KeyQyd___qd__AHyXAAA07DefaultgA6OptionVtcAHRszAA7StorageRd__0G0Qyd__Rsd_0_r0_lufc"></a>
-                    <a name="//apple_ref/swift/Method/init(key:storedBy:defaultValue:defaultValuePersistBehaviour:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:7Persist9PersisterC3key8storedBy12defaultValue0fgA9BehaviourACyqd_0_SgG3KeyQyd___qd__AHyXAAA07DefaultgA6OptionVtcAHRszAA7StorageRd__0G0Qyd__Rsd_0_r0_lufc">init(key:<wbr>storedBy:<wbr>defaultValue:<wbr>defaultValuePersistBehaviour:<wbr>)</a>
+                    <a name="/s:7Persist9PersisterC3key8storedBy10cacheValue07defaultG00hgA9BehaviourACyqd_0_SgG3KeyQyd___qd__SbAIyXAAA07DefaultgA6OptionVtcAIRszAA7StorageRd__0G0Qyd__Rsd_0_r0_lufc"></a>
+                    <a name="//apple_ref/swift/Method/init(key:storedBy:cacheValue:defaultValue:defaultValuePersistBehaviour:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7Persist9PersisterC3key8storedBy10cacheValue07defaultG00hgA9BehaviourACyqd_0_SgG3KeyQyd___qd__SbAIyXAAA07DefaultgA6OptionVtcAIRszAA7StorageRd__0G0Qyd__Rsd_0_r0_lufc">init(key:<wbr>storedBy:<wbr>cacheValue:<wbr>defaultValue:<wbr>defaultValuePersistBehaviour:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -687,6 +749,7 @@ against the provided key.</p>
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">convenience</span> <span class="kd">init</span><span class="o">&lt;</span><span class="kt"><a href="../Protocols/Storage.html">Storage</a></span><span class="p">:</span> <span class="kt">Persist</span><span class="o">.</span><span class="kt"><a href="../Protocols/Storage.html">Storage</a></span><span class="p">,</span> <span class="kt">WrappedValue</span><span class="o">&gt;</span><span class="p">(</span>
     <span class="nv">key</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Storage.html">Storage</a></span><span class="o">.</span><span class="kt">Key</span><span class="p">,</span>
     <span class="n">storedBy</span> <span class="nv">storage</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Storage.html">Storage</a></span><span class="p">,</span>
+    <span class="nv">cacheValue</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span>
     <span class="n"><a href="../Classes/Persister.html#/s:7Persist9PersisterC12defaultValuexvp">defaultValue</a></span><span class="p">:</span> <span class="kd">@autoclosure</span> <span class="kd">@escaping</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Value</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
     <span class="n"><a href="../Classes/Persister.html#/s:7Persist9PersisterC012defaultValueA9BehaviourAA07DefaultdA6OptionVvp">defaultValuePersistBehaviour</a></span><span class="p">:</span> <span class="kt"><a href="../Structs/DefaultValuePersistOption.html">DefaultValuePersistOption</a></span> <span class="o">=</span> <span class="p">[]</span>
 <span class="p">)</span> <span class="k">where</span> <span class="kt"><a href="../Protocols/Storage.html">Storage</a></span><span class="o">.</span><span class="kt">Value</span> <span class="o">==</span> <span class="kt">WrappedValue</span><span class="p">,</span> <span class="kt">Value</span> <span class="o">==</span> <span class="kt">Optional</span><span class="o">&lt;</span><span class="kt">WrappedValue</span><span class="o">&gt;</span></code></pre>
@@ -721,6 +784,20 @@ against the provided key.</p>
                                 </div>
                               </td>
                             </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>cacheValue</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>When <code>true</code> the latest value will be cached in
+memory to improve performance when retrieving values, at the cost of
+increased memory usage.</p>
+                                </div>
+                              </td>
+                            </tr>
                           </tbody>
                         </table>
                       </div>
@@ -743,9 +820,9 @@ against the provided key.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:7Persist9PersisterC3key8storedBy12defaultValue0fgA9BehaviourACyxG3KeyQyd___qd__xyXAAA07DefaultgA6OptionVtcAA7StorageRd__yp0G0Rtd__lufc"></a>
-                    <a name="//apple_ref/swift/Method/init(key:storedBy:defaultValue:defaultValuePersistBehaviour:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:7Persist9PersisterC3key8storedBy12defaultValue0fgA9BehaviourACyxG3KeyQyd___qd__xyXAAA07DefaultgA6OptionVtcAA7StorageRd__yp0G0Rtd__lufc">init(key:<wbr>storedBy:<wbr>defaultValue:<wbr>defaultValuePersistBehaviour:<wbr>)</a>
+                    <a name="/s:7Persist9PersisterC3key8storedBy10cacheValue07defaultG00hgA9BehaviourACyxG3KeyQyd___qd__SbxyXAAA07DefaultgA6OptionVtcAA7StorageRd__yp0G0Rtd__lufc"></a>
+                    <a name="//apple_ref/swift/Method/init(key:storedBy:cacheValue:defaultValue:defaultValuePersistBehaviour:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7Persist9PersisterC3key8storedBy10cacheValue07defaultG00hgA9BehaviourACyxG3KeyQyd___qd__SbxyXAAA07DefaultgA6OptionVtcAA7StorageRd__yp0G0Rtd__lufc">init(key:<wbr>storedBy:<wbr>cacheValue:<wbr>defaultValue:<wbr>defaultValuePersistBehaviour:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -764,6 +841,7 @@ against the provided key.</p>
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">convenience</span> <span class="kd">init</span><span class="o">&lt;</span><span class="kt"><a href="../Protocols/Storage.html">Storage</a></span><span class="p">:</span> <span class="kt">Persist</span><span class="o">.</span><span class="kt"><a href="../Protocols/Storage.html">Storage</a></span><span class="o">&gt;</span><span class="p">(</span>
     <span class="nv">key</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Storage.html">Storage</a></span><span class="o">.</span><span class="kt">Key</span><span class="p">,</span>
     <span class="n">storedBy</span> <span class="nv">storage</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Storage.html">Storage</a></span><span class="p">,</span>
+    <span class="nv">cacheValue</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span>
     <span class="n"><a href="../Classes/Persister.html#/s:7Persist9PersisterC12defaultValuexvp">defaultValue</a></span><span class="p">:</span> <span class="kd">@autoclosure</span> <span class="kd">@escaping</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Value</span><span class="p">,</span>
     <span class="n"><a href="../Classes/Persister.html#/s:7Persist9PersisterC012defaultValueA9BehaviourAA07DefaultdA6OptionVvp">defaultValuePersistBehaviour</a></span><span class="p">:</span> <span class="kt"><a href="../Structs/DefaultValuePersistOption.html">DefaultValuePersistOption</a></span> <span class="o">=</span> <span class="p">[]</span>
 <span class="p">)</span> <span class="k">where</span> <span class="kt"><a href="../Protocols/Storage.html">Storage</a></span><span class="o">.</span><span class="kt">Value</span> <span class="o">==</span> <span class="kt">Any</span></code></pre>
@@ -798,6 +876,20 @@ against the provided key.</p>
                                 </div>
                               </td>
                             </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>cacheValue</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>When <code>true</code> the latest value will be cached in
+memory to improve performance when retrieving values, at the cost of
+increased memory usage.</p>
+                                </div>
+                              </td>
+                            </tr>
                           </tbody>
                         </table>
                       </div>
@@ -807,9 +899,9 @@ against the provided key.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:7Persist9PersisterC3key8storedBy12defaultValue0fgA9BehaviourACyqd_0_SgG3KeyQyd___qd__AHyXAAA07DefaultgA6OptionVtcAHRszAA7StorageRd__yp0G0Rtd__r0_lufc"></a>
-                    <a name="//apple_ref/swift/Method/init(key:storedBy:defaultValue:defaultValuePersistBehaviour:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:7Persist9PersisterC3key8storedBy12defaultValue0fgA9BehaviourACyqd_0_SgG3KeyQyd___qd__AHyXAAA07DefaultgA6OptionVtcAHRszAA7StorageRd__yp0G0Rtd__r0_lufc">init(key:<wbr>storedBy:<wbr>defaultValue:<wbr>defaultValuePersistBehaviour:<wbr>)</a>
+                    <a name="/s:7Persist9PersisterC3key8storedBy10cacheValue07defaultG00hgA9BehaviourACyqd_0_SgG3KeyQyd___qd__SbAIyXAAA07DefaultgA6OptionVtcAIRszAA7StorageRd__yp0G0Rtd__r0_lufc"></a>
+                    <a name="//apple_ref/swift/Method/init(key:storedBy:cacheValue:defaultValue:defaultValuePersistBehaviour:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7Persist9PersisterC3key8storedBy10cacheValue07defaultG00hgA9BehaviourACyqd_0_SgG3KeyQyd___qd__SbAIyXAAA07DefaultgA6OptionVtcAIRszAA7StorageRd__yp0G0Rtd__r0_lufc">init(key:<wbr>storedBy:<wbr>cacheValue:<wbr>defaultValue:<wbr>defaultValuePersistBehaviour:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -828,6 +920,7 @@ against the provided key.</p>
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">convenience</span> <span class="kd">init</span><span class="o">&lt;</span><span class="kt"><a href="../Protocols/Storage.html">Storage</a></span><span class="p">:</span> <span class="kt">Persist</span><span class="o">.</span><span class="kt"><a href="../Protocols/Storage.html">Storage</a></span><span class="p">,</span> <span class="kt">WrappedValue</span><span class="o">&gt;</span><span class="p">(</span>
     <span class="nv">key</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Storage.html">Storage</a></span><span class="o">.</span><span class="kt">Key</span><span class="p">,</span>
     <span class="n">storedBy</span> <span class="nv">storage</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Storage.html">Storage</a></span><span class="p">,</span>
+    <span class="nv">cacheValue</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span>
     <span class="n"><a href="../Classes/Persister.html#/s:7Persist9PersisterC12defaultValuexvp">defaultValue</a></span><span class="p">:</span> <span class="kd">@autoclosure</span> <span class="kd">@escaping</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Value</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
     <span class="n"><a href="../Classes/Persister.html#/s:7Persist9PersisterC012defaultValueA9BehaviourAA07DefaultdA6OptionVvp">defaultValuePersistBehaviour</a></span><span class="p">:</span> <span class="kt"><a href="../Structs/DefaultValuePersistOption.html">DefaultValuePersistOption</a></span> <span class="o">=</span> <span class="p">[]</span>
 <span class="p">)</span> <span class="k">where</span> <span class="kt"><a href="../Protocols/Storage.html">Storage</a></span><span class="o">.</span><span class="kt">Value</span> <span class="o">==</span> <span class="kt">Any</span><span class="p">,</span> <span class="kt">Value</span> <span class="o">==</span> <span class="kt">Optional</span><span class="o">&lt;</span><span class="kt">WrappedValue</span><span class="o">&gt;</span></code></pre>
@@ -862,6 +955,20 @@ against the provided key.</p>
                                 </div>
                               </td>
                             </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>cacheValue</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>When <code>true</code> the latest value will be cached in
+memory to improve performance when retrieving values, at the cost of
+increased memory usage.</p>
+                                </div>
+                              </td>
+                            </tr>
                           </tbody>
                         </table>
                       </div>
@@ -884,9 +991,9 @@ against the provided key.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:7Persist9PersisterC3key8storedBy11transformer12defaultValue0ghA9BehaviourACyxG3KeyQyd___qd__qd_0_xyXAAA07DefaulthA6OptionVtc5InputQyd_0_RszAA7StorageRd__AA11TransformerRd_0_yp0H0Rtd__r0_lufc"></a>
-                    <a name="//apple_ref/swift/Method/init(key:storedBy:transformer:defaultValue:defaultValuePersistBehaviour:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:7Persist9PersisterC3key8storedBy11transformer12defaultValue0ghA9BehaviourACyxG3KeyQyd___qd__qd_0_xyXAAA07DefaulthA6OptionVtc5InputQyd_0_RszAA7StorageRd__AA11TransformerRd_0_yp0H0Rtd__r0_lufc">init(key:<wbr>storedBy:<wbr>transformer:<wbr>defaultValue:<wbr>defaultValuePersistBehaviour:<wbr>)</a>
+                    <a name="/s:7Persist9PersisterC3key8storedBy11transformer10cacheValue07defaultH00ihA9BehaviourACyxG3KeyQyd___qd__qd_0_SbxyXAAA07DefaulthA6OptionVtc5InputQyd_0_RszAA7StorageRd__AA11TransformerRd_0_yp0H0Rtd__r0_lufc"></a>
+                    <a name="//apple_ref/swift/Method/init(key:storedBy:transformer:cacheValue:defaultValue:defaultValuePersistBehaviour:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7Persist9PersisterC3key8storedBy11transformer10cacheValue07defaultH00ihA9BehaviourACyxG3KeyQyd___qd__qd_0_SbxyXAAA07DefaulthA6OptionVtc5InputQyd_0_RszAA7StorageRd__AA11TransformerRd_0_yp0H0Rtd__r0_lufc">init(key:<wbr>storedBy:<wbr>transformer:<wbr>cacheValue:<wbr>defaultValue:<wbr>defaultValuePersistBehaviour:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -907,6 +1014,7 @@ and being retrieved from the storage.</p>
     <span class="nv">key</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Storage.html">Storage</a></span><span class="o">.</span><span class="kt">Key</span><span class="p">,</span>
     <span class="n">storedBy</span> <span class="nv">storage</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Storage.html">Storage</a></span><span class="p">,</span>
     <span class="nv">transformer</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="p">,</span>
+    <span class="nv">cacheValue</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span>
     <span class="n"><a href="../Classes/Persister.html#/s:7Persist9PersisterC12defaultValuexvp">defaultValue</a></span><span class="p">:</span> <span class="kd">@autoclosure</span> <span class="kd">@escaping</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Value</span><span class="p">,</span>
     <span class="n"><a href="../Classes/Persister.html#/s:7Persist9PersisterC012defaultValueA9BehaviourAA07DefaultdA6OptionVvp">defaultValuePersistBehaviour</a></span><span class="p">:</span> <span class="kt"><a href="../Structs/DefaultValuePersistOption.html">DefaultValuePersistOption</a></span> <span class="o">=</span> <span class="p">[]</span>
 <span class="p">)</span> <span class="k">where</span> <span class="kt"><a href="../Protocols/Storage.html">Storage</a></span><span class="o">.</span><span class="kt">Value</span> <span class="o">==</span> <span class="kt">Any</span><span class="p">,</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Input</span> <span class="o">==</span> <span class="kt">Value</span></code></pre>
@@ -954,6 +1062,20 @@ and being retrieved from the storage.</p>
                                 </div>
                               </td>
                             </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>cacheValue</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>When <code>true</code> the latest value will be cached in
+memory to improve performance when retrieving values, at the cost of
+increased memory usage.</p>
+                                </div>
+                              </td>
+                            </tr>
                           </tbody>
                         </table>
                       </div>
@@ -963,9 +1085,9 @@ and being retrieved from the storage.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:7Persist9PersisterC3key8storedBy11transformer12defaultValue0ghA9BehaviourACyqd_1_SgG3KeyQyd___qd__qd_0_AIyXAAA07DefaulthA6OptionVtcAIRszAA7StorageRd__AA11TransformerRd_0_5InputQyd_0_Rsd_1_yp0H0Rtd__r1_lufc"></a>
-                    <a name="//apple_ref/swift/Method/init(key:storedBy:transformer:defaultValue:defaultValuePersistBehaviour:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:7Persist9PersisterC3key8storedBy11transformer12defaultValue0ghA9BehaviourACyqd_1_SgG3KeyQyd___qd__qd_0_AIyXAAA07DefaulthA6OptionVtcAIRszAA7StorageRd__AA11TransformerRd_0_5InputQyd_0_Rsd_1_yp0H0Rtd__r1_lufc">init(key:<wbr>storedBy:<wbr>transformer:<wbr>defaultValue:<wbr>defaultValuePersistBehaviour:<wbr>)</a>
+                    <a name="/s:7Persist9PersisterC3key8storedBy11transformer10cacheValue07defaultH00ihA9BehaviourACyqd_1_SgG3KeyQyd___qd__qd_0_SbAJyXAAA07DefaulthA6OptionVtcAJRszAA7StorageRd__AA11TransformerRd_0_5InputQyd_0_Rsd_1_yp0H0Rtd__r1_lufc"></a>
+                    <a name="//apple_ref/swift/Method/init(key:storedBy:transformer:cacheValue:defaultValue:defaultValuePersistBehaviour:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7Persist9PersisterC3key8storedBy11transformer10cacheValue07defaultH00ihA9BehaviourACyqd_1_SgG3KeyQyd___qd__qd_0_SbAJyXAAA07DefaulthA6OptionVtcAJRszAA7StorageRd__AA11TransformerRd_0_5InputQyd_0_Rsd_1_yp0H0Rtd__r1_lufc">init(key:<wbr>storedBy:<wbr>transformer:<wbr>cacheValue:<wbr>defaultValue:<wbr>defaultValuePersistBehaviour:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -986,6 +1108,7 @@ and being retrieved from the storage.</p>
     <span class="nv">key</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Storage.html">Storage</a></span><span class="o">.</span><span class="kt">Key</span><span class="p">,</span>
     <span class="n">storedBy</span> <span class="nv">storage</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Storage.html">Storage</a></span><span class="p">,</span>
     <span class="nv">transformer</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="p">,</span>
+    <span class="nv">cacheValue</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span>
     <span class="n"><a href="../Classes/Persister.html#/s:7Persist9PersisterC12defaultValuexvp">defaultValue</a></span><span class="p">:</span> <span class="kd">@autoclosure</span> <span class="kd">@escaping</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Value</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
     <span class="n"><a href="../Classes/Persister.html#/s:7Persist9PersisterC012defaultValueA9BehaviourAA07DefaultdA6OptionVvp">defaultValuePersistBehaviour</a></span><span class="p">:</span> <span class="kt"><a href="../Structs/DefaultValuePersistOption.html">DefaultValuePersistOption</a></span> <span class="o">=</span> <span class="p">[]</span>
 <span class="p">)</span> <span class="k">where</span> <span class="kt"><a href="../Protocols/Storage.html">Storage</a></span><span class="o">.</span><span class="kt">Value</span> <span class="o">==</span> <span class="kt">Any</span><span class="p">,</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Input</span> <span class="o">==</span> <span class="kt">WrappedValue</span><span class="p">,</span> <span class="kt">Value</span> <span class="o">==</span> <span class="kt">WrappedValue</span><span class="p">?</span></code></pre>
@@ -1033,6 +1156,20 @@ and being retrieved from the storage.</p>
                                 </div>
                               </td>
                             </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>cacheValue</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>When <code>true</code> the latest value will be cached in
+memory to improve performance when retrieving values, at the cost of
+increased memory usage.</p>
+                                </div>
+                              </td>
+                            </tr>
                           </tbody>
                         </table>
                       </div>
@@ -1055,9 +1192,9 @@ and being retrieved from the storage.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:7Persist9PersisterC3key8storedBy11transformer12defaultValue0ghA9BehaviourACyxG3KeyQyd___qd__qd_0_xyXAAA07DefaulthA6OptionVtc5InputQyd_0_RszAA7StorageRd__AA11TransformerRd_0_6OutputQyd_0_0H0Rtd__r0_lufc"></a>
-                    <a name="//apple_ref/swift/Method/init(key:storedBy:transformer:defaultValue:defaultValuePersistBehaviour:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:7Persist9PersisterC3key8storedBy11transformer12defaultValue0ghA9BehaviourACyxG3KeyQyd___qd__qd_0_xyXAAA07DefaulthA6OptionVtc5InputQyd_0_RszAA7StorageRd__AA11TransformerRd_0_6OutputQyd_0_0H0Rtd__r0_lufc">init(key:<wbr>storedBy:<wbr>transformer:<wbr>defaultValue:<wbr>defaultValuePersistBehaviour:<wbr>)</a>
+                    <a name="/s:7Persist9PersisterC3key8storedBy11transformer10cacheValue07defaultH00ihA9BehaviourACyxG3KeyQyd___qd__qd_0_SbxyXAAA07DefaulthA6OptionVtc5InputQyd_0_RszAA7StorageRd__AA11TransformerRd_0_6OutputQyd_0_0H0Rtd__r0_lufc"></a>
+                    <a name="//apple_ref/swift/Method/init(key:storedBy:transformer:cacheValue:defaultValue:defaultValuePersistBehaviour:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7Persist9PersisterC3key8storedBy11transformer10cacheValue07defaultH00ihA9BehaviourACyxG3KeyQyd___qd__qd_0_SbxyXAAA07DefaulthA6OptionVtc5InputQyd_0_RszAA7StorageRd__AA11TransformerRd_0_6OutputQyd_0_0H0Rtd__r0_lufc">init(key:<wbr>storedBy:<wbr>transformer:<wbr>cacheValue:<wbr>defaultValue:<wbr>defaultValuePersistBehaviour:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1078,6 +1215,7 @@ and after being retrieved from the storage.</p>
     <span class="nv">key</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Storage.html">Storage</a></span><span class="o">.</span><span class="kt">Key</span><span class="p">,</span>
     <span class="n">storedBy</span> <span class="nv">storage</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Storage.html">Storage</a></span><span class="p">,</span>
     <span class="nv">transformer</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="p">,</span>
+    <span class="nv">cacheValue</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span>
     <span class="n"><a href="../Classes/Persister.html#/s:7Persist9PersisterC12defaultValuexvp">defaultValue</a></span><span class="p">:</span> <span class="kd">@autoclosure</span> <span class="kd">@escaping</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Value</span><span class="p">,</span>
     <span class="n"><a href="../Classes/Persister.html#/s:7Persist9PersisterC012defaultValueA9BehaviourAA07DefaultdA6OptionVvp">defaultValuePersistBehaviour</a></span><span class="p">:</span> <span class="kt"><a href="../Structs/DefaultValuePersistOption.html">DefaultValuePersistOption</a></span> <span class="o">=</span> <span class="p">[]</span>
 <span class="p">)</span> <span class="k">where</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Input</span> <span class="o">==</span> <span class="kt">Value</span><span class="p">,</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Output</span> <span class="o">==</span> <span class="kt"><a href="../Protocols/Storage.html">Storage</a></span><span class="o">.</span><span class="kt">Value</span></code></pre>
@@ -1127,6 +1265,20 @@ and after being retrieved from the storage.</p>
                             <tr>
                               <td>
                                 <code>
+                                <em>cacheValue</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>When <code>true</code> the latest value will be cached in
+memory to improve performance when retrieving values, at the cost of
+increased memory usage.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
                                 <em>defaultValue</em>
                                 </code>
                               </td>
@@ -1157,9 +1309,9 @@ and after being retrieved from the storage.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:7Persist9PersisterC3key8storedBy11transformer12defaultValue0ghA9BehaviourACyqd_1_SgG3KeyQyd___qd__qd_0_AIyXAAA07DefaulthA6OptionVtcAIRszAA7StorageRd__AA11TransformerRd_0_5InputQyd_0_Rsd_1_6OutputQyd_0_0H0Rtd__r1_lufc"></a>
-                    <a name="//apple_ref/swift/Method/init(key:storedBy:transformer:defaultValue:defaultValuePersistBehaviour:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:7Persist9PersisterC3key8storedBy11transformer12defaultValue0ghA9BehaviourACyqd_1_SgG3KeyQyd___qd__qd_0_AIyXAAA07DefaulthA6OptionVtcAIRszAA7StorageRd__AA11TransformerRd_0_5InputQyd_0_Rsd_1_6OutputQyd_0_0H0Rtd__r1_lufc">init(key:<wbr>storedBy:<wbr>transformer:<wbr>defaultValue:<wbr>defaultValuePersistBehaviour:<wbr>)</a>
+                    <a name="/s:7Persist9PersisterC3key8storedBy11transformer10cacheValue07defaultH00ihA9BehaviourACyqd_1_SgG3KeyQyd___qd__qd_0_SbAJyXAAA07DefaulthA6OptionVtcAJRszAA7StorageRd__AA11TransformerRd_0_5InputQyd_0_Rsd_1_6OutputQyd_0_0H0Rtd__r1_lufc"></a>
+                    <a name="//apple_ref/swift/Method/init(key:storedBy:transformer:cacheValue:defaultValue:defaultValuePersistBehaviour:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7Persist9PersisterC3key8storedBy11transformer10cacheValue07defaultH00ihA9BehaviourACyqd_1_SgG3KeyQyd___qd__qd_0_SbAJyXAAA07DefaulthA6OptionVtcAJRszAA7StorageRd__AA11TransformerRd_0_5InputQyd_0_Rsd_1_6OutputQyd_0_0H0Rtd__r1_lufc">init(key:<wbr>storedBy:<wbr>transformer:<wbr>cacheValue:<wbr>defaultValue:<wbr>defaultValuePersistBehaviour:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1180,6 +1332,7 @@ and after being retrieved from the storage.</p>
     <span class="nv">key</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Storage.html">Storage</a></span><span class="o">.</span><span class="kt">Key</span><span class="p">,</span>
     <span class="n">storedBy</span> <span class="nv">storage</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Storage.html">Storage</a></span><span class="p">,</span>
     <span class="nv">transformer</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="p">,</span>
+    <span class="nv">cacheValue</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span>
     <span class="n"><a href="../Classes/Persister.html#/s:7Persist9PersisterC12defaultValuexvp">defaultValue</a></span><span class="p">:</span> <span class="kd">@autoclosure</span> <span class="kd">@escaping</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Value</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
     <span class="n"><a href="../Classes/Persister.html#/s:7Persist9PersisterC012defaultValueA9BehaviourAA07DefaultdA6OptionVvp">defaultValuePersistBehaviour</a></span><span class="p">:</span> <span class="kt"><a href="../Structs/DefaultValuePersistOption.html">DefaultValuePersistOption</a></span> <span class="o">=</span> <span class="p">[]</span>
 <span class="p">)</span> <span class="k">where</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Input</span> <span class="o">==</span> <span class="kt">WrappedValue</span><span class="p">,</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Output</span> <span class="o">==</span> <span class="kt"><a href="../Protocols/Storage.html">Storage</a></span><span class="o">.</span><span class="kt">Value</span><span class="p">,</span> <span class="kt">Value</span> <span class="o">==</span> <span class="kt">WrappedValue</span><span class="p">?</span></code></pre>
@@ -1223,6 +1376,20 @@ and after being retrieved from the storage.</p>
                               <td>
                                 <div>
                                   <p>A transformer to transform the value before being persisted and after being retrieved from the storage</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>cacheValue</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>When <code>true</code> the latest value will be cached in
+memory to improve performance when retrieving values, at the cost of
+increased memory usage.</p>
                                 </div>
                               </td>
                             </tr>
@@ -1314,6 +1481,32 @@ and after being retrieved from the storage.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">retrieveValue</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Value</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:7Persist9PersisterC13retrieveValue15revalidateCachexSb_tF"></a>
+                    <a name="//apple_ref/swift/Method/retrieveValue(revalidateCache:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7Persist9PersisterC13retrieveValue15revalidateCachexSb_tF">retrieveValue(revalidateCache:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
                         <p>Attempts to retrieve the value from the storage. If the value is <code>nil</code> or an error occurs when retrieving
 the value the default value will be returned.</p>
 
@@ -1328,9 +1521,28 @@ value will be persisted.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">retrieveValue</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Value</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">retrieveValue</span><span class="p">(</span><span class="nv">revalidateCache</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Value</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>revalidateCache</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>When <code>true</code> the cache – if present – will be discarded and the latest value will be retrieved. If <code><a href="../Classes/Persister.html#/s:7Persist9PersisterC10cacheValueSbvp">cacheValue</a></code> is <code>true</code> this value will be cached.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                       <div>
                         <h4>Return Value</h4>
@@ -1355,10 +1567,11 @@ value will be persisted.</p>
                         <p>Attempts to retrieve the value from the storage. If the value is <code>nil</code> the default value will be returned.</p>
 
 <p>If the <code>persistWhenNil</code> option has been provided and the storage returns <code>nil</code> the default value
- will be persisted.</p>
+will be persisted.</p>
 
-<p>If the <code>persistOnError</code> option has been provided and there is an error retrieving the value the default
-value will <strong>not</strong> be persisted and the error will be thrown.</p>
+<p>If the <code>persistOnError</code> option has been provided and there is an error
+retrieving the value the default value will <strong>not</strong> be persisted and the
+error will be thrown.</p>
 <div class="aside aside-throws">
     <p class="aside-title">Throws</p>
     Any error thrown while retrieving the value.
@@ -1371,6 +1584,49 @@ value will <strong>not</strong> be persisted and the error will be thrown.</p>
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">retrieveValueOrThrow</span><span class="p">()</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">Value</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The persisted value, or the default value if no value has been persisted.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:7Persist9PersisterC20retrieveValueOrThrow15revalidateCachexSb_tKF"></a>
+                    <a name="//apple_ref/swift/Method/retrieveValueOrThrow(revalidateCache:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7Persist9PersisterC20retrieveValueOrThrow15revalidateCachexSb_tKF">retrieveValueOrThrow(revalidateCache:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Attempts to retrieve the value from the storage. If the value is <code>nil</code> the default value will be returned.</p>
+
+<p>If the <code>persistWhenNil</code> option has been provided and the storage returns <code>nil</code> the default value
+will be persisted.</p>
+
+<p>If the <code>persistOnError</code> option has been provided and there is an error
+retrieving the value the default value will <strong>not</strong> be persisted and the
+error will be thrown.</p>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    Any error thrown while retrieving the value.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">retrieveValueOrThrow</span><span class="p">(</span><span class="nv">revalidateCache</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">Value</span></code></pre>
 
                         </div>
                       </div>
@@ -2526,9 +2782,9 @@ retrieved from the storage.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:7Persist9PersisterC3key8storedBy12defaultValue0fgA9BehaviourACyqd__SgGSS_So14NSUserDefaultsCAHyXAAA07DefaultgA6OptionVtcAHRszAA014StorableInUserJ0Rd__lufc"></a>
-                    <a name="//apple_ref/swift/Method/init(key:storedBy:defaultValue:defaultValuePersistBehaviour:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:7Persist9PersisterC3key8storedBy12defaultValue0fgA9BehaviourACyqd__SgGSS_So14NSUserDefaultsCAHyXAAA07DefaultgA6OptionVtcAHRszAA014StorableInUserJ0Rd__lufc">init(key:<wbr>storedBy:<wbr>defaultValue:<wbr>defaultValuePersistBehaviour:<wbr>)</a>
+                    <a name="/s:7Persist9PersisterC3key8storedBy10cacheValue07defaultG00hgA9BehaviourACyqd__SgGSS_So14NSUserDefaultsCSbAIyXAAA07DefaultgA6OptionVtcAIRszAA014StorableInUserK0Rd__lufc"></a>
+                    <a name="//apple_ref/swift/Method/init(key:storedBy:cacheValue:defaultValue:defaultValuePersistBehaviour:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7Persist9PersisterC3key8storedBy10cacheValue07defaultG00hgA9BehaviourACyqd__SgGSS_So14NSUserDefaultsCSbAIyXAAA07DefaultgA6OptionVtcAIRszAA014StorableInUserK0Rd__lufc">init(key:<wbr>storedBy:<wbr>cacheValue:<wbr>defaultValue:<wbr>defaultValuePersistBehaviour:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -2547,6 +2803,7 @@ retrieved from the storage.</p>
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">convenience</span> <span class="kd">init</span><span class="o">&lt;</span><span class="kt">WrappedValue</span><span class="o">&gt;</span><span class="p">(</span>
     <span class="nv">key</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>
     <span class="n">storedBy</span> <span class="nv">userDefaults</span><span class="p">:</span> <span class="kt">UserDefaults</span><span class="p">,</span>
+    <span class="nv">cacheValue</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span>
     <span class="n"><a href="../Classes/Persister.html#/s:7Persist9PersisterC12defaultValuexvp">defaultValue</a></span><span class="p">:</span> <span class="kd">@autoclosure</span> <span class="kd">@escaping</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Value</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
     <span class="n"><a href="../Classes/Persister.html#/s:7Persist9PersisterC012defaultValueA9BehaviourAA07DefaultdA6OptionVvp">defaultValuePersistBehaviour</a></span><span class="p">:</span> <span class="kt"><a href="../Structs/DefaultValuePersistOption.html">DefaultValuePersistOption</a></span> <span class="o">=</span> <span class="p">[]</span>
 <span class="p">)</span> <span class="k">where</span> <span class="kt">WrappedValue</span><span class="p">:</span> <span class="kt"><a href="../Protocols.html#/s:7Persist22StorableInUserDefaultsP">StorableInUserDefaults</a></span><span class="p">,</span> <span class="kt">Value</span> <span class="o">==</span> <span class="kt">WrappedValue</span><span class="p">?</span></code></pre>
@@ -2578,6 +2835,18 @@ retrieved from the storage.</p>
                               <td>
                                 <div>
                                   <p>The user defaults to use to persist and retrieve the value.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>cacheValue</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>When <code>true</code> the latest value will be cached in memory to improve performance when retrieving values, at the cost of increased memory usage.</p>
                                 </div>
                               </td>
                             </tr>
@@ -2614,9 +2883,9 @@ retrieved from the storage.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:7Persist9PersisterC3key12userDefaults12defaultValue0fgA9BehaviourACyqd__SgGSS_So06NSUserE0CAHyXAAA07DefaultgA6OptionVtcAHRszAA014StorableInUserE0Rd__lufc"></a>
-                    <a name="//apple_ref/swift/Method/init(key:userDefaults:defaultValue:defaultValuePersistBehaviour:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:7Persist9PersisterC3key12userDefaults12defaultValue0fgA9BehaviourACyqd__SgGSS_So06NSUserE0CAHyXAAA07DefaultgA6OptionVtcAHRszAA014StorableInUserE0Rd__lufc">init(key:<wbr>userDefaults:<wbr>defaultValue:<wbr>defaultValuePersistBehaviour:<wbr>)</a>
+                    <a name="/s:7Persist9PersisterC3key12userDefaults10cacheValue07defaultG00hgA9BehaviourACyqd__SgGSS_So06NSUserE0CSbAIyXAAA07DefaultgA6OptionVtcAIRszAA014StorableInUserE0Rd__lufc"></a>
+                    <a name="//apple_ref/swift/Method/init(key:userDefaults:cacheValue:defaultValue:defaultValuePersistBehaviour:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7Persist9PersisterC3key12userDefaults10cacheValue07defaultG00hgA9BehaviourACyqd__SgGSS_So06NSUserE0CSbAIyXAAA07DefaultgA6OptionVtcAIRszAA014StorableInUserE0Rd__lufc">init(key:<wbr>userDefaults:<wbr>cacheValue:<wbr>defaultValue:<wbr>defaultValuePersistBehaviour:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -2635,6 +2904,7 @@ retrieved from the storage.</p>
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">convenience</span> <span class="kd">init</span><span class="o">&lt;</span><span class="kt">WrappedValue</span><span class="o">&gt;</span><span class="p">(</span>
     <span class="nv">key</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>
     <span class="nv">userDefaults</span><span class="p">:</span> <span class="kt">UserDefaults</span><span class="p">,</span>
+    <span class="nv">cacheValue</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span>
     <span class="n"><a href="../Classes/Persister.html#/s:7Persist9PersisterC12defaultValuexvp">defaultValue</a></span><span class="p">:</span> <span class="kd">@autoclosure</span> <span class="kd">@escaping</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Value</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
     <span class="n"><a href="../Classes/Persister.html#/s:7Persist9PersisterC012defaultValueA9BehaviourAA07DefaultdA6OptionVvp">defaultValuePersistBehaviour</a></span><span class="p">:</span> <span class="kt"><a href="../Structs/DefaultValuePersistOption.html">DefaultValuePersistOption</a></span> <span class="o">=</span> <span class="p">[]</span>
 <span class="p">)</span> <span class="k">where</span> <span class="kt">WrappedValue</span><span class="p">:</span> <span class="kt"><a href="../Protocols.html#/s:7Persist22StorableInUserDefaultsP">StorableInUserDefaults</a></span><span class="p">,</span> <span class="kt">Value</span> <span class="o">==</span> <span class="kt">WrappedValue</span><span class="p">?</span></code></pre>
@@ -2666,6 +2936,18 @@ retrieved from the storage.</p>
                               <td>
                                 <div>
                                   <p>The user defaults to use to persist and retrieve the value.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>cacheValue</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>When <code>true</code> the latest value will be cached in memory to improve performance when retrieving values, at the cost of increased memory usage.</p>
                                 </div>
                               </td>
                             </tr>
@@ -2715,9 +2997,9 @@ retrieved from the storage.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:7Persist9PersisterC3key8storedBy11transformer12defaultValue0ghA9BehaviourACyxGSS_So14NSUserDefaultsCqd__xyXAAA07DefaulthA6OptionVtc5InputQyd__RszAA11TransformerRd__AA014StorableInUserK06OutputRpd__lufc"></a>
-                    <a name="//apple_ref/swift/Method/init(key:storedBy:transformer:defaultValue:defaultValuePersistBehaviour:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:7Persist9PersisterC3key8storedBy11transformer12defaultValue0ghA9BehaviourACyxGSS_So14NSUserDefaultsCqd__xyXAAA07DefaulthA6OptionVtc5InputQyd__RszAA11TransformerRd__AA014StorableInUserK06OutputRpd__lufc">init(key:<wbr>storedBy:<wbr>transformer:<wbr>defaultValue:<wbr>defaultValuePersistBehaviour:<wbr>)</a>
+                    <a name="/s:7Persist9PersisterC3key8storedBy11transformer10cacheValue07defaultH00ihA9BehaviourACyxGSS_So14NSUserDefaultsCqd__SbxyXAAA07DefaulthA6OptionVtc5InputQyd__RszAA11TransformerRd__AA014StorableInUserL06OutputRpd__lufc"></a>
+                    <a name="//apple_ref/swift/Method/init(key:storedBy:transformer:cacheValue:defaultValue:defaultValuePersistBehaviour:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7Persist9PersisterC3key8storedBy11transformer10cacheValue07defaultH00ihA9BehaviourACyxGSS_So14NSUserDefaultsCqd__SbxyXAAA07DefaulthA6OptionVtc5InputQyd__RszAA11TransformerRd__AA014StorableInUserL06OutputRpd__lufc">init(key:<wbr>storedBy:<wbr>transformer:<wbr>cacheValue:<wbr>defaultValue:<wbr>defaultValuePersistBehaviour:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -2740,6 +3022,7 @@ retrieved from the storage.</p>
     <span class="nv">key</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>
     <span class="n">storedBy</span> <span class="nv">userDefaults</span><span class="p">:</span> <span class="kt">UserDefaults</span><span class="p">,</span>
     <span class="nv">transformer</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="p">,</span>
+    <span class="nv">cacheValue</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span>
     <span class="n"><a href="../Classes/Persister.html#/s:7Persist9PersisterC12defaultValuexvp">defaultValue</a></span><span class="p">:</span> <span class="kd">@autoclosure</span> <span class="kd">@escaping</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Value</span><span class="p">,</span>
     <span class="n"><a href="../Classes/Persister.html#/s:7Persist9PersisterC012defaultValueA9BehaviourAA07DefaultdA6OptionVvp">defaultValuePersistBehaviour</a></span><span class="p">:</span> <span class="kt"><a href="../Structs/DefaultValuePersistOption.html">DefaultValuePersistOption</a></span> <span class="o">=</span> <span class="p">[]</span>
 <span class="p">)</span> <span class="k">where</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Input</span> <span class="o">==</span> <span class="kt">Value</span><span class="p">,</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Output</span><span class="p">:</span> <span class="kt"><a href="../Protocols.html#/s:7Persist22StorableInUserDefaultsP">StorableInUserDefaults</a></span></code></pre>
@@ -2783,6 +3066,18 @@ retrieved from the storage.</p>
                               <td>
                                 <div>
                                   <p>A transformer to transform the value before being persisted and after being retrieved from the storage</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>cacheValue</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>When <code>true</code> the latest value will be cached in memory to improve performance when retrieving values, at the cost of increased memory usage.</p>
                                 </div>
                               </td>
                             </tr>
@@ -2819,9 +3114,9 @@ retrieved from the storage.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:7Persist9PersisterC3key12userDefaults11transformer12defaultValue0ghA9BehaviourACyxGSS_So06NSUserE0Cqd__xyXAAA07DefaulthA6OptionVtc5InputQyd__RszAA11TransformerRd__AA014StorableInUserE06OutputRpd__lufc"></a>
-                    <a name="//apple_ref/swift/Method/init(key:userDefaults:transformer:defaultValue:defaultValuePersistBehaviour:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:7Persist9PersisterC3key12userDefaults11transformer12defaultValue0ghA9BehaviourACyxGSS_So06NSUserE0Cqd__xyXAAA07DefaulthA6OptionVtc5InputQyd__RszAA11TransformerRd__AA014StorableInUserE06OutputRpd__lufc">init(key:<wbr>userDefaults:<wbr>transformer:<wbr>defaultValue:<wbr>defaultValuePersistBehaviour:<wbr>)</a>
+                    <a name="/s:7Persist9PersisterC3key12userDefaults11transformer10cacheValue07defaultH00ihA9BehaviourACyxGSS_So06NSUserE0Cqd__SbxyXAAA07DefaulthA6OptionVtc5InputQyd__RszAA11TransformerRd__AA014StorableInUserE06OutputRpd__lufc"></a>
+                    <a name="//apple_ref/swift/Method/init(key:userDefaults:transformer:cacheValue:defaultValue:defaultValuePersistBehaviour:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7Persist9PersisterC3key12userDefaults11transformer10cacheValue07defaultH00ihA9BehaviourACyxGSS_So06NSUserE0Cqd__SbxyXAAA07DefaulthA6OptionVtc5InputQyd__RszAA11TransformerRd__AA014StorableInUserE06OutputRpd__lufc">init(key:<wbr>userDefaults:<wbr>transformer:<wbr>cacheValue:<wbr>defaultValue:<wbr>defaultValuePersistBehaviour:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -2844,6 +3139,7 @@ retrieved from the storage.</p>
     <span class="nv">key</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>
     <span class="nv">userDefaults</span><span class="p">:</span> <span class="kt">UserDefaults</span><span class="p">,</span>
     <span class="nv">transformer</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="p">,</span>
+    <span class="nv">cacheValue</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span>
     <span class="n"><a href="../Classes/Persister.html#/s:7Persist9PersisterC12defaultValuexvp">defaultValue</a></span><span class="p">:</span> <span class="kd">@autoclosure</span> <span class="kd">@escaping</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Value</span><span class="p">,</span>
     <span class="n"><a href="../Classes/Persister.html#/s:7Persist9PersisterC012defaultValueA9BehaviourAA07DefaultdA6OptionVvp">defaultValuePersistBehaviour</a></span><span class="p">:</span> <span class="kt"><a href="../Structs/DefaultValuePersistOption.html">DefaultValuePersistOption</a></span> <span class="o">=</span> <span class="p">[]</span>
 <span class="p">)</span> <span class="k">where</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Input</span> <span class="o">==</span> <span class="kt">Value</span><span class="p">,</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Output</span><span class="p">:</span> <span class="kt"><a href="../Protocols.html#/s:7Persist22StorableInUserDefaultsP">StorableInUserDefaults</a></span></code></pre>
@@ -2887,6 +3183,18 @@ retrieved from the storage.</p>
                               <td>
                                 <div>
                                   <p>A transformer to transform the value before being persisted and after being retrieved from the storage</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>cacheValue</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>When <code>true</code> the latest value will be cached in memory to improve performance when retrieving values, at the cost of increased memory usage.</p>
                                 </div>
                               </td>
                             </tr>
@@ -2936,9 +3244,9 @@ retrieved from the storage.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:7Persist9PersisterC3key8storedBy11transformer12defaultValue0ghA9BehaviourACyqd_0_SgGSS_So14NSUserDefaultsCqd__AIyXAAA07DefaulthA6OptionVtcAIRszAA11TransformerRd__5InputQyd__Rsd_0_AA014StorableInUserK06OutputRpd__r0_lufc"></a>
-                    <a name="//apple_ref/swift/Method/init(key:storedBy:transformer:defaultValue:defaultValuePersistBehaviour:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:7Persist9PersisterC3key8storedBy11transformer12defaultValue0ghA9BehaviourACyqd_0_SgGSS_So14NSUserDefaultsCqd__AIyXAAA07DefaulthA6OptionVtcAIRszAA11TransformerRd__5InputQyd__Rsd_0_AA014StorableInUserK06OutputRpd__r0_lufc">init(key:<wbr>storedBy:<wbr>transformer:<wbr>defaultValue:<wbr>defaultValuePersistBehaviour:<wbr>)</a>
+                    <a name="/s:7Persist9PersisterC3key8storedBy11transformer10cacheValue07defaultH00ihA9BehaviourACyqd_0_SgGSS_So14NSUserDefaultsCqd__SbAJyXAAA07DefaulthA6OptionVtcAJRszAA11TransformerRd__5InputQyd__Rsd_0_AA014StorableInUserL06OutputRpd__r0_lufc"></a>
+                    <a name="//apple_ref/swift/Method/init(key:storedBy:transformer:cacheValue:defaultValue:defaultValuePersistBehaviour:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7Persist9PersisterC3key8storedBy11transformer10cacheValue07defaultH00ihA9BehaviourACyqd_0_SgGSS_So14NSUserDefaultsCqd__SbAJyXAAA07DefaulthA6OptionVtcAJRszAA11TransformerRd__5InputQyd__Rsd_0_AA014StorableInUserL06OutputRpd__r0_lufc">init(key:<wbr>storedBy:<wbr>transformer:<wbr>cacheValue:<wbr>defaultValue:<wbr>defaultValuePersistBehaviour:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -2961,6 +3269,7 @@ retrieved from the storage.</p>
     <span class="nv">key</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>
     <span class="n">storedBy</span> <span class="nv">userDefaults</span><span class="p">:</span> <span class="kt">UserDefaults</span><span class="p">,</span>
     <span class="nv">transformer</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="p">,</span>
+    <span class="nv">cacheValue</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span>
     <span class="n"><a href="../Classes/Persister.html#/s:7Persist9PersisterC12defaultValuexvp">defaultValue</a></span><span class="p">:</span> <span class="kd">@autoclosure</span> <span class="kd">@escaping</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Value</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
     <span class="n"><a href="../Classes/Persister.html#/s:7Persist9PersisterC012defaultValueA9BehaviourAA07DefaultdA6OptionVvp">defaultValuePersistBehaviour</a></span><span class="p">:</span> <span class="kt"><a href="../Structs/DefaultValuePersistOption.html">DefaultValuePersistOption</a></span> <span class="o">=</span> <span class="p">[]</span>
 <span class="p">)</span> <span class="k">where</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Input</span> <span class="o">==</span> <span class="kt">WrappedValue</span><span class="p">,</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Output</span><span class="p">:</span> <span class="kt"><a href="../Protocols.html#/s:7Persist22StorableInUserDefaultsP">StorableInUserDefaults</a></span><span class="p">,</span> <span class="kt">Value</span> <span class="o">==</span> <span class="kt">WrappedValue</span><span class="p">?</span></code></pre>
@@ -3004,6 +3313,18 @@ retrieved from the storage.</p>
                               <td>
                                 <div>
                                   <p>A transformer to transform the value before being persisted and after being retrieved from the storage</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>cacheValue</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>When <code>true</code> the latest value will be cached in memory to improve performance when retrieving values, at the cost of increased memory usage.</p>
                                 </div>
                               </td>
                             </tr>
@@ -3040,9 +3361,9 @@ retrieved from the storage.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:7Persist9PersisterC3key12userDefaults11transformer12defaultValue0ghA9BehaviourACyqd_0_SgGSS_So06NSUserE0Cqd__AIyXAAA07DefaulthA6OptionVtcAIRszAA11TransformerRd__5InputQyd__Rsd_0_AA014StorableInUserE06OutputRpd__r0_lufc"></a>
-                    <a name="//apple_ref/swift/Method/init(key:userDefaults:transformer:defaultValue:defaultValuePersistBehaviour:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:7Persist9PersisterC3key12userDefaults11transformer12defaultValue0ghA9BehaviourACyqd_0_SgGSS_So06NSUserE0Cqd__AIyXAAA07DefaulthA6OptionVtcAIRszAA11TransformerRd__5InputQyd__Rsd_0_AA014StorableInUserE06OutputRpd__r0_lufc">init(key:<wbr>userDefaults:<wbr>transformer:<wbr>defaultValue:<wbr>defaultValuePersistBehaviour:<wbr>)</a>
+                    <a name="/s:7Persist9PersisterC3key12userDefaults11transformer10cacheValue07defaultH00ihA9BehaviourACyqd_0_SgGSS_So06NSUserE0Cqd__SbAJyXAAA07DefaulthA6OptionVtcAJRszAA11TransformerRd__5InputQyd__Rsd_0_AA014StorableInUserE06OutputRpd__r0_lufc"></a>
+                    <a name="//apple_ref/swift/Method/init(key:userDefaults:transformer:cacheValue:defaultValue:defaultValuePersistBehaviour:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7Persist9PersisterC3key12userDefaults11transformer10cacheValue07defaultH00ihA9BehaviourACyqd_0_SgGSS_So06NSUserE0Cqd__SbAJyXAAA07DefaulthA6OptionVtcAJRszAA11TransformerRd__5InputQyd__Rsd_0_AA014StorableInUserE06OutputRpd__r0_lufc">init(key:<wbr>userDefaults:<wbr>transformer:<wbr>cacheValue:<wbr>defaultValue:<wbr>defaultValuePersistBehaviour:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -3065,6 +3386,7 @@ retrieved from the storage.</p>
     <span class="nv">key</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>
     <span class="nv">userDefaults</span><span class="p">:</span> <span class="kt">UserDefaults</span><span class="p">,</span>
     <span class="nv">transformer</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="p">,</span>
+    <span class="nv">cacheValue</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span>
     <span class="n"><a href="../Classes/Persister.html#/s:7Persist9PersisterC12defaultValuexvp">defaultValue</a></span><span class="p">:</span> <span class="kd">@autoclosure</span> <span class="kd">@escaping</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Value</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
     <span class="n"><a href="../Classes/Persister.html#/s:7Persist9PersisterC012defaultValueA9BehaviourAA07DefaultdA6OptionVvp">defaultValuePersistBehaviour</a></span><span class="p">:</span> <span class="kt"><a href="../Structs/DefaultValuePersistOption.html">DefaultValuePersistOption</a></span> <span class="o">=</span> <span class="p">[]</span>
 <span class="p">)</span> <span class="k">where</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Input</span> <span class="o">==</span> <span class="kt">WrappedValue</span><span class="p">,</span> <span class="kt"><a href="../Protocols/Transformer.html">Transformer</a></span><span class="o">.</span><span class="kt">Output</span><span class="p">:</span> <span class="kt"><a href="../Protocols.html#/s:7Persist22StorableInUserDefaultsP">StorableInUserDefaults</a></span><span class="p">,</span> <span class="kt">Value</span> <span class="o">==</span> <span class="kt">WrappedValue</span><span class="p">?</span></code></pre>
@@ -3108,6 +3430,18 @@ retrieved from the storage.</p>
                               <td>
                                 <div>
                                   <p>A transformer to transform the value before being persisted and after being retrieved from the storage</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>cacheValue</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>When <code>true</code> the latest value will be cached in memory to improve performance when retrieving values, at the cost of increased memory usage.<br></p>
                                 </div>
                               </td>
                             </tr>
@@ -3752,9 +4086,9 @@ using <code>UserDefaults</code> keys with a dot (<code>.</code>) in them.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:7Persist9PersisterCA2A22StorableInUserDefaultsRzlE3key8storedBy12defaultValue0jkA9BehaviourACyxGSS_So06NSUserF0CxyXAAA07DefaultkA6OptionVtcfc"></a>
-                    <a name="//apple_ref/swift/Method/init(key:storedBy:defaultValue:defaultValuePersistBehaviour:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:7Persist9PersisterCA2A22StorableInUserDefaultsRzlE3key8storedBy12defaultValue0jkA9BehaviourACyxGSS_So06NSUserF0CxyXAAA07DefaultkA6OptionVtcfc">init(key:<wbr>storedBy:<wbr>defaultValue:<wbr>defaultValuePersistBehaviour:<wbr>)</a>
+                    <a name="/s:7Persist9PersisterCA2A22StorableInUserDefaultsRzlE3key8storedBy10cacheValue07defaultK00lkA9BehaviourACyxGSS_So06NSUserF0CSbxyXAAA07DefaultkA6OptionVtcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(key:storedBy:cacheValue:defaultValue:defaultValuePersistBehaviour:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7Persist9PersisterCA2A22StorableInUserDefaultsRzlE3key8storedBy10cacheValue07defaultK00lkA9BehaviourACyxGSS_So06NSUserF0CSbxyXAAA07DefaultkA6OptionVtcfc">init(key:<wbr>storedBy:<wbr>cacheValue:<wbr>defaultValue:<wbr>defaultValuePersistBehaviour:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -3773,6 +4107,7 @@ using <code>UserDefaults</code> keys with a dot (<code>.</code>) in them.</p>
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">convenience</span> <span class="nf">init</span><span class="p">(</span>
     <span class="nv">key</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>
     <span class="n">storedBy</span> <span class="nv">userDefaults</span><span class="p">:</span> <span class="kt">UserDefaults</span><span class="p">,</span>
+    <span class="nv">cacheValue</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span>
     <span class="n"><a href="../Classes/Persister.html#/s:7Persist9PersisterC12defaultValuexvp">defaultValue</a></span><span class="p">:</span> <span class="kd">@autoclosure</span> <span class="kd">@escaping</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Value</span><span class="p">,</span>
     <span class="n"><a href="../Classes/Persister.html#/s:7Persist9PersisterC012defaultValueA9BehaviourAA07DefaultdA6OptionVvp">defaultValuePersistBehaviour</a></span><span class="p">:</span> <span class="kt"><a href="../Structs/DefaultValuePersistOption.html">DefaultValuePersistOption</a></span> <span class="o">=</span> <span class="p">[]</span>
 <span class="p">)</span></code></pre>
@@ -3804,6 +4139,18 @@ using <code>UserDefaults</code> keys with a dot (<code>.</code>) in them.</p>
                               <td>
                                 <div>
                                   <p>The user defaults to use to persist and retrieve the value.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>cacheValue</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>When <code>true</code> the latest value will be cached in memory to improve performance when retrieving values, at the cost of increased memory usage.</p>
                                 </div>
                               </td>
                             </tr>
@@ -3840,9 +4187,9 @@ using <code>UserDefaults</code> keys with a dot (<code>.</code>) in them.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:7Persist9PersisterCA2A22StorableInUserDefaultsRzlE3key04userF012defaultValue0ijA9BehaviourACyxGSS_So06NSUserF0CxyXAAA07DefaultjA6OptionVtcfc"></a>
-                    <a name="//apple_ref/swift/Method/init(key:userDefaults:defaultValue:defaultValuePersistBehaviour:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:7Persist9PersisterCA2A22StorableInUserDefaultsRzlE3key04userF012defaultValue0ijA9BehaviourACyxGSS_So06NSUserF0CxyXAAA07DefaultjA6OptionVtcfc">init(key:<wbr>userDefaults:<wbr>defaultValue:<wbr>defaultValuePersistBehaviour:<wbr>)</a>
+                    <a name="/s:7Persist9PersisterCA2A22StorableInUserDefaultsRzlE3key04userF010cacheValue07defaultJ00kjA9BehaviourACyxGSS_So06NSUserF0CSbxyXAAA07DefaultjA6OptionVtcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(key:userDefaults:cacheValue:defaultValue:defaultValuePersistBehaviour:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7Persist9PersisterCA2A22StorableInUserDefaultsRzlE3key04userF010cacheValue07defaultJ00kjA9BehaviourACyxGSS_So06NSUserF0CSbxyXAAA07DefaultjA6OptionVtcfc">init(key:<wbr>userDefaults:<wbr>cacheValue:<wbr>defaultValue:<wbr>defaultValuePersistBehaviour:<wbr>)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -3861,6 +4208,7 @@ using <code>UserDefaults</code> keys with a dot (<code>.</code>) in them.</p>
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">convenience</span> <span class="nf">init</span><span class="p">(</span>
     <span class="nv">key</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>
     <span class="nv">userDefaults</span><span class="p">:</span> <span class="kt">UserDefaults</span><span class="p">,</span>
+    <span class="nv">cacheValue</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span>
     <span class="n"><a href="../Classes/Persister.html#/s:7Persist9PersisterC12defaultValuexvp">defaultValue</a></span><span class="p">:</span> <span class="kd">@autoclosure</span> <span class="kd">@escaping</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Value</span><span class="p">,</span>
     <span class="n"><a href="../Classes/Persister.html#/s:7Persist9PersisterC012defaultValueA9BehaviourAA07DefaultdA6OptionVvp">defaultValuePersistBehaviour</a></span><span class="p">:</span> <span class="kt"><a href="../Structs/DefaultValuePersistOption.html">DefaultValuePersistOption</a></span> <span class="o">=</span> <span class="p">[]</span>
 <span class="p">)</span></code></pre>
@@ -3892,6 +4240,18 @@ using <code>UserDefaults</code> keys with a dot (<code>.</code>) in them.</p>
                               <td>
                                 <div>
                                   <p>The user defaults to use to persist and retrieve the value.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>cacheValue</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>When <code>true</code> the latest value will be cached in memory to improve performance when retrieving values, at the cost of increased memory usage.</p>
                                 </div>
                               </td>
                             </tr>
@@ -3930,7 +4290,7 @@ using <code>UserDefaults</code> keys with a dot (<code>.</code>) in them.</p>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2024 <a class="link" href="" target="_blank" rel="external noopener">Joseph Duffy</a>. All rights reserved. (Last updated: 2024-04-17)</p>
+          <p>&copy; 2024 <a class="link" href="" target="_blank" rel="external noopener">Joseph Duffy</a>. All rights reserved. (Last updated: 2024-04-18)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
         </section>
       </article>
