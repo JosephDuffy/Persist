@@ -21,7 +21,13 @@ let package = Package(
         .package(url: "https://github.com/apple/swift-syntax.git", from: "509.0.0"),
     ],
     targets: [
-        .target(name: "Persist", dependencies: ["PersistMacros"]),
+        .target(
+            name: "Persist",
+            dependencies: ["PersistMacros"],
+            swiftSettings: [
+                .enableExperimentalFeature("StrictConcurrency"),
+            ]
+        ),
 
         .macro(
             name: "PersistMacros",

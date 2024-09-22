@@ -55,9 +55,52 @@ public macro Persist<Key, Input, Output>(
     cacheValue: Bool = false
 ) = #externalMacro(module: "PersistMacros", type: "Persist_Storage_ThrowingTransformer")
 
+// User Defaults
+
+@attached(peer, names: suffixed(_storage), prefixed(`$`), suffixed(_cache))
+@attached(accessor)
+public macro Persist(
+    key: String,
+    userDefaults: UserDefaults,
+    cacheValue: Bool = false
+) = #externalMacro(module: "PersistMacros", type: "Persist_UserDefaults_NoTransformer")
+
+@attached(peer, names: suffixed(_storage), prefixed(`$`), suffixed(_cache))
+@attached(accessor)
+public macro Persist<Root>(
+    key: String,
+    userDefaults: KeyPath<Root, UserDefaults>,
+    cacheValue: Bool = false
+) = #externalMacro(module: "PersistMacros", type: "Persist_UserDefaults_NoTransformer")
+
 import Foundation
 
-public struct UserDefaultsStorage: Storage, Sendable {
+public struct UpdateListenerWrapper<Value>: Sendable {
+    public typealias ValuesStreamProvider = @Sendable () -> AsyncStream<Value>
+
+    private let valuesStreamProvider: ValuesStreamProvider
+
+    public init(valuesStreamProvider: @escaping ValuesStreamProvider) {
+        self.valuesStreamProvider = valuesStreamProvider
+    }
+
+    public func addUpdateListener(_ updateListener: @Sendable @escaping (_ value: Value) -> Void) -> any Cancellable {
+        let task = Task { [valuesStreamProvider] in
+            let stream = valuesStreamProvider()
+
+            for await value in stream {
+                if Task.isCancelled { return }
+                updateListener(value)
+            }
+        }
+
+        return Subscription {
+            task.cancel()
+        }
+    }
+}
+
+public struct UserDefaultsStorage: Sendable {
     private var userDefaults: UserDefaults {
         _userDefaults()
     }
@@ -68,64 +111,196 @@ public struct UserDefaultsStorage: Storage, Sendable {
         self._userDefaults = userDefaults
     }
 
-    public func getValue<Value>(forKey key: String) -> Value? {
-        userDefaults.value(forKey: key) as? Value
-    }
+    // MARK: - String
 
     public func getValue(forKey key: String) -> String? {
         userDefaults.string(forKey: key)
     }
 
-    public func getValue(forKey key: String) -> [Any]? {
-        userDefaults.array(forKey: key)
+    public func setValue(_ value: String, forKey key: String) {
+        userDefaults.setValue(value, forKey: key)
     }
 
-    public func getValue(forKey key: String) -> [String: Any]? {
-        userDefaults.dictionary(forKey: key)
+    public func valuesStream(forKey key: String) -> AsyncStream<String?> {
+        _valuesStream(forKey: key)
     }
 
-    public func getValue(forKey key: String) -> Data? {
-        userDefaults.data(forKey: key)
-    }
-
-    public func getValue(forKey key: String) -> [String]? {
-        userDefaults.stringArray(forKey: key)
-    }
-
-    public func getValue(forKey key: String) -> Int? {
-        userDefaults.integer(forKey: key)
-    }
-
-    public func getValue(forKey key: String) -> Float? {
-        userDefaults.float(forKey: key)
-    }
-
-    public func getValue(forKey key: String) -> Double? {
-        userDefaults.double(forKey: key)
-    }
+    // MARK: - Bool
 
     public func getValue(forKey key: String) -> Bool? {
-        userDefaults.bool(forKey: key)
+        userDefaults.object(forKey: key) != nil ? userDefaults.bool(forKey: key) : nil
     }
 
-    public func getValue(forKey key: String) -> URL? {
-        userDefaults.url(forKey: key)
-    }
-
-    public func setValue<Value>(_ value: Value, forKey key: String) {
+    public func setValue(_ value: Bool, forKey key: String) {
         userDefaults.setValue(value, forKey: key)
+    }
+
+    public func valuesStream(forKey key: String) -> AsyncStream<Bool?> {
+        _valuesStream(forKey: key)
+    }
+
+    // MARK: - Int
+
+    public func getValue(forKey key: String) -> Int? {
+        userDefaults.object(forKey: key) != nil ? userDefaults.integer(forKey: key) : nil
     }
 
     public func setValue(_ value: Int, forKey key: String) {
         userDefaults.setValue(value, forKey: key)
     }
 
+    public func valuesStream(forKey key: String) -> AsyncStream<Int?> {
+        _valuesStream(forKey: key)
+    }
+
+    // MARK: - Double
+
+    public func getValue(forKey key: String) -> Double? {
+        userDefaults.object(forKey: key) != nil ? userDefaults.double(forKey: key) : nil
+    }
+
+    public func setValue(_ value: Double, forKey key: String) {
+        userDefaults.setValue(value, forKey: key)
+    }
+
+    public func valuesStream(forKey key: String) -> AsyncStream<Double?> {
+        _valuesStream(forKey: key)
+    }
+
+    // MARK: - Float
+
+    public func getValue(forKey key: String) -> Float? {
+        userDefaults.object(forKey: key) != nil ? userDefaults.float(forKey: key) : nil
+    }
+
+    public func setValue(_ value: Float, forKey key: String) {
+        userDefaults.setValue(value, forKey: key)
+    }
+
+    public func valuesStream(forKey key: String) -> AsyncStream<Float?> {
+        _valuesStream(forKey: key)
+    }
+
+    // MARK: - Data
+
+    public func getValue(forKey key: String) -> Data? {
+        userDefaults.data(forKey: key)
+    }
+
+    public func setValue(_ value: Data, forKey key: String) {
+        userDefaults.setValue(value, forKey: key)
+    }
+
+    public func valuesStream(forKey key: String) -> AsyncStream<Data?> {
+        _valuesStream(forKey: key)
+    }
+
+    // MARK: - Date
+
+    public func getValue(forKey key: String) -> Date? {
+        userDefaults.object(forKey: key) as? Date
+    }
+
+    public func setValue(_ value: Date, forKey key: String) {
+        userDefaults.setValue(value, forKey: key)
+    }
+
+    public func valuesStream(forKey key: String) -> AsyncStream<Date?> {
+        _valuesStream(forKey: key)
+    }
+
+    // MARK: - URL
+
+    public func getValue(forKey key: String) -> URL? {
+        userDefaults.url(forKey: key)
+    }
+
     public func setValue(_ value: URL, forKey key: String) {
         userDefaults.setValue(value, forKey: key)
     }
 
+    public func valuesStream(forKey key: String) -> AsyncStream<URL?> {
+        _valuesStream(forKey: key)
+    }
+
+    // MARK: - [String]
+
+    public func getValue(forKey key: String) -> [String]? {
+        userDefaults.stringArray(forKey: key)
+    }
+
+    public func setValue(_ value: [String], forKey key: String) {
+        userDefaults.setValue(value, forKey: key)
+    }
+
+    public func valuesStream(forKey key: String) -> AsyncStream<[String]?> {
+        _valuesStream(forKey: key)
+    }
+
+    // MARK: - Removal
+
     public func removeValue(forKey key: String) {
         userDefaults.removeObject(forKey: key)
+    }
+
+    // MARK: - Private API
+
+    private func _valuesStream<Value>(forKey key: String) -> AsyncStream<Value?> where Value: Sendable {
+        AsyncStream { continuation in
+            let observer = KeyPathObserver(updateListener: { newValue in
+                if let newValue = newValue as? Value {
+                    continuation.yield(newValue)
+                } else {
+                    continuation.yield(nil)
+                }
+            })
+            userDefaults.addObserver(observer, forKeyPath: key, options: .new, context: nil)
+            continuation.onTermination = { @Sendable _ in
+                userDefaults.removeObserver(observer, forKeyPath: key)
+            }
+        }
+    }
+
+    private func _valuesStream(forKey key: String) -> AsyncStream<URL?> {
+        AsyncStream { continuation in
+            let observer = KeyPathObserver(updateListener: { newValue in
+                if
+                    let newValue = newValue as? Data,
+                    let url = URL(dataRepresentation: newValue, relativeTo: nil)
+                {
+                    continuation.yield(url)
+                } else {
+                    continuation.yield(nil)
+                }
+            })
+            userDefaults.addObserver(observer, forKeyPath: key, options: .new, context: nil)
+            continuation.onTermination = { @Sendable _ in
+                userDefaults.removeObserver(observer, forKeyPath: key)
+            }
+        }
+    }
+}
+
+private final class KeyPathObserver: NSObject, Sendable {
+    private let updateListener: @Sendable (_ value: Any?) -> Void
+
+    fileprivate init(updateListener: @escaping @Sendable (_ value: Any?) -> Void) {
+        self.updateListener = updateListener
+    }
+
+    override func observeValue(
+        forKeyPath keyPath: String?,
+        of object: Any?,
+        change: [NSKeyValueChangeKey: Any]?, context:
+        UnsafeMutableRawPointer?
+    ) {
+        if let change = change, let newValue = change[.newKey] {
+            if newValue is NSNull {
+                updateListener(nil)
+            } else {
+                updateListener(newValue)
+            }
+        }
     }
 }
 
