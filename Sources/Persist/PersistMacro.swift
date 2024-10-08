@@ -100,6 +100,55 @@ public struct UpdateListenerWrapper<Value>: Sendable {
     }
 }
 
+public struct UserDefaultsObserver<Value>: Sendable {
+    fileprivate let key: String
+    fileprivate let userDefaults: @Sendable () -> UserDefaults
+
+    public init(key: String, userDefaults: @Sendable @autoclosure @escaping () -> UserDefaults) {
+        self.key = key
+        self.userDefaults = userDefaults
+    }
+}
+
+extension UserDefaultsObserver where Value: Sendable {
+    public func valuesStream() -> AsyncStream<Value?> where Value: Sendable {
+        AsyncStream { continuation in
+            let observer = KeyPathObserver(updateListener: { newValue in
+                if let newValue = newValue as? Value {
+                    continuation.yield(newValue)
+                } else {
+                    continuation.yield(nil)
+                }
+            })
+            userDefaults().addObserver(observer, forKeyPath: key, options: .new, context: nil)
+            continuation.onTermination = { @Sendable _ in
+                userDefaults().removeObserver(observer, forKeyPath: key)
+            }
+        }
+    }
+}
+
+extension UserDefaultsObserver where Value == URL {
+    public func valuesStream() -> AsyncStream<URL?> {
+        AsyncStream { continuation in
+            let observer = KeyPathObserver(updateListener: { newValue in
+                if
+                    let newValue = newValue as? Data,
+                    let url = URL(dataRepresentation: newValue, relativeTo: nil)
+                {
+                    continuation.yield(url)
+                } else {
+                    continuation.yield(nil)
+                }
+            })
+            userDefaults().addObserver(observer, forKeyPath: key, options: .new, context: nil)
+            continuation.onTermination = { @Sendable _ in
+                userDefaults().removeObserver(observer, forKeyPath: key)
+            }
+        }
+    }
+}
+
 public struct UserDefaultsStorage: Sendable {
     private var userDefaults: UserDefaults {
         _userDefaults()
