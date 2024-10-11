@@ -50,7 +50,8 @@ struct TestStruct: Sendable {
 
     private var userDefaults: UserDefaults { .standard }
 
-    private var dictionaryStorage = DictionaryStorage()
+    // This is not actually safe, just for testing.
+    private nonisolated(unsafe) var dictionaryStorage = DictionaryStorage()
 
     mutating func setPrivateSetProperty(_ newValue: Int?) {
         privateSetProperty = newValue
