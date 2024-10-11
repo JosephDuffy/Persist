@@ -38,7 +38,7 @@ struct TestStruct: Sendable {
 
 //    @Persist(
 //        key: "transformed-key",
-//        storage: UserDefaultsStorage(.standard),
+//        userDefaults: .standard,
 //        transformer: JSONTransformer<TaskPriority>()
 //    )
 //    var transformedProperty: TaskPriority?

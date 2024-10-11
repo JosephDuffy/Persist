@@ -73,6 +73,15 @@ public macro Persist<Root>(
     cacheValue: Bool = false
 ) = #externalMacro(module: "PersistMacros", type: "Persist_UserDefaults_NoTransformer")
 
+@attached(peer, names: suffixed(_storage), prefixed(`$`), suffixed(_cache))
+@attached(accessor)
+public macro Persist<Input, Output>(
+    key: String,
+    userDefaults: UserDefaults,
+    transformer: any ThrowingTransformer<Input, Output>,
+    cacheValue: Bool = false
+) = #externalMacro(module: "PersistMacros", type: "Persist_UserDefaults_NoTransformer")
+
 import Foundation
 
 public struct UpdateListenerWrapper<Value>: Sendable {

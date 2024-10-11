@@ -41,11 +41,10 @@ extension UserDefaultsMacro {
         in context: some MacroExpansionContext,
         isMutating: Bool,
         isThrowing: Bool,
-        transformerModifier: TransformerModifier?
+        transformerModifier: TransformerModifier = []
     ) throws -> [AccessorDeclSyntax] {
         guard let property = declaration.as(VariableDeclSyntax.self),
               let binding = property.bindings.first,
-              let identifier = binding.pattern.as(IdentifierPatternSyntax.self)?.identifier,
               binding.accessorBlock == nil
         else {
             throw HashableMacroDiagnosticMessage(
@@ -59,33 +58,6 @@ extension UserDefaultsMacro {
             throw HashableMacroDiagnosticMessage(
                 id: "property-requires-type-annotation",
                 message: "@Persist does not support properties without an explicit type annotation.",
-                severity: .error
-            )
-        }
-
-        func unwrapBaseType(_ type: TypeSyntax) -> BaseType? {
-            if let optionalType = type.as(OptionalTypeSyntax.self) {
-                if let wrappedType = unwrapBaseType(optionalType.wrappedType) {
-                    return .optional(wrappedType)
-                } else {
-                    return nil
-                }
-            } else if let identifier = type.as(IdentifierTypeSyntax.self) {
-                return .identifier(identifier)
-            } else if let dictionary = type.as(DictionaryTypeSyntax.self) {
-                return .dictionary(dictionary)
-            } else if let array = type.as(ArrayTypeSyntax.self) {
-                // TODO: Check for things like [Int8], which are not supported.
-                return .array(array)
-            } else {
-                return nil
-            }
-        }
-
-        guard let baseType = unwrapBaseType(typeAnnotation.type) else {
-            throw HashableMacroDiagnosticMessage(
-                id: "unsupported-type-annotation",
-                message: "@Persist does not support this type annotation.",
                 severity: .error
             )
         }
@@ -118,8 +90,8 @@ extension UserDefaultsMacro {
                         .text
                 }
                 .joined(separator: ".")
-        } else if transformerExpression != nil {
-            "\(identifier)_transformer"
+        } else if let transformerExpression {
+            "\(transformerExpression)"
         } else {
             nil
         }
@@ -134,85 +106,175 @@ extension UserDefaultsMacro {
 
         let userDefaultsPropertyName = try userDefaultsAccessor(labeledArguments: labeledArguments)
 
+        if let transformer {
+            let getter: DeclSyntax
+            let setter: DeclSyntax
 
-        let valueSetter = """
-        \(userDefaultsPropertyName).set(newValue, forKey: \(keyExpression))
-        """
+            let isOptional = typeAnnotation.type.is(OptionalTypeSyntax.self)
 
-        func valueAccessor(forBaseType baseType: BaseType) throws -> String {
-            switch baseType {
-            case .optional(let baseType):
-                try valueAccessor(forBaseType: baseType)
-            case .identifier(let identifierTypeSyntax):
-                switch identifierTypeSyntax.name.trimmed.text {
-                case "Bool", "Int", "UInt", "Int8", "UInt8", "Int16", "UInt16", "Int32", "UInt32", "Int64", "UInt64", "Float", "Double", "String", "Data", "Date", "CGFloat", "NSNumber":
-                    """
-                    if let value = \(userDefaultsPropertyName).object(forKey: \(keyExpression)) as? \(identifierTypeSyntax.name.trimmed) {
-                            return value
-                    }
-                    """
-                case "URL", "NSURL":
-                    // URLs are actually stored as Data. We must use url(forKey:) to decode it.
-                    """
-                    // The stored object must be data. This is how URLs are stored by user defaults and it
-                    // prevents user defaults from trying to coerce e.g. a string to a URL by assuming that
-                    // it uses the 'file' protocol.
-                    if \(userDefaultsPropertyName).object(forKey: \(keyExpression)) is Data, let value = \(userDefaultsPropertyName).url(forKey: \(keyExpression)) {
-                            return value
-                    }
-                    """
-                default:
-                    throw HashableMacroDiagnosticMessage(
-                        id: "unsupported-type",
-                        message: "The '\(identifierTypeSyntax.name.trimmed.text)' type is not supported. If it is a typealias provide the original type.",
-                        severity: .error
-                    )
-                }
-            case .array(let arrayTypeSyntax):
+            var valueAccessor = """
+            if let storedValue = \(userDefaultsPropertyName).object(forKey: \(keyExpression)) as? type(of: \(transformer)) .Output {
+                return try \(transformer).transformOutput(storedValue)
+            }
+            """
+
+            if isOptional {
+                valueAccessor += """
+                
+                return nil
                 """
-                if let value = \(userDefaultsPropertyName).object(forKey: \(keyExpression)) as? \(arrayTypeSyntax) {
-                        return value
+            } else if let defaultValue = binding.initializer?.value {
+                valueAccessor += """
+                
+                return \(defaultValue)
+                """
+            } else {
+                throw HashableMacroDiagnosticMessage(
+                    id: "non-optional-unsupported",
+                    message: "Non-optionals properties must have a default value.",
+                    severity: .error
+                )
+            }
+
+            if transformerModifier.contains(.throwing) {
+                getter = """
+                get throws {
+                    \(raw: valueAccessor)
                 }
                 """
-            case .dictionary(let dictionaryTypeSyntax):
+                setter = """
+                \(raw: isMutating ? "mutating" : "nonmutating") set throws {
+                    let transformedValue = try \(raw: transformer).transformInput(newValue)
+                    \(raw: userDefaultsPropertyName).set(transformedValue, forKey: \(keyExpression))
+                }
                 """
-                if let value = \(userDefaultsPropertyName).object(forKey: \(keyExpression)) as? \(dictionaryTypeSyntax) {
-                        return value
+            } else {
+                getter = """
+                get {
+                    \(raw: valueAccessor)
+                }
+                """
+                setter = """
+                \(raw: isMutating ? "mutating" : "nonmutating") set {
+                    let transformedValue = \(raw: transformer).transformInput(newValue)
+                    \(raw: userDefaultsPropertyName).set(transformedValue, forKey: \(keyExpression))
                 }
                 """
             }
-        }
 
-        var valueAccessor: String = try valueAccessor(forBaseType: baseType)
-
-        if baseType.isOptional {
-            valueAccessor += """
-            
-            return nil
-            """
-        } else if let defaultValue = binding.initializer?.value {
-            valueAccessor += """
-            
-            return \(defaultValue)
-            """
+            return [
+                """
+                \(getter)
+                \(setter)
+                """
+            ]
         } else {
-            throw HashableMacroDiagnosticMessage(
-                id: "non-optional-unsupported",
-                message: "Non-optionals properties must have a default value.",
-                severity: .error
-            )
-        }
+            func unwrapBaseType(_ type: TypeSyntax) -> BaseType? {
+                if let optionalType = type.as(OptionalTypeSyntax.self) {
+                    if let wrappedType = unwrapBaseType(optionalType.wrappedType) {
+                        return .optional(wrappedType)
+                    } else {
+                        return nil
+                    }
+                } else if let identifier = type.as(IdentifierTypeSyntax.self) {
+                    return .identifier(identifier)
+                } else if let dictionary = type.as(DictionaryTypeSyntax.self) {
+                    return .dictionary(dictionary)
+                } else if let array = type.as(ArrayTypeSyntax.self) {
+                    // TODO: Check for things like [Int8], which are not supported.
+                    return .array(array)
+                } else {
+                    return nil
+                }
+            }
 
-        return [
-            """
-            get {
-                \(raw: valueAccessor)
+            guard let baseType = unwrapBaseType(typeAnnotation.type) else {
+                throw HashableMacroDiagnosticMessage(
+                    id: "unsupported-type-annotation",
+                    message: "@Persist does not support this type annotation.",
+                    severity: .error
+                )
             }
-            set {
-                \(raw: valueSetter)
-            }
+
+            let valueSetter = """
+            \(userDefaultsPropertyName).set(newValue, forKey: \(keyExpression))
             """
-        ]
+
+            func valueAccessor(forBaseType baseType: BaseType) throws -> String {
+                switch baseType {
+                case .optional(let baseType):
+                    try valueAccessor(forBaseType: baseType)
+                case .identifier(let identifierTypeSyntax):
+                    switch identifierTypeSyntax.name.trimmed.text {
+                    case "Bool", "Int", "UInt", "Int8", "UInt8", "Int16", "UInt16", "Int32", "UInt32", "Int64", "UInt64", "Float", "Double", "String", "Data", "Date", "CGFloat", "NSNumber":
+                        """
+                        if let value = \(userDefaultsPropertyName).object(forKey: \(keyExpression)) as? \(identifierTypeSyntax.name.trimmed) {
+                                return value
+                        }
+                        """
+                    case "URL", "NSURL":
+                        // URLs are actually stored as Data. We must use url(forKey:) to decode it.
+                        """
+                        // The stored object must be data. This is how URLs are stored by user defaults and it
+                        // prevents user defaults from trying to coerce e.g. a string to a URL by assuming that
+                        // it uses the 'file' protocol.
+                        if \(userDefaultsPropertyName).object(forKey: \(keyExpression)) is Data, let value = \(userDefaultsPropertyName).url(forKey: \(keyExpression)) {
+                                return value
+                        }
+                        """
+                    default:
+                        throw HashableMacroDiagnosticMessage(
+                            id: "unsupported-type",
+                            message: "The '\(identifierTypeSyntax.name.trimmed.text)' type is not supported. If it is a typealias provide the original type.",
+                            severity: .error
+                        )
+                    }
+                case .array(let arrayTypeSyntax):
+                    """
+                    if let value = \(userDefaultsPropertyName).object(forKey: \(keyExpression)) as? \(arrayTypeSyntax) {
+                            return value
+                    }
+                    """
+                case .dictionary(let dictionaryTypeSyntax):
+                    """
+                    if let value = \(userDefaultsPropertyName).object(forKey: \(keyExpression)) as? \(dictionaryTypeSyntax) {
+                            return value
+                    }
+                    """
+                }
+            }
+
+            var valueAccessor: String = try valueAccessor(forBaseType: baseType)
+
+            if baseType.isOptional {
+                valueAccessor += """
+                
+                return nil
+                """
+            } else if let defaultValue = binding.initializer?.value {
+                valueAccessor += """
+                
+                return \(defaultValue)
+                """
+            } else {
+                throw HashableMacroDiagnosticMessage(
+                    id: "non-optional-unsupported",
+                    message: "Non-optionals properties must have a default value.",
+                    severity: .error
+                )
+            }
+
+            return [
+                """
+                get {
+                    \(raw: valueAccessor)
+                }
+                set {
+                    \(raw: valueSetter)
+                }
+                """
+            ]
+        }
     }
 
     static func userDefaultsAccessor(labeledArguments: LabeledExprListSyntax) throws -> String {
@@ -381,7 +443,7 @@ public struct Persist_UserDefaults_NoTransformer: UserDefaultsMacro {
             in: context,
             isMutating: false,
             isThrowing: false,
-            transformerModifier: nil
+            transformerModifier: []
         )
     }
 

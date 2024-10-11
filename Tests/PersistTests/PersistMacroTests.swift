@@ -5,37 +5,30 @@ import XCTest
 // Macro implementations build for the host, so the corresponding module is not available when cross-compiling. Cross-compiled tests may still make use of the macro itself in end-to-end tests.
 #if canImport(PersistMacros)
 import PersistMacros
-
-let testMacros: [String: Macro.Type] = [
-    "Persist": Persist_Storage_NoTransformer.self,
-]
 #endif
 
 final class PersistMacroTests: XCTestCase {
-    func testMacro() throws {
+    func testUserDefaultsTransformer() throws {
         #if canImport(PersistMacros)
         assertMacroExpansion(
             """
             struct Setting {
-                @Persist(key: "foo", storage: UserDefaultsStorage(.standard))
-                var testProperty: Int = 0
+                @Persist(
+                    key: "transformed-key",
+                    userDefaults: .standard,
+                    transformer: JSONTransformer<TaskPriority>()
+                )
+                var transformedProperty: TaskPriority?
             }
             """,
             expandedSource: """
             struct Setting {
-                var testProperty: Int = 0 {
-                    get {
-                        testProperty_storage.getValue(forKey: "foo") ?? 0
-                    }
-                    nonmutating set {
-                        testProperty_storage.setValue(newValue, forKey: "foo")
-                    }
-                }
-
-                private let testProperty_storage = UserDefaultsStorage(.standard)
+                var transformedProperty: TaskPriority?
             }
             """,
-            macros: testMacros
+            macros: [
+                "Persist": Persist_UserDefaults_NoTransformer.self,
+            ]
         )
         #else
         throw XCTSkip("macros are only supported when running tests for the host platform")
