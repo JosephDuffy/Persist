@@ -433,13 +433,35 @@ public protocol Transformer<Input, Output> {
     func transformOutput<Output>(_ output: Output) -> Input
 }
 
+public protocol ThrowingInputTransformer<Input, Output> {
+    associatedtype Input
+    associatedtype Output
+    associatedtype TransformInputError: Error
+
+    func transformInput(_ input: Input) throws(TransformInputError) -> Output
+
+    func transformOutput(_ output: Output) -> Input
+}
+
+public protocol ThrowingOutputTransformer<Input, Output> {
+    associatedtype Input
+    associatedtype Output
+    associatedtype TransformOutputError: Error
+
+    func transformInput(_ input: Input) -> Output
+
+    func transformOutput(_ output: Output) throws(TransformOutputError) -> Input
+}
+
 public protocol ThrowingTransformer<Input, Output> {
     associatedtype Input
     associatedtype Output
+    associatedtype TransformInputError: Error
+    associatedtype TransformOutputError: Error
 
-    func transformInput(_ input: Input) throws -> Output
+    func transformInput(_ input: Input) throws(TransformInputError) -> Output
 
-    func transformOutput(_ output: Output) throws -> Input
+    func transformOutput(_ output: Output) throws(TransformOutputError) -> Input
 }
 
 public struct JSONTransformer<Input: Codable>: ThrowingTransformer, Sendable {
@@ -467,5 +489,112 @@ public struct JSONTransformer<Input: Codable>: ThrowingTransformer, Sendable {
         let decoder = JSONDecoder()
         configureDecoder?(decoder)
         return try decoder.decode(Input.self, from: data)
+    }
+}
+
+public struct RawRepresentableTransformer<Input: RawRepresentable>: ThrowingOutputTransformer, Sendable {
+    public init() {}
+
+    public func transformInput(_ input: Input) -> Input.RawValue {
+        input.rawValue
+    }
+
+    public func transformOutput(_ rawValue: Input.RawValue) throws -> Input {
+        if let value = Input(rawValue: rawValue) {
+            return value
+        }
+
+        throw InvalidRawValueError()
+    }
+}
+
+public struct InvalidRawValueError: Error {}
+
+public struct UserDefaultsPersister<Transformer> {
+    public let userDefaults: UserDefaults
+
+    public let transformer: Transformer
+
+    public init(userDefaults: UserDefaults, transformer: Transformer) {
+        self.userDefaults = userDefaults
+        self.transformer = transformer
+    }
+}
+
+extension UserDefaultsPersister where Transformer == Void {
+    public init(userDefaults: UserDefaults) where Transformer == Void {
+        self.init(userDefaults: userDefaults, transformer: ())
+    }
+
+    public func set(_ value: Any?, forKey key: String) {
+        userDefaults.set(value, forKey: key)
+    }
+
+    public func object(forKey key: String) -> Any? {
+        userDefaults.object(forKey: key)
+    }
+}
+
+extension UserDefaultsPersister where Transformer: Persist.Transformer {
+    public func set<Input>(_ value: Input, forKey key: String) where Input == Transformer.Input {
+        let transformed = transformer.transformInput(value)
+        userDefaults.set(transformed, forKey: key)
+    }
+
+    public func object<Input>(forKey key: String) -> Input? where Input == Transformer.Input {
+        guard let transformed = userDefaults.object(forKey: key) as? Transformer.Output else {
+            return nil
+        }
+        return transformer.transformOutput(transformed)
+    }
+}
+
+extension UserDefaultsPersister where Transformer: Persist.ThrowingInputTransformer {
+    public func set<Input>(_ value: Input, forKey key: String)
+        throws(Transformer.TransformInputError) where Input == Transformer.Input
+    {
+        let transformed = try transformer.transformInput(value)
+        userDefaults.set(transformed, forKey: key)
+    }
+
+    public func object<Input>(forKey key: String) -> Input? where Input == Transformer.Input {
+        guard let transformed = userDefaults.object(forKey: key) as? Transformer.Output else {
+            return nil
+        }
+        return transformer.transformOutput(transformed)
+    }
+}
+
+extension UserDefaultsPersister where Transformer: Persist.ThrowingOutputTransformer {
+    public func set<Input>(_ value: Input, forKey key: String) where Input == Transformer.Input {
+        let transformed = transformer.transformInput(value)
+        userDefaults.set(transformed, forKey: key)
+    }
+
+    public func object<Input>(forKey key: String) throws(Transformer.TransformOutputError) -> Input?
+        where Input == Transformer.Input
+    {
+        guard let transformed = userDefaults.object(forKey: key) as? Transformer.Output else {
+            return nil
+        }
+        return try transformer.transformOutput(transformed)
+    }
+}
+
+extension UserDefaultsPersister where Transformer: Persist.ThrowingTransformer {
+    public func set<Input>(_ value: Input, forKey key: String)
+        throws(Transformer.TransformInputError) where Input == Transformer.Input
+    {
+        let transformed = try transformer.transformInput(value)
+        userDefaults.set(transformed, forKey: key)
+    }
+
+    public func object<Input>(forKey key: String) throws(Transformer.TransformOutputError) -> Input?
+        where Input == Transformer.Input
+    {
+        guard let transformed = userDefaults.object(forKey: key) as? Transformer.Output else {
+            return nil
+        }
+        return try transformer.transformOutput(transformed)
     }
 }
